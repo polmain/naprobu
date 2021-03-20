@@ -1,0 +1,14 @@
+/.idea
+/public/storage
+/storage/*.key
+.env
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+composer.phar
+naprobu.sql
+
+# Project exclude paths
+/node_modules/

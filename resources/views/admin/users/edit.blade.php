@@ -1,0 +1,349 @@
+@extends('admin.layouts.layout')
+
+@section('content')
+    {{--ini_get('post_max_size')--}}
+    <div class='row'>
+        <div class='col-md-6'>
+            <!-- Box -->
+            <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Редактировать пользователя</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                <form action="{{route('adm_users_save',['user_id'=>$user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
+                    {{ csrf_field() }}
+                    <div class="box-body">
+
+                        <div class="form-group">
+                            <label for="login" class="col-sm-3 control-label ">Логин</label>
+
+                            <div class="col-sm-9">
+                                <input name="login" type="text" class="form-control" id="login" placeholder="Логин" value="{{$user->name}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="firstName" class="col-sm-3 control-label ">Имя</label>
+
+                            <div class="col-sm-9">
+                                <input name="first_name" type="text" class="form-control" id="firstName" placeholder="Имя" value="{{$user->first_name}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName" class="col-sm-3 control-label ">Фамилия</label>
+
+                            <div class="col-sm-9">
+                                <input name="last_name" type="text" class="form-control" id="lastName" placeholder="Фамилия" value="{{$user->last_name}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="userSex" class="col-sm-3 control-label ">Пол</label>
+                            <div class="col-sm-9">
+                                <select name="sex" class="form-control select2" id="userSex" style="width: 100%;">
+                                    <option {{($user->sex == 1)?'selected=selected ':''}}value="1">Мужской</option>
+                                    <option {{($user->sex == 0)?'selected=selected ':''}}value="0">Женский</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="birsday" class="col-sm-3 control-label ">Год рождения</label>
+                            <div class="col-sm-9">
+                                <input name="birsday" type="text" class="form-control" id="birsday" placeholder="Год рождения" value="{{$user->birsday}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="birsday" class="col-sm-3 control-label ">Город</label>
+                            <div class="col-sm-9">
+                                <input name="city" type="text" class="form-control" id="city" placeholder="Город" value="{{$user->city}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="birsday" class="col-sm-3 control-label ">Область</label>
+                            <div class="col-sm-9">
+                                <input name="region" type="text" class="form-control" id="region" placeholder="Область" value="{{$user->region}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="col-sm-3 control-label ">Email</label>
+                            <div class="col-sm-9">
+                                <input name="email" type="email" class="form-control" id="email" placeholder="Email" value="{{$user->email}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="col-sm-3 control-label ">Телефон</label>
+                            <div class="col-sm-9">
+                                <input name="phone" type="text" class="form-control" id="phone" placeholder="Телефон" value="{{$user->phone}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-sm-3 control-label ">Пароль</label>
+                            <div class="col-sm-9">
+                                <input name="password" type="password" class="form-control" id="password" placeholder="Пароль" >
+                            </div>
+                        </div>
+                        @if(Auth::user()->hasRole('admin'))
+                        <div class="form-group">
+                            <label for="userRole" class="col-sm-3 control-label ">Роль пользователя</label>
+                            <div class="col-sm-9">
+                                <select name="role" class="form-control select2" id="userRole" style="width: 100%;">
+                                    <option {{($user->hasRole("user"))?'selected=selected ':''}}value="user">Пользователь</option>
+                                    <option {{($user->hasRole("expert"))?'selected=selected ':''}}value="expert">Эксперт</option>
+                                    <option {{($user->hasRole("moderator"))?'selected=selected ':''}}value="moderator">Модератор</option>
+                                    <option {{($user->hasRole("admin"))?'selected=selected ':''}}value="admin">Администратор</option>
+                                </select>
+                            </div>
+                        </div>
+                        @endif
+                        <div class="form-group">
+                            <label for="userRole" class="col-sm-3 control-label ">Аватар</label>
+                            <div class="col-sm-9">
+                                <div class="load-image-container avatar">
+                                    <div class="load-img " style="background-image: url('/public/uploads/images/avatars/{{$user->avatar}}');"></div>
+                                    <input type="file" name="avatar" id="avatar"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary pull-right">Сохранить</button>
+                    </div><!-- /.box-footer-->
+                </form>
+            </div><!-- /.box -->
+        </div><!-- /.col -->
+        <div class='col-md-6'>
+            <!-- Box -->
+            <form action="{{route('adm_change_status',['user_id'    =>  $user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
+                {{ csrf_field() }}
+            <div class="box box-warning collapsed-box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Сменить статус</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.box-tools -->
+                </div>
+                    <div class="box-body">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Новый статус<span class="input-request">*</span></label>
+                                <select name="status" class="form-control select2" style="width: 100%;">
+                                    @foreach($statuses as $status)
+                                        <option value="{{$status->id}}">{{$status->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Время действия статуса<span class="input-request">*</span></label>
+                                <select name="unlock_time" class="form-control select2" style="width: 100%;">
+                                    <option value="-1">Навсегда</option>
+                                    <option value="43200">1 месяц</option>
+                                    <option value="131400">3 месяца</option>
+                                    <option value="262800">Полгода</option>
+                                    <option value="525600">1 год</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Причина смены статуса</label>
+                                <textarea name="note" class="form-control" rows="5" placeholder="Причина смены статуса.."></textarea>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Подтвердить</button>
+                    </div>
+
+            </div>
+            </form>
+            <div class="box box-default collapsed-box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">История смены статусов</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.box-tools -->
+                </div>
+
+                <div class="box-body">
+                    <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>Статус</th>
+                                <th>Примечание</th>
+                                <th>Время смены</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($statusHistory as $status)
+                                <tr>
+                                    <td>{{$status->id}}</td>
+                                    <td>{{$status->status->name}}</td>
+                                    <td>{{$status->note}}</td>
+                                    <td>{{$status->created_at}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    </div>
+                </div><!-- /.box-body -->
+
+            </div>
+            <!-- Box -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Материалы пользователя</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <p><a href="{{route('adm_review')}}?filter={{ $reviewFilter }}">Отзывы ({{$countReviews}})</a></p>
+                    <p><a href="{{route('adm_comment')}}?filter={{ $commentFilter }}">Комментарии к отзывам ({{$countComments}})</a></p>
+                    <p><a href="{{route('adm_user_request',['user_id' => $user->id])}}">Заявки к проектам ({{$user->requests_count}})</a></p>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+            <form action="{{route('adm_delete_ratting',['user_id'    =>  $user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <div class="box box-warning collapsed-box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Штраф за накрутку</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                        <!-- /.box-tools -->
+                    </div>
+                    <div class="box-body">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Размер штрафа<span class="input-request">*</span></label>
+                                <select name="fine" class="form-control select2" style="width: 100%;">
+                                    <option value="delete_5">5</option>
+                                    <option value="delete_10">10</option>
+                                    <option value="delete_20">20</option>
+                                    <option value="delete_50">50</option>
+                                    <option value="delete_100">100</option>
+                                    <option value="delete_500">500</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Подтвердить</button>
+                    </div>
+
+                </div>
+            </form>
+
+            <form action="{{route('adm_add_ratting',['user_id'    =>  $user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <div class="box box-warning collapsed-box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Добавить баллы</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                        <!-- /.box-tools -->
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group row">
+                        <div class="col-md-6">
+                                <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> За что баллы<span class="input-request">*</span></label>
+                                <input type="text" class="form-control" name="name_ru" required>
+                        </div>
+                        <div class="col-md-6">
+                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> За что баллы<span class="input-request">*</span></label>
+                                <input type="text" class="form-control" name="name_ua" required>
+                        </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Колличество баллов<span class="input-request">*</span></label>
+                                <input type="number" class="form-control" min="1" required name="score">
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Подтвердить</button>
+                    </div>
+
+                </div>
+            </form>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Рейтинг пользователя</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <h4>{{$ratingStatus->name}}({{$user->current_rating}}) <strong>{{$user->history->sum('score')}}</strong></h4>
+                    <div class="table-responsive">
+                    <table id="user-history" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Действие</th>
+                            <th width="60">Балы</th>
+                            <th width="60">Балы</th>
+                            <th>Время</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+
+@endsection
+
+@section("scripts")
+    <script>
+		var tableUsers = $('#user-history').DataTable({
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Все"]],
+			"pageLength": 10,
+			"language": {
+				"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json"
+			},
+			"processing": true,
+			"serverSide": true,
+			"ajax": "{!! route('adm_users_history',['user_id'=>$user->id]) !!}",
+			"columns": [
+
+				{
+					data: 'action',
+                    orderable:      false,
+				},
+				{
+					data: 'points',
+					orderable:      false,
+                },
+				{
+					data: 'score',
+					orderable:      false,
+                },
+				{
+					data: "created_at",
+				},
+
+			],
+			"fnDrawCallback": afterDrawTabel
+		});
+
+		tableUsers.on( 'draw', afterDrawTabel() );
+    </script>
+@endsection

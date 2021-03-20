@@ -1,0 +1,34 @@
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+@import "fonts";
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+// Slick Carousel
+@import '~slick-carousel/slick/slick.scss';
+
+// Fancybox
+@import '~@fancyapps/fancybox/dist/jquery.fancybox.css';
+
+//Select2
+
+@import '../../bower_components/select2/dist/css/select2.min.css';
+
+@import 'perfect-scrollbar.min.css';
+@import 'dropzone.min.css';
+
+// Mixins
+@import 'function';
+@import "flex";
+
+.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+@import 'style';

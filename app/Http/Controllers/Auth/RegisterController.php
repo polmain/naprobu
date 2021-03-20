@@ -1,0 +1,194 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App;
+use Cookie;
+use App\Library\Users\UserRating;
+use App\User;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Http\Controllers\Auth\EmailVerification;
+use Illuminate\Http\Request;
+
+use App\Model\Page;
+use SEO;
+use SEOMeta;
+use OpenGraph;
+
+
+class RegisterController extends Controller
+{
+    /*
+    |--------------------------------------------------------------------------
+    | Register Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller handles the registration of new users as well as their
+    | validation and creation. By default this controller uses a trait to
+    | provide this functionality without requiring any additional code.
+    |
+    */
+
+    use RegistersUsers;
+
+    /**
+     * Where to redirect users after registration.
+     *
+     * @var string
+     */
+    protected $redirectTo = '/cabinet/';
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
+
+
+	public function showRegistrationForm(Request $request)
+	{
+		$locale = App::getLocale();
+
+		$countries = App\Model\User\UserCountry::all();
+
+		$page = Page::where([
+			['url','registration'],
+			['lang',$locale],
+		])->first();
+
+		$title = $page->seo_title ?? str_replace(':page_name:',$page->name, \App\Model\Setting::where([['name','title_default'],['lang',$locale]])->first()->value);
+		$description = $page->seo_description ?? str_replace(':page_name:',$page->name, \App\Model\Setting::where([['name','description_default'],['lang',$locale]])->first()->value);
+		$og_image = $page->og_image ?? \App\Model\Setting::where('name','og_image_default')->first()->value;
+
+		SEO::setTitle($title);
+		SEO::setDescription($description);
+		SEOMeta::setKeywords($page->seo_keywords);
+		OpenGraph::addImage([
+				'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
+				'width' => 350,
+				'height' => 220
+			]
+		);
+
+
+		$lang = ($locale == 'ru')?'ua':'ru';
+		//разбиваем на массив по разделителю
+		$segments = explode('/', route('registration'));
+
+		//Если URL (где нажали на переключение языка) содержал корректную метку языка
+		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
+			unset($segments[3]); //удаляем метку
+		}
+
+		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
+		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
+			array_splice($segments, 3, 0, $lang);
+		}
+
+		//формируем полный URL
+		$alternet_url = implode("/", $segments);
+
+		return view('auth.register',[
+			'page' => $page,
+			'alternet_url' => $alternet_url,
+			'countries'	=> $countries
+		]);
+	}
+
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'lang' => ['required'],
+        ]);
+    }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return \App\User
+     */
+    protected function create(array $data)
+	{
+		$user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'status_id' => 5,
+			'current_rating' => 0,
+			'rang_id' => 1,
+			'lang' => $data['lang']
+        ]);
+        return $user;
+    }
+
+	/**
+	 * The user has been registered.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  mixed  $user
+	 * @return mixed
+	 */
+	protected function registered(Request $request, $user)
+	{
+		$locale = App::getLocale();
+		
+		$this->user_rating($user);
+		$user->makeExployee('user');
+
+
+		EmailVerification::sendVerifyCode($user);
+
+		if($request->hasCookie('ref_id')){
+			$ref_owner = User::find(Cookie::get('ref_id'));
+			UserRating::addAction('friend',$ref_owner);
+		}
+
+		$this->guard()->logout();
+
+		$lang = ($locale == 'ru')?'ua':'ru';
+		//разбиваем на массив по разделителю
+		$segments = explode('/', route('home'));
+
+		//Если URL (где нажали на переключение языка) содержал корректную метку языка
+		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
+			unset($segments[3]); //удаляем метку
+		}
+
+		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
+		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
+			array_splice($segments, 3, 0, $lang);
+		}
+
+		//формируем полный URL
+		$alternet_url = implode("/", $segments);
+
+		return view('message',[
+			'header'	=>	trans('page_message.registered_header'),
+			'message'	=>	trans('page_message.registered_message',['email' => $user->email]),
+			'alternet_url' => $alternet_url
+		]);
+	}
+
+	protected function user_rating($user){
+		UserRating::addAction('register',$user);
+		UserRating::addAction('email',$user);
+	}
+
+}

@@ -22,7 +22,9 @@ use OpenGraph;
 
 class MainController extends Controller
 {
-    const FAKE_PROJECT_COUNT_INCREMENTER = 37;
+    private const FAKE_PROJECT_COUNT_INCREMENTER = 37;
+    private const OPEN_GRAPH_IMAGE_WIDTH = 350;
+    private const OPEN_GRAPH_IMAGE_HEIGHT = 220;
 
     public function home(Request $request){
 		$locale = App::getLocale();
@@ -41,8 +43,8 @@ class MainController extends Controller
 		SEOMeta::setKeywords($page->seo_keywords);
 		OpenGraph::addImage([
 				'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
-				'width' => 350,
-				'height' => 220
+				'width' => self::OPEN_GRAPH_IMAGE_WIDTH,
+				'height' => self::OPEN_GRAPH_IMAGE_HEIGHT
 			]
 		);
 
@@ -111,7 +113,7 @@ class MainController extends Controller
 
 		//формируем полный URL
 		$alternet_url = implode("/", $segments);
-		
+
     	return view('home',[
     		'projects'	=>	$projects,
     		'reviews'	=>	$reviews,
@@ -155,8 +157,8 @@ class MainController extends Controller
 		SEOMeta::setKeywords($page->seo_keywords);
 		OpenGraph::addImage([
 				'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
-				'width' => 350,
-				'height' => 220
+                'width' => self::OPEN_GRAPH_IMAGE_WIDTH,
+                'height' => self::OPEN_GRAPH_IMAGE_HEIGHT
 			]
 		);
 
@@ -206,8 +208,8 @@ class MainController extends Controller
 		SEOMeta::setKeywords($page->seo_keywords);
 		OpenGraph::addImage([
 				'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
-				'width' => 350,
-				'height' => 220
+                'width' => self::OPEN_GRAPH_IMAGE_WIDTH,
+                'height' => self::OPEN_GRAPH_IMAGE_HEIGHT
 			]
 		);
 		$lang = ($locale == 'ru')?'ua':'ru';
@@ -251,8 +253,8 @@ class MainController extends Controller
 		SEOMeta::setKeywords($page->seo_keywords);
 		OpenGraph::addImage([
 				'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
-				'width' => 350,
-				'height' => 220
+                'width' => self::OPEN_GRAPH_IMAGE_WIDTH,
+                'height' => self::OPEN_GRAPH_IMAGE_HEIGHT
 			]
 		);
 
@@ -310,8 +312,8 @@ class MainController extends Controller
 		SEOMeta::setKeywords($page->seo_keywords);
 		OpenGraph::addImage([
 				'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
-				'width' => 350,
-				'height' => 220
+                'width' => self::OPEN_GRAPH_IMAGE_WIDTH,
+                'height' => self::OPEN_GRAPH_IMAGE_HEIGHT
 			]
 		);
 
@@ -362,8 +364,8 @@ class MainController extends Controller
 		SEOMeta::setKeywords($page->seo_keywords);
 		OpenGraph::addImage([
 				'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
-				'width' => 350,
-				'height' => 220
+                'width' => self::OPEN_GRAPH_IMAGE_WIDTH,
+                'height' => self::OPEN_GRAPH_IMAGE_HEIGHT
 			]
 		);
 

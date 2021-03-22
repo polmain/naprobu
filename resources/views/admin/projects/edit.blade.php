@@ -401,7 +401,7 @@
                             <label>Аудитория проекта<span class="input-request">*</span></label>
                             <select class="form-control required" name="audience" style="width: 100%;">
                                 @foreach($audienceArray as $audience)
-                                    <option value="{{$audience}}" @if($project->audience === $audience) selected="selected" @endif>{{trans('project.audience_'.$audience)}}</option>
+                                    <option value="{{$audience}}" @if($project->audience->getValue() === $audience) selected="selected" @endif>{{trans('project.audience_'.$audience)}}</option>
                                 @endforeach
                             </select>
                         </div>

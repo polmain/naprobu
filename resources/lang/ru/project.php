@@ -48,4 +48,8 @@ return [
 	'hide_title'		=>	'Скрытый проект',
 	'password'			=>	'Введите пароль от проекта',
 	'password_submit'	=>	'Войти',
+
+    // Свойтва проекта
+    'audience_ukraine' => "Украина",
+    'audience_word' => "Международный",
 ];

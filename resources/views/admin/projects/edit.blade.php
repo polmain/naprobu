@@ -398,6 +398,14 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label>Аудитория проекта<span class="input-request">*</span></label>
+                            <select class="form-control required" name="audience" style="width: 100%;">
+                                @foreach($audienceArray as $audience)
+                                    <option value="{{$audience}}" @if($project->audience === $audience) selected="selected" @endif>{{trans('project.audience_'.$audience)}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label>Статус</label>
                             <select class="form-control" name="status" style="width: 100%;">
                                 <option value="">--</option>

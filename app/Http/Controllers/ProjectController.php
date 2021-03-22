@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App;
+use App\Entity\ProjectAudienceEnum;
 use App\Library\Users\UserRating;
 use Cookie;
 use Illuminate\Support\Facades\Auth;
@@ -54,6 +55,7 @@ class ProjectController extends Controller
 			['status_id','<>',10],
 			['type','<>','only-blogger'],
     		['isHide',0],
+            ['audience',ProjectAudienceEnum::UKRAINE],
 		])->orderBy('start_registration_time','desc')->paginate(15);
 
 		if ($request->ajax()) {
@@ -333,7 +335,7 @@ class ProjectController extends Controller
 		if(empty($project)){
 			abort(404);
 		}
-		
+
 		$project_id = ($locale == 'ru')? $project->id : $project->base->id;
 
 		$subpage = Subpage::with('project','base')

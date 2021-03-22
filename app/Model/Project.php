@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Entity\ProjectAudienceEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
@@ -78,4 +79,9 @@ class Project extends Model
 		}
 		return $likes;
 	}
+
+    public function getAudienceAttribute($value): ProjectAudienceEnum
+    {
+        return ProjectAudienceEnum::getInstance($value);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App;
+use App\Entity\ProjectAudienceEnum;
 use Illuminate\Http\Request;
 use App\Mail\PartnerNotificationMail;
 use App\Model\Project;
@@ -54,6 +55,7 @@ class MainController extends Controller
     		['status_id','<>',3],
     		['status_id','<>',10],
 			['type','<>','only-blogger'],
+            ['audience',ProjectAudienceEnum::UKRAINE],
 		])->orderBy('start_registration_time','desc')->limit(6)->get();
 
 		$project_count = Project::where([

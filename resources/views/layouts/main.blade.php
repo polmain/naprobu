@@ -74,9 +74,11 @@
 
 <div class="to-up"></div>
 @auth
+    @if(!env('APP_DEBUG', false))
     <div class="push-container">
 
     </div>
+    @endif
 @else
 
     <div class="modal fade modal-auth" id="login" tabindex="-1" role="dialog">

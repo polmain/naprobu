@@ -6,6 +6,7 @@ use App\Entity\ProjectAudienceEnum;
 use App\Http\Controllers\Admin\iAdminController;
 use App\Model\Blogger\BloggerUserProject;
 use App\Model\Questionnaire;
+use App\StaticData\CountryData;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\Post;
@@ -36,6 +37,9 @@ class ProjectController extends Controller implements iAdminController
 
 	//Список всех проектов
 	public function all(){
+        $countryCollection = CountryData::getCollection();
+        dd($countryCollection);
+
 		$projects = Project::with(['category','status','requests'])
 			->withCount(['requests'])
 			->where('lang','ru')

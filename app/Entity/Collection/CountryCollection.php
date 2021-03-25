@@ -28,7 +28,7 @@ class CountryCollection extends NaprobuMutableCollection
 
         $countryCollection = new self();
 
-        foreach ($countryDataArray as $countryData){
+        foreach ($countryDataArray->getData() as $countryData){
             $country = Country::createFromArray($countryData);
             $countryCollection->add($country);
         }

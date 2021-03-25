@@ -17,7 +17,7 @@ use Traversable;
  * @method                           add($key)
  * @method                           addCollection($collectionToMerge)
  */
-abstract class NaprobuMutableCollection
+abstract class NaprobuMutableCollection extends NaprobuBaseCollection
 {
     public function isMutable(): bool
     {

@@ -38,7 +38,7 @@ class ProjectController extends Controller implements iAdminController
 	//Список всех проектов
 	public function all(){
         $countryCollection = CountryCollection::buildCollection();
-        dd($countryCollection->first()));
+        dd($countryCollection->first());
 
 		$projects = Project::with(['category','status','requests'])
 			->withCount(['requests'])

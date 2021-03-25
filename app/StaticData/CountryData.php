@@ -4015,12 +4015,8 @@ class CountryData
             ]
         ];
 
-    public static function getCollection(): CountryCollection
+    public function getData(): array
     {
-        $class = new self();
-
-        $countryCollection = new CountryCollection($class->countries);
-
-        return  $countryCollection;
+        return $this->countries;
     }
 }

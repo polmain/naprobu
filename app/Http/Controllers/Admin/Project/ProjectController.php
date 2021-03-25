@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Project;
 
+use App\Entity\Collection\CountryCollection;
 use App\Entity\ProjectAudienceEnum;
 use App\Http\Controllers\Admin\iAdminController;
 use App\Model\Blogger\BloggerUserProject;
 use App\Model\Questionnaire;
-use App\StaticData\CountryData;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\Post;
@@ -37,7 +37,7 @@ class ProjectController extends Controller implements iAdminController
 
 	//Список всех проектов
 	public function all(){
-        $countryCollection = CountryData::getCollection();
+        $countryCollection = CountryCollection::buildCollection();
         dd($countryCollection);
 
 		$projects = Project::with(['category','status','requests'])

@@ -29,7 +29,7 @@ class InternationalMiddleware
 			return $segmentsURI[1];
 		}
 
-		return $segmentsURI[0];
+		return null;
 	}
 
 	public function handle($request, Closure $next)

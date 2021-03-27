@@ -28,7 +28,7 @@ class MainController extends Controller
     private const OPEN_GRAPH_IMAGE_HEIGHT = 220;
 
     public function home(Request $request){
-        dd($request->international);
+        dd($request->get('international'));
 		$locale = App::getLocale();
 
 		$page = Page::where([

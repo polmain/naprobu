@@ -26,7 +26,8 @@ abstract class NaprobuDataCollection extends NaprobuImmutableCollection
     public static function buildCollection(): NaprobuBaseCollection
     {
         /** @var StaticDataInterface $dataArray */
-        $dataArray = self::getDataClassName();
+        $dataArrayClass = self::getDataClassName();
+        $dataArray = new $dataArrayClass;
 
         $class = get_called_class();
         $dataCollection = new $class;

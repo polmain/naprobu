@@ -27,10 +27,10 @@ abstract class NaprobuDataCollection extends NaprobuImmutableCollection
     {
         /** @var StaticDataInterface $dataArray */
         $dataArrayClass = self::getDataClassName();
-        $dataArray = new $dataArrayClass;
+        $dataArray = new $dataArrayClass();
 
         $class = get_called_class();
-        $dataCollection = new $class;
+        $dataCollection = new $class();
 
         /** @var DataClassInterface $dataClassName */
         $dataClass = $dataCollection::getClassName();

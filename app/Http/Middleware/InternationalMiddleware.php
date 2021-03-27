@@ -35,9 +35,9 @@ class InternationalMiddleware
 	public function handle($request, Closure $next)
 	{
 		if(self::getInternational()){
-            $request->attributes->add(['international', true]);
+            $request->attributes->add(['international' => true]);
         }else{
-            $request->attributes->add(['international', false]);
+            $request->attributes->add(['international' => false]);
         }
 
 		return $next($request);

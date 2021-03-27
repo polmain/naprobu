@@ -37,8 +37,6 @@ class ProjectController extends Controller implements iAdminController
 
 	//Список всех проектов
 	public function all(){
-        $countryCollection = CountryCollection::buildCollection();
-        dd($countryCollection->first());
 
 		$projects = Project::with(['category','status','requests'])
 			->withCount(['requests'])
@@ -141,6 +139,7 @@ class ProjectController extends Controller implements iAdminController
 		$statuses = ProjectStatus::where('lang','ru')->get();
 		$categories = ProjectCategory::where('lang','ru')->get();
 		$audienceArray = ProjectAudienceEnum::toArray();
+        $countryCollection = CountryCollection::buildCollection();
 
 		SEO::setTitle('Новый проект');
 		AdminPageData::setPageName('Новый проект');
@@ -151,6 +150,7 @@ class ProjectController extends Controller implements iAdminController
 			'categories' => $categories,
 			'statuses' => $statuses,
 			'audienceArray' => $audienceArray,
+            'countryCollection' => $countryCollection
 		]);
 	}
 

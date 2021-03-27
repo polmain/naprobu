@@ -71,7 +71,6 @@ class Kernel extends HttpKernel
 		'role' => \App\Http\Middleware\Owner::class,
 		'admin.notifications' => \App\Http\Middleware\Admin\Notifications::class,
 		'locale'	=>	\App\Http\Middleware\Locale::class,
-		'international'	=>	\App\Http\Middleware\InternationalMiddleware::class,
 		'ban'	=>	\App\Http\Middleware\UserIsBan::class,
     ];
 

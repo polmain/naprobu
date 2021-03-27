@@ -575,7 +575,7 @@ Route::get('setlocale/{lang}', function ($lang) {
 
 })->name('setlocale');
 
-Route::prefix(App\Http\Middleware\LocaleMiddleware::getLocale())->middleware('locale')->group(function($lang = 'ua') {
+Route::prefix(App\Http\Middleware\LocaleMiddleware::getLocale())->prefix(App\Http\Middleware\InternationalMiddleware::getInternational())->middleware('locale')->group(function($lang = 'ua') {
 	Route::get('/verify/{user_id}/{verify_code}/','Auth\EmailVerification@verify')->name('auth.verify');
 	Route::group(['middleware'=>'auth'],function(){
 		Route::group(['middleware'=>'role:user'],function(){
@@ -589,7 +589,7 @@ Route::get('sitemap.xml', 'ArchiveController@sitemap');
 Route::get('/get-region/','UserController@getRegion')->name('registration.region');
 Route::get('/get-city/','UserController@getCity')->name('registration.city');
 
-Route::prefix(App\Http\Middleware\LocaleMiddleware::getLocale())->middleware('locale')->group(function($lang = 'ua') {
+Route::prefix(App\Http\Middleware\LocaleMiddleware::getLocale())->prefix(App\Http\Middleware\InternationalMiddleware::getInternational())->middleware('locale')->group(function($lang = 'ua') {
 	Route::get('/{url}/', 'MainController@simple')->name('simple');
 });
 

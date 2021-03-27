@@ -37,7 +37,7 @@ abstract class NaprobuDataCollection extends NaprobuImmutableCollection
 
         foreach ($dataArray->getData() as $data){
             $dataObject = $dataClass::createFromArray($data);
-            $dataCollection->add($dataObject);
+            $dataCollection->addElement($dataObject);
         }
 
         return $dataCollection;

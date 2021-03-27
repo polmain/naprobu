@@ -24,6 +24,11 @@ abstract class NaprobuImmutableCollection extends NaprobuBaseCollection
         $this->processImmutableException(__FUNCTION__);
     }
 
+    private function addElement($element): void
+    {
+        parent::add($element);
+    }
+
     private function processImmutableException(string $method): void
     {
         throw new ImmutableCollectionException(get_class($this), $method);

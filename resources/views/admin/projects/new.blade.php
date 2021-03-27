@@ -282,7 +282,7 @@
                             <label>Страна проекта<span class="input-request">*</span></label>
                             <select class="form-control required" name="audience" style="width: 100%;">
                                 @foreach($countryCollection as $country)
-                                    <option value="{{$country->getCode()}}">{{$country->getName()}}</option>
+                                    <option value="{{$country->getCode()}}" @if($country->getCode() === 'UA') selected="selected" @endif>{{$country->getName()}}</option>
                                 @endforeach
                             </select>
                         </div>

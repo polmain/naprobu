@@ -16934,6 +16934,10 @@ form .btn-blue:hover {
 }
 
 /* end insede pages *//* project list pages */
+.project-main-img{
+    position: relative;
+}
+
 .project-status-icon, .project-country {
     display: inline-block;
     position: relative;

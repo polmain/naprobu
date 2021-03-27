@@ -26,8 +26,8 @@ class InternationalMiddleware
 			return $segmentsURI[0];
 		}
 		//Проверяем метку типа страниц  - во втором сегменте (для второстипенного языка)
-		if (!empty($segmentsURI[1]) && $segmentsURI[1] === static::INTERNATIONAL) {
-			return $segmentsURI[1];
+		if (!empty($segmentsURI[2]) && $segmentsURI[2] === static::INTERNATIONAL) {
+			return $segmentsURI[2];
 		}
 
 		return null;

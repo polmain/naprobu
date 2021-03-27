@@ -16950,16 +16950,13 @@ form .btn-blue:hover {
     height: 64px;
     left: 20px;
     bottom: -32px;
-    border: 3px solid #052b5f;
-    border-radius: 50%;
     overflow: hidden;
 }
-
+.project-main-img .project-country{
+    left: 30px;
+}
 .project-country img{
-    height: 100%;
-    max-width: unset;
     position: absolute;
-    left: -50%;
 }
 
 .project-status-icon:before {

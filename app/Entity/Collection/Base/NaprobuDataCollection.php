@@ -18,12 +18,25 @@ use Traversable;
  */
 abstract class NaprobuDataCollection extends NaprobuImmutableCollection
 {
+    /** @var array $cache */
+    protected static $cache = [];
+
     public static function getDataClassName(): ?string
     {
         return null;
     }
 
-    public static function buildCollection(): NaprobuBaseCollection
+    public static function getInstance(): NaprobuBaseCollection
+    {
+        $class = get_called_class();
+        if(!isset(static::$cache[$class])){
+           return static::buildCollection();
+        }
+
+        return static::$cache[$class];
+    }
+
+    protected static function buildCollection(): NaprobuBaseCollection
     {
         $class = get_called_class();
         $dataCollection = new $class();

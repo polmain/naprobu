@@ -26,4 +26,15 @@ class CountryCollection extends NaprobuDataCollection
     {
         return CountryData::class;
     }
+
+    public function getFirstByCode(string $code): ?Country
+    {
+        foreach ($this as $country){
+            if($country->getCode() === $code){
+                return $country;
+            }
+        }
+
+        return null;
+    }
 }

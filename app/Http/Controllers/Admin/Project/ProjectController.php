@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Project;
 
+use App\Entity\Collection\CountryCollection;
 use App\Entity\ProjectAudienceEnum;
 use App\Http\Controllers\Admin\iAdminController;
 use App\Model\Blogger\BloggerUserProject;
@@ -36,6 +37,7 @@ class ProjectController extends Controller implements iAdminController
 
 	//Список всех проектов
 	public function all(){
+
 		$projects = Project::with(['category','status','requests'])
 			->withCount(['requests'])
 			->where('lang','ru')
@@ -137,6 +139,7 @@ class ProjectController extends Controller implements iAdminController
 		$statuses = ProjectStatus::where('lang','ru')->get();
 		$categories = ProjectCategory::where('lang','ru')->get();
 		$audienceArray = ProjectAudienceEnum::toArray();
+        $countryCollection = CountryCollection::getInstance();
 
 		SEO::setTitle('Новый проект');
 		AdminPageData::setPageName('Новый проект');
@@ -147,6 +150,7 @@ class ProjectController extends Controller implements iAdminController
 			'categories' => $categories,
 			'statuses' => $statuses,
 			'audienceArray' => $audienceArray,
+            'countryCollection' => $countryCollection
 		]);
 	}
 
@@ -192,6 +196,7 @@ class ProjectController extends Controller implements iAdminController
 		$categories = ProjectCategory::where('lang','ru')->get();
 		$statuses = ProjectStatus::where('lang','ru')->get();
         $audienceArray = ProjectAudienceEnum::toArray();
+        $countryCollection = CountryCollection::getInstance();
 
 		SEO::setTitle('Редактирование проекта: '.$project->name);
 		AdminPageData::setPageName('Редактирование проекта');
@@ -206,6 +211,7 @@ class ProjectController extends Controller implements iAdminController
 			'countReviews' => $countReviews,
 			'reviewFilter' => $reviewFilter,
 			'audienceArray' => $audienceArray,
+			'countryCollection' => $countryCollection,
 		]);
 	}
 
@@ -328,6 +334,7 @@ class ProjectController extends Controller implements iAdminController
 		$project->name = $request->name;
 		$project->type = $request->type;
 		$project->audience = $request->audience;
+		$project->country = $request->country;
 		$project->category_id = $request->category;
 		$project->url = $request->url;
 		$project->short_description = $request->short_description;
@@ -400,6 +407,7 @@ class ProjectController extends Controller implements iAdminController
 
 		$projectUA->type = $request->type;
 		$projectUA->audience = $request->audience;
+		$projectUA->country = $request->country;
 		$projectUA->category_id = $request->category;
 		$projectUA->name = $request->nameUA;
 		$projectUA->url = $request->urlUA;

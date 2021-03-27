@@ -2,7 +2,12 @@
     <a href="{{route('project.level2',[$project->url])}}" class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1">
         <div class="project-item ">
             <div class="project-item-image" style="background-image: url({{$project->preview_image}})">
-                <div class="project-status-icon project-status-{{(App::getlocale() == 'ru')?$project->status_id:$project->base->status_id}}">
+                @if($project->country && $project->audience->isWord())
+                <div class="project-country">
+                    <img src="{{$project->country->getFlag()}}" alt="{{$project->country->getName()}}">
+                </div>
+                @endif
+                <div class="project-status-icon project-status-{{(App::getlocale() === 'ru')?$project->status_id:$project->base->status_id}}">
                     <img src="{{asset('public/svg/icons/project_timer.svg')}}" alt="timer">
                 </div>
             </div>

@@ -210,12 +210,12 @@
                     @endif
                 @endif
                 --}}
-                
+
 
                         @foreach($base->links->where('lang',$lang) as $links)
                             <a href="{{$links->link}}" class="project-sidebar-link project-sidebar-link_blue" target="_blank">{{$links->text}}</a>
                         @endforeach
-                    
+
 
                 @if($base->subpages->where('type_id',9)->where('lang',$lang)->first())
                     <a href="{{route('project.subpage',[$project->url,$base->subpages->where('type_id',9)->where('lang',$lang)->first()->url])}}" class="project-rules project-sidebar-link">{{$base->subpages->where('type_id',9)->where('lang',$lang)->first()->name}}</a>
@@ -279,15 +279,21 @@
                 <section class="project-header ">
 
                     <h1>{{$project->name}}</h1>
-                    <img src="{{$project->main_image}}" alt="{{$project->name}}">
-
-                            <div class="share-project">
-                                <a href="https://www.facebook.com/sharer/sharer.php?u={!!   urlencode(route('project.level2',['url'=>$project->url])) !!}"
-                                   onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
-                                   target="_blank" title="@lang('global.facebook_share')">
-                                    @lang('global.facebook_share')
-                                </a>
+                    <div class="project-main-img">
+                        <img src="{{$project->main_image}}" alt="{{$project->name}}">
+                        @if($project->country && $project->audience->isWord())
+                            <div class="project-country">
+                                <img src="{{$project->country->getFlag()}}" alt="{{$project->country->getName()}}">
                             </div>
+                        @endif
+                    </div>
+                    <div class="share-project">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={!!   urlencode(route('project.level2',['url'=>$project->url])) !!}"
+                           onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+                           target="_blank" title="@lang('global.facebook_share')">
+                            @lang('global.facebook_share')
+                        </a>
+                    </div>
                     @if($base->messages->where('isHide',0)->count()>0)
                         <div class="project-message">
                             <h2>@lang('project.project_message')</h2>

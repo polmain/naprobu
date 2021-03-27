@@ -6,7 +6,7 @@ use App\StaticData\Base\StaticDataClass;
 
 class CountryData extends StaticDataClass
 {
-    private $data = [
+    protected $data = [
             [
                 "name" => "Afghanistan",
                 "code" => "AF",

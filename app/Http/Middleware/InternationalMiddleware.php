@@ -20,17 +20,16 @@ class InternationalMiddleware
 
 
 		$segmentsURI = explode('/',$uri); //делим на части по разделителю "/"
-dd($segmentsURI);
 		//Проверяем метку типа страниц  - в первом сегменте (для базового языка)
 		if (!empty($segmentsURI[0]) && $segmentsURI[0] === static::INTERNATIONAL) {
 			return $segmentsURI[0];
 		}
 		//Проверяем метку типа страниц  - во втором сегменте (для второстипенного языка)
-		if (!empty($segmentsURI[2]) && $segmentsURI[2] === static::INTERNATIONAL) {
-			return $segmentsURI[2];
+		if (!empty($segmentsURI[1]) && $segmentsURI[1] === static::INTERNATIONAL) {
+			return $segmentsURI[1];
 		}
 
-		return null;
+		return "";
 	}
 
 	public function handle($request, Closure $next)

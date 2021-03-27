@@ -11,7 +11,7 @@ class InternationalMiddleware
 
 
 	/*
-	 * Проверяет наличие корректной метки языка в текущем URL
+	 * Проверяет наличие корректной метки типа языка в текущем URL
 	 * Возвращает метку или значеие null, если нет метки
 	 */
 	public static function getInternational()
@@ -21,9 +21,13 @@ class InternationalMiddleware
 
 		$segmentsURI = explode('/',$uri); //делим на части по разделителю "/"
 
-		//Проверяем метку типа страниц  - есть ли она среди доступных языков
+		//Проверяем метку типа страниц  - в первом сегменте (для базового языка)
 		if (!empty($segmentsURI[0]) && $segmentsURI[0] === static::INTERNATIONAL) {
 			return $segmentsURI[0];
+		}
+		//Проверяем метку типа страниц  - во втором сегменте (для второстипенного языка)
+		if (!empty($segmentsURI[1]) && $segmentsURI[1] === static::INTERNATIONAL) {
+			return $segmentsURI[1];
 		}
 
 		return null;

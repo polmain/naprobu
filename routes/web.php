@@ -442,7 +442,7 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
 	Route::post('/project/password/','ProjectController@password')->name('project.password');
 	Route::post('/blog/password/','BlogController@password')->name('blog.password');
 
-	Route::prefix(App\Http\Middleware\LocaleMiddleware::getLocale().App\Http\Middleware\InternationalMiddleware::getInternational())->middleware('locale')->group(function($lang = 'ua') {
+	Route::prefix(App\Http\Middleware\LocaleMiddleware::getLocale())->prefix(App\Http\Middleware\InternationalMiddleware::getInternational())->middleware('locale')->group(function($lang = 'ua') {
 
 		Route::get('/', 'MainController@home')->name('home');
 

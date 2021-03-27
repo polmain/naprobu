@@ -21,8 +21,7 @@ class InternationalMiddleware
 
 		$segmentsURI = explode('/',$uri); //делим на части по разделителю "/"
 
-
-		//Проверяем метку языка  - есть ли она среди доступных языков
+		//Проверяем метку типа страниц  - есть ли она среди доступных языков
 		if (!empty($segmentsURI[0]) && $segmentsURI[0] === static::INTERNATIONAL) {
 			return $segmentsURI[0];
 		}
@@ -30,18 +29,15 @@ class InternationalMiddleware
 		return null;
 	}
 
-	/*
-	* Устанавливает язык приложения в зависимости от метки языка из URL
-	*/
 	public function handle($request, Closure $next)
 	{
-		$locale = self::getLocale();
+		if(self::getInternational()){
+            $request->attributes->add(['international', true]);
+        }else{
+            $request->attributes->add(['international', false]);
+        }
 
-		if($locale) App::setLocale($locale);
-		//если метки нет - устанавливаем основной язык $mainLanguage
-		else App::setLocale(self::$mainLanguage);
-
-		return $next($request); //пропускаем дальше - передаем в следующий посредник
+		return $next($request);
 	}
 
 }

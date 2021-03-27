@@ -405,6 +405,15 @@
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="form-group">
+                            <label>Страна проекта<span class="input-request">*</span></label>
+                            <select class="form-control required" name="country" style="width: 100%;">
+                                @foreach($countryCollection as $country)
+                                    <option value="{{$country->getCode()}}" @if($country->getCode() === $project->country->getCode()) selected="selected" @endif>{{$country->getName()}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label>Статус</label>
                             <select class="form-control" name="status" style="width: 100%;">

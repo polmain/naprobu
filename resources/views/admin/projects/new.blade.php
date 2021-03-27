@@ -280,7 +280,7 @@
                         </div>
                         <div class="form-group">
                             <label>Страна проекта<span class="input-request">*</span></label>
-                            <select class="form-control required" name="audience" style="width: 100%;">
+                            <select class="form-control required" name="country" style="width: 100%;">
                                 @foreach($countryCollection as $country)
                                     <option value="{{$country->getCode()}}" @if($country->getCode() === 'UA') selected="selected" @endif>{{$country->getName()}}</option>
                                 @endforeach

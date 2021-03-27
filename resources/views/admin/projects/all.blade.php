@@ -39,6 +39,7 @@
                             <th width="20">#</th>
                             <th>Проект</th>
                             <th>Категория</th>
+                            <th>Аудитория</th>
                             <th>Анкеты</th>
                             <th>Статус</th>
                             <th width="20">Скрыт</th>
@@ -56,6 +57,7 @@
                                 <td class="text-center"><a href="{{route('adm_project_edit',['project_id'=>$project->id])}}">{{$project->id}}</a></td>
                                 <td><a href="{{route('adm_project_edit',['project_id'=>$project->id])}}">{{$project->name}}</a></td>
                                 <td>{{$project->category->name}}</td>
+                                <td>{{trans('project.audience_'.$project->audience)}}</td>
                                 <td class="text-center"><a href='{{route('adm_select_project_request',['project_id'=>$project->id])}}'>{{$project->requests_count}}</a></td>
                                 <td>{{$project->status->name}}</td>
                                 <td class="text-center">

@@ -16953,7 +16953,7 @@ form .btn-blue:hover {
 
 .project-country img{
     height: 100%;
-    min-width: unset;
+    max-width: unset;
     position: absolute;
     left: -50%;
 }

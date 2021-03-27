@@ -1,14 +1,12 @@
 <?php
 
-
 namespace App\StaticData;
 
+use App\StaticData\Base\StaticDataClass;
 
-use App\Entity\Collection\CountryCollection;
-
-class CountryData
+class CountryData extends StaticDataClass
 {
-    private $countries = [
+    private $data = [
             [
                 "name" => "Afghanistan",
                 "code" => "AF",
@@ -4014,9 +4012,4 @@ class CountryData
                 "flag" => "https://restcountries.eu/data/zwe.svg"
             ]
         ];
-
-    public function getData(): array
-    {
-        return $this->countries;
-    }
 }

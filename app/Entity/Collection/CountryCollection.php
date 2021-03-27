@@ -2,7 +2,7 @@
 
 namespace App\Entity\Collection;
 
-use App\Entity\Collection\Base\NaprobuMutableCollection;
+use App\Entity\Collection\Base\NaprobuDataCollection;
 use App\Entity\Country;
 use App\StaticData\CountryData;
 use ArrayIterator;
@@ -15,24 +15,15 @@ use Traversable;
  * @method Country|null                        first()
  * @method Country|null                        last()
  */
-class CountryCollection extends NaprobuMutableCollection
+class CountryCollection extends NaprobuDataCollection
 {
     public static function getClassName(): string
     {
         return Country::class;
     }
 
-    public static function buildCollection(): CountryCollection
+    public static function getDataClassName(): string
     {
-        $countryDataArray = new CountryData();
-
-        $countryCollection = new self();
-
-        foreach ($countryDataArray->getData() as $countryData){
-            $country = Country::createFromArray($countryData);
-            $countryCollection->add($country);
-        }
-
-        return $countryCollection;
+        return CountryData::class;
     }
 }

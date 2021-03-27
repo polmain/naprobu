@@ -22,11 +22,6 @@ abstract class NaprobuBaseCollection implements NaprobuCollectionInterface
         $this->elements = $elements;
     }
 
-    public static function getClassName(): ?string
-    {
-        return null;
-    }
-
     protected function validateElement($element): void
     {
         if (!$this->isValidElement($element)) {

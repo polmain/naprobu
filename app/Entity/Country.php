@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
-class Country
+use App\Entity\Common\DataClassInterface;
+
+class Country implements DataClassInterface
 {
     private const NAME_KEY = 'name';
     private const CODE_KEY = 'code';
@@ -39,7 +41,7 @@ class Country
         return $this->flag;
     }
 
-    public static function createFromArray(array $data): self
+    public static function createFromArray(array $data): DataClassInterface
     {
         return new self(
             $data[self::NAME_KEY],

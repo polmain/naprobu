@@ -9,6 +9,8 @@ use IteratorAggregate;
 
 interface NaprobuCollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 {
+    public static function getClassName(): string;
+
     public function get($key);
 
     public function add($element): void;

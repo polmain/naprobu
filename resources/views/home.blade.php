@@ -151,6 +151,7 @@
             </div>
         </div>
     </section>
+    @if(!$international)
     <section class="main-reviews">
         <div class="container">
             <h2>{{StringTranslate::translate('current_reviews_mainpage')}}</h2>
@@ -237,6 +238,7 @@
             </div>
         </div>
     </section>
+    @endif
     <section class="main-blog">
         <div class="container">
             <h2>{{StringTranslate::translate('blog_mainpage')}}</h2>

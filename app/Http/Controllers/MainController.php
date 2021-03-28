@@ -104,7 +104,6 @@ class MainController extends Controller
 		])->get();
 
 
-
 		$lang = ($locale == 'ru')?'ua':'ru';
 		//разбиваем на массив по разделителю
 		$segments = explode('/', route('home'));
@@ -131,6 +130,7 @@ class MainController extends Controller
     		'review_count'	=>	$review_count,
     		'expert_count'	=>	$expert_count,
 			'alternet_url'	=> $alternet_url,
+			'international'	=> $international,
 		]);
 	}
 

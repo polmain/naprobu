@@ -14584,12 +14584,12 @@ header .header-search div:hover:after {
     background-image: url("../svg/icons/search_hover.svg");
 }
 
-header .header-search a {
+header .header-international a {
     font-size: 0;
     cursor: pointer;
 }
 
-header .header-search a:after {
+header .header-international a:after {
     content: '';
     display: inline-block;
     position: absolute;
@@ -14607,7 +14607,7 @@ header .header-search a:after {
     left: calc(50% - 10px);
 }
 
-header .header-search a:hover:after {
+header .header-international a:hover:after {
     background-image: url("../svg/icons/world-map_hover.svg");
 }
 

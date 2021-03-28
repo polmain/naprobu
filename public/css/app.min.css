@@ -14629,7 +14629,7 @@ header .header-international.header-international-ukraine a:after {
     left: calc(50% - 10px);
 }
 
-header .header-international a:hover:after {
+header .header-international.header-international-ukraine a:hover:after {
     background-image: url("../svg/icons/ukraine_map.svg");
     opacity: 0.8;
 }

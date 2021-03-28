@@ -27,8 +27,8 @@
                             <a href="{{route('home')}}international">International</a>
                         </div>
                     @else
-                        <div class="col-md-1 col-1 header-international-ukraine">
-                            <a href="{{ str_replace('international','',route('home'))}}">Ukraine</a>
+                        <div class="col-md-1 col-1 header-international header-international-ukraine">
+                            <a href="{{ str_replace('international/','',route('home'))}}">Ukraine</a>
                         </div>
                     @endif
                     <div class="col-md-1 col-2 header-search">

@@ -14523,7 +14523,7 @@ header .header-menu ul li > ul li:last-child a {
     }
 }
 
-header .auth-header, header .lang, header .header-search {
+header .auth-header, header .lang, header .header-search, header .header-international {
     display: -moz-flex;
     display: -webkit-box;
     display: -webkit-flex;
@@ -14537,7 +14537,7 @@ header .auth-header, header .lang, header .header-search {
     height: 100%;
 }
 
-header .auth-header:after, header .lang:after, header .header-search:after {
+header .auth-header:after, header .lang:after, header .header-search:after, header .header-international:after {
     content: '';
     position: absolute;
     right: 0px;
@@ -14547,7 +14547,7 @@ header .auth-header:after, header .lang:after, header .header-search:after {
     background-color: #f9f9f9;
 }
 
-header .auth-header:before, header .lang:before, header .header-search:before {
+header .auth-header:before, header .lang:before, header .header-search:before, header .header-international:before {
     content: '';
     position: absolute;
     right: 1px;
@@ -14582,6 +14582,33 @@ header .header-search div:after {
 
 header .header-search div:hover:after {
     background-image: url("../svg/icons/search_hover.svg");
+}
+
+header .header-search a {
+    font-size: 0;
+    cursor: pointer;
+}
+
+header .header-search a:after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background-image: url("../svg/icons/world-map.svg");
+    -khtml-background-size: cover;
+    -ms-background-size: cover;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-position: 50% 50%;
+    top: -webkit-calc(50% - 6px);
+    top: calc(50% - 6px);
+    left: -webkit-calc(50% - 10px);
+    left: calc(50% - 10px);
+}
+
+header .header-search a:hover:after {
+    background-image: url("../svg/icons/world-map_hover.svg");
 }
 
 header .lang {

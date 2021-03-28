@@ -14616,7 +14616,7 @@ header .header-international.header-international-ukraine a:after {
     display: inline-block;
     position: absolute;
     width: 24px;
-    height: 24px;
+    height: 18px;
     background-image: url("../svg/icons/ukraine_map.svg");
     -khtml-background-size: cover;
     -ms-background-size: cover;

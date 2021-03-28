@@ -24,6 +24,7 @@ use OpenGraph;
 class ProjectController extends Controller
 {
     public function all(Request $request){
+        $international = $request->get('international');
 		$locale = App::getLocale();
 
 		$page = Page::where([
@@ -49,13 +50,19 @@ class ProjectController extends Controller
 			['lang',$locale],
 			['isHide',0],
 		])->get();
+
+    	$audience = ProjectAudienceEnum::UKRAINE;
+    	if($international){
+            $audience = ProjectAudienceEnum::WORD;
+        }
+
     	$projects	=	Project::where([
     		['lang',$locale],
 			['status_id','<>',3],
 			['status_id','<>',10],
 			['type','<>','only-blogger'],
     		['isHide',0],
-            ['audience',ProjectAudienceEnum::UKRAINE],
+            ['audience',$audience],
 		])->orderBy('start_registration_time','desc')->paginate(15);
 
 		if ($request->ajax()) {

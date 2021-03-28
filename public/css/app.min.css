@@ -14593,9 +14593,9 @@ header .header-international a:after {
     content: '';
     display: inline-block;
     position: absolute;
-    width: 18px;
-    height: 18px;
-    background-image: url("../svg/icons/world-map.svg");
+    width: 24px;
+    height: 24px;
+    background-image: url("../svg/icons/worldwide.svg");
     -khtml-background-size: cover;
     -ms-background-size: cover;
     background-size: cover;
@@ -14608,7 +14608,30 @@ header .header-international a:after {
 }
 
 header .header-international a:hover:after {
-    background-image: url("../svg/icons/world-map_hover.svg");
+    background-image: url("../svg/icons/worldwide-hover.svg");
+}
+
+header .header-international.header-international-ukraine a:after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background-image: url("../svg/icons/ukraine_map.svg");
+    -khtml-background-size: cover;
+    -ms-background-size: cover;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-position: 50% 50%;
+    top: -webkit-calc(50% - 6px);
+    top: calc(50% - 6px);
+    left: -webkit-calc(50% - 10px);
+    left: calc(50% - 10px);
+}
+
+header .header-international a:hover:after {
+    background-image: url("../svg/icons/ukraine_map.svg");
+    opacity: 0.8;
 }
 
 header .lang {

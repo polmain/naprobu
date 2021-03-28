@@ -36,8 +36,10 @@ class InternationalMiddleware
 	{
 		if(self::getInternational()){
             $request->attributes->add(['international' => true]);
+            view()->share('international',true);
         }else{
             $request->attributes->add(['international' => false]);
+            view()->share('international',false);
         }
 
 		return $next($request);

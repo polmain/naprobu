@@ -346,6 +346,7 @@
                 </section>
                 @if($project->product_info)
                     <section class="project-text">
+                        <h2>@lang('project.product_info')</h2>
                         <div class="project-text-wrap">
                             {!! $project->product_info !!}
                         </div>

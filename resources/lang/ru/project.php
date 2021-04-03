@@ -18,6 +18,7 @@ return [
 	'blogger_header'	=>	'Блогеры тестируют',
 	'blogger_link'		=>	'Читать',
 	'project_message'	=>	'Важные сообщения проекта',
+	'product_info'	    =>	'Описание продукта',
 	'project_result'	=>	'Результаты тестирования',
 	'project_review'	=>	'Отзывы',
 	'project_review_all'=>	'Читать все отзывы',

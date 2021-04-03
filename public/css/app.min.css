@@ -14523,7 +14523,7 @@ header .header-menu ul li > ul li:last-child a {
     }
 }
 
-header .auth-header, header .lang, header .header-search {
+header .auth-header, header .lang, header .header-search, header .header-international {
     display: -moz-flex;
     display: -webkit-box;
     display: -webkit-flex;
@@ -14537,7 +14537,7 @@ header .auth-header, header .lang, header .header-search {
     height: 100%;
 }
 
-header .auth-header:after, header .lang:after, header .header-search:after {
+header .auth-header:after, header .lang:after, header .header-search:after, header .header-international:after {
     content: '';
     position: absolute;
     right: 0px;
@@ -14547,7 +14547,7 @@ header .auth-header:after, header .lang:after, header .header-search:after {
     background-color: #f9f9f9;
 }
 
-header .auth-header:before, header .lang:before, header .header-search:before {
+header .auth-header:before, header .lang:before, header .header-search:before, header .header-international:before {
     content: '';
     position: absolute;
     right: 1px;
@@ -14582,6 +14582,56 @@ header .header-search div:after {
 
 header .header-search div:hover:after {
     background-image: url("../svg/icons/search_hover.svg");
+}
+
+header .header-international a {
+    font-size: 0;
+    cursor: pointer;
+}
+
+header .header-international a:after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background-image: url("../svg/icons/worldwide.svg");
+    -khtml-background-size: cover;
+    -ms-background-size: cover;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-position: 50% 50%;
+    top: -webkit-calc(50% - 6px);
+    top: calc(50% - 6px);
+    left: -webkit-calc(50% - 10px);
+    left: calc(50% - 10px);
+}
+
+header .header-international a:hover:after {
+    background-image: url("../svg/icons/worldwide-hover.svg");
+}
+
+header .header-international.header-international-ukraine a:after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    width: 24px;
+    height: 18px;
+    background-image: url("../svg/icons/ukraine_map.svg");
+    -khtml-background-size: cover;
+    -ms-background-size: cover;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-position: 50% 50%;
+    top: -webkit-calc(50% - 6px);
+    top: calc(50% - 6px);
+    left: -webkit-calc(50% - 10px);
+    left: calc(50% - 10px);
+}
+
+header .header-international.header-international-ukraine a:hover:after {
+    background-image: url("../svg/icons/ukraine_map.svg");
+    opacity: 0.8;
 }
 
 header .lang {
@@ -16951,6 +17001,7 @@ form .btn-blue:hover {
     left: 20px;
     bottom: -32px;
     overflow: hidden;
+    z-index: 1;
 }
 .project-main-img .project-country{
     left: 30px;

@@ -28,6 +28,7 @@ class MainController extends Controller
     private const OPEN_GRAPH_IMAGE_HEIGHT = 220;
 
     public function home(Request $request){
+        $international = $request->get('international');
 		$locale = App::getLocale();
 
 		$page = Page::where([
@@ -49,13 +50,18 @@ class MainController extends Controller
 			]
 		);
 
+		$audience = ProjectAudienceEnum::UKRAINE;
+		if($international){
+            $audience = ProjectAudienceEnum::WORD;
+        }
+
     	$projects = Project::where([
     		['lang',$locale],
     		['isHide',0],
     		['status_id','<>',3],
     		['status_id','<>',10],
 			['type','<>','only-blogger'],
-            ['audience',ProjectAudienceEnum::UKRAINE],
+            ['audience',$audience],
 		])->orderBy('start_registration_time','desc')->limit(6)->get();
 
 		$project_count = Project::where([
@@ -98,7 +104,6 @@ class MainController extends Controller
 		])->get();
 
 
-
 		$lang = ($locale == 'ru')?'ua':'ru';
 		//разбиваем на массив по разделителю
 		$segments = explode('/', route('home'));
@@ -125,6 +130,7 @@ class MainController extends Controller
     		'review_count'	=>	$review_count,
     		'expert_count'	=>	$expert_count,
 			'alternet_url'	=> $alternet_url,
+			'international'	=> $international,
 		]);
 	}
 

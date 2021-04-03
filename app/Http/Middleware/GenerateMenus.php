@@ -11,6 +11,7 @@ use App;
 
 class GenerateMenus
 {
+    private const UKRAINE_ONLY_ROUTE_LIST = ['partner', 'blog'];
     /**
      * Handle an incoming request.
      *
@@ -20,14 +21,18 @@ class GenerateMenus
      */
     public function handle($request, Closure $next)
     {
+        $international = $request->get('international');
     	$lang = App::getLocale();
 		$projectCategories = ProjectCategory::where('lang',$lang)->get();
 
 		$menus = App\Model\Menu\Menu::all();
 
 		foreach ($menus as $menu){
-			Menu::make($menu->name, function ($menuView) use ($projectCategories, $lang, $menu) {
+			Menu::make($menu->name, function ($menuView) use ($projectCategories, $lang, $menu, $international) {
 				foreach ($menu->items->where('lang',$lang) as $menuItem){
+				    if ($international && in_array($menuItem->route, self::UKRAINE_ONLY_ROUTE_LIST)){
+				        continue;
+                    }
 					$options = [];
 					if($menuItem->route){
 						$options['route'] = $menuItem->route;
@@ -50,7 +55,7 @@ class GenerateMenus
 				}
 			});
 		}
-		
+
 		return $next($request);
     }
 

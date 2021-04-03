@@ -180,47 +180,6 @@
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
 
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">SEO проекта</h3>
-                        <div class="box-tools pull-right">
-                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Title</label>
-                                <input type="text" id="title" name="title" class="form-control" placeholder="Введите Title проекта...">
-                            </div>
-                            <div class="col-md-6">
-                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Title</label>
-                                <input type="text" id="titleUA" name="titleUA" class="form-control" placeholder="Введите Title проекта...">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Description</label>
-                                <textarea class="form-control" name="seo_description" rows="5" placeholder="Введите Description проекта..."></textarea>
-                            </div>
-                            <div class="col-md-6">
-                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Description</label>
-                                <textarea class="form-control" name="seo_description_ua" rows="5" placeholder="Введите Description проекта..."></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Keywords</label>
-                                <input type="text" class="form-control" name="keywords" placeholder="Введите Keywords проекта...">
-                            </div>
-                            <div class="col-md-6">
-                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Keywords</label>
-                                <input type="text" class="form-control" name="keywordsUA" placeholder="Введите Keywords проекта...">
-                            </div>
-                        </div>
-                    </div><!-- /.box-body -->
-                </div><!-- /.box -->
-
 
 
                 <div class="form-group">
@@ -264,6 +223,47 @@
                         <!-- /.tab-content -->
                     </div>
                 </div>
+
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">SEO проекта</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Title</label>
+                                <input type="text" id="title" name="title" class="form-control" placeholder="Введите Title проекта...">
+                            </div>
+                            <div class="col-md-6">
+                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Title</label>
+                                <input type="text" id="titleUA" name="titleUA" class="form-control" placeholder="Введите Title проекта...">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Description</label>
+                                <textarea class="form-control" name="seo_description" rows="5" placeholder="Введите Description проекта..."></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Description</label>
+                                <textarea class="form-control" name="seo_description_ua" rows="5" placeholder="Введите Description проекта..."></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Keywords</label>
+                                <input type="text" class="form-control" name="keywords" placeholder="Введите Keywords проекта...">
+                            </div>
+                            <div class="col-md-6">
+                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Keywords</label>
+                                <input type="text" class="form-control" name="keywordsUA" placeholder="Введите Keywords проекта...">
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
 
             </div>
             <div class="col-md-3">

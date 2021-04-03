@@ -11,7 +11,7 @@ return [
 	'project_name'		=>	'Project menu',
 	'register_project'	=>	'Register in the project',
 	'write_report'		=>	'Fill report',
-	'write_post_report'	=> 'Post questionnaire',
+	'write_post_report'	=>  'Post questionnaire',
 	'blog_header'		=>	'Blog post',
 	'blog_link'			=>	'Go to blog',
 	'contest_rule'		=>	'Read the terms',

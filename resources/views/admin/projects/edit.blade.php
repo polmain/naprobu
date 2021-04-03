@@ -216,7 +216,6 @@
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
 
-
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">Результаты проекта</h3>
@@ -272,6 +271,28 @@
                         </div>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
+
+                <div class="form-group">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs pull-right">
+                            <li><a href="#text_5-2" data-toggle="tab"><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"></a></li>
+                            <li class="active"><a href="#text_5-1" data-toggle="tab"><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"></a></li>
+                            <li class="pull-left header"><label>Описание продукта<span class="input-request">*</span></label></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="text_5-1">
+                                <textarea class="editor" id="text" name="product_info" rows="10" cols="80">{{$project->product_info}}</textarea>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="text_5-2">
+                                <textarea class="editor" id="text" name="product_infoUA" rows="10" cols="80">{{$translate->product_info}}</textarea>
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">SEO проекта</h3>

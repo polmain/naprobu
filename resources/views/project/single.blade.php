@@ -211,10 +211,9 @@
                 @endif
                 --}}
 
-
-                        @foreach($base->links->where('lang',$lang) as $links)
-                            <a href="{{$links->link}}" class="project-sidebar-link project-sidebar-link_blue" target="_blank">{{$links->text}}</a>
-                        @endforeach
+                @foreach($base->links->where('lang',$lang) as $links)
+                    <a href="{{$links->link}}" class="project-sidebar-link project-sidebar-link_blue" target="_blank">{{$links->text}}</a>
+                @endforeach
 
 
                 @if($base->subpages->where('type_id',9)->where('lang',$lang)->first())
@@ -345,6 +344,13 @@
                         {!! $project->text !!}
                     </div>
                 </section>
+                @if($project->product_info)
+                    <section class="project-text">
+                        <div class="project-text-wrap">
+                            {!! $project->product_info !!}
+                        </div>
+                    </section>
+                @endif
                 @if($reviews->count()>0)
                     <section class="project-review">
                         <h2>@lang('project.project_review')</h2>

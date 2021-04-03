@@ -14658,7 +14658,7 @@ header .lang .other-lang {
     top: 100%;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 200%;
     text-align: center;
     line-height: 100%;
     display: -moz-flex;
@@ -14672,9 +14672,16 @@ header .lang .other-lang {
     -moz-justify-content: center;
     justify-content: center;
     overflow: hidden;
+    flex-wrap: wrap;
 }
 
-header .lang .current-lang:hover span, header .lang .other-lang:hover span {
+header .lang .other-lang .other-lang-item{
+    width: 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+    position: relative;
+}
+header .lang .current-lang:hover span, header .lang .other-lang .other-lang-item:hover span {
     color: #f9423a;
 }
 

@@ -17001,6 +17001,7 @@ form .btn-blue:hover {
     left: 20px;
     bottom: -32px;
     overflow: hidden;
+    z-index: 1;
 }
 .project-main-img .project-country{
     left: 30px;

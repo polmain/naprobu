@@ -40,12 +40,6 @@
                                 <div class="current-lang"><img src="{{asset('public/svg/icons/'.$lang.'.svg')}}" class="lang-flag" alt="{{$lang}}"/><span>{{strtoupper($lang)}}</span></div>
                             @else
                                <a class="other-lang" style="display: none" href="@yield('lang_href')"><img src="{{asset('public/svg/icons/'.$lang.'.svg')}}" class="lang-flag" alt="{{$lang}}"/><span>{{strtoupper($lang)}}</span></a>
-                                {{--<a class="other-lang" style="display: none" href="{{ route('setlocale',$lang)}}"><img src="{{asset('public/svg/icons/'.$lang.'.svg')}}" class="lang-flag" alt="{{$lang}}"/><span>{{strtoupper($lang)}}</span></a>
-                                @auth
-                                    @if(Auth::user()->hasRole('admin'))
-                                        <a class="other-lang" style="display: none" href="@yield('lang_href')"><img src="{{asset('public/svg/icons/'.$lang.'.svg')}}" class="lang-flag" alt="{{$lang}}"/><span>{{strtoupper($lang)}}</span></a>
-                                    @endif
-                                @endauth--}}
                             @endif
                         @endforeach
                     </div>

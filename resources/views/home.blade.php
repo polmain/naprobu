@@ -114,7 +114,11 @@
                 @foreach($projects  as  $project)
                     <a class="col-md-6 col-lg-4 project-item" href="{{route('project.level2',[$project->url])}}">
                         <div class="project-item-image" style="background-image: url({{$project->preview_image}})">
-
+                            @if($project->country && $project->audience->isWord())
+                                <div class="project-country">
+                                    <img src="{{$project->country->getFlag()}}" alt="{{$project->country->getName()}}">
+                                </div>
+                            @endif
                         </div>
                         <div class="project-item-info">
                             <div class="project-item-name">{{$project->name}}</div>

@@ -341,6 +341,7 @@ class ProjectController extends Controller implements iAdminController
 		$project->text = $request->text;
 		$project->product_name = $request->product_name;
 		$project->product_info = $request->product_info;
+		$project->faq = $request->faq;
 		$project->rules = $request->rules;
 		$project->qa_text = $request->qa_text;
 		$project->count_users = $request->count_users;
@@ -416,6 +417,7 @@ class ProjectController extends Controller implements iAdminController
 		$projectUA->text = $request->textUA;
 		$projectUA->product_name = $request->product_nameUA;
         $projectUA->product_info = $request->product_infoUA;
+        $projectUA->faq = $request->faqUA;
 		$projectUA->rules = $request->rulesUA;
 		$projectUA->qa_text = $request->qa_textUA;
 		$projectUA->count_users = $request->count_users;

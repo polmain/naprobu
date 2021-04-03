@@ -352,6 +352,14 @@
                         </div>
                     </section>
                 @endif
+                @if($project->faq)
+                    <section class="project-text">
+                        <h2>@lang('project.faq')</h2>
+                        <div class="project-text-wrap">
+                            {!! $project->faq !!}
+                        </div>
+                    </section>
+                @endif
                 @if($reviews->count()>0)
                     <section class="project-review">
                         <h2>@lang('project.project_review')</h2>

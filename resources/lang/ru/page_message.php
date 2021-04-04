@@ -8,10 +8,10 @@ return [
     'already_verify_message'	=> 'Вы уже подтверждали свой email ранее',
 	'thankyou_email_header'		=> 'Спасибо что подтвердили свой email',
 	'thankyou_email_message'	=> 'Теперь вы можете авторизироваться на сайте',
-	'cod_not_valid_header'		=> 'Код подтверждения не верный',
+	'cod_not_valid_header'		=> 'Код подтверждения неверный',
 	'cod_not_valid_message'		=> 'Мы отправили вам повторный код на ваш e-mail: :email.',
 	'not_verify_message'		=> 'Вы не подтвердили свой email. Пожалуйста подтвердите его и авторизируйтесь снова.',
-    
+
     //Brif
     'brif_header'   => "Благодарим за заполненный Бриф",
     'brif_message'  => "Мы свяжемся с Вами в ближайшее время как только обработаем Ваш бриф.",

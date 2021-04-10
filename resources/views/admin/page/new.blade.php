@@ -52,7 +52,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group project-url edit url-en" id="project-url-rn">img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Постоянная ссылка: <div class="edit-url">
+                        <div class="form-group project-url edit url-en" id="project-url-en"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Постоянная ссылка: <div class="edit-url">
                                 <div class="edit-a active">
                                     <a href="{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/en/" class="link-url"><span class="static-part">{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/en/</span><span class="edit-part"></span></a>
                                     <button type="button" class="btn btn-default btn-sm change-url">Изменить</button>

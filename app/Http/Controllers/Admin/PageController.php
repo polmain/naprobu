@@ -141,7 +141,7 @@ class PageController extends Controller
 	private function checkRequiredForLang(Request $request, string $lang): bool
     {
         $upperLang = mb_strtoupper($lang);
-
+dd($request->has('name'.$upperLang));
 	    return $request->has('name'.$upperLang);
     }
 

@@ -183,10 +183,35 @@ class PageController extends Controller
 		$block->content = $request->block_content[$key];
 		$block->save();
 
-		$block_ua = $block->translate->first();
-		$block_ua->content = $request->block_content_ua[$key];
-		$block_ua->save();
+		if($request->block_content_ua[$key]){
+            $block_ua = $block->translate->where('lang','ua')->first();
+            if(empty($block_ua)){
+                $block_ua = $this->createBlock($block, self::UKRAINIAN_LANG);
+            }
+            $block_ua->content = $request->block_content_ua[$key];
+            $block_ua->save();
+        }
+
+        if($request->block_content_en[$key]){
+            $block_en = $block->translate->where('lang','en')->first();
+            if(empty($block_en)){
+                $block_en = $this->createBlock($block, self::ENGLISH_LANG);
+            }
+            $block_en->content = $request->block_content_en[$key];
+            $block_en->save();
+        }
 	}
+
+	private function createBlock(Block $blockRU, string $lang): Block
+    {
+        $block = new Block();
+        $block->type_id = $blockRU->type_id;
+        $block->page_id = $blockRU->page_id;
+        $block->name = $blockRU->name;
+        $block->lang = $lang;
+
+        return $block;
+    }
 
 	/* Main page editors */
 	public function validURL(Request $request)

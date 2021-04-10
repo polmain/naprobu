@@ -194,18 +194,23 @@
                                         <div class="form-group row">
                                             @switch($block->type_id)
                                                 @case(1)
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4">
                                                         <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Текст<span class="input-request">*</span></label>
                                                         <input type="text" name="block_content[]" class="form-control required" placeholder="Введите строку..." value="{{$block->content}}">
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Текст<span class="input-request">*</span></label>
-                                                        <input type="text" name="block_content_ua[]" class="form-control required" placeholder="Введите строку..." value="{{$block->translate->first()->content}}">
+                                                    <div class="col-md-4">
+                                                        <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Текст</label>
+                                                        <input type="text" name="block_content_ua[]" class="form-control" placeholder="Введите строку..." value="{{$block->translate->firstWhere('lang', 'ua')? $block->translate->firstWhere('lang', 'ua')->content : ''}}">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Текст</label>
+                                                        <input type="text" name="block_content_en[]" class="form-control" placeholder="Введите строку..." value="{{$block->translate->firstWhere('lang', 'en')? $block->translate->firstWhere('lang', 'en')->content : ''}}">
                                                     </div>
                                                 @break
                                                 @case(2)
                                                     <div class="nav-tabs-custom">
                                                         <ul class="nav nav-tabs pull-right">
+                                                            <li><a href="#text_{{$block->id}}-3" data-toggle="tab"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"></a></li>
                                                             <li><a href="#text_{{$block->id}}-2" data-toggle="tab"><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"></a></li>
                                                             <li class="active"><a href="#text_{{$block->id}}-1" data-toggle="tab"><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"></a></li>
                                                             <li class="pull-left header"><label>Текст<span class="input-request">*</span></label></li>
@@ -216,7 +221,11 @@
                                                             </div>
                                                             <!-- /.tab-pane -->
                                                             <div class="tab-pane" id="text_{{$block->id}}-2">
-                                                                <textarea class="editor" name="block_content_ua[]" rows="10" cols="80">{!! $block->translate->first()->content !!}</textarea>
+                                                                <textarea class="editor" name="block_content_ua[]" rows="10" cols="80">{!! $block->translate->firstWhere('lang', 'ua')? $block->translate->firstWhere('lang', 'ua')->content : '' !!}</textarea>
+                                                            </div>
+                                                            <!-- /.tab-pane -->
+                                                            <div class="tab-pane" id="text_{{$block->id}}-3">
+                                                                <textarea class="editor" name="block_content_en[]" rows="10" cols="80">{!! $block->translate->firstWhere('lang', 'en')? $block->translate->firstWhere('lang', 'en')->content : '' !!}</textarea>
                                                             </div>
                                                             <!-- /.tab-pane -->
                                                         </div>
@@ -224,7 +233,7 @@
                                                     </div>
                                                 @break
                                                 @case(3)
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4">
                                                         <label class="control-label "><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Картинка<span class="input-request">*</span></label>
                                                         <div class="load-image-container project-img ">
                                                             @if(!empty($block->content))
@@ -242,18 +251,36 @@
                                                             @endif
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4">
                                                         <label class="control-label "><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Картинка<span class="input-request">*</span></label>
                                                         <div class="load-image-container project-img ">
-                                                            @if(!empty($block->translate->first()->content))
-                                                                <div class="load-img active" style="background-image: url({{$block->translate->first()->content}});">
-                                                                    <input type="hidden" class="upload_image_name" name="block_content_ua[]" value="{{$block->translate->first()->content}}">
+                                                            @if(!empty($block->translate->firstWhere('lang', 'ua')))
+                                                                <div class="load-img active" style="background-image: url({{$block->translate->firstWhere('lang', 'ua')->content}});">
+                                                                    <input type="hidden" class="upload_image_name" name="block_content_ua[]" value="{{$block->translate->firstWhere('lang', 'ua')->content}}">
                                                                 </div>
                                                                 <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
                                                                 <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
                                                             @else
                                                                 <div class="load-img">
                                                                     <input type="hidden" class="upload_image_name" name="block_content_ua[]">
+                                                                </div>
+                                                                <button type="button" class="btn btn-primary image_upload">Добавить изображение</button>
+                                                                <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="control-label "><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Картинка<span class="input-request">*</span></label>
+                                                        <div class="load-image-container project-img ">
+                                                            @if(!empty($block->translate->firstWhere('lang', 'en')))
+                                                                <div class="load-img active" style="background-image: url({{$block->translate->firstWhere('lang', 'en')->content}});">
+                                                                    <input type="hidden" class="upload_image_name" name="block_content_en[]" value="{{$block->translate->firstWhere('lang', 'en')->content}}">
+                                                                </div>
+                                                                <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
+                                                                <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
+                                                            @else
+                                                                <div class="load-img">
+                                                                    <input type="hidden" class="upload_image_name" name="block_content_en[]">
                                                                 </div>
                                                                 <button type="button" class="btn btn-primary image_upload">Добавить изображение</button>
                                                                 <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>

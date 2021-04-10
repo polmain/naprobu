@@ -15,19 +15,22 @@
                     </div>
                     <div class="box-body">
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Название страницы<span class="input-request">*</span></label>
                                 <input type="text" id="name-ru" name="name" class="form-control project-name required" placeholder="Введите название страницы..." value="{{$page->name}}">
                             </div>
-                            <div class="col-md-6">
-                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название страницы<span class="input-request">*</span></label>
-                                <input type="text" id="name-ua" name="nameUA" class="form-control project-name required" placeholder="Введите название страницы..." value="{{$page->translate->name}}">
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название страницы</label>
+                                <input type="text" id="name-ua" name="nameUA" class="form-control project-name" placeholder="Введите название страницы..." value="{{ $pageUA ? $pageUA->name :''}}">
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Название страницы</label>
+                                <input type="text" id="name-en" name="nameEN" class="form-control project-name" placeholder="Введите название страницы..." value="{{ $pageEN ? $pageEN->name :''}}">
                             </div>
                         </div>
                         <div class="form-group project-url edit not-edit url-ru" id="project-url-ru"><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Постоянная ссылка: <div class="edit-url">
                                 <div class="edit-a active">
                                     <a href="{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/ru/{{$page->url}}" class="link-url"><span class="static-part">{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/ru/</span><span class="edit-part">{{$page->url}}</span></a>
-                                    {{--<button type="button" class="btn btn-default btn-sm change-url">Изменить</button>--}}
                                 </div>
                                 <div class="edit-input">
                                     {{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/ru/<input type="text" class="new-url" name="url" value="{{$page->url}}">
@@ -38,11 +41,21 @@
                         </div>
                         <div class="form-group project-url edit not-edit url-ua" id="project-url-ua"><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Постоянная ссылка: <div class="edit-url">
                                 <div class="edit-a active">
-                                    <a href="{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/{{$page->translate->url}}" class="link-url"><span class="static-part">{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/</span><span class="edit-part">{{$page->translate->url}}</span></a>
-                                    {{--<button type="button" class="btn btn-default btn-sm change-url">Изменить</button>--}}
+                                    <a href="{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/{{ $pageUA ? $pageUA->url :''}}" class="link-url"><span class="static-part">{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/</span><span class="edit-part">{{ $pageUA ? $pageUA->url :''}}</span></a>
                                 </div>
                                 <div class="edit-input">
-                                    {{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/<input type="text" class="new-url" name="urlUA" value="{{$page->translate->url}}">
+                                    {{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/<input type="text" class="new-url" name="urlUA" value="{{ $pageUA ? $pageUA->url :'' }}">
+                                    <button type="button" class="btn btn-success btn-sm save-url">Ок</button>
+                                    <button type="button" class="btn btn-default btn-sm cancel-url">Отмена</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group project-url edit not-edit url-en" id="project-url-en"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Постоянная ссылка: <div class="edit-url">
+                                <div class="edit-a active">
+                                    <a href="{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/en/{{ $pageEN ? $pageEN->url :''}}" class="link-url"><span class="static-part">{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/en/</span><span class="edit-part">{{ $pageEN ? $pageEN->url :''}}</span></a>
+                                </div>
+                                <div class="edit-input">
+                                    {{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/en/<input type="text" class="new-url" name="urlEN" value="{{ $pageEN ? $pageEN->url :''}}">
                                     <button type="button" class="btn btn-success btn-sm save-url">Ок</button>
                                     <button type="button" class="btn btn-default btn-sm cancel-url">Отмена</button>
                                 </div>
@@ -55,6 +68,7 @@
                         <div class="form-group">
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs pull-right">
+                                    <li><a href="#text_3-3" data-toggle="tab"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"></a></li>
                                     <li><a href="#text_2-2" data-toggle="tab"><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"></a></li>
                                     <li class="active"><a href="#text_1-1" data-toggle="tab"><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"></a></li>
                                     <li class="pull-left header"><label>Текст страницы</label></li>
@@ -65,7 +79,11 @@
                                     </div>
                                     <!-- /.tab-pane -->
                                     <div class="tab-pane" id="text_2-2">
-                                        <textarea class="editor" id="textUA" name="contentUA" rows="10" cols="80">{!! $page->translate->content !!}</textarea>
+                                        <textarea class="editor" id="textUA" name="contentUA" rows="10" cols="80">{!! $pageUA ? $pageUA->content :'' !!}</textarea>
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                    <div class="tab-pane" id="text_3-3">
+                                        <textarea class="editor" id="textEN" name="contentEN" rows="10" cols="80">{!! $pageEN ? $pageEN->content :'' !!}</textarea>
                                     </div>
                                     <!-- /.tab-pane -->
                                 </div>
@@ -84,33 +102,45 @@
                     </div>
                     <div class="box-body">
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Title</label>
                                 <input type="text" id="title" name="seo_title" class="form-control" placeholder="Введите Title проекта..." value="{{$page->seo_title}}">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Title</label>
-                                <input type="text" id="titleUA" name="seo_titleUA" class="form-control" placeholder="Введите Title проекта..." value="{{$page->translate->seo_title}}">
+                                <input type="text" id="titleUA" name="seo_titleUA" class="form-control" placeholder="Введите Title проекта..." value="{{ $pageUA ? $pageUA->seo_title :'' }}">
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Title</label>
+                                <input type="text" id="titleUA" name="seo_titleEN" class="form-control" placeholder="Введите Title проекта..." value="{{ $pageEN ? $pageEN->seo_title :'' }}">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Description</label>
                                 <textarea class="form-control" name="seo_description" rows="5" placeholder="Введите Description проекта...">{{$page->seo_description}}</textarea>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Description</label>
-                                <textarea class="form-control" name="seo_descriptionUA" rows="5" placeholder="Введите Description проекта...">{{$page->translate->seo_description}}</textarea>
+                                <textarea class="form-control" name="seo_descriptionUA" rows="5" placeholder="Введите Description проекта...">{{ $pageUA ? $pageUA->seo_description :'' }}</textarea>
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Description</label>
+                                <textarea class="form-control" name="seo_descriptionEN" rows="5" placeholder="Введите Description проекта...">{{ $pageEN ? $pageEN->seo_description :'' }}</textarea>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Keywords</label>
                                 <input type="text" class="form-control" name="seo_keywords" placeholder="Введите Keywords проекта..." value="{{$page->seo_keywords}}">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Keywords</label>
-                                <input type="text" class="form-control" name="seo_keywordsUA" placeholder="Введите Keywords проекта..." value="{{$page->translate->seo_keywords}}">
+                                <input type="text" class="form-control" name="seo_keywordsUA" placeholder="Введите Keywords проекта..." value="{{$pageUA ? $pageUA->seo_keywords :''}}">
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Keywords</label>
+                                <input type="text" class="form-control" name="seo_keywordsEN" placeholder="Введите Keywords проекта..." value="{{$pageEN ? $pageEN->seo_keywords :''}}">
                             </div>
                         </div>
                         <div class="form-group row">

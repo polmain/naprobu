@@ -49,6 +49,8 @@ class PageController extends Controller
 	public function edit($page_id){
 		$templates = PageTemplate::all();
 		$page = Page::with(['translate','blocks'])->where('id',$page_id)->first();
+		$pageUA = $page->translate->firstWhere('lang', 'ua');
+		$pageEN = $page->translate->firstWhere('lang', 'en');
 
 		SEO::setTitle('Редактирование страницы');
 		AdminPageData::setPageName('Редактирование страницы');
@@ -58,6 +60,8 @@ class PageController extends Controller
 		return view('admin.page.edit',[
 			'templates'	=>	$templates,
 			'page'	=>	$page,
+			'pageUA'	=>	$pageUA,
+			'pageEN'	=>	$pageEN,
 		]);
 	}
 

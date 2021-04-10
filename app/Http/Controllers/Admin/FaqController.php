@@ -14,6 +14,8 @@ use AdminPageData;
 
 class FaqController extends Controller
 {
+    private const TRANSLATE_LANG = ['ua', 'en'];
+
 	protected $childsId = [];
 
     public function categories(){
@@ -58,9 +60,8 @@ class FaqController extends Controller
 
 	public function create(Request $request){
 		$faqCategory = new FaqCategory();
-		$translate = new FaqCategory();
 
-		$this->createOrEdit($request, $faqCategory, $translate);
+		$this->createOrEdit($request, $faqCategory);
 
 		ModeratorLogs::addLog("Добавил группу FAQ: ".$request->name);
 
@@ -76,9 +77,8 @@ class FaqController extends Controller
 
 	public function save(Request $request,$id){
 		$faqCategory = FaqCategory::find($id);
-		$translate = FaqCategory::where('rus_lang_id',$id)->first();
 
-		$this->createOrEdit($request, $faqCategory, $translate);
+		$this->createOrEdit($request, $faqCategory);
 		ModeratorLogs::addLog("Отредактировал группу FAQ: ".$request->name);
 
 		if(($request->submit == "save-hide") || ($request->submit == "save")){
@@ -111,19 +111,18 @@ class FaqController extends Controller
 		return "ok";
 	}
 
-	protected function createOrEdit($request,$faqCategory,$translate){
+	private function createOrEdit(Request $request, FaqCategory $faqCategory){
 		$faqCategory->name = $request->name;
 		$faqCategory->sort = $request->sort;
 		$faqCategory->image = $request->image;
-		$faqCategory->isHide = ($request->submit == "save-hide");
+		$faqCategory->isHide = ($request->submit === "save-hide");
 		$faqCategory->save();
 
-		$translate->name = $request->nameUA;
-		$translate->lang = 'ua';
-		$translate->rus_lang_id = $faqCategory->id;
-		$translate->image = $request->image;
-		$translate->sort = $request->sort;
-		$translate->save();
+        foreach (self::TRANSLATE_LANG as $lang){
+            if($this->checkRequiredForLang($request, $lang)){
+                $this->translateSaveOrCreate($faqCategory, $request, $lang);
+            }
+        }
 
 		$sort = 1;
 
@@ -132,11 +131,37 @@ class FaqController extends Controller
 			$sort++;
 		}
 
-		$this->deleteQuestions($faqCategory->id, $request);
+		$this->deleteQuestions($faqCategory->id);
 	}
 
+    private function checkRequiredForLang(Request $request, string $lang): bool
+    {
+        $upperLang = mb_strtoupper($lang);
 
-	protected function createOrEditQuestion($request,$key,$sort,$faqCategory_id){
+        return (bool) $request->input('name'.$upperLang);
+    }
+
+    private function translateSaveOrCreate(FaqCategory $faqCategory, Request $request, string $lang): void
+    {
+        $translate = FaqCategory::where([
+            'rus_lang_id' => $faqCategory->id,
+            'lang' => $lang,
+        ])->first();
+
+        if(empty($translate)){
+            $translate = new FaqCategory();
+            $translate->rus_lang_id = $faqCategory->id;
+            $translate->lang = $lang;
+        }
+        $upperLang = mb_strtoupper($lang);
+        $translate->name = $request->input('name'.$upperLang);
+        $translate->image = $request->image;
+        $translate->sort = $request->sort;
+        $translate->save();
+    }
+
+
+	private function createOrEditQuestion($request,$key,$sort,$faqCategory_id){
 		$question = FaqQuestion::find($request->question[$key]);
 		if(empty($question)){
 			$question = new FaqQuestion();
@@ -150,25 +175,54 @@ class FaqController extends Controller
 		$question->save();
 		$this->childsId[] = $question->id;
 
-
 		$ruId = $question->id;
-		/* UA */
-		$questionUA = FaqQuestion::where('rus_lang_id',$ruId)->first();
 
-		if(empty($questionUA))
-		{
-			$questionUA = new FaqQuestion();
-			$questionUA->lang = 'ua';
-			$questionUA->rus_lang_id = $ruId;
-		}
-
-		$questionUA->question = $request->question_name_ua[$key];
-		$questionUA->answer = $request->question_answer_ua[$key];
-		$questionUA->faq_category_id = $faqCategory_id;
-		$questionUA->sort = $sort;
-
-		$questionUA->save();
+        foreach (self::TRANSLATE_LANG as $lang){
+            if($this->checkRequiredQuestionForLang($request, $key, $lang)){
+                $this->translateCreateOrEditQuestion(
+                    $request,
+                    $ruId,
+                    $faqCategory_id,
+                    $sort,
+                    $key,
+                    $lang);
+            }
+        }
 	}
+
+    private function checkRequiredQuestionForLang(Request $request, int $key, string $lang): bool
+    {
+        return (bool) $request->input('question_name_'.$lang)[$key] && $request->input('question_answer_'.$lang)[$key];
+    }
+
+    private function translateCreateOrEditQuestion(
+        Request $request,
+        int $ruId,
+        int $faqCategory_id,
+        int $sort,
+        int $key,
+        string $lang
+    ): void
+    {
+        $translate = FaqQuestion::where([
+            'rus_lang_id' => $ruId,
+            'lang' => $lang,
+        ])->first();
+
+        if(empty($translate))
+        {
+            $translate = new FaqQuestion();
+            $translate->lang = $lang;
+            $translate->rus_lang_id = $ruId;
+        }
+
+        $translate->question = $request->input('question_name_'.$lang)[$key];
+        $translate->answer = $request->input('question_answer_'.$lang)[$key];
+        $translate->faq_category_id = $faqCategory_id;
+        $translate->sort = $sort;
+
+        $translate->save();
+    }
 
 	protected function deleteQuestions($faqCategory_id){
 		$questions = FaqQuestion::where([

@@ -135,7 +135,7 @@ class BrandController extends Controller
         ])->first();
 
         if(empty($translate)){
-            $translate = new $brand();
+            $translate = new Brand();
             $translate->rus_lang_id = $brand->id;
             $translate->lang = $lang;
         }

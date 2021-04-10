@@ -70,7 +70,7 @@
                                             <input type="text" name="question_name_ua[]" class="form-control" placeholder="Введите вопрос..." value="{{$question->translate->firstWhere('lang', 'ua')? $question->translate->firstWhere('lang', 'ua')->question : ''}}">
                                         </div>
                                         <div class="col-md-4">
-                                            <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Вопрос</label>$faqCategory->translate->firstWhere('lang', 'ua')
+                                            <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Вопрос</label>
                                             <input type="text" name="question_name_en[]" class="form-control" placeholder="Введите вопрос..." value="{{$question->translate->firstWhere('lang', 'en')? $question->translate->firstWhere('lang', 'en')->question : ''}}">
                                         </div>
                                     </div>

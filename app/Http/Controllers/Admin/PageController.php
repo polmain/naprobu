@@ -124,36 +124,42 @@ class PageController extends Controller
 	}
 
 	protected function saveOrCreate($page,$request){
-		$page->name = $request->name;
-		$page->content = $request->content;
-		$page->url = $request->url;
-		$page->isHide = ($request->submit == "save-hide");
-		$page->template_id = 1;
-
-		$page->seo_title = $request->seo_title;
-		$page->seo_description = $request->seo_description;
-		$page->seo_keywords = $request->seo_keywords;
-		$page->og_image = $request->og_image;
-		$page->save();
-
-		$translate = Page::where('rus_lang_id',$page->id)->first();
-		if(empty($translate)){
-			$translate = new Page();
-			$translate->rus_lang_id = $page->id;
-			$translate->lang = 'ua';
-		}
-		$translate->name = $request->nameUA;
-		$translate->content = $request->contentUA;
-		$translate->url = $request->urlUA;
-		$translate->isHide = ($request->submit == "save-hide");
-		$translate->template_id = 1;
-
-		$translate->seo_title = $request->seo_titleUA;
-		$translate->seo_description = $request->seo_descriptionUA;
-		$translate->seo_keywords = $request->seo_keywordsUA;
-		$translate->og_image = $request->og_image;
-		$translate->save();
+        $this->translateSaveOrCreate($page, $request);
+        $this->translateSaveOrCreate($page, $request, 'ua');
+        $this->translateSaveOrCreate($page, $request, 'en');
 	}
+
+	private function translateSaveOrCreate(Page $page, Request $request, ?string $lang = ''){
+        if($lang !== ''){
+            $translate = Page::where([
+                'rus_lang_id' => $page->id,
+                'lang' => $lang,
+            ])->first();
+
+            if(empty($translate)){
+                $translate = new Page();
+                $translate->rus_lang_id = $page->id;
+                $translate->lang = $lang;
+            }
+        }else{
+            $translate = $page;
+        }
+
+        $upperLang = mb_strtoupper($lang);
+
+        $translate->name = $request->input('name'.$upperLang);
+        $translate->content = $request->input('content'.$upperLang);
+        $translate->url = $request->input('url'.$upperLang);
+        $translate->isHide = ($request->submit == "save-hide");
+        $translate->template_id = 1;
+
+        $translate->seo_title = $request->input('seo_title'.$upperLang);
+        $translate->seo_description = $request->input('seo_description'.$upperLang);
+        $translate->seo_keywords = $request->input('seo_keywords'.$upperLang);
+        $translate->og_image = $request->og_image;
+        $translate->save();
+
+    }
 
 	protected function editBlock($request,$key){
 		$block = Block::find($request->block[$key]);

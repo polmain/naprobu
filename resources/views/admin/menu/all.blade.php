@@ -19,8 +19,7 @@
                         <thead>
                         <tr>
                             <th width="20">#</th>
-                            <th  width="150">Название</th>
-                            <th>Колечетсво пунктов</th>
+                            <th>Название</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -31,9 +30,6 @@
 									</td>
 									<td>
 										<a href="{{route('adm_menu_edit',[$menu->id])}}">{{$menu->name}}</a>
-									</td>
-									<td>
-										{{ $menu->items_count / 2}}
 									</td>
 								</tr>
 							@endforeach

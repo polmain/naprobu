@@ -191,11 +191,11 @@
                     </div>
                     <div class="col-md-4">
                         <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Вопрос</label>
-                        <input type="text" name="question_name_ua[]" class="form-control none-required" placeholder="Введите вопрос...">
+                        <input type="text" name="question_name_ua[]" class="form-control" placeholder="Введите вопрос...">
                     </div>
                     <div class="col-md-4">
                         <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Вопрос</label>
-                        <input type="text" name="question_name_en[]" class="form-control none-required" placeholder="Введите вопрос...">
+                        <input type="text" name="question_name_en[]" class="form-control" placeholder="Введите вопрос...">
                     </div>
                 </div>
                 <div class="form-group row">

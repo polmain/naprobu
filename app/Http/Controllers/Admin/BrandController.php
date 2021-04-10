@@ -11,6 +11,8 @@ use App\Library\Users\ModeratorLogs;
 
 class BrandController extends Controller
 {
+    private const TRANSLATE_LANG = ['ua', 'en'];
+
     public function all(){
 		SEO::setTitle('Все Брэнды');
 		AdminPageData::setPageName('Все Брэнды');
@@ -94,6 +96,7 @@ class BrandController extends Controller
 		$brand->save();
 		return "ok";
 	}
+
 	public function show($brand_id){
 		$brand = Brand::find($brand_id);
 		$brand->isHide = false;
@@ -104,23 +107,44 @@ class BrandController extends Controller
 		return "ok";
 	}
 
-	protected function saveOrCreate($brand,$request){
+	public function saveOrCreate(Brand $brand, Request $request){
+
 		$brand->name = $request->name;
 		$brand->alt = $request->alt;
 		$brand->logo = $request->image;
 		$brand->review = $request->review;
 		$brand->save();
 
-		$translate = Brand::where('rus_lang_id',$brand->id)->first();
-		if(empty($translate)){
-			$translate = new Brand();
-			$translate->rus_lang_id = $brand->id;
-			$translate->lang = 'ua';
-		}
-		$translate->name = $request->name_ua;
-		$translate->alt = $request->alt_ua;
-		$translate->logo = $request->image;
-		$translate->review = $request->review_ua;
-		$translate->save();
+        foreach (self::TRANSLATE_LANG as $lang){
+            if($this->checkRequiredForLang($request, $lang)){
+                $this->translateSaveOrCreate($brand, $request, $lang);
+            }
+        }
 	}
+
+    private function checkRequiredForLang(Request $request, string $lang): bool
+    {
+        return (bool) $request->input('name_'.$lang);
+    }
+
+    private function translateSaveOrCreate(Brand $brand, Request $request, string $lang): void
+    {
+        $translate = Brand::where([
+            'rus_lang_id' => $brand->id,
+            'lang' => $lang,
+        ])->first();
+
+        if(empty($translate)){
+            $translate = new $brand();
+            $translate->rus_lang_id = $brand->id;
+            $translate->lang = $lang;
+        }
+
+        $translate->name = $request->input('name_'.$lang);
+        $translate->alt = $request->input('alt_'.$lang);
+        $translate->review = $request->input('review_'.$lang);
+        $translate->logo = $request->image;
+        $translate->save();
+
+    }
 }

@@ -13,6 +13,10 @@ use AdminPageData;
 
 class PageController extends Controller
 {
+    private const UKRAINIAN_LANG = 'ua';
+    private const ENGLISH_LANG = 'en';
+    private const TRANSLATE_LANG = [self::UKRAINIAN_LANG, self::ENGLISH_LANG];
+
 	public function all(){
 		$pages = Page::where('rus_lang_id',0)->get();
 
@@ -49,6 +53,7 @@ class PageController extends Controller
 	public function edit($page_id){
 		$templates = PageTemplate::all();
 		$page = Page::with(['translate','blocks'])->where('id',$page_id)->first();
+
 		$pageUA = $page->translate->firstWhere('lang', 'ua');
 		$pageEN = $page->translate->firstWhere('lang', 'en');
 
@@ -125,11 +130,23 @@ class PageController extends Controller
 
 	protected function saveOrCreate($page,$request){
         $this->translateSaveOrCreate($page, $request);
-        $this->translateSaveOrCreate($page, $request, 'ua');
-        $this->translateSaveOrCreate($page, $request, 'en');
+
+        foreach (self::TRANSLATE_LANG as $lang){
+            if($this->checkRequiredForLang($request, $lang)){
+                $this->translateSaveOrCreate($page, $request, $lang);
+            }
+        }
 	}
 
-	private function translateSaveOrCreate(Page $page, Request $request, ?string $lang = ''){
+	private function checkRequiredForLang(Request $request, string $lang): bool
+    {
+        $upperLang = mb_strtoupper($lang);
+
+	    return $request->input('name'.$upperLang) !== '';
+    }
+
+	private function translateSaveOrCreate(Page $page, Request $request, ?string $lang = ''): void
+    {
         if($lang !== ''){
             $translate = Page::where([
                 'rus_lang_id' => $page->id,

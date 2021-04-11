@@ -58,7 +58,10 @@ class TagController extends Controller
 		$formatted_tags = [];
 
 		foreach ($tags as $tag) {
-			$formatted_tags[] = ['id' => $tag->id, 'text' => $tag->name.' (укр: '.$tag->translate->name.')'];
+			$formatted_tags[] = ['id' => $tag->id, 'text' => $tag->name
+                .($tag->translate->firstWhere('lang',self::UKRAINIAN_LANG)?' (укр: '.$tag->translate->firstWhere('lang',self::UKRAINIAN_LANG)->name.')':'')
+                .($tag->translate->firstWhere('lang',self::ENGLISH_LANG)?' (eng: '.$tag->translate->firstWhere('lang',self::ENGLISH_LANG)->name.')':'')
+            ];
 		}
 
 		return \Response::json($formatted_tags);

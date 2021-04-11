@@ -160,7 +160,7 @@
                                 @if($post->project_id)
                                 @foreach($projects->reverse() as $project)
                                     @if($project->id == $post->project_id)
-                                        <option value="{{$project->id}}" selected="selcted">{{$project->name}}</option>
+                                        <option value="{{$project->id}}" selected="selected">{{$project->name}}</option>
                                         @break
                                     @endif
                                 @endforeach

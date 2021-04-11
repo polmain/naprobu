@@ -456,7 +456,7 @@ class QuestionnaireController extends Controller
 	private function createOrEditTranslate(Questionnaire $questionnaire, Request $request, string $lang): void
     {
         $translate = Questionnaire::where([
-            'rus_lang_id',$questionnaire->id,
+            'rus_lang_id' => $questionnaire->id,
             'lang' => $lang
         ])->first();
 

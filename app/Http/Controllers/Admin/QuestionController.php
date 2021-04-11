@@ -283,7 +283,7 @@ class QuestionController extends Controller
 
 	private function newOrEditChild($request,$question_id,$questionnaire_id){
 		$sort = 1;
-		if($request->has('question_children_question_'.$request->question.'')){
+		if($request->has('question_children_question_'.$request->question)){
 			foreach ($request->input('question_children_question_'.$request->question) as $i=>$children){
 				$child = Question::find($request->input('question_'.$request->question.'_children_id.'.$i));
 				if(empty($child)){
@@ -295,6 +295,7 @@ class QuestionController extends Controller
 				$child->name = $request->input('question_children_question_'.$request->question)[$i];
 				$child->sort = $sort;
 				$child->save();
+
 				$this->childsId[((int)$request->input('question_'.$request->question.'_children_id.'.$i))] = $child->id;
 
 				foreach (self::TRANSLATE_LANG as $lang){

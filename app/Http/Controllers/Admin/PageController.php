@@ -129,11 +129,11 @@ class PageController extends Controller
 	}
 
 	protected function saveOrCreate($page,$request){
-        $this->translateSaveOrCreate($page, $request);
+        $this->saveOrCreateTranslate($page, $request);
 
         foreach (self::TRANSLATE_LANG as $lang){
             if($this->checkRequiredForLang($request, $lang)){
-                $this->translateSaveOrCreate($page, $request, $lang);
+                $this->saveOrCreateTranslate($page, $request, $lang);
             }
         }
 	}
@@ -145,7 +145,7 @@ class PageController extends Controller
 	    return (bool) $request->input('name'.$upperLang);
     }
 
-	private function translateSaveOrCreate(Page $page, Request $request, ?string $lang = ''): void
+	private function saveOrCreateTranslate(Page $page, Request $request, ?string $lang = ''): void
     {
         if($lang !== ''){
             $translate = Page::where([

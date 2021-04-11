@@ -11,6 +11,10 @@ use AdminPageData;
 
 class TagController extends Controller
 {
+    private const UKRAINIAN_LANG = 'ua';
+    private const ENGLISH_LANG = 'en';
+    private const TRANSLATE_LANG = [self::UKRAINIAN_LANG, self::ENGLISH_LANG];
+
 	public function __construct()
 	{
 		AdminPageData::addBreadcrumbLevel('Блог','blog');
@@ -32,8 +36,11 @@ class TagController extends Controller
 
 		return datatables()
 			->eloquent($tags)
-			->addColumn('translate', function (PostTagList $translate) {
-				return $translate->translate->name;
+			->addColumn('translate_ua', function (PostTagList $translate) {
+				return $translate->translate->firstWhere('lang', self::UKRAINIAN_LANG)? $translate->translate->firstWhere('lang', self::UKRAINIAN_LANG)->name : '';
+			})
+			->addColumn('translate_en', function (PostTagList $translate) {
+				return $translate->translate->firstWhere('lang', self::ENGLISH_LANG)? $translate->translate->firstWhere('lang', self::ENGLISH_LANG)->name : '';
 			})
 			->toJson();
 	}
@@ -63,14 +70,18 @@ class TagController extends Controller
 		$tag->url = $this->str2url($request->name_ru);
 		$tag->save();
 
-		$tagUA = new PostTagList();
-		$tagUA->name = $request->name_ua;
-		$tagUA->url = $this->str2url($request->name_ua);
-		$tagUA->lang = 'ua';
-		$tagUA->rus_lang_id = $tag->id;
-		$tagUA->save();
+		foreach (self::TRANSLATE_LANG as $lang){
+            $translate = new PostTagList();
 
+            $name = $request->input('name_'.$lang);
+            $translate->name = $name;
+            $translate->url = $this->str2url($name);
 
+            $translate->lang = $lang;
+            $translate->rus_lang_id = $tag->id;
+
+            $translate->save();
+        }
 
 		return redirect()->route('adm_post_tag');
 	}

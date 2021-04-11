@@ -14,6 +14,10 @@ use App\Library\Users\ModeratorLogs;
 
 class BlogController extends Controller
 {
+    private const UKRAINIAN_LANG = 'ua';
+    private const ENGLISH_LANG = 'en';
+    private const TRANSLATE_LANG = [self::UKRAINIAN_LANG, self::ENGLISH_LANG];
+
 	public function all(){
 		$posts = Post::with(['project','comments'])->where('rus_lang_id',0)->get();
 		return view('admin.post.all',[
@@ -103,21 +107,47 @@ class BlogController extends Controller
 		$post->seo_keywords = $request->seo_keywords;
 		$post->save();
 
-		$translate = Post::where('rus_lang_id',$post->id)->first();
-		if(empty($translate)){
-			$translate = new Post();
-			$translate->rus_lang_id = $post->id;
-			$translate->lang = 'ua';
-		}
-		$translate->name = $request->nameUA;
-		$translate->content = $request->contentUA;
-		$translate->url = $request->urlUA;
-		$translate->isHide = ($request->submit == "save-hide");
-		$translate->project_id = $request->project_id;
-
-		$translate->seo_title = $request->seo_titleUA;
-		$translate->seo_description = $request->seo_descriptionUA;
-		$translate->seo_keywords = $request->seo_keywordsUA;
-		$translate->save();
+        foreach (self::TRANSLATE_LANG as $lang){
+            if($this->checkRequiredForLang($request, $lang)){
+                $this->createOrUpdateTranslate($post, $request, $lang);
+            }
+        }
 	}
+
+    private function checkRequiredForLang(Request $request, string $lang): bool
+    {
+        $upperLang = mb_strtoupper($lang);
+
+        return $request->input('name'.$upperLang)
+            && $request->input('content'.$upperLang)
+            && $request->input('url'.$upperLang);
+    }
+
+	private function createOrUpdateTranslate(Post $post, Request $request, string $lang): void
+    {
+        $translate = Post::where([
+            'rus_lang_id' => $post->id,
+            'lang' => $lang,
+        ])->first();
+
+        if(empty($translate)){
+            $translate = new Post();
+            $translate->rus_lang_id = $post->id;
+            $translate->lang = $lang;
+        }
+
+        $upperLang = mb_strtoupper($lang);
+
+        $translate->name = $request->input('name'.$upperLang);
+        $translate->content = $request->input('content'.$upperLang);
+        $translate->url = $request->input('url'.$upperLang);
+        $translate->isHide = ($request->submit == "save-hide");
+        $translate->project_id = $request->project_id;
+
+
+        $translate->seo_title = $request->input('seo_title'.$upperLang);
+        $translate->seo_description = $request->input('seo_description'.$upperLang);
+        $translate->seo_keywords = $request->input('seo_keywords'.$upperLang);
+        $translate->save();
+    }
 }

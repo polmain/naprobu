@@ -17,6 +17,7 @@ use DB;
 
 class UserRating
 {
+    private const TRANSLATE_LANG = ['ua', 'en'];
 	protected $statuses = [
 		'register'	=> 1,
 		'authorization'	=> 3,
@@ -134,12 +135,14 @@ class UserRating
 				'rus_lang_id' => 0
 			]);
 
-			UserRatingAction::create([
-				'name' => $request->name_ua,
-				'points' => $request->score,
-				'lang' => 'ua',
-				'rus_lang_id' => $action->id
-			]);
+			foreach (self::TRANSLATE_LANG as $lang){
+                UserRatingAction::create([
+                    'name' => $request->input('name_'.$lang),
+                    'points' => $request->score,
+                    'lang' => $lang,
+                    'rus_lang_id' => $action->id
+                ]);
+            }
 		}
 
 		$instance->addActionToUser($action,$user);

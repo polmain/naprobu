@@ -130,7 +130,7 @@ class QuestionnaireController extends Controller
             $this->copyTranslate($original_questionnaire, $questionnaire, $lang);
         }
 
-		$this->copyQuestions($original_questionnaire);
+		$this->copyQuestions($original_questionnaire, $questionnaire);
 
 		return redirect()->route('adm_questionnaire_edit',[$questionnaire->id]);
 	}

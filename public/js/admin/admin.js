@@ -407,15 +407,15 @@ var answerTemplate = '<div class="form-group form-child-item row item-sort">\n' 
 
 	'<div class="col-md-3">' +
 	'       <label><img src="/public/images/russia.png" alt="Флаг России"> Значение варианта ответа<span class="input-request">*</span></label>\n' +
-	'       <input type="text" name="question_children_question_--id--[]" class="form-control required" placeholder="Введите вариант ответа...">\n' +
+	'       <input type="text" name="question_children_--id--[]" class="form-control required" placeholder="Введите вариант ответа...">\n' +
 	'</div>' +
 	'<div class="col-md-3">' +
 	'       <label><img src="/public/images/ukraine.png" alt="Флаг Украины"> Значение варианта ответа</label>\n' +
-	'       <input type="text" name="question_children_question_ua_--id--[]" class="form-control" placeholder="Введите вариант ответа...">\n' +
+	'       <input type="text" name="question_children_ua_--id--[]" class="form-control" placeholder="Введите вариант ответа...">\n' +
 	'</div>' +
 	'<div class="col-md-3">' +
 	'       <label><img src="/public/images/united-kingdom.png" alt="Флаг Великой бриатнии"> Значение варианта ответа</label>\n' +
-	'       <input type="text" name="question_children_question_en_--id--[]" class="form-control" placeholder="Введите вариант ответа...">\n' +
+	'       <input type="text" name="question_children_en_--id--[]" class="form-control" placeholder="Введите вариант ответа...">\n' +
 	'</div>' +
 	'<div class="col-md-3"> ' +
 	'<div class="btn btn-danger btn-block delete-child" style="margin-top: 25px">Удалить вариант</div>' +

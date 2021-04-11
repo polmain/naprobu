@@ -20,11 +20,11 @@
                                 <input type="text" id="name" name="name" class="form-control required" value="{{$questionnaire->name}}" placeholder="Введите название анкеты...">
                             </div>
                             <div class="col-md-4">
-                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название анкеты<span class="input-request">*</span></label>
+                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название анкеты</label>
                                 <input type="text" id="nameUA" name="nameUA" class="form-control" placeholder="Введите название анкеты..." value="{{($translate->firstWhere('lang', 'ua'))?$translate->firstWhere('lang', 'ua')->name:""}}">
                             </div>
                             <div class="col-md-4">
-                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Название анкеты<span class="input-request">*</span></label>
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Название анкеты</label>
                                 <input type="text" id="nameEN" name="nameEN" class="form-control" placeholder="Введите название анкеты..." value="{{($translate->firstWhere('lang', 'en'))?$translate->firstWhere('lang', 'en')->name:""}}">
                             </div>
                         </div>

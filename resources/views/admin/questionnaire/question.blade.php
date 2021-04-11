@@ -49,7 +49,7 @@
                                             <label class="child-contructor-title">Варианты ответов</label>
                                             <div class="list-answers list-child list-sort">
                                                 @foreach($question->options->sortBy("sort") as $child)
-                                                    @if($child->rus_lang_id === 0 && $child->type_id === 7)
+                                                    @if($child->rus_lang_id == 0 && $child->type_id == 7)
                                                         <div class="form-group form-child-item row item-sort bg-default">
                                                             <input type="hidden" name="question_{{$question->id}}_children_id[]" value="{{$child->id}}">
                                                             <div class="col-md-3">

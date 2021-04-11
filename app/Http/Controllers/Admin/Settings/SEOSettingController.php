@@ -12,30 +12,33 @@ use AdminPageData;
 
 class SEOSettingController extends Controller
 {
-	public function settings(){
+    private const DEFAULT_LANG = 'ru';
+    private const TRANSLATE_LANG = ['ua', 'en'];
+
+    public function settings(){
 		$settings = Setting::where([
 			['page','seo'],
-			['lang','ru'],
+			['lang', self::DEFAULT_LANG],
 		])->get();
 
 		$blog_settings = Setting::where([
 			['page','seo_blog'],
-			['lang','ru'],
+			['lang', self::DEFAULT_LANG],
 		])->get();
 
 		$revew_settings = Setting::where([
 			['page','seo_review'],
-			['lang','ru'],
+			['lang', self::DEFAULT_LANG],
 		])->get();
 
 		$user_settings = Setting::where([
 			['page','seo_user'],
-			['lang','ru'],
+			['lang', self::DEFAULT_LANG],
 		])->get();
 
 		$profile_settings = Setting::where([
 			['page','seo_profile'],
-			['lang','ru'],
+			['lang', self::DEFAULT_LANG],
 		])->get();
 
 		SEO::setTitle('Настройки SEO');
@@ -67,8 +70,18 @@ class SEOSettingController extends Controller
 		$setting->value = $request->setting_content[$key];
 		$setting->save();
 
-		$setting_ua = $setting->translate->first();
-		$setting_ua->value = $request->setting_content_ua[$key];
-		$setting_ua->save();
+		foreach (self::TRANSLATE_LANG as $lang){
+            $translate = $setting->translate->firstWhere('lang', $lang);
+            if($translate){
+                $translate = new Setting();
+                $translate->lang = $lang;
+                $translate->name = $setting->name;
+                $translate->label = $setting->label;
+                $translate->page = $setting->page;
+                $translate->type_id = $setting->type_id;
+            }
+            $translate->value = $request->input('setting_content_'.$lang)[$key];
+            $translate->save();
+        }
 	}
 }

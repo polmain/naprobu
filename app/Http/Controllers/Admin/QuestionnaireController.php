@@ -225,7 +225,7 @@ class QuestionnaireController extends Controller
 
 	private function getEditOrCopyPageContent($questionnaire_id): array{
 		$questionnaire = Questionnaire::find($questionnaire_id);
-		$translate = Questionnaire::where('rus_lang_id',$questionnaire_id);
+		$translate = Questionnaire::where('rus_lang_id',$questionnaire_id)->get();
 		$questionnaireTypes = QuestionnaireType::all();
 		$questionTypes = FieldType::whereNotIn('id', [7, 9])->get();
 		$questions = Question::with(['type','translate','options.translate'])->where([

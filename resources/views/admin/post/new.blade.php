@@ -82,11 +82,11 @@
                                     </div>
                                     <!-- /.tab-pane -->
                                     <div class="tab-pane" id="text_2-2">
-                                        <textarea class="editor required" id="textUA" name="contentUA" rows="10" cols="80"></textarea>
+                                        <textarea class="editor" id="textUA" name="contentUA" rows="10" cols="80"></textarea>
                                     </div>
                                     <!-- /.tab-pane -->
                                     <div class="tab-pane" id="text_3-3">
-                                        <textarea class="editor required" id="textEN" name="contentEN" rows="10" cols="80"></textarea>
+                                        <textarea class="editor" id="textEN" name="contentEN" rows="10" cols="80"></textarea>
                                     </div>
                                     <!-- /.tab-pane -->
                                 </div>

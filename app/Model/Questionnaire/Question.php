@@ -34,6 +34,6 @@ class Question extends Model
 	}
 
 	public function translate(){
-		return $this->hasOne('App\Model\Questionnaire\Question', 'rus_lang_id');
+		return $this->hasMany('App\Model\Questionnaire\Question', 'rus_lang_id');
 	}
 }

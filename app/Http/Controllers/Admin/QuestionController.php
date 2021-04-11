@@ -14,6 +14,10 @@ use AdminPageData;
 
 class QuestionController extends Controller
 {
+    private const UKRAINIAN_LANG = 'ua';
+    private const ENGLISH_LANG = 'en';
+    private const TRANSLATE_LANG = [self::UKRAINIAN_LANG, self::ENGLISH_LANG];
+
 	protected $childsId = [];
 
 	public function ajax(Request $request,$questionnaire_id){
@@ -29,7 +33,7 @@ class QuestionController extends Controller
 		$view = view('admin.questionnaire.includes.questions',compact('questions','questionTypes'))->render();
 		return response()->json([
 			'html' => $view,
-			'isNext' => $questions->nextPageUrl() || false
+			'isNext' => (bool) $questions->nextPageUrl()
 		]);
 	}
 
@@ -47,7 +51,7 @@ class QuestionController extends Controller
 		$view = view('admin.questionnaire.includes.questions_copy',compact('questions','questionTypes'))->render();
 		return response()->json([
 			'html' => $view,
-			'isNext' => $questions->nextPageUrl() || false
+			'isNext' => (bool) $questions->nextPageUrl()
 		]);
 	}
 
@@ -199,7 +203,7 @@ class QuestionController extends Controller
 	}
 
 
-	protected function createOrEdit($request,$question, $questionnaire_id){
+	private function createOrEdit($request,$question, $questionnaire_id){
 		if(empty($question)){
 			$question = new Question();
 			$question->questionnaire_id = $questionnaire_id;
@@ -215,9 +219,7 @@ class QuestionController extends Controller
 		];
 		$question->restrictions = $restrictions;
 		if(isset($request->question_relation)){
-			//if(array_key_exists(((int)$request->question_relation[$key]),$this->childsId)){
-				$question->question_relation_id = $request->question_relation;
-			//}
+            $question->question_relation_id = $request->question_relation;
 		}
 
 		$question->save();
@@ -241,31 +243,45 @@ class QuestionController extends Controller
 			$other->delete();
 		}
 
-		$ruId = $question->id;
-		/* UA */
-		$questionUA = Question::where('rus_lang_id',$ruId)->first();
-
-		if(empty($questionUA))
-		{
-			$questionUA = new Question();
-			$questionUA->lang = 'ua';
-			$questionUA->rus_lang_id = $ruId;
-			$questionUA->sort = time();
-			$questionUA->questionnaire_id = $questionnaire_id;
-		}
-
-		$questionUA->type_id = $question->type_id;
-
-		$questionUA->name = $request->question_name_ua;
-		$questionUA->required = $question->required;
-		$questionUA->help = $request->question_help_ua;
-
-		$questionUA->save();
+		foreach (self::TRANSLATE_LANG as $lang){
+		    if($this->checkRequiredQuestionForLang($request, $lang)){
+                $this->createOrEditTranslate($question, $request, $lang);
+            }
+        }
 
 		return $question;
 	}
 
-	protected function newOrEditChild($request,$question_id,$questionnaire_id){
+    private function checkRequiredQuestionForLang(Request  $request, string $lang): bool
+    {
+        return (bool) $request->input('question_name_'.$lang);
+    }
+
+	private function createOrEditTranslate(Question $question, Request $request, string $lang): void
+    {
+        $translate = Question::where([
+            'rus_lang_id' => $question->id,
+            'lang' => $lang,
+        ])->first();
+
+        if(empty($translate))
+        {
+            $translate = new Question();
+            $translate->lang = $lang;
+            $translate->rus_lang_id = $question->id;
+            $translate->sort = time();
+            $translate->questionnaire_id = $question->questionnaire_id;
+        }
+
+        $translate->name = $request->input('question_name_'.$lang);
+        $translate->help = $request->input('question_help_'.$lang);
+        $translate->type_id = $question->type_id;
+        $translate->required = $question->required;
+
+        $translate->save();
+    }
+
+	private function newOrEditChild($request,$question_id,$questionnaire_id){
 		$sort = 1;
 		if($request->has('question_children_question_'.$request->question.'')){
 			foreach ($request->input('question_children_question_'.$request->question) as $i=>$children){
@@ -280,24 +296,52 @@ class QuestionController extends Controller
 				$child->sort = $sort;
 				$child->save();
 				$this->childsId[((int)$request->input('question_'.$request->question.'_children_id.'.$i))] = $child->id;
-				$translate =  Question::where('rus_lang_id',$child->id)->first();
-				if(empty($translate)){
-					$translate = new Question();
-					$translate->type_id = 7;
-					$translate->parent = $question_id;
-					$translate->questionnaire_id = $questionnaire_id;
-					$translate->lang = 'ua';
-					$translate->rus_lang_id = $child->id;
-				}
-				$translate->name = $request->input('question_children_ua_question_'.$request->question)[$i];
-				$translate->sort = $sort;
-				$translate->save();
+
+				foreach (self::TRANSLATE_LANG as $lang){
+				    if($this->checkRequiredChildForLang($request, $lang, $i)){
+                        $this->newOrEditChildTranslate($request, $child, $question_id, $questionnaire_id, $i, $sort, $lang);
+                    }
+                }
+
 				$sort++;
 			}
 		}
 	}
 
-	protected function newOtherChild($question_id,$questionnaire_id){
+    private function checkRequiredChildForLang(Request  $request, string $lang, int $i): bool
+    {
+        return (bool) $request->input('question_children_'.$lang.'_question_'.$request->question)[$i];
+    }
+
+	private function newOrEditChildTranslate(
+	    Request $request,
+        Question $child,
+        int $question_id,
+        int $questionnaire_id,
+        $key,
+        int $sort,
+        string $lang
+    ): void
+    {
+        $translate =  Question::where([
+            'rus_lang_id' => $child->id,
+            'lang' => $lang,
+        ])->first();
+
+        if(empty($translate)){
+            $translate = new Question();
+            $translate->type_id = 7;
+            $translate->parent = $question_id;
+            $translate->questionnaire_id = $questionnaire_id;
+            $translate->lang = $lang;
+            $translate->rus_lang_id = $child->id;
+        }
+        $translate->name = $request->input('question_children_'.$lang.'_question_'.$request->question)[$key];
+        $translate->sort = $sort;
+        $translate->save();
+    }
+
+	private function newOtherChild($question_id,$questionnaire_id){
 		$child = new Question();
 		$child->name = "Другое";
 		$child->type_id = 9;

@@ -92,7 +92,7 @@
                                             <div class="col-md-4">
                                                 <label class="control-label "><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Картинка<span class="input-request">*</span></label>
                                                 <div class="load-image-container project-img ">
-                                                    @if(!empty($setting->translate->firstWhere('lang', 'ua')) && $setting->translate->firstWhere('lang', 'ua')->value))
+                                                    @if(!empty($setting->translate->firstWhere('lang', 'ua')) && $setting->translate->firstWhere('lang', 'ua')->value)
                                                         <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
                                                             <input type="hidden" class="upload_image_name" name="setting_content_ua[]" value="{{$setting->translate->firstWhere('lang', 'ua')->value}}">
                                                         </div>
@@ -110,7 +110,7 @@
                                             <div class="col-md-4">
                                                 <label class="control-label "><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Картинка<span class="input-request">*</span></label>
                                                 <div class="load-image-container project-img ">
-                                                    @if(!empty($setting->translate->firstWhere('lang', 'en')) && $setting->translate->firstWhere('lang', 'en')->value))
+                                                    @if(!empty($setting->translate->firstWhere('lang', 'en')) && $setting->translate->firstWhere('lang', 'en')->value)
                                                         <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
                                                             <input type="hidden" class="upload_image_name" name="setting_content_en[]" value="{{$setting->translate->firstWhere('lang', 'en')->value}}">
                                                         </div>
@@ -219,12 +219,12 @@
                                             <div class="col-md-4">
                                                 <label class="control-label "><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Картинка<span class="input-request">*</span></label>
                                                 <div class="load-image-container project-img ">
-                                                    @if(!empty($setting->translate->firstWhere('lang', 'ua')) && $setting->translate->firstWhere('lang', 'ua')->value))
-                                                    <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
-                                                        <input type="hidden" class="upload_image_name" name="setting_content_ua[]" value="{{$setting->translate->firstWhere('lang', 'ua')->value}}">
-                                                    </div>
-                                                    <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
-                                                    <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
+                                                    @if(!empty($setting->translate->firstWhere('lang', 'ua')) && $setting->translate->firstWhere('lang', 'ua')->value)
+                                                        <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
+                                                            <input type="hidden" class="upload_image_name" name="setting_content_ua[]" value="{{$setting->translate->firstWhere('lang', 'ua')->value}}">
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
+                                                        <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
                                                     @else
                                                         <div class="load-img">
                                                             <input type="hidden" class="upload_image_name" name="setting_content_ua[]">
@@ -237,12 +237,12 @@
                                             <div class="col-md-4">
                                                 <label class="control-label "><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Картинка<span class="input-request">*</span></label>
                                                 <div class="load-image-container project-img ">
-                                                    @if(!empty($setting->translate->firstWhere('lang', 'en')) && $setting->translate->firstWhere('lang', 'en')->value))
-                                                    <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
-                                                        <input type="hidden" class="upload_image_name" name="setting_content_en[]" value="{{$setting->translate->firstWhere('lang', 'en')->value}}">
-                                                    </div>
-                                                    <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
-                                                    <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
+                                                    @if(!empty($setting->translate->firstWhere('lang', 'en')) && $setting->translate->firstWhere('lang', 'en')->value)
+                                                        <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
+                                                            <input type="hidden" class="upload_image_name" name="setting_content_en[]" value="{{$setting->translate->firstWhere('lang', 'en')->value}}">
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
+                                                        <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
                                                     @else
                                                         <div class="load-img">
                                                             <input type="hidden" class="upload_image_name" name="setting_content_en[]">
@@ -346,12 +346,12 @@
                                             <div class="col-md-4">
                                                 <label class="control-label "><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Картинка<span class="input-request">*</span></label>
                                                 <div class="load-image-container project-img ">
-                                                    @if(!empty($setting->translate->firstWhere('lang', 'ua')) && $setting->translate->firstWhere('lang', 'ua')->value))
-                                                    <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
-                                                        <input type="hidden" class="upload_image_name" name="setting_content_ua[]" value="{{$setting->translate->firstWhere('lang', 'ua')->value}}">
-                                                    </div>
-                                                    <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
-                                                    <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
+                                                    @if(!empty($setting->translate->firstWhere('lang', 'ua')) && $setting->translate->firstWhere('lang', 'ua')->value)
+                                                        <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
+                                                            <input type="hidden" class="upload_image_name" name="setting_content_ua[]" value="{{$setting->translate->firstWhere('lang', 'ua')->value}}">
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
+                                                        <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
                                                     @else
                                                         <div class="load-img">
                                                             <input type="hidden" class="upload_image_name" name="setting_content_ua[]">
@@ -364,12 +364,12 @@
                                             <div class="col-md-4">
                                                 <label class="control-label "><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Картинка<span class="input-request">*</span></label>
                                                 <div class="load-image-container project-img ">
-                                                    @if(!empty($setting->translate->firstWhere('lang', 'en')) && $setting->translate->firstWhere('lang', 'en')->value))
-                                                    <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
-                                                        <input type="hidden" class="upload_image_name" name="setting_content_en[]" value="{{$setting->translate->firstWhere('lang', 'en')->value}}">
-                                                    </div>
-                                                    <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
-                                                    <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
+                                                    @if(!empty($setting->translate->firstWhere('lang', 'en')) && $setting->translate->firstWhere('lang', 'en')->value)
+                                                        <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
+                                                            <input type="hidden" class="upload_image_name" name="setting_content_en[]" value="{{$setting->translate->firstWhere('lang', 'en')->value}}">
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
+                                                        <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
                                                     @else
                                                         <div class="load-img">
                                                             <input type="hidden" class="upload_image_name" name="setting_content_en[]">
@@ -473,12 +473,12 @@
                                             <div class="col-md-4">
                                                 <label class="control-label "><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Картинка<span class="input-request">*</span></label>
                                                 <div class="load-image-container project-img ">
-                                                    @if(!empty($setting->translate->firstWhere('lang', 'ua')) && $setting->translate->firstWhere('lang', 'ua')->value))
-                                                    <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
-                                                        <input type="hidden" class="upload_image_name" name="setting_content_ua[]" value="{{$setting->translate->firstWhere('lang', 'ua')->value}}">
-                                                    </div>
-                                                    <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
-                                                    <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
+                                                    @if(!empty($setting->translate->firstWhere('lang', 'ua')) && $setting->translate->firstWhere('lang', 'ua')->value)
+                                                        <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
+                                                            <input type="hidden" class="upload_image_name" name="setting_content_ua[]" value="{{$setting->translate->firstWhere('lang', 'ua')->value}}">
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
+                                                        <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
                                                     @else
                                                         <div class="load-img">
                                                             <input type="hidden" class="upload_image_name" name="setting_content_ua[]">
@@ -491,12 +491,12 @@
                                             <div class="col-md-4">
                                                 <label class="control-label "><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Картинка<span class="input-request">*</span></label>
                                                 <div class="load-image-container project-img ">
-                                                    @if(!empty($setting->translate->firstWhere('lang', 'en')) && $setting->translate->firstWhere('lang', 'en')->value))
-                                                    <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
-                                                        <input type="hidden" class="upload_image_name" name="setting_content_en[]" value="{{$setting->translate->firstWhere('lang', 'en')->value}}">
-                                                    </div>
-                                                    <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
-                                                    <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
+                                                    @if(!empty($setting->translate->firstWhere('lang', 'en')) && $setting->translate->firstWhere('lang', 'en')->value)
+                                                        <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
+                                                            <input type="hidden" class="upload_image_name" name="setting_content_en[]" value="{{$setting->translate->firstWhere('lang', 'en')->value}}">
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
+                                                        <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
                                                     @else
                                                         <div class="load-img">
                                                             <input type="hidden" class="upload_image_name" name="setting_content_en[]">
@@ -600,12 +600,12 @@
                                             <div class="col-md-4">
                                                 <label class="control-label "><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Картинка<span class="input-request">*</span></label>
                                                 <div class="load-image-container project-img ">
-                                                    @if(!empty($setting->translate->firstWhere('lang', 'ua')) && $setting->translate->firstWhere('lang', 'ua')->value))
-                                                    <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
-                                                        <input type="hidden" class="upload_image_name" name="setting_content_ua[]" value="{{$setting->translate->firstWhere('lang', 'ua')->value}}">
-                                                    </div>
-                                                    <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
-                                                    <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
+                                                    @if(!empty($setting->translate->firstWhere('lang', 'ua')) && $setting->translate->firstWhere('lang', 'ua')->value)
+                                                        <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
+                                                            <input type="hidden" class="upload_image_name" name="setting_content_ua[]" value="{{$setting->translate->firstWhere('lang', 'ua')->value}}">
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
+                                                        <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
                                                     @else
                                                         <div class="load-img">
                                                             <input type="hidden" class="upload_image_name" name="setting_content_ua[]">
@@ -618,12 +618,12 @@
                                             <div class="col-md-4">
                                                 <label class="control-label "><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Картинка<span class="input-request">*</span></label>
                                                 <div class="load-image-container project-img ">
-                                                    @if(!empty($setting->translate->firstWhere('lang', 'en')) && $setting->translate->firstWhere('lang', 'en')->value))
-                                                    <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
-                                                        <input type="hidden" class="upload_image_name" name="setting_content_en[]" value="{{$setting->translate->firstWhere('lang', 'en')->value}}">
-                                                    </div>
-                                                    <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
-                                                    <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
+                                                    @if(!empty($setting->translate->firstWhere('lang', 'en')) && $setting->translate->firstWhere('lang', 'en')->value)
+                                                        <div class="load-img active" style="background-image: url({{$setting->translate->first()->value}});">
+                                                            <input type="hidden" class="upload_image_name" name="setting_content_en[]" value="{{$setting->translate->firstWhere('lang', 'en')->value}}">
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
+                                                        <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
                                                     @else
                                                         <div class="load-img">
                                                             <input type="hidden" class="upload_image_name" name="setting_content_en[]">

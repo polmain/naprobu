@@ -171,7 +171,14 @@
                             <label>Теги</label>
                             <select class="form-control select2" name="tags[]" id="tags" multiple="multiple">
                                 @foreach($post->tags as $tag)
-                                    <option value="{{$tag->id}}" selected="selcted">{{$tag->name}} (укр: {{$tag->translate->name}})</option>
+                                    <option value="{{$tag->id}}" selected="selcted">{{$tag->name}}
+                                        @if($tag->translate->firstWhere('lang', 'ua'))
+                                        (укр: {{$tag->translate->firstWhere('lang', 'ua')->name}})
+                                        @endif
+                                        @if($tag->translate->firstWhere('lang', 'en'))
+                                        (eng: {{$tag->translate->firstWhere('lang', 'en')->name}})
+                                        @endif
+                                    </option>
                                 @endforeach
                             </select>
                         </div>

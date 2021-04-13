@@ -220,9 +220,9 @@ class CategoryController extends Controller implements iAdminController
         $translate->url = $request->input('url'.$upperLang);
         $translate->isHide = ($request->submit == "save-hide");
 
-        $translate->seo_title = $request->input('seo_title'.$upperLang);
-        $translate->seo_description = $request->input('seo_description'.$upperLang);
-        $translate->seo_keywords = $request->input('seo_keywords'.$upperLang);
+        $translate->seo_title = $request->input('title'.$upperLang);
+        $translate->seo_description = $request->input('description'.$upperLang);
+        $translate->seo_keywords = $request->input('keywords'.$upperLang);
 
         $translate->save();
 

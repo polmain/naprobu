@@ -77,7 +77,7 @@
                         <div class="form-group">
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs pull-right">
-                                    <li><a href="#tab_3-3" data-toggle="tab"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"></a></li>
+                                    <li><a href="#tab_2-3" data-toggle="tab"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"></a></li>
                                     <li><a href="#tab_2-2" data-toggle="tab"><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"></a></li>
                                     <li class="active"><a href="#tab_1-1" data-toggle="tab"><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"></a></li>
                                     <li class="pull-left header"><label>Краткое описание проекта<span class="input-request">*</span></label></li>
@@ -91,7 +91,7 @@
                                         <textarea class="form-control" name="short_descriptionUA" rows="5" placeholder="Введите краткое описание проекта...">{{$translateUA? $translateUA->short_description : ''}}</textarea>
                                     </div>
                                     <!-- /.tab-pane -->
-                                    <div class="tab-pane" id="tab_3-3">
+                                    <div class="tab-pane" id="tab_2-3">
                                         <textarea class="form-control" name="short_descriptionEN" rows="5" placeholder="Введите краткое описание проекта...">{{$translateEN? $translateEN->short_description : ''}}</textarea>
                                     </div>
                                     <!-- /.tab-pane -->

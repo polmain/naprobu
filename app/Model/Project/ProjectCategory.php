@@ -17,6 +17,6 @@ class ProjectCategory extends Model
 	}
 
 	public function translate(){
-		return $this->hasOne('App\Model\Project\ProjectCategory', 'rus_lang_id');
+		return $this->hasMany('App\Model\Project\ProjectCategory', 'rus_lang_id');
 	}
 }

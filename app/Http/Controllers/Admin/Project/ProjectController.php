@@ -30,6 +30,10 @@ use Storage;
 
 class ProjectController extends Controller implements iAdminController
 {
+    private const UKRAINIAN_LANG = 'ua';
+    private const ENGLISH_LANG = 'en';
+    private const TRANSLATE_LANG = [self::UKRAINIAN_LANG, self::ENGLISH_LANG];
+
     public function __construct()
     {
         app()->setLocale('ru');
@@ -103,35 +107,19 @@ class ProjectController extends Controller implements iAdminController
 	}
 
 	protected function isBusyUrlProject($lang,$project_id,$url){
-		if($lang == 'ru'){
-			return Project::where([
-				['lang','ru'],
-				['id','<>',$project_id],
-				['url',$url],
-			])->first() !== null;
-		}else{
-			return Project::where([
-					['lang','ua'],
-					['rus_lang_id','<>',$project_id],
-					['url',$url],
-				])->first() !== null;
-		}
+        return Project::where([
+                ['lang',$lang],
+                ['rus_lang_id','<>',$project_id],
+                ['url',$url],
+            ])->first() !== null;
 	}
 
 	protected function isBusyUrlProjectCategory($lang,$category_id,$url){
-		if($lang == 'ru'){
-			return ProjectCategory::where([
-					['lang','ru'],
-					['id','<>',$category_id],
-					['url',$url],
-				])->first() !== null;
-		}else{
-			return ProjectCategory::where([
-					['lang','ua'],
-					['rus_lang_id','<>',$category_id],
-					['url',$url],
-				])->first() !== null;
-		}
+        return ProjectCategory::where([
+                ['lang',$lang],
+                ['id','<>',$category_id],
+                ['url',$url],
+            ])->first() !== null;
 	}
 
 	// Страница добавления проекта
@@ -189,7 +177,7 @@ class ProjectController extends Controller implements iAdminController
 		$reviewFilter = json_encode($array);
 		$translate = Project::with(['category','status'])
 			->where('rus_lang_id',$project_id)
-			->first();
+			->get();
 		if(empty($translate)){
 			$translate = new Project();
 		}

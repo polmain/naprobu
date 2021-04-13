@@ -222,7 +222,7 @@ class CategoryController extends Controller implements iAdminController
 
         $translate->seo_title = $request->input('title'.$upperLang);
         $translate->seo_description = $request->input('description'.$upperLang);
-        $translate->seo_keywords = $request->input('keywords'.$upperLang);
+        $translate->seo_keyword = $request->input('keywords'.$upperLang);
 
         $translate->save();
 

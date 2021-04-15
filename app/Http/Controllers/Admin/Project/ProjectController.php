@@ -412,7 +412,10 @@ class ProjectController extends Controller implements iAdminController
 
     private function saveOrCreateTranslate(Project $project, Request $request, string $lang): void
     {
-        $translate = Project::where('rus_lang_id',$project->id)->first();
+        $translate = Project::where([
+            'rus_lang_id' => $project->id,
+            'lang' => $lang
+        ])->first();
 
         if(empty($translate))
         {
@@ -499,7 +502,10 @@ class ProjectController extends Controller implements iAdminController
 
 	private function createOrEditQuestionTranslate(ProjectBlock $block, Request $request, string $lang, $key): void
     {
-        $translate = ProjectBlock::where('rus_lang_id',$block->id)->first();
+        $translate = ProjectBlock::where([
+            'rus_lang_id' => $block->id,
+            'lang' => $lang
+        ])->first();
 
         if(empty($translate))
         {

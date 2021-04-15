@@ -117,7 +117,7 @@
                                     </div>
                                     <!-- /.tab-pane -->
                                     <div class="tab-pane" id="text_3-3">
-                                        <textarea class="editor" id="text" name="textUA" rows="10" cols="80">{{$translateEN? $translateEN->text : ''}}</textarea>
+                                        <textarea class="editor" id="text" name="textEN" rows="10" cols="80">{{$translateEN? $translateEN->text : ''}}</textarea>
                                     </div>
                                     <!-- /.tab-pane -->
                                 </div>
@@ -135,7 +135,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Краткое название продукта</label>
-                                <input type="text" id="product_nameUA" name="product_nameUA" value="{{$translateEN? $translateEN->product_name : ''}}" class="form-control" placeholder="Введите краткое название продукта...">
+                                <input type="text" id="product_nameEN" name="product_nameEN" value="{{$translateEN? $translateEN->product_name : ''}}" class="form-control" placeholder="Введите краткое название продукта...">
                             </div>
                         </div>
                     </div><!-- /.box-body -->
@@ -398,7 +398,7 @@
                             </div>
                             <!-- /.tab-pane -->
                             <div class="tab-pane" id="text_6-3">
-                                <textarea class="editor" id="text" name="faqUA" rows="10" cols="80">{{$translateEN? $translateEN->faq : ''}}</textarea>
+                                <textarea class="editor" id="text" name="faqEN" rows="10" cols="80">{{$translateEN? $translateEN->faq : ''}}</textarea>
                             </div>
                             <!-- /.tab-pane -->
                         </div>

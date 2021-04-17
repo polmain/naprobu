@@ -18,7 +18,7 @@ class AlternativeUrlService
         foreach (static::LANGUAGE as $lang){
             if($lang !== $currentLang && isset($routes[$lang])){
                 $langPath = $lang === static::DEFAULT_LANG ? '' : $lang.'/';
-                $alternativeUrls[$lang] = $baseUrl.$langPath.$routes['lang'];
+                $alternativeUrls[$lang] = $baseUrl.$langPath.$routes[$lang];
             }
         }
 

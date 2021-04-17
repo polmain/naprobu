@@ -176,7 +176,7 @@ class BloggerController extends Controller
 	public function editMembers(Request $request,$member_id){
 		$bloggerProject = BloggerUserProject::find($member_id);
 
-		$bloggerProject->format = $request->format;
+		$bloggerProject->format = $request->input('format');
 		$bloggerProject->ohvat = $request->ohvat;
 		$bloggerProject->prise_without_nds = $request->prise_without_nds;
 		$bloggerProject->link_to_post = $request->link_to_post;

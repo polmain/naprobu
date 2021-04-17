@@ -10,6 +10,7 @@ use App\Library\Users\ModeratorLogs;
 use SEO;
 use AdminPageData;
 
+// todo remove this class
 class LanguageController extends Controller
 {
     public function settings(){

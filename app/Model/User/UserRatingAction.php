@@ -11,6 +11,6 @@ class UserRatingAction extends Model
 	];
 
 	public function translate(){
-		return $this->hasOne('App\Model\User\UserRatingAction', 'rus_lang_id');
+		return $this->hasMany('App\Model\User\UserRatingAction', 'rus_lang_id');
 	}
 }

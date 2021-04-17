@@ -15,15 +15,23 @@
                             <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                         </div>
                     </div>
+                    @php
+                        $translateUA = $translate->firstWhere('lang','ua');
+                        $translateEN = $translate->firstWhere('lang','en');
+                    @endphp
                     <div class="box-body">
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Название проекта<span class="input-request">*</span></label>
                                 <input type="text" id="name-ru" name="name" class="form-control project-name required" value="{{$project->name}}" placeholder="Введите название проекта...">
                             </div>
-                            <div class="col-md-6">
-                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название проекта<span class="input-request">*</span></label>
-                                <input type="text" id="name-ua" name="nameUA" class="form-control project-name required" value="{{$translate->name}}" placeholder="Введите название проекта...">
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название проекта</label>
+                                <input type="text" id="name-ua" name="nameUA" class="form-control project-name" value="{{$translateUA? $translateUA->name : ''}}" placeholder="Введите название проекта...">
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Название проекта</label>
+                                <input type="text" id="name-en" name="nameEN" class="form-control project-name" value="{{$translateEN? $translateEN->name : ''}}" placeholder="Введите название проекта...">
                             </div>
                         </div>
                         <div class="form-group project-url not-edit url-ru" id="project-url-ru"><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Постоянная ссылка: <div class="edit-url">
@@ -32,7 +40,7 @@
                                     <button type="button" class="btn btn-default btn-sm change-url">Изменить</button>
                                 </div>
                                 <div class="edit-input">
-                                    {{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/ru/projects/</span><input type="text" class="new-url" name="url" value="{{$project->url}}">
+                                    {{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/ru/projects/<input type="text" class="new-url" name="url" value="{{$project->url}}">
                                     <button type="button" class="btn btn-success btn-sm save-url">Ок</button>
                                     <button type="button" class="btn btn-default btn-sm cancel-url">Отмена</button>
                                 </div>
@@ -40,11 +48,23 @@
                         </div>
                         <div class="form-group project-url not-edit url-ua" id="project-url-ua"><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Постоянная ссылка: <div class="edit-url">
                                 <div class="edit-a active">
-                                    <a href="{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/projects/{{$translate->url}}" class="link-url"><span class="static-part">{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/projects/</span><span class="edit-part">{{$translate->url}}</span></a>
+                                    <a href="{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/projects/{{$translateUA? $translateUA->url : ''}}" class="link-url"><span class="static-part">{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/projects/</span><span class="edit-part">{{$translateUA? $translateUA->url : ''}}</span></a>
                                     <button type="button" class="btn btn-default btn-sm change-url">Изменить</button>
                                 </div>
                                 <div class="edit-input">
-                                    {{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/projects/<input type="text" class="new-url" name="urlUA" value="{{$translate->url}}">
+                                    {{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/projects/<input type="text" class="new-url" name="urlUA" value="{{$translateUA? $translateUA->url : ''}}">
+                                    <button type="button" class="btn btn-success btn-sm save-url">Ок</button>
+                                    <button type="button" class="btn btn-default btn-sm cancel-url">Отмена</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group project-url not-edit url-en" id="project-url-en"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Постоянная ссылка: <div class="edit-url">
+                                <div class="edit-a active">
+                                    <a href="{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/en/projects/{{$translateEN? $translateEN->url : ''}}" class="link-url"><span class="static-part">{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/en/projects/</span><span class="edit-part">{{$translateEN? $translateEN->url : ''}}</span></a>
+                                    <button type="button" class="btn btn-default btn-sm change-url">Изменить</button>
+                                </div>
+                                <div class="edit-input">
+                                    {{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/en/projects/<input type="text" class="new-url" name="urlEN" value="{{$translateEN? $translateEN->url : ''}}">
                                     <button type="button" class="btn btn-success btn-sm save-url">Ок</button>
                                     <button type="button" class="btn btn-default btn-sm cancel-url">Отмена</button>
                                 </div>
@@ -57,6 +77,7 @@
                         <div class="form-group">
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs pull-right">
+                                    <li><a href="#tab_2-3" data-toggle="tab"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"></a></li>
                                     <li><a href="#tab_2-2" data-toggle="tab"><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"></a></li>
                                     <li class="active"><a href="#tab_1-1" data-toggle="tab"><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"></a></li>
                                     <li class="pull-left header"><label>Краткое описание проекта<span class="input-request">*</span></label></li>
@@ -67,7 +88,11 @@
                                     </div>
                                     <!-- /.tab-pane -->
                                     <div class="tab-pane" id="tab_2-2">
-                                        <textarea class="form-control required" name="short_descriptionUA" rows="5" placeholder="Введите краткое описание проекта...">{{$translate->short_description}}</textarea>
+                                        <textarea class="form-control" name="short_descriptionUA" rows="5" placeholder="Введите краткое описание проекта...">{{$translateUA? $translateUA->short_description : ''}}</textarea>
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                    <div class="tab-pane" id="tab_2-3">
+                                        <textarea class="form-control" name="short_descriptionEN" rows="5" placeholder="Введите краткое описание проекта...">{{$translateEN? $translateEN->short_description : ''}}</textarea>
                                     </div>
                                     <!-- /.tab-pane -->
                                 </div>
@@ -77,6 +102,7 @@
                         <div class="form-group">
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs pull-right">
+                                    <li><a href="#text_3-3" data-toggle="tab"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"></a></li>
                                     <li><a href="#text_2-2" data-toggle="tab"><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"></a></li>
                                     <li class="active"><a href="#text_1-1" data-toggle="tab"><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"></a></li>
                                     <li class="pull-left header"><label>Полное описание проекта<span class="input-request">*</span></label></li>
@@ -87,7 +113,11 @@
                                     </div>
                                     <!-- /.tab-pane -->
                                     <div class="tab-pane" id="text_2-2">
-                                        <textarea class="editor required" id="text" name="textUA" rows="10" cols="80">{{$translate->text}}</textarea>
+                                        <textarea class="editor" id="text" name="textUA" rows="10" cols="80">{{$translateUA? $translateUA->text : ''}}</textarea>
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                    <div class="tab-pane" id="text_3-3">
+                                        <textarea class="editor" id="text" name="textEN" rows="10" cols="80">{{$translateEN? $translateEN->text : ''}}</textarea>
                                     </div>
                                     <!-- /.tab-pane -->
                                 </div>
@@ -95,13 +125,17 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Краткое название продукта<span class="input-request">*</span></label>
                                 <input type="text" id="product_name" name="product_name" value="{{$project->product_name}}" class="form-control required" placeholder="Введите краткое название продукта...">
                             </div>
-                            <div class="col-md-6">
-                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Краткое название продукта<span class="input-request">*</span></label>
-                                <input type="text" id="product_nameUA" name="product_nameUA" value="{{$translate->product_name}}" class="form-control required" placeholder="Введите краткое название продукта...">
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Краткое название продукта</label>
+                                <input type="text" id="product_nameUA" name="product_nameUA" value="{{$translateUA? $translateUA->product_name : ''}}" class="form-control" placeholder="Введите краткое название продукта...">
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Краткое название продукта</label>
+                                <input type="text" id="product_nameEN" name="product_nameEN" value="{{$translateEN? $translateEN->product_name : ''}}" class="form-control" placeholder="Введите краткое название продукта...">
                             </div>
                         </div>
                     </div><!-- /.box-body -->
@@ -118,6 +152,7 @@
                         <div class="form-group">
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs pull-right">
+                                    <li><a href="#tab_3-3" data-toggle="tab"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"></a></li>
                                     <li><a href="#tab_3-2" data-toggle="tab"><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"></a></li>
                                     <li class="active"><a href="#tab_3-1" data-toggle="tab"><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"></a></li>
                                     <li class="pull-left header"><label>Изображения проекта<span class="input-request">*</span></label></li>
@@ -169,11 +204,11 @@
                                     <div class="tab-pane row" id="tab_3-2">
                                         <div class="col-md-8">
                                             <div class="form-group">
-                                                <label for="avatar" class="control-label ">Главное изображение<span class="input-request">*</span></label>
+                                                <label for="avatar" class="control-label ">Главное изображение</label>
                                                 <div class="load-image-container project-img ">
-                                                    @if(!empty($translate->main_image))
-                                                        <div class="load-img active" style="background-image: url({{$translate->main_image}});">
-                                                            <input type="hidden" class="upload_image_name" name="main_image_ua" value="{{$translate->main_image}}">
+                                                    @if($translateUA && !empty($translateUA->main_image))
+                                                        <div class="load-img active" style="background-image: url({{$translateUA->main_image}});">
+                                                            <input type="hidden" class="upload_image_name" name="main_image_ua" value="{{$translateUA->main_image}}">
                                                         </div>
                                                         <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
                                                         <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
@@ -189,17 +224,60 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="avatar" class="control-label">Превью для каталога<span class="input-request">*</span></label>
+                                                <label for="avatar" class="control-label">Превью для каталога</label>
                                                 <div class="load-image-container project-img ">
-                                                    @if(!empty($translate->preview_image))
-                                                        <div class="load-img active" style="background-image: url({{$translate->preview_image}});">
-                                                            <input type="hidden" class="upload_image_name" name="preview_image_ua" value="{{$translate->preview_image}}">
+                                                    @if($translateUA && !empty($translateUA->preview_image))
+                                                        <div class="load-img active" style="background-image: url({{$translateUA->preview_image}});">
+                                                            <input type="hidden" class="upload_image_name" name="preview_image_ua" value="{{$translateUA->preview_image}}">
                                                         </div>
                                                         <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
                                                         <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
                                                     @else
                                                         <div class="load-img">
                                                             <input type="hidden" class="upload_image_name" name="preview_image_ua">
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary image_upload">Добавить изображение</button>
+                                                        <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                    <div class="tab-pane row" id="tab_3-3">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label for="avatar" class="control-label ">Главное изображение</label>
+                                                <div class="load-image-container project-img ">
+                                                    @if($translateEN && !empty($translateEN->main_image))
+                                                        <div class="load-img active" style="background-image: url({{$translateEN->main_image}});">
+                                                            <input type="hidden" class="upload_image_name" name="main_image_en" value="{{$translateEN->main_image}}">
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
+                                                        <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
+                                                    @else
+                                                        <div class="load-img">
+                                                            <input type="hidden" class="upload_image_name" name="main_image_en">
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary image_upload">Добавить изображение</button>
+                                                        <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="avatar" class="control-label">Превью для каталога</label>
+                                                <div class="load-image-container project-img ">
+                                                    @if($translateEN && !empty($translateEN->preview_image))
+                                                        <div class="load-img active" style="background-image: url({{$translateEN->preview_image}});">
+                                                            <input type="hidden" class="upload_image_name" name="preview_image_en" value="{{$translateEN->preview_image}}">
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary image_upload">Изменить изображение</button>
+                                                        <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
+                                                    @else
+                                                        <div class="load-img">
+                                                            <input type="hidden" class="upload_image_name" name="preview_image_en">
                                                         </div>
                                                         <button type="button" class="btn btn-primary image_upload">Добавить изображение</button>
                                                         <button type="button" class="btn btn-danger image_delete">Удалить изображение</button>
@@ -246,13 +324,17 @@
                                         </div>
                                         <div class="question-body">
                                             <div class="form-group row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Подпись<span class="input-request">*</span></label>
                                                     <input type="text" name="label_ru[]" class="form-control question-name none-required" placeholder="Введите подпись..." value="{{$block->text}}">
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Подпись<span class="input-request">*</span></label>
-                                                    <input type="text" name="label_ua[]" class="form-control" placeholder="Введите подпись..." value="{{$block->translate->text}}">
+                                                <div class="col-md-4">
+                                                    <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Подпись</label>
+                                                    <input type="text" name="label_ua[]" class="form-control" placeholder="Введите подпись..." value="{{$block->translate->firstWhere('lang', 'ua')? $block->translate->firstWhere('lang', 'ua')->text : ''}}">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Подпись</label>
+                                                    <input type="text" name="label_en[]" class="form-control" placeholder="Введите подпись..." value="{{$block->translate->firstWhere('lang', 'en')? $block->translate->firstWhere('lang', 'en')->text : ''}}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -275,6 +357,7 @@
                 <div class="form-group">
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs pull-right">
+                            <li><a href="#text_5-3" data-toggle="tab"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"></a></li>
                             <li><a href="#text_5-2" data-toggle="tab"><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"></a></li>
                             <li class="active"><a href="#text_5-1" data-toggle="tab"><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"></a></li>
                             <li class="pull-left header"><label>Описание продукта</label></li>
@@ -285,7 +368,11 @@
                             </div>
                             <!-- /.tab-pane -->
                             <div class="tab-pane" id="text_5-2">
-                                <textarea class="editor" id="text" name="product_infoUA" rows="10" cols="80">{{$translate->product_info}}</textarea>
+                                <textarea class="editor" id="text" name="product_infoUA" rows="10" cols="80">{{$translateUA? $translateUA->product_info : ''}}</textarea>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="text_5-3">
+                                <textarea class="editor" id="text" name="product_infoEN" rows="10" cols="80">{{$translateEN? $translateEN->product_info : ''}}</textarea>
                             </div>
                             <!-- /.tab-pane -->
                         </div>
@@ -296,6 +383,7 @@
                 <div class="form-group">
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs pull-right">
+                            <li><a href="#text_6-3" data-toggle="tab"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"></a></li>
                             <li><a href="#text_6-2" data-toggle="tab"><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"></a></li>
                             <li class="active"><a href="#text_6-1" data-toggle="tab"><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"></a></li>
                             <li class="pull-left header"><label>FAQ</label></li>
@@ -306,7 +394,11 @@
                             </div>
                             <!-- /.tab-pane -->
                             <div class="tab-pane" id="text_6-2">
-                                <textarea class="editor" id="text" name="faqUA" rows="10" cols="80">{{$translate->faq}}</textarea>
+                                <textarea class="editor" id="text" name="faqUA" rows="10" cols="80">{{$translateUA? $translateUA->faq : ''}}</textarea>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="text_6-3">
+                                <textarea class="editor" id="text" name="faqEN" rows="10" cols="80">{{$translateEN? $translateEN->faq : ''}}</textarea>
                             </div>
                             <!-- /.tab-pane -->
                         </div>
@@ -323,33 +415,45 @@
                     </div>
                     <div class="box-body">
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Title</label>
                                 <input type="text" id="title" name="title" value="{{$project->seo_title}}" class="form-control" placeholder="Введите Title проекта...">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Title</label>
-                                <input type="text" id="titleUA" name="titleUA"  value="{{$translate->seo_title}}" class="form-control" placeholder="Введите Title проекта...">
+                                <input type="text" id="titleUA" name="titleUA"  value="{{$translateUA? $translateUA->seo_title : ''}}" class="form-control" placeholder="Введите Title проекта...">
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Title</label>
+                                <input type="text" id="titleEN" name="titleEN"  value="{{$translateEN? $translateEN->seo_title : ''}}" class="form-control" placeholder="Введите Title проекта...">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Description</label>
                                 <textarea class="form-control" name="seo_description" rows="5" placeholder="Введите Description проекта...">{{$project->seo_description}}</textarea>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Description</label>
-                                <textarea class="form-control" name="seo_description_ua" rows="5" placeholder="Введите Description проекта...">{{$translate->seo_description}}</textarea>
+                                <textarea class="form-control" name="seo_description_ua" rows="5" placeholder="Введите Description проекта...">{{$translateUA? $translateUA->seo_description : ''}}</textarea>
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Description</label>
+                                <textarea class="form-control" name="seo_description_en" rows="5" placeholder="Введите Description проекта...">{{$translateEN? $translateEN->seo_description : ''}}</textarea>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Keywords</label>
                                 <input type="text" class="form-control" name="keywords" value="{{$project->seo_keyword}}" placeholder="Введите Keywords проекта...">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Keywords</label>
-                                <input type="text" class="form-control" name="keywordsUA" value="{{$translate->seo_keyword}}" placeholder="Введите Keywords проекта...">
+                                <input type="text" class="form-control" name="keywordsUA" value="{{$translateUA? $translateUA->seo_keyword : ''}}" placeholder="Введите Keywords проекта...">
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Keywords</label>
+                                <input type="text" class="form-control" name="keywordsEN" value="{{$translateEN? $translateEN->seo_keyword : ''}}" placeholder="Введите Keywords проекта...">
                             </div>
                         </div>
                     </div><!-- /.box-body -->
@@ -426,7 +530,7 @@
                             <select class="form-control required" id="sub-url" name="category" style="width: 100%;">
                                 <option value="">--</option>
                                 @foreach($categories as $category)
-                                    <option data-url-ru="{{$category->url}}" data-url-ua="{{$category->translate->url}}" value="{{$category->id}}"{{($project->category_id == $category->id)?" selected=selected":""}}>{{$category->name}}</option>
+                                    <option data-url-ru="{{$category->url}}" data-url-ua="{{$category->translate->firstWhere('lang', 'ua')? $category->translate->firstWhere('lang', 'ua')->url : ''}}" data-url-en="{{$category->translate->firstWhere('lang', 'en')? $category->translate->firstWhere('lang', 'en')->url : ''}}" value="{{$category->id}}"{{($project->category_id == $category->id)?" selected=selected":""}}>{{$category->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -527,13 +631,17 @@
             </div>
             <div class="question-body">
                 <div class="form-group row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Подпись<span class="input-request">*</span></label>
                         <input type="text" name="label_ru[]" class="form-control question-name none-required" placeholder="Введите подпись...">
                     </div>
-                    <div class="col-md-6">
-                        <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Подпись<span class="input-request">*</span></label>
+                    <div class="col-md-4">
+                        <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Подпись</label>
                         <input type="text" name="label_ua[]" class="form-control" placeholder="Введите подпись...">
+                    </div>
+                    <div class="col-md-4">
+                        <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Подпись</label>
+                        <input type="text" name="label_en[]" class="form-control" placeholder="Введите подпись...">
                     </div>
                 </div>
                 <div class="form-group row">

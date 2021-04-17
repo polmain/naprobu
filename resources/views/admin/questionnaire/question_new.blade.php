@@ -20,13 +20,17 @@
 
                             <div class="question-body">
                                 <div class="form-group row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Вопрос<span class="input-request">*</span></label>
                                         <input type="text" name="question_name" class="form-control question-name required" placeholder="Введите вопрос...">
                                     </div>
-                                    <div class="col-md-6">
-                                        <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Вопрос<span class="input-request">*</span></label>
-                                        <input type="text" name="question_name_ua" class="form-control required" placeholder="Введите вопрос...">
+                                    <div class="col-md-4">
+                                        <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Вопрос</label>
+                                        <input type="text" name="question_name_ua" class="form-control" placeholder="Введите вопрос...">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Вопрос</label>
+                                        <input type="text" name="question_name_en" class="form-control" placeholder="Введите вопрос...">
                                     </div>
                                 </div>
 
@@ -45,13 +49,17 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Подсказка к вопросу</label>
                                         <input type="text" name="question_help" class="form-control" placeholder="Введите подсказку...">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Подсказка к вопросу </label>
                                         <input type="text" name="question_help_ua" class="form-control" placeholder="Введите подсказку...">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Подсказка к вопросу </label>
+                                        <input type="text" name="question_help_en" class="form-control" placeholder="Введите подсказку...">
                                     </div>
                                 </div>
                                 <div class="form-group">

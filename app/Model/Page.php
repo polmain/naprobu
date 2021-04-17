@@ -10,7 +10,7 @@ class Page extends Model
 		return $this->hasOne('App\Model\Page',  'id','rus_lang_id');
 	}
 	public function translate(){
-		return $this->hasOne('App\Model\Page', 'rus_lang_id');
+		return $this->hasMany('App\Model\Page', 'rus_lang_id');
 	}
 	public function template(){
 		return $this->hasOne('App\Model\PageTemaplate', 'id', 'template_id');

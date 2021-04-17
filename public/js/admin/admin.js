@@ -227,6 +227,7 @@ function changeModeEditURL(lang) {
 var lang = [];
 lang[0] = "ru";
 lang[1] = "ua";
+lang[2] = "en";
 /*$("#sub-url").change(function () {
 	for(var i=0;i<lang.length;i++){
 		$catURL = $(this).find("option:selected").attr("data-url-"+lang[i]);
@@ -380,7 +381,7 @@ function getQuestionsAjax(base_url,page) {
 	{
 
 
-		
+
 		$(".ajax-questions").append(data.html);
 
 		if(data.isNext){
@@ -404,15 +405,19 @@ function getQuestionsAjax(base_url,page) {
 var answerTemplate = '<div class="form-group form-child-item row item-sort">\n' +
 	'<input type="hidden" name="--id--_children_id[]" value="--id_answer--"> \n'+
 
-	'<div class="col-md-5">' +
+	'<div class="col-md-3">' +
 	'       <label><img src="/public/images/russia.png" alt="Флаг России"> Значение варианта ответа<span class="input-request">*</span></label>\n' +
 	'       <input type="text" name="question_children_--id--[]" class="form-control required" placeholder="Введите вариант ответа...">\n' +
 	'</div>' +
-	'<div class="col-md-5">' +
-	'       <label><img src="/public/images/ukraine.png" alt="Флаг Украины"> Значение варианта ответа<span class="input-request">*</span></label>\n' +
-	'       <input type="text" name="question_children_ua_--id--[]" class="form-control required" placeholder="Введите вариант ответа...">\n' +
+	'<div class="col-md-3">' +
+	'       <label><img src="/public/images/ukraine.png" alt="Флаг Украины"> Значение варианта ответа</label>\n' +
+	'       <input type="text" name="question_children_ua_--id--[]" class="form-control" placeholder="Введите вариант ответа...">\n' +
 	'</div>' +
-	'<div class="col-md-2"> ' +
+	'<div class="col-md-3">' +
+	'       <label><img src="/public/images/united-kingdom.png" alt="Флаг Великой бриатнии"> Значение варианта ответа</label>\n' +
+	'       <input type="text" name="question_children_en_--id--[]" class="form-control" placeholder="Введите вариант ответа...">\n' +
+	'</div>' +
+	'<div class="col-md-3"> ' +
 	'<div class="btn btn-danger btn-block delete-child" style="margin-top: 25px">Удалить вариант</div>' +
 	'</div>' +
 	'<div class="col-md-12">id: <input type="text" value="--id_answer--" readonly></div><br> '+

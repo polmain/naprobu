@@ -330,9 +330,12 @@ class RequestController extends Controller
 
 		$projectRequest = ProjectRequest::find($request_id);
 		$projectName = $projectRequest->project->name;
-		if ($projectRequest->user->lang == "ua")
+		if ($projectRequest->user->lang !== "ru")
 		{
-			$projectName = $projectRequest->project->translate->name;
+            $projectTranslate = $projectRequest->project->translate->firstWhere('lang', $projectRequest->user->lang);
+            if($projectTranslate){
+                $projectName = $projectTranslate->name;
+            }
 		}
 
 		if($shipping){

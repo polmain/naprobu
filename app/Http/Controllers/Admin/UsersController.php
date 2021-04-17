@@ -34,7 +34,8 @@ use AdminPageData;
 
 class UsersController extends Controller
 {
-    //
+    private const TRANSLATE_LANG = ['ua', 'en'];
+
 	public function all(){
 		SEO::setTitle('Все пользователи');
 		AdminPageData::setPageName('Все пользователи');

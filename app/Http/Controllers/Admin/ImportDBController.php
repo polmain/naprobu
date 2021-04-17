@@ -34,6 +34,7 @@ use App\Model\Import\InvalidUser;
 use Carbon\Carbon;
 use Storage;
 
+// todo delete this class
 class ImportDBController extends Controller
 {
 	protected $projectCategory = [

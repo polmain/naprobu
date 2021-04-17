@@ -19,7 +19,7 @@ class Project extends Model
 	}
 
 	public function translate(){
-		return $this->hasOne('App\Model\Project', 'rus_lang_id');
+		return $this->hasMany('App\Model\Project', 'rus_lang_id');
 	}
 
 	public function base(){

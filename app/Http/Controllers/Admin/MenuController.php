@@ -14,6 +14,7 @@ use AdminPageData;
 
 class MenuController extends Controller
 {
+    private const TRANSLATE_LANG = ['ua', 'en'];
 	protected $childsId = [];
 
 	public function list(){
@@ -55,7 +56,7 @@ class MenuController extends Controller
 		}
 
 		ModeratorLogs::addLog("Отредактировал Menu: ".$menu->name);
-		
+
 		if(($request->submit == "save")){
 			return redirect()->route('adm_menu_edit',$menu->id);
 		}
@@ -71,13 +72,15 @@ class MenuController extends Controller
 		}
 		$item->save();
 
+        foreach (self::TRANSLATE_LANG as $lang){
+            $item = $item->translates->where('lang',$lang)->first();
+            $item->label = $request->input('item_label_'.$lang)[$key];
+            $item->sort = $sort;
+            if($menu_id == 3){
+                $item->link = $request->input('item_link_'.$lang)[$key];
+            }
+            $item->save();
+        }
 
-		$item_ua = $item->translates->where('lang','ua')->first();
-		$item_ua->label = $request->item_label_ua[$key];
-		$item_ua->sort = $sort;
-		if($menu_id == 3){
-			$item_ua->link = $request->item_link_ua[$key];
-		}
-		$item_ua->save();
 	}
 }

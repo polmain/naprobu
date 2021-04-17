@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App;
+use App\Services\LanguageServices\AlternativeUrlService;
 use Illuminate\Http\Request;
 use App\Model\Project;
 use App\Model\Project\ProjectCategory;
@@ -48,28 +49,16 @@ class ArchiveController extends Controller
 				'height' => 220
 			]
 		);
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('archive'));
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
+        $routes = AlternativeUrlService::generateReplyRoutes('archive/');
 
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('archive',[
 			'projects'	=>	$projects,
 			'posts'	=>	$posts,
 			'page'	=>	$page,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 

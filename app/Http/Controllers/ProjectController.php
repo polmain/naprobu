@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App;
 use App\Entity\ProjectAudienceEnum;
 use App\Library\Users\UserRating;
+use App\Services\LanguageServices\AlternativeUrlService;
 use Cookie;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -74,32 +75,17 @@ class ProjectController extends Controller
 			]);
 		}
 
-		$lang = ($locale == 'ru')?'ua':'ru';
+        $url = ($projects->previousPageUrl())? 'projects?page='.$projects->currentPage().'/': 'projects/';
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
 
-		$url = ($projects->previousPageUrl())?route('project',['page'=>$projects->currentPage()]):route('project');
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
-
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
-
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
     	return view('project.list',[
     		'categories'	=>	$categories,
     		'projects'	=>	$projects,
 			'lang'	=> $locale,
 			'page'	=> $page,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 

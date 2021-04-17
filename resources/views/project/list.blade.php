@@ -1,7 +1,5 @@
 @extends('layouts.main')
-@section('lang_href',$alternet_url)
 @section('head')
-<link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
     @if($projects->previousPageUrl())
         @if($projects->currentPage() == 2)
             <link rel="prev" href="{{$projects->resolveCurrentPath()}}/" />

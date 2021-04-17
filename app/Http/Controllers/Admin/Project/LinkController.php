@@ -14,6 +14,10 @@ use AdminPageData;
 
 class LinkController extends Controller
 {
+    private const UKRAINIAN_LANG = 'ua';
+    private const ENGLISH_LANG = 'en';
+    private const TRANSLATE_LANG = [self::UKRAINIAN_LANG, self::ENGLISH_LANG];
+
 	public function __construct()
 	{
 		AdminPageData::addBreadcrumbLevel('Проекты','project');
@@ -104,42 +108,83 @@ class LinkController extends Controller
 		$link = ProjectLink::find($link_id);
 		$link->isHide = true;
 		$link->save();
-		$link = ProjectLink::where('rus_lang_id',$link_id)->first();
-		$link->isHide = true;
-		$link->save();
+
+		foreach (self::TRANSLATE_LANG as $lang){
+            $link = ProjectLink::where([
+                'rus_lang_id' => $link_id,
+                'lang' => $lang
+            ])->first();
+
+            if($link){
+                $link->isHide = true;
+                $link->save();
+            }
+        }
+
 		return "ok";
 	}
 	public function show($link_id){
 		$link = ProjectLink::find($link_id);
 		$link->isHide = false;
 		$link->save();
-		$link = ProjectLink::where('rus_lang_id',$link_id)->first();
-		$link->isHide = false;
-		$link->save();
+
+        foreach (self::TRANSLATE_LANG as $lang){
+            $link = ProjectLink::where([
+                'rus_lang_id' => $link_id,
+                'lang' => $lang
+            ])->first();
+
+            if($link){
+                $link->isHide = false;
+                $link->save();
+            }
+        }
+
 		return "ok";
 	}
 
-	protected function createOrEdit($request,$link){
+	private function createOrEdit($request,$link): void
+    {
 		$link->text = $request->text;
 		$link->link = $request->link;
 		$link->project_id = $request->project_id;
 		$link->isHide = ($request->submit == "save-hide");
 		$link->save();
 
-		$translate = ProjectLink::where([
-			['rus_lang_id',$link->id],
-			['lang','ua']
-		])->first();
-		if(empty($translate)){
-			$translate = new ProjectLink();
-			$translate->rus_lang_id = $link->id;
-			$translate->lang = 'ua';
-		}
-
-		$translate->text = $request->textUA;
-		$translate->link = $request->linkUA;
-		$translate->project_id = $request->project_id;
-		$translate->isHide = ($request->submit == "save-hide");
-		$translate->save();
+        foreach (self::TRANSLATE_LANG as $lang){
+            if($this->checkRequiredForLang($request, $lang)){
+                $this->saveOrCreateTranslate($link, $request, $lang);
+            }
+        }
 	}
+
+
+    private function checkRequiredForLang(Request $request, string $lang): bool
+    {
+        $upperLang = mb_strtoupper($lang);
+
+        return $request->input('text'.$upperLang) && $request->input('link'.$upperLang);
+    }
+
+    private function saveOrCreateTranslate(ProjectLink $link, Request $request, string $lang): void
+    {
+        $translate = ProjectLink::where([
+            ['rus_lang_id',$link->id],
+            ['lang',$lang]
+        ])->first();
+
+        if(empty($translate)){
+            $translate = new ProjectLink();
+            $translate->rus_lang_id = $link->id;
+            $translate->lang = $lang;
+        }
+
+        $upperLang = mb_strtoupper($lang);
+
+        $translate->text = $request->input('text'.$upperLang);
+        $translate->link = $request->input('link'.$upperLang);
+        $translate->project_id = $link->project_id;
+        $translate->isHide = ($request->submit == "save-hide");
+        $translate->save();
+    }
 }

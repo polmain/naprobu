@@ -19,23 +19,31 @@
                         <div class="form-group">
                             <div class="nav-tabs-custom">
                                 <div class="form-group row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Текст ссылки<span class="input-request">*</span></label>
                                         <input type="text" id="text-ru" name="text" class="form-control required" placeholder="Введите текст ссылки...">
                                     </div>
-                                    <div class="col-md-6">
-                                        <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Текст ссылки<span class="input-request">*</span></label>
-                                        <input type="text" id="text-ua" name="textUA" class="form-control required" placeholder="Введите текст ссылки...">
+                                    <div class="col-md-4">
+                                        <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Текст ссылки</label>
+                                        <input type="text" id="text-ua" name="textUA" class="form-control" placeholder="Введите текст ссылки...">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Текст ссылки</label>
+                                        <input type="text" id="text-en" name="textEN" class="form-control" placeholder="Введите текст ссылки...">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Ссылка<span class="input-request">*</span></label>
                                         <input type="text" id="link-ru" name="link" class="form-control required" placeholder="Введите ссылку...">
                                     </div>
-                                    <div class="col-md-6">
-                                        <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Ссылка<span class="input-request">*</span></label>
-                                        <input type="text" id="link-ua" name="linkUA" class="form-control required" placeholder="Введите ссылку...">
+                                    <div class="col-md-4">
+                                        <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Ссылка</label>
+                                        <input type="text" id="link-ua" name="linkUA" class="form-control" placeholder="Введите ссылку...">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Ссылка</label>
+                                        <input type="text" id="link-en" name="linkEN" class="form-control" placeholder="Введите ссылку...">
                                     </div>
                                 </div>
                                 <!-- /.tab-content -->

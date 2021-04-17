@@ -285,18 +285,39 @@ class ProjectController extends Controller implements iAdminController
 		$project = Project::find($project_id);
 		$project->isHide = true;
 		$project->save();
-		$project = Project::where('rus_lang_id',$project_id)->first();
-		$project->isHide = true;
-		$project->save();
+
+        foreach (self::TRANSLATE_LANG as $lang){
+            $project = Project::where([
+                'rus_lang_id' => $project_id,
+                'lang' => $lang
+            ])->first();
+
+            if($project){
+                $project->isHide = true;
+                $project->save();
+            }
+        }
+
 		return "ok";
 	}
+
 	public function show($project_id){
 		$project = Project::find($project_id);
 		$project->isHide = false;
 		$project->save();
-		$project = Project::where('rus_lang_id',$project_id)->first();
-		$project->isHide = false;
-		$project->save();
+
+        foreach (self::TRANSLATE_LANG as $lang){
+            $project = Project::where([
+                'rus_lang_id' => $project_id,
+                'lang' => $lang
+            ])->first();
+
+            if($project){
+                $project->isHide = false;
+                $project->save();
+            }
+        }
+
 		return "ok";
 	}
 

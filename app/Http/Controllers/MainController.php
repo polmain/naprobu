@@ -92,7 +92,7 @@ class MainController extends Controller
 							})->count();
 
     	$posts = Post::with(['project.category.translate'])
-            ->whereHas('translate', function (Post $translate) use ($locale){
+            ->whereHas('translate', function ($translate) use ($locale){
                 return $translate->where('lang', $locale);
             })
 			->withCount(['visible_comments'])->where([

@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('lang_href',$alternet_url)
+@section('lang_href',$alternativeUrls)
 @section('head')
     @foreach($alternativeUrls as $lang => $alternet_url)
     <link rel="alternate" href="{{$alternet_url}}" hreflang="{{ $lang }}" />

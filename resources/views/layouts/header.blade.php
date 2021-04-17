@@ -37,8 +37,8 @@
                         <div class="current-lang"><img src="{{asset('public/svg/icons/'.App::getLocale().'.svg')}}" class="lang-flag" alt="{{App::getLocale()}}"/><span>{{strtoupper(App::getLocale())}}</span></div>
                         <div class="other-lang" style="display: none">
                             @foreach(\Config::get('app.locales') as $lang)
-                                @if(App::getLocale() !== $lang)
-                                <a class="other-lang-item" href="@yield('lang_href')"><img src="{{asset('public/svg/icons/'.$lang.'.svg')}}" class="lang-flag" alt="{{$lang}}"/><span>{{strtoupper($lang)}}</span></a>
+                                @if(App::getLocale() !== $lang && $alternativeUrls[$lang])
+                                <a class="other-lang-item" href="{{$alternativeUrls[$lang]}}"><img src="{{asset('public/svg/icons/'.$lang.'.svg')}}" class="lang-flag" alt="{{$lang}}"/><span>{{strtoupper($lang)}}</span></a>
                                 @endif
                             @endforeach
                         </div>

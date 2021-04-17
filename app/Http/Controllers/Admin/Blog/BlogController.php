@@ -107,8 +107,16 @@ class BlogController extends Controller
 		$post = Post::find($post_id);
 		$post->isHide = true;
 		$post->save();
-		$post->translate->isHide = true;
-		$post->translate->save();
+
+		foreach (self::TRANSLATE_LANG as $lang){
+            $post = Post::where([
+                'rus_lang_id' => $post_id,
+                'lang' => $lang,
+            ]);
+            $post->isHide = true;
+            $post->save();
+        }
+
 		return "ok";
 	}
 	public function show($post_id){
@@ -116,8 +124,14 @@ class BlogController extends Controller
 		$post->isHide = false;
 		$post->save();
 
-		$post->translate->isHide = false;
-		$post->translate->save();
+        foreach (self::TRANSLATE_LANG as $lang){
+            $post = Post::where([
+                'rus_lang_id' => $post_id,
+                'lang' => $lang,
+            ]);
+            $post->isHide = false;
+            $post->save();
+        }
 		return "ok";
 	}
 

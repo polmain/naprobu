@@ -429,7 +429,8 @@ class QuestionnaireController extends Controller
                     $projectTranslate = $project->translate->firstWhere('lang', $userLang);
 
                     if($projectTranslate){
-                        $projectName = $project->translate->name;
+                        $projectName = $projectTranslate->name;
+
                         if($userLang === 'ua'){
                             $link = "projects/questionnaire/".$questionnaire->id.'/';
                         }else{

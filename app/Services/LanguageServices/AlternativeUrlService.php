@@ -16,7 +16,7 @@ class AlternativeUrlService
         $baseUrl = ((Request::secure())?"https://":"http://").Request::getHost().'/';
 
         foreach (static::LANGUAGE as $lang){
-            if($lang !== $currentLang && $routes[$lang]){
+            if($lang !== $currentLang && isset($routes[$lang])){
                 $langPath = $lang === static::DEFAULT_LANG ? '' : $lang.'/';
                 $alternativeUrls[$lang] = $baseUrl.$langPath.$routes['lang'];
             }

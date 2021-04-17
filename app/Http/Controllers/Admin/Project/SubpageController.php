@@ -16,6 +16,7 @@ use AdminPageData;
 
 class SubpageController extends Controller implements iAdminController
 {
+    // todo move this constans to enum class
     private const UKRAINIAN_LANG = 'ua';
     private const ENGLISH_LANG = 'en';
     private const TRANSLATE_LANG = [self::UKRAINIAN_LANG, self::ENGLISH_LANG];

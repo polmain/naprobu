@@ -173,7 +173,7 @@
                                     <div class="rang-date"><span class="user-rang"> @if(App::getLocale() == 'ru')
                                                 {{$review->user->rang->name}}
                                             @else
-                                                {{$review->user->rang->translate->name}}
+                                                {{$review->user->rang->translate->firstWhere('lang', App::getLocale())->name}}
                                             @endif</span>, {{$review->created_at}}</div>
                                 </div>
                             </a>

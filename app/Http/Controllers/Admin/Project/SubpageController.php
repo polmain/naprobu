@@ -19,6 +19,10 @@ use AdminPageData;
 
 class SubpageController extends Controller implements iAdminController
 {
+    private const UKRAINIAN_LANG = 'ua';
+    private const ENGLISH_LANG = 'en';
+    private const TRANSLATE_LANG = [self::UKRAINIAN_LANG, self::ENGLISH_LANG];
+
 	public function __construct()
 	{
 		AdminPageData::addBreadcrumbLevel('Проекты','project');
@@ -115,13 +119,7 @@ class SubpageController extends Controller implements iAdminController
 
 	public function edit(Request $request, $subpage_id)
 	{
-		$subpage = Subpage::with('reviews')->find($subpage_id);
-		$translate = Subpage::where('rus_lang_id',$subpage_id)
-			->first();
-
-		if(empty($translate)){
-			$translate = new Subpage();
-		}
+		$subpage = Subpage::with(['reviews', 'translate'])->find($subpage_id);
 
 		$projects = Project::with(['category.translate','translate'])
 			->where('lang','ru')
@@ -141,7 +139,6 @@ class SubpageController extends Controller implements iAdminController
 
 		return view('admin.projects.subpage.edit',[
 			'subpage' => $subpage,
-			'translate' => $translate,
 			'projects' => $projects,
 			'types' => $types,
 			"countReviews"=>$countReviews,
@@ -265,7 +262,7 @@ class SubpageController extends Controller implements iAdminController
 				case 5:
 					$subpage->isSendNotification = true;
 					$subpage->save();
-					
+
 					$projectRequests = Project\ProjectRequest::where('project_id', $subpage->project_id)->orderBy('id')->first();
 
 					$queue = new Queue();

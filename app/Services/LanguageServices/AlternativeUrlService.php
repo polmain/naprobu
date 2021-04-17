@@ -6,7 +6,7 @@ use Request;
 
 class AlternativeUrlService
 {
-    public const DEFAULT_LANG = 'ru';
+    public const DEFAULT_LANG = 'ua';
     public const LANGUAGE = ['ru', 'ua', 'en'];
 
     public static function getAlternativeUrls(string $currentLang, array $routes): array

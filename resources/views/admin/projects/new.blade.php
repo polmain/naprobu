@@ -205,8 +205,6 @@
                                         </div>
                                     </div>
                                     <!-- /.tab-pane -->
-                                </div>
-                                <!-- /.tab-content -->
                                     <div class="tab-pane row" id="tab_3-3">
                                         <div class="col-md-8">
                                             <div class="form-group">

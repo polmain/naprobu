@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App;
 use App\Entity\ProjectAudienceEnum;
+use App\Services\LanguageServices\AlternativeUrlService;
 use Illuminate\Http\Request;
 use App\Mail\PartnerNotificationMail;
 use App\Model\Project;
@@ -91,6 +92,9 @@ class MainController extends Controller
 							})->count();
 
     	$posts = Post::with(['project.category.translate'])
+            ->whereHas('translate', function (Post $translate) use ($locale){
+                return $translate->where('lang', $locale);
+            })
 			->withCount(['visible_comments'])->where([
 				['lang','ru'],
 				['isHide',0],
@@ -103,23 +107,9 @@ class MainController extends Controller
 			['isHide',0],
 		])->get();
 
+        $routes = AlternativeUrlService::generateReplyRoutes('');
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('home'));
-
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
     	return view('home',[
     		'projects'	=>	$projects,
@@ -129,7 +119,7 @@ class MainController extends Controller
     		'project_count'	=>	$project_count,
     		'review_count'	=>	$review_count,
     		'expert_count'	=>	$expert_count,
-			'alternet_url'	=> $alternet_url,
+			'alternativeUrls'	=> $alternativeUrls,
 			'international'	=> $international,
 		]);
 	}
@@ -170,27 +160,14 @@ class MainController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('about'));
+		$routes = AlternativeUrlService::generateReplyRoutes('about/');
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
     	return view('about',[
     		'page' => $page,
     		'brands' => $brands,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -220,27 +197,15 @@ class MainController extends Controller
                 'height' => self::OPEN_GRAPH_IMAGE_HEIGHT
 			]
 		);
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('faq'));
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
+        $routes = AlternativeUrlService::generateReplyRoutes('faq');
 
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
     	return view('faq',[
     		'page' => $page,
     		'faqCategories' => $faqCategories,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -266,26 +231,13 @@ class MainController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('contact'));
+        $routes = AlternativeUrlService::generateReplyRoutes('contact/');
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
     	return view('contact',[
     		'page' => $page,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -325,27 +277,14 @@ class MainController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('partner'));
+        $routes = AlternativeUrlService::generateReplyRoutes('partner/');
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('b2b',[
 			'page' => $page,
 			'brands' => $brands,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 

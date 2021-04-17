@@ -38,14 +38,14 @@
                     @if((App::getLocale() == 'ru') || $faqCategory->translate->firstWhere('lang', App::getLocale()))
                         <div class="faq-category-question-container {{(0 == $i++)?'active':''}}" id="faq-category-{{$faqCategory->id}}-questions">
                             @foreach($faqCategory->questions as $question)
-                                @if((App::getLocale() == 'ru') || $faqCategory->translate->firstWhere('lang', App::getLocale()))
+                                @if((App::getLocale() == 'ru') || $question->translate->firstWhere('lang', App::getLocale()))
                                     <div class="faq-category-question-item">
                                        @if(App::getLocale() == 'ru')
                                            <div class="faq-category-question-item-question">{{$question->question}}</div>
                                            <div class="faq-category-question-item-answer">{!!  $question->answer !!}</div>
                                        @else
-                                            <div class="faq-category-question-item-question">{{$faqCategory->translate->firstWhere('lang', App::getLocale())->question}}</div>
-                                            <div class="faq-category-question-item-answer">{!! $faqCategory->translate->firstWhere('lang', App::getLocale())->answer !!}</div>
+                                            <div class="faq-category-question-item-question">{{$question->translate->firstWhere('lang', App::getLocale())->question}}</div>
+                                            <div class="faq-category-question-item-answer">{!! $question->translate->firstWhere('lang', App::getLocale())->answer !!}</div>
                                        @endif
                                     </div>
                                 @endif

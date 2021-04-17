@@ -75,7 +75,7 @@ class ProjectController extends Controller
 			]);
 		}
 
-        $url = ($projects->previousPageUrl())? 'projects?page='.$projects->currentPage().'/': 'projects/';
+        $url = ($projects->previousPageUrl())? 'projects/?page='.$projects->currentPage(): 'projects/';
         $routes = AlternativeUrlService::generateReplyRoutes($url);
 
         $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);

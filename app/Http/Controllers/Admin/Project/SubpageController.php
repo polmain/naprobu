@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Admin\Project;
 
-use App\Library\Users\Notification;
-use App\Mail\UserNotificationMail;
 use App\Model\Queue;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -13,7 +11,6 @@ use App\Model\Project\Subpage;
 use App\Model\Project\SubpageType;
 use App\Model\Review;
 use App\Library\Users\ModeratorLogs;
-use Illuminate\Support\Facades\Mail;
 use SEO;
 use AdminPageData;
 
@@ -27,7 +24,7 @@ class SubpageController extends Controller implements iAdminController
 	{
 		AdminPageData::addBreadcrumbLevel('Проекты','project');
 	}
-    //
+
 	public function all()
 	{
 		$subpages = Subpage::with(['project','type'])
@@ -104,7 +101,7 @@ class SubpageController extends Controller implements iAdminController
 	public function create(Request $request)
 	{
 		$subpage = new Subpage();
-		$this->createOrEdit($request, $subpage, "create");
+		$this->createOrEdit($request, $subpage);
 
 		ModeratorLogs::addLog("Создал Подстраницу проекта: ".$request->name);
 		if(($request->submit == "save-hide") || ($request->submit == "save")){
@@ -149,7 +146,7 @@ class SubpageController extends Controller implements iAdminController
 	public function save(Request $request, $subpage_id)
 	{
 		$subpage = Subpage::find($subpage_id);
-		$this->createOrEdit($request, $subpage, "update");
+		$this->createOrEdit($request, $subpage);
 
 		ModeratorLogs::addLog("Отредактировал Подстраницу проекта: ".$request->name);
 		if(($request->submit == "save-hide") || ($request->submit == "save")){
@@ -180,21 +177,35 @@ class SubpageController extends Controller implements iAdminController
 		$subpage = Subpage::find($subpage_id);
 		$subpage->isHide = true;
 		$subpage->save();
-		$subpage = Subpage::where('rus_lang_id',$subpage_id)->first();
-		$subpage->isHide = true;
-		$subpage->save();
+
+        foreach (self::TRANSLATE_LANG as $lang) {
+            $subpage = Subpage::where([
+                'rus_lang_id' => $subpage_id,
+                'lang' => $lang
+            ])->first();
+            $subpage->isHide = true;
+            $subpage->save();
+        }
+
 		return "ok";
 	}
 	public function show($subpage_id){
 		$subpage = Subpage::find($subpage_id);
 		$subpage->isHide = false;
 		$subpage->save();
-		$subpage = Subpage::where('rus_lang_id',$subpage_id)->first();
-		$subpage->isHide = false;
-		$subpage->save();
+
+        foreach (self::TRANSLATE_LANG as $lang) {
+            $subpage = Subpage::where([
+                    'rus_lang_id' => $subpage_id,
+                    'lang' => $lang
+                ])->first();
+            $subpage->isHide = false;
+            $subpage->save();
+        }
+
 		return "ok";
 	}
-	protected function createOrEdit($request,$subpage,$mode){
+	protected function createOrEdit($request,$subpage){
 		$subpage->name = $request->name;
 		$subpage->isHide = ($request->submit == "save-hide");
 		$subpage->url = $request->url;
@@ -214,66 +225,85 @@ class SubpageController extends Controller implements iAdminController
 
 		$subpage->save();
 
-		$translate = Subpage::where('rus_lang_id',$subpage->id)->first();
-
-		if(empty($translate))
-		{
-			$translate = new Subpage();
-			$translate->lang = 'ua';
-			$translate->rus_lang_id = $subpage->id;
-		}
-
-		$translate->name = $request->nameUA;
-		$translate->isHide = ($request->submit == "save-hide");
-		$translate->url = $request->urlUA;
-		$translate->text = $request->textUA;
-		$translate->short_description = $request->short_descriptionUA;
-		$translate->type_id = $request->type;
-		$translate->project_id = $request->project;
-
-		$translate->hasComments = ($request->has('isComments'));
-		$translate->hasReviews = ($request->has('isReview'));
-		$translate->isReviewForm = ($request->has('isForm'));
-		$translate->min_charsets = $request->min_charsets;
-		$translate->image = $request->image_ua;
-
-		$translate->seo_title = $request->titleUA;
-		$translate->seo_description = $request->descriptionUA;
-		$translate->seo_keyword = $request->keywordsUA;
-
-		$translate->save();
+        foreach (self::TRANSLATE_LANG as $lang) {
+            if ($this->checkRequiredForLang($request, $lang)) {
+                $this->saveOrCreateTranslate($subpage, $request, $lang);
+            }
+        }
 
 		if(!$subpage->isSendNotification && !$subpage->isHide){
 
 			switch ($subpage->type_id)
 			{
 				case 3:
-					$subpage->isSendNotification = true;
-					$subpage->save();
-
-					$projectRequests = Project\ProjectRequest::where('project_id', $subpage->project_id)->orderBy('id')->first();
-
-					$queue = new Queue();
-					$queue->name = 'project_contest';
-					$queue->project_id = $subpage->id;
-					$queue->start = ($projectRequests->id - 1);
-					$queue->save();
+                    $this->sendNotification($subpage, 'project_contest'); // Todo queueType move to enum
 					break;
 				case 5:
-					$subpage->isSendNotification = true;
-					$subpage->save();
-
-					$projectRequests = Project\ProjectRequest::where('project_id', $subpage->project_id)->orderBy('id')->first();
-
-					$queue = new Queue();
-					$queue->name = 'project_membership';
-					$queue->project_id = $subpage->id;
-					$queue->start = ($projectRequests->id - 1);
-					$queue->save();
+				    $this->sendNotification($subpage, 'project_membership');
 					break;
+                default:
+                    break;
 			}
 		}
 	}
+
+	private function sendNotification(Subpage $subpage, string $queueType): void
+    {
+        $subpage->isSendNotification = true;
+        $subpage->save();
+
+        $projectRequests = Project\ProjectRequest::where('project_id', $subpage->project_id)->orderBy('id')->first();
+
+        $queue = new Queue();
+        $queue->name = $queueType;
+        $queue->project_id = $subpage->id;
+        $queue->start = ($projectRequests->id - 1);
+        $queue->save();
+    }
+
+    private function checkRequiredForLang(Request $request, string $lang): bool
+    {
+        $upperLang = mb_strtoupper($lang);
+
+        return (bool) $request->input('name'.$upperLang);
+    }
+
+    private function saveOrCreateTranslate(Subpage $subpage, Request $request, string $lang): void
+    {
+        $translate = Subpage::where([
+            'rus_lang_id' => $subpage->id,
+            'lang' => $lang,
+        ])->first();
+
+        if(empty($translate))
+        {
+            $translate = new Subpage();
+            $translate->lang = $lang;
+            $translate->rus_lang_id = $subpage->id;
+        }
+
+        $upperLang = mb_strtoupper($lang);
+
+        $translate->name = $request->input('name'.$upperLang);
+        $translate->isHide = $subpage->isHide;
+        $translate->url = $request->input('url'.$upperLang);
+        $translate->text = $request->input('text'.$upperLang);
+        $translate->short_description = $request->input('short_description'.$upperLang);
+        $translate->type_id = $subpage->type_id;
+        $translate->project_id = $subpage->project_id;
+
+        $translate->hasComments = $subpage->hasComments;
+        $translate->hasReviews = $subpage->hasReviews;
+        $translate->isReviewForm = $subpage->isReviewForm;
+        $translate->min_charsets = $subpage->min_charsets;
+        $translate->image = $request->input('image_'.$lang);
+
+        $translate->seo_title = $request->input('title'.$upperLang);
+        $translate->seo_description = $request->input('description'.$upperLang);
+        $translate->seo_keyword = $request->input('keywords'.$upperLang);
+
+        $translate->save();
+    }
 
 	protected function saveImage($image, $nameModificator){
 		$newName = time().$nameModificator.'.'.$image->getClientOriginalExtension();
@@ -306,15 +336,15 @@ class SubpageController extends Controller implements iAdminController
 			$project_id = Subpage::find($subpage_id)->project_id;
 
 			if($lang == 'ru'){
-				return Subpage::where([
-						['lang','ru'],
-						['id','<>',$subpage_id],
-						['project_id',$project_id],
-						['url',$url],
-					])->first() !== null;
+                return Subpage::where([
+                        ['lang',$lang],
+                        ['id','<>',$subpage_id],
+                        ['project_id',$project_id],
+                        ['url',$url],
+                    ])->first() !== null;
 			}else{
 				return Subpage::where([
-						['lang','ua'],
+						['lang',$lang],
 						['rus_lang_id','<>',$subpage_id],
 						['project_id',$project_id],
 						['url',$url],

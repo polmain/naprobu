@@ -306,7 +306,7 @@ class ProjectController extends Controller
 
 		$project_id = ($locale == 'ru')? $project->id : $project->base->id;
 
-		$subpage = Subpage::with('project.translate','base')
+		$subpage = Subpage::with('project.translate','base.project.translate')
 			->where([
 				['lang',$locale],
 				['project_id',$project_id],

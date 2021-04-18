@@ -155,7 +155,7 @@ class ProjectController extends Controller
 			]);
 		}
 
-        $routes = ['ru' => $base->url.'/'];
+        $routes = ['ru' => 'projects/'.$base->url.'/'.($projects->previousPageUrl() ?'?page='.$projects->currentPage() : '')];
 
         foreach ($base->translate as $translate){
             $routes[$translate->lang] = 'projects/'.$translate->url.'/'.($projects->previousPageUrl() ?'?page='.$projects->currentPage() : '');

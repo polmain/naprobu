@@ -332,11 +332,6 @@ class ProjectController extends Controller
 				]
 			);
 
-			$lang = ($locale == 'ru')?'ua':'ru';
-			$project_alt = ($locale == 'ru')? $project->translate->url : $project->base->url;
-			$subpage_alt = ($locale == 'ru')? $subpage->translate->url : $subpage->base->url;
-
-
 			if($subpage->type_id == 5){
 				$requests = ProjectRequest::with(['user'])->where([
 						['project_id', $project_id],

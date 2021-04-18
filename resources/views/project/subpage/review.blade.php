@@ -1,7 +1,5 @@
 @extends('layouts.main')
-@section('lang_href',$alternet_url)
 @section('head')
-    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
     @if($reviews->previousPageUrl())
         @if($reviews->currentPage() == 2)
             <link rel="prev" href="{{$reviews->resolveCurrentPath()}}/" />
@@ -17,7 +15,7 @@
     <section class="breadcrumb-box mb-4">
         <div class="container">
             <div class="row">
-                {{ Breadcrumbs::render('project_subpage',(App::getLocale() == 'ua')?$project->category->translate:$project->category,$project,$subpage) }}
+                {{ Breadcrumbs::render('project_subpage',(App::getLocale() !== 'ru')?$project->category->translate->firstWhere('lang', App::getLocale()):$project->category,$project,$subpage) }}
             </div>
         </div>
     </section>

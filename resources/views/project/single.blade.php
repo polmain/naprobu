@@ -1,13 +1,9 @@
 @extends('layouts.main')
-@section('lang_href',$alternet_url)
-@section('head')
-    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
-@endsection
 @section('content')
 <section class="breadcrumb-box">
     <div class="container">
         <div class="row">
-                {{ Breadcrumbs::render('project_single',($lang == 'ua')?$project->category->translate:$project->category,$project) }}
+                {{ Breadcrumbs::render('project_single',($lang !== 'ru')?$project->category->translate->firstWhere('lang', $lang):$project->category,$project) }}
         </div>
     </div>
 </section>

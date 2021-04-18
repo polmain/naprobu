@@ -22,6 +22,7 @@ use SEO;
 use SEOMeta;
 use OpenGraph;
 
+// todo refactoring this class
 class ProjectController extends Controller
 {
     public function all(Request $request){
@@ -305,7 +306,7 @@ class ProjectController extends Controller
 
 		$project_id = ($locale == 'ru')? $project->id : $project->base->id;
 
-		$subpage = Subpage::with('project','base')
+		$subpage = Subpage::with('project.translate','base')
 			->where([
 				['lang',$locale],
 				['project_id',$project_id],

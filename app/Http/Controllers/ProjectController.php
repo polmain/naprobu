@@ -346,7 +346,7 @@ class ProjectController extends Controller
                 $routes = ['ru' => 'projects/'.$subpage_base->project->url.'/'.$subpage_base->url.'/'];
 
                 foreach ($subpage_base->translate as $translate){
-                    $projectTranslate = $subpage_base->project->firstWhere('lang', $translate->lang);
+                    $projectTranslate = $subpage_base->project->translate->firstWhere('lang', $translate->lang);
                     if($projectTranslate){
                         $routes[$translate->lang] = 'projects/'.$projectTranslate->url.'/'.$translate->url.'/';
                     }
@@ -379,7 +379,7 @@ class ProjectController extends Controller
 				$routes = ['ru' => 'projects/'.$subpage_base->project->url.'/'.$subpage_base->url.'/'.($posts->previousPageUrl() ?'?page='.$posts->currentPage() : '')];
 
                 foreach ($subpage_base->translate as $translate){
-                    $projectTranslate = $subpage_base->project->firstWhere('lang', $translate->lang);
+                    $projectTranslate = $subpage_base->project->translate->firstWhere('lang', $translate->lang);
                     if($projectTranslate){
                         $routes[$translate->lang] = 'projects/'.$projectTranslate->url.'/'.$translate->url.'/'.($posts->previousPageUrl() ?'?page='.$posts->currentPage() : '');
                     }
@@ -439,7 +439,7 @@ class ProjectController extends Controller
 				$routes = ['ru' => 'projects/'.$subpage_base->project->url.'/'.$subpage_base->url.'/'.($reviews->previousPageUrl() ?'?page='.$reviews->currentPage() : '')];
 
                 foreach ($subpage_base->translate as $translate){
-                    $projectTranslate = $subpage_base->project->firstWhere('lang', $translate->lang);
+                    $projectTranslate = $subpage_base->project->translate->firstWhere('lang', $translate->lang);
                     if($projectTranslate){
                         $routes[$translate->lang] = 'projects/'.$projectTranslate->url.'/'.$translate->url.'/'.($reviews->previousPageUrl() ?'?page='.$reviews->currentPage() : '');
                     }

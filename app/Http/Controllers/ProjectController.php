@@ -343,35 +343,28 @@ class ProjectController extends Controller
 						['status_id','>=',7],
 					])
 					->get()
-					//->sortBy('user.name',SORT_NATURAL|SORT_FLAG_CASE);
 					->sortBy((function($item,$key) {
 						return mb_substr(mb_strtolower($item->user->name),0,1);
 					}));
 
-				$url = route('project.subpage',['project_url'=>$project_alt,'subpage'=>$subpage_alt]);
+                $routes = ['ru' => 'projects/'.$subpage_base->project->url.'/'.$subpage_base->url.'/'];
 
-				//разбиваем на массив по разделителю
-				$segments = explode('/', $url);
+                foreach ($subpage_base->translate as $translate){
+                    $projectTranslate = $subpage_base->project->firstWhere('lang', $translate->lang);
+                    if($projectTranslate){
+                        $routes[$translate->lang] = 'projects/'.$projectTranslate->url.'/'.$translate->url.'/';
+                    }
+                }
 
-				//Если URL (где нажали на переключение языка) содержал корректную метку языка
-				if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-					unset($segments[3]); //удаляем метку
-				}
-
-				//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-				if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-					array_splice($segments, 3, 0, $lang);
-				}
-
-				//формируем полный URL
-				$alternet_url = implode("/", $segments);
+                $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 				return view('project.subpage.member',[
 					'project' => $project,
 					'subpage' => $subpage,
 					'requests' => $requests,
-					'alternet_url' => $alternet_url
+					'alternativeUrls' => $alternativeUrls
 				]);
+
 			}elseif($subpage->type_id == 15){
 				$posts = ProjectBloggerPost::where([
 					['project_id', $project_id],
@@ -387,30 +380,22 @@ class ProjectController extends Controller
 					]);
 				}
 
-				$url = ($posts->previousPageUrl())?route('project.subpage',['project_url'=>$project_alt,'subpage'=>$subpage_alt,'page'=>$posts->currentPage()]):route('project.subpage',['project_url'=>$project_alt,'subpage'=>$subpage_alt]);
+				$routes = ['ru' => 'projects/'.$subpage_base->project->url.'/'.$subpage_base->url.'/'.($posts->previousPageUrl() ?'?page='.$posts->currentPage() : '')];
 
+                foreach ($subpage_base->translate as $translate){
+                    $projectTranslate = $subpage_base->project->firstWhere('lang', $translate->lang);
+                    if($projectTranslate){
+                        $routes[$translate->lang] = 'projects/'.$projectTranslate->url.'/'.$translate->url.'/'.($posts->previousPageUrl() ?'?page='.$posts->currentPage() : '');
+                    }
+                }
 
-				//разбиваем на массив по разделителю
-				$segments = explode('/', $url);
-
-				//Если URL (где нажали на переключение языка) содержал корректную метку языка
-				if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-					unset($segments[3]); //удаляем метку
-				}
-
-				//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-				if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-					array_splice($segments, 3, 0, $lang);
-				}
-
-				//формируем полный URL
-				$alternet_url = implode("/", $segments);
+                $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 				return view('project.subpage.blogger_post',[
 					'project' => $project,
 					'subpage' => $subpage,
 					'posts' => $posts,
-					'alternet_url' => $alternet_url
+					'alternativeUrls' => $alternativeUrls
 				]);
 			}
 			else{
@@ -455,24 +440,16 @@ class ProjectController extends Controller
 					])->first();
 				}
 
-				$url = ($reviews->previousPageUrl())?route('project.subpage',['project_url'=>$project_alt,'subpage'=>$subpage_alt,'page'=>$reviews->currentPage()]):route('project.subpage',['project_url'=>$project_alt,'subpage'=>$subpage_alt]);
+				$routes = ['ru' => 'projects/'.$subpage_base->project->url.'/'.$subpage_base->url.'/'.($reviews->previousPageUrl() ?'?page='.$reviews->currentPage() : '')];
 
+                foreach ($subpage_base->translate as $translate){
+                    $projectTranslate = $subpage_base->project->firstWhere('lang', $translate->lang);
+                    if($projectTranslate){
+                        $routes[$translate->lang] = 'projects/'.$projectTranslate->url.'/'.$translate->url.'/'.($reviews->previousPageUrl() ?'?page='.$reviews->currentPage() : '');
+                    }
+                }
 
-				//разбиваем на массив по разделителю
-				$segments = explode('/', $url);
-
-				//Если URL (где нажали на переключение языка) содержал корректную метку языка
-				if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-					unset($segments[3]); //удаляем метку
-				}
-
-				//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-				if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-					array_splice($segments, 3, 0, $lang);
-				}
-
-				//формируем полный URL
-				$alternet_url = implode("/", $segments);
+                $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 				return view('project.subpage.review',[
 					'project'		=>	$project,
@@ -480,7 +457,7 @@ class ProjectController extends Controller
 					'reviews'		=>	$reviews,
 					'subpage_base'	=>	$subpage_base,
 					'projectRequest'	=>	$projectRequest,
-					'alternet_url' => $alternet_url
+					'alternativeUrls' => $alternativeUrls
 				]);
 			}
 		}

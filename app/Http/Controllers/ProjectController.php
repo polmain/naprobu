@@ -180,6 +180,7 @@ class ProjectController extends Controller
 			['lang',$locale],
 			['isHide',0],
 		])->get();
+
 		$project	=	Project::with(['subpages.reviews.user','category','status','questionnaires','messages','base'])
 			->where([
 				['url', $url],
@@ -191,26 +192,13 @@ class ProjectController extends Controller
 
 		$base = ($locale == 'ru')? $project : $project->base;
 
+        $routes = ['ru' => 'projects/'.$base->url.'/'];
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		$project_alt = ($locale == 'ru')? $project->translate->url : $project->base->url;
+        foreach ($base->translate as $translate){
+            $routes[$translate->lang] = 'projects/'.$translate->url.'/';
+        }
 
-		$url = route('project.level2',['url'=>$project_alt]);
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
-
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		if($project->isHide || $project->type == 'only-blogger'){
 			SEO::setTitle(trans('project.hide_title'));
@@ -228,7 +216,7 @@ class ProjectController extends Controller
 						'categories'	=>	$categories,
 						'project'	=>	$project,
 						'base'		=>	$base,
-						'alternet_url'	=> $alternet_url
+						'alternativeUrls'	=> $alternativeUrls
 					]);
 				}
 			}else{
@@ -236,7 +224,7 @@ class ProjectController extends Controller
 					'categories'	=>	$categories,
 					'project'	=>	$project,
 					'base'		=>	$base,
-					'alternet_url'	=> $alternet_url
+					'alternativeUrls'	=> $alternativeUrls
 				]);
 			}
 		}
@@ -299,7 +287,7 @@ class ProjectController extends Controller
 			'lang'	=>	$locale,
 			'projectRequest'	=>	$projectRequest,
 			'blocks'	=>	$blocks,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 

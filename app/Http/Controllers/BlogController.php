@@ -298,7 +298,7 @@ class BlogController extends Controller
         $routes = ['ru' => 'blog/'.$base->url.'/'];
 
         foreach ($base->translate as $translate){
-            $routes[$translate->lang] = 'projects/'.$translate->url.'/';
+            $routes[$translate->lang] = 'blog/'.$translate->url.'/';
         }
 
         $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
@@ -351,7 +351,7 @@ class BlogController extends Controller
         $routes = ['ru' => 'blog/'.$base->url.'/'];
 
         foreach ($base->translate as $translate){
-            $routes[$translate->lang] = 'projects/'.$translate->url.'/';
+            $routes[$translate->lang] = 'blog/'.$translate->url.'/';
         }
 
         $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
@@ -466,7 +466,7 @@ class BlogController extends Controller
         $routes = ['ru' => 'blog/'.$base->url.'/'];
 
         foreach ($base->translate as $translate){
-            $routes[$translate->lang] = 'projects/'.$translate->url.'/';
+            $routes[$translate->lang] = 'blog/'.$translate->url.'/';
         }
 
         $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);

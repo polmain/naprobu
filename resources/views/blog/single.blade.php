@@ -63,7 +63,7 @@
                         </div>
                         <div class="blog-bottom">
                             <div class="blog-tag">
-                                <div class="blog-tag-title">@lang('blog.tags'):</div><div class="blog-tag-list">@foreach($base->tags as $tag) @if($locale == "ru")<a href="{{route('blog.level2',[$tag->url])}}" class="blog-tag-item">{{$tag->name}}</a>@else @if($tag->translate->firstWhere('lang', $locale))<a href="{{route('blog.level2',[$tag->translate->firstWhere('lang', $locale)->url])}}" class="blog-tag-item">{{$tag->translate->firstWhere('lang', $locale)->name}}</a>@endif @endforeach</div>
+                                <div class="blog-tag-title">@lang('blog.tags'):</div><div class="blog-tag-list">@foreach($base->tags as $tag) @if($locale == "ru")<a href="{{route('blog.level2',[$tag->url])}}" class="blog-tag-item">{{$tag->name}}</a>@else @if($tag->translate->firstWhere('lang', $locale))<a href="{{route('blog.level2',[$tag->translate->firstWhere('lang', $locale)->url])}}" class="blog-tag-item">{{$tag->translate->firstWhere('lang', $locale)->name}}</a>@endif @endif @endforeach</div>
                             </div>
                             <div class="blog-share">
                                 <a href="https://www.facebook.com/sharer/sharer.php?u={!!   urlencode(route('blog.level2',['url'=>$post->url])) !!}"

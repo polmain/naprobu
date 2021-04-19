@@ -204,8 +204,9 @@ class ReviewController extends Controller
 			['id',$reviewUrl],
 		])->get();
 
-		$project_name = ($locale == "ru")? $reviews->first()->subpage->project->name : $reviews->first()->subpage->project->translate->name;
-		$project = ($locale == "ru")? $reviews->first()->subpage->project : $reviews->first()->subpage->project->translate;
+		$project_name = ($locale == "ru")? $reviews->first()->subpage->project->name : ($reviews->first()->subpage->project->translate->firstWhere('lang', $locale)? $reviews->first()->subpage->project->translate->firstWhere('lang', $locale)->name:'');
+		$project_name = $project_name ?? $reviews->first()->subpage->project->name;
+		$project = $reviews->first()->subpage->project;
 
 		$title = str_replace(':user_name:',$reviews->first()->user->name, \App\Model\Setting::where([['name','review_single_title'],['lang',$locale]])->first()->value);
 		$title = str_replace(':project_name:',$project_name, $title);

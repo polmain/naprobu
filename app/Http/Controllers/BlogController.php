@@ -171,25 +171,15 @@ class BlogController extends Controller
 				}])->find($post->rus_lang_id);
 		}
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		$post_alt = ($locale == 'ru')? $post->translate->url : $post->base->url;
+        $base = ($locale == 'ru')? $post : $post->base;
 
-		$url = route('blog.level2',['url'=>$post_alt]);
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
+        $routes = ['ru' => 'blog/'.$base->url.'/'];
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
+        foreach ($base->translate as $translate){
+            $routes[$translate->lang] = 'blog/'.$translate->url.'/';
+        }
 
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		if($post->isHide){
 			SEO::setTitle(trans('blog.hide_title'));
@@ -207,7 +197,7 @@ class BlogController extends Controller
 						'categories'	=>	$categories,
 						'post'	=>	$post,
 						'base'		=>	$base,
-						'alternet_url'	=> $alternet_url
+						'alternativeUrls'	=> $alternativeUrls
 					]);
 				}
 			}else{
@@ -215,7 +205,7 @@ class BlogController extends Controller
 					'categories'	=>	$categories,
 					'post'	=>	$post,
 					'base'		=>	$base,
-					'alternet_url'	=> $alternet_url
+                    'alternativeUrls'	=> $alternativeUrls
 				]);
 			}
 		}
@@ -241,7 +231,7 @@ class BlogController extends Controller
 			'base'	=> $base,
 			'locale'	=>	$locale,
 			'sidebar'	=> $this->sidebar,
-			'alternet_url' => $alternet_url
+            'alternativeUrls'	=> $alternativeUrls
 		]);
 	}
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\LanguageServices\AlternativeUrlService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Auth;
@@ -94,9 +95,12 @@ class BlogController extends Controller
 
 		$posts = Post::with(['project.category.translate','base']);
 
-		$url = route('blog');
+        $url = 'blog/';
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
 
-		return $this->list($posts, $lastPost, $page, $request, $url);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
+
+		return $this->list($posts, $lastPost, $page, $request, $alternativeUrls);
 	}
 
 	public function lavel2(Request $request,$url){
@@ -289,10 +293,17 @@ class BlogController extends Controller
 				$prj->where('category_id',$categoryBase->id);
 			});
 
-		$post_alt = ($locale == 'ru')? $category->translate->url : $category->base->url;
-		$url = route('blog.level2',['url'=>$post_alt]);
+        $base = ($locale === 'ru')? $category : $category->base;
 
-		return $this->list($posts, $lastPost, $category, $request, $url);
+        $routes = ['ru' => 'blog/'.$base->url.'/'];
+
+        foreach ($base->translate as $translate){
+            $routes[$translate->lang] = 'projects/'.$translate->url.'/';
+        }
+
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
+
+		return $this->list($posts, $lastPost, $category, $request, $alternativeUrls);
 	}
 
 	public function project($request, $url){
@@ -335,17 +346,24 @@ class BlogController extends Controller
 		$posts = Post::with(['project.category.translate'])
 			->where('project_id',$projectBase->id);
 
-		$post_alt = ($locale == 'ru')? $project->translate->url : $project->base->url;
-		$url = route('blog.level2',['url'=>$post_alt]);
+        $base = ($locale == 'ru')? $project : $project->base;
 
-		return $this->list($posts, $lastPost, $project, $request, $url);
+        $routes = ['ru' => 'blog/'.$base->url.'/'];
+
+        foreach ($base->translate as $translate){
+            $routes[$translate->lang] = 'projects/'.$translate->url.'/';
+        }
+
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
+
+		return $this->list($posts, $lastPost, $project, $request, $alternativeUrls);
 	}
 
-	public function user($request, $url){
+	public function user($request, $userUrl){
 		$locale = App::getLocale();
 
 		$user = User::where([
-			['name',$url],
+			['name',$userUrl],
 		])->first();
 
 
@@ -374,9 +392,12 @@ class BlogController extends Controller
 		$posts = Post::with(['project.category.translate'])
 			->where('author_id',$user->id);
 
-		$url = route('blog.level2',['url'=>$url]);
+        $url = 'blog/'.$userUrl.'/';
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
 
-		return $this->list($posts, $lastPost, $user, $request, $url);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
+
+		return $this->list($posts, $lastPost, $user, $request, $alternativeUrls);
 	}
 
 	public function tag($request, $url){
@@ -440,11 +461,17 @@ class BlogController extends Controller
 				});
 		}
 
+        $base = ($locale === 'ru')? $tag : $tag->base;
 
-		$post_alt = ($locale == 'ru')? $tag->translate->url : $tag->base->url;
-		$url = route('blog.level2',['url'=>$post_alt]);
+        $routes = ['ru' => 'blog/'.$base->url.'/'];
 
-		return $this->list($posts, $lastPost, $tag, $request, $url);
+        foreach ($base->translate as $translate){
+            $routes[$translate->lang] = 'projects/'.$translate->url.'/';
+        }
+
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
+
+		return $this->list($posts, $lastPost, $tag, $request, $alternativeUrls);
 	}
 
 
@@ -478,14 +505,17 @@ class BlogController extends Controller
 		$posts = Post::with(['project.category.translate'])
 			->where('project_id',null);
 
-		$url = route('blog.level2',['url'=>'news']);
-
 		$page = null;
 
-		return $this->list($posts, $lastPost, $page, $request, $url);
+        $url = 'blog/news/';
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
+
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
+
+		return $this->list($posts, $lastPost, $page, $request, $alternativeUrls);
 	}
 
-	public function list($posts, $lastPost, $page, $request, $url){
+	public function list($posts, $lastPost, $page, $request, array $alternativeUrls){
 		$locale = App::getLocale();
 
 		$categories = ProjectCategory::with(['base'])->where([['lang',$locale],['isHide',0]])->get();
@@ -515,24 +545,6 @@ class BlogController extends Controller
 			]);
 		}
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-
-		$url = ($posts->previousPageUrl())?($url.'?page='.$posts->currentPage()):$url;
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
-
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
 
 		return view('blog.list',[
 			'categories'	=>	$categories,
@@ -541,7 +553,7 @@ class BlogController extends Controller
 			'locale'	=>	$locale,
 			'lastPost'	=>	$lastPost,
 			'sidebar'	=> $this->sidebar,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 

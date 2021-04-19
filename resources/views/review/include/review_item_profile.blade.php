@@ -4,8 +4,8 @@
             @if(App::getLocale() == 'ru')
                 <a class="review-project-name" href="{{route('project.level2',[$review->subpage->project->url])}}">{{$review->subpage->project->name}}</a>
             @else
-                @if($review->subpage->project->translate)
-                    <a class="review-project-name" href="{{route('project.level2',[$review->subpage->project->translate->url])}}">{{$review->subpage->project->translate->name}}</a>
+                @if($review->subpage->project->translate->firstWhere('lang', App::getLocale))
+                    <a class="review-project-name" href="{{route('project.level2',[$review->subpage->project->translate->firstWhere('lang', App::getLocale)->url])}}">{{$review->subpage->project->translate->firstWhere('lang', App::getLocale)->name}}</a>
                 @endif
             @endif
 
@@ -21,7 +21,7 @@
                     @if(App::getLocale() == 'ru')
                         <div class="user-role">{{$review->user->rang->name}}</div>
                     @else
-                        <div class="user-role">{{$review->user->rang->translate->name}}</div>
+                        <div class="user-role">{{$review->user->rang->translate->firstWhere('lang', App::getLocale)->name}}</div>
                     @endif
                 </div>
             </a>
@@ -95,7 +95,7 @@
                                 @if(App::getLocale() == 'ru')
                                     <div class="user-role">{{$comment->user->rang->name}}</div>
                                 @else
-                                    <div class="user-role">{{$comment->user->rang->translate->name}}</div>
+                                    <div class="user-role">{{$comment->user->rang->translate->firstWhere('lang', App::getLocale)->name}}</div>
                                 @endif
                             </div>
                         </a>

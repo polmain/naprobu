@@ -1,13 +1,13 @@
 @foreach($projects as $request)
     @php($project = $request->project)
-    @if(App::getlocale() == 'ua')
-        @if(empty($project->translate))
+    @if(App::getLocale() === 'ua')
+        @if(empty($project->translate->firstWhere('lang', App::getLocale())))
             @continue
         @endif
     @endif
     <div class="col-lg-6 col-md-6 col-sm-10 offset-md-0 offset-sm-1">
         <div class="project-item{{(($project->status_id) == 1)?" project-item-end":''}}" >
-            <a class="project-item-image" style="background-image: url({{$project->preview_image}})" href="{{route('project.level2',[(App::getLocale() == "ru")?$project->url:$project->translate->url])}}">
+            <a class="project-item-image" style="background-image: url({{$project->preview_image}})" href="{{route('project.level2',[(App::getLocale() == "ru")?$project->url:$project->translate->firstWhere('lang', App::getLocale())->url])}}">
                 <div class="project-status-icon project-status-{{$project->status_id}}">
                     <svg id="icon_новый_проект" data-name="icon новый проект" xmlns="http://www.w3.org/2000/svg" width="50.312" height="56.44" viewBox="0 0 50.312 56.44">
                         <defs>
@@ -42,9 +42,9 @@
                     </svg>
                 </div>
             </a>
-            <a class="project-info" href="{{route('project.level2',[(App::getLocale() == "ru")?$project->url:$project->translate->url])}}">
+            <a class="project-info" href="{{route('project.level2',[(App::getLocale() == "ru")?$project->url:$project->translate->firstWhere('lang', App::getLocale())->url])}}">
 
-                <div class="project-name">{{(App::getLocale() == "ru")?$project->name:$project->translate->name}}</div>
+                <div class="project-name">{{(App::getLocale() == "ru")?$project->name:$project->translate->firstWhere('lang', App::getLocale())->name}}</div>
 
                 <div class="project-params"><div class="project-param-name">@lang('project.member_count'):</div><div class="project-param-value">{{$project->count_users}}</div></div>
                 @include('project.include.project_item_status')
@@ -67,20 +67,20 @@
                     @endif
                     @case(6)
                     @if($request->status_id == 7)
-                        <a href="{{route('project.level2',[(App::getLocale() == "ru")?$project->url:$project->translate->url])}}" class="project-action-link">@lang('user.send_review')</a>
+                        <a href="{{route('project.level2',[(App::getLocale() == "ru")?$project->url:$project->translate->firstWhere('lang', App::getLocale())->url])}}" class="project-action-link">@lang('user.send_review')</a>
                         @break
                     @endif
                     @case(5)
                     @if($request->status_id == 7)
-                        <a href="{{route('project.level2',[(App::getLocale() == "ru")?$project->url:$project->translate->url])}}" class="project-action-link">@lang('user.write_report')</a>
+                        <a href="{{route('project.level2',[(App::getLocale() == "ru")?$project->url:$project->translate->firstWhere('lang', App::getLocale())->url])}}" class="project-action-link">@lang('user.write_report')</a>
                         @break
                     @endif
                 @endswitch
 
                     @if($project->questionnaires->where('type_id',4)->first() && $request->status_id == 9)
-                        <a href="{{route('project.level2',[(App::getLocale() == "ru")?$project->url:$project->translate->url])}}" class="project-action-link">@lang('user.write_post_report')</a>
+                        <a href="{{route('project.level2',[(App::getLocale() == "ru")?$project->url:$project->translate->firstWhere('lang', App::getLocale())->url])}}" class="project-action-link">@lang('user.write_post_report')</a>
                     @endif
-                    <a href="{{route('project.level2',[(App::getLocale() == "ru")?$project->url:$project->translate->url])}}">@lang('project.detail_project')</a>
+                    <a href="{{route('project.level2',[(App::getLocale() == "ru")?$project->url:$project->translate->firstWhere('lang', App::getLocale())->url])}}">@lang('project.detail_project')</a>
             </div>
         </div>
     </div>

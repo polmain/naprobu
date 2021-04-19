@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App;
+use App\Services\LanguageServices\AlternativeUrlService;
 use Auth;
 use Cookie;
 use Image;
@@ -53,27 +54,15 @@ class UserController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('user.cabinet'));
+		$url = 'cabinet/';
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
     	return view('user.main',[
     		'userLikes' => $userLikes,
     		'ratingStatuses' => $ratingStatuses,
-			'alternet_url' => $alternet_url,
+			'alternativeUrls' => $alternativeUrls,
 			'countries' => $countries,
 		]);
 	}
@@ -588,7 +577,7 @@ class UserController extends Controller
 	}
 
 	public function isNameRegister(Request $request){
-		
+
 
 		$name = $request->name;
 		$user = User::where('name',$name)->where('id','<>',Auth::user()->id)->first();

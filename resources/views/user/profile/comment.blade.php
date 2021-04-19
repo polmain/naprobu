@@ -29,7 +29,7 @@
                     @if(App::getLocale() == 'ru')
                         {{$user->rang->name}}
                     @else
-                        {{$user->rang->translate->firstWhere('lang', App::getLocale)->name}}
+                        {{$user->rang->translate->firstWhere('lang', App::getLocale())->name}}
                     @endif
                 </div>
             </div>

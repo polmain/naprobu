@@ -1,11 +1,10 @@
 @foreach($questions as $question)
-    <div class="form-group {{($question->question_relation_id > 0)?"relation-question relation-question_".$question->question_relation_id:"" }}" id="question_group_{{$question->id}}"{!! ($question->question_relation_id > 0)?" relation-question='".$question->question_relation_id."'":""  !!}>
+    @php
+        $translate = $question->translate->firstWhere('lang', $locale);
+    @endphp
 
-        @php
-            $translate = $question->translate->firstWhere('lang', $locale);
-        @endphp
-
-        @if($locale == "ru" || $translate)
+    @if($locale == "ru" || $translate)
+        <div class="form-group {{($question->question_relation_id > 0)?"relation-question relation-question_".$question->question_relation_id:"" }}" id="question_group_{{$question->id}}"{!! ($question->question_relation_id > 0)?" relation-question='".$question->question_relation_id."'":""  !!}>
             <label class="question_title {{($question->required == 1)?" required-title":"" }}" for="question_{{$question->id}}">{{($locale == "ru")? $question->name : $translate->name}}</label>
             @switch($question->type_id)
                 @case(1)
@@ -80,6 +79,6 @@
                     ?
                 </button>
             @endif
-        @endif
-    </div>
+        </div>
+    @endif
 @endforeach

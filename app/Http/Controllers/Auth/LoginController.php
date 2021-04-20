@@ -46,7 +46,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         $locale = App::getLocale();
-        $routes = AlternativeUrlService::generateReplyRoutes('');
+        $routes = AlternativeUrlService::generateReplyRoutes('login/');
 
         $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 

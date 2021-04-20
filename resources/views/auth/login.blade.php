@@ -105,11 +105,8 @@
                             </div>
                         </div>
                         <div class="row auth-social-container">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <a class="auth-social auth-facebook" href="/login/facebook/"><img src="{{asset('public/svg/icons/facebook-white.svg')}}" alt="Facebook Logo"></a>
-                            </div>
-                            <div class="col-6">
-                                <a class="auth-social auth-instagram" href="/login/instagram/"><img src="{{asset('public/svg/icons/instagram_white.svg')}}" alt="Instagram Logo"></a>
                             </div>
                         </div>
                     </form>

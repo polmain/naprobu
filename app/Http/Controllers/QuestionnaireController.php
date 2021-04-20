@@ -113,7 +113,7 @@ class QuestionnaireController extends Controller
                 'lang' => $locale
             ])->first();
 
-            if(!$questionnaire){
+            if(!$questionnaire || !$project){
                 abort(404);
             }
 		}

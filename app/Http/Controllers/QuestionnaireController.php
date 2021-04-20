@@ -27,6 +27,7 @@ class QuestionnaireController extends Controller
 		$user = Auth::user();
 
 		$base = Questionnaire::with(['translate','project','type'])->findOrFail($id);
+
 		if(!$base){
 			abort(404);
 		}elseif($base->type_id == 1){
@@ -107,7 +108,14 @@ class QuestionnaireController extends Controller
 				['lang', $locale],
 				['rus_lang_id', $base->project_id],
 			])->first();
-			$questionnaire = Questionnaire::where('rus_lang_id', $base->id)->first();
+			$questionnaire = Questionnaire::where([
+			    'rus_lang_id'=>$base->id,
+                'lang' => $locale
+            ])->first();
+
+            if(!$questionnaire){
+                abort(404);
+            }
 		}
 
 		$title = str_replace(':page_name:',$questionnaire->name, \App\Model\Setting::where([['name','title_default'],['lang',$locale]])->first()->value);

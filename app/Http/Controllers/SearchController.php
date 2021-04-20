@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\LanguageServices\AlternativeUrlService;
 use Illuminate\Http\Request;
 use App;
 use App\Model\Project;
@@ -89,6 +90,7 @@ class SearchController extends Controller
 		}
 
 	}
+
 	public function index(Request $request)
 	{
 		$locale = App::getLocale();
@@ -174,28 +176,15 @@ class SearchController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('search',['name'=>$request->name]));
+        $routes = AlternativeUrlService::generateReplyRoutes('/search/?name='.$request->name);
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('search',[
 			'page' => $page,
 			'result' => $result,
 			'error' => $error,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 }

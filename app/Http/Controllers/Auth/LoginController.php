@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Services\LanguageServices\AlternativeUrlService;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Library\Users\UserRating;
 use Carbon;
+use App;
 
 
 class LoginController extends Controller
@@ -41,6 +43,18 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function showLoginForm()
+    {
+        $locale = App::getLocale();
+        $routes = AlternativeUrlService::generateReplyRoutes('');
+
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
+
+        return view('auth.login',[
+            'alternativeUrls' => $alternativeUrls
+        ]);
+    }
+
 	/**
 	 * The user has been authenticated.
 	 *
@@ -71,5 +85,5 @@ class LoginController extends Controller
 		}
 
 	}
-	
+
 }

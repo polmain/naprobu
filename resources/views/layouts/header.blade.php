@@ -21,16 +21,7 @@
             </div>
             <div class="col-lg-5 col-md-7 col-6 offset-md-1 order-3 offset-lg-0">
                 <div class="row position-relative">
-                    @if(!$international)
-                        <div class="col-md-1 d-none d-md-block header-international">
-                            <a href="{{route('home')}}international">International</a>
-                        </div>
-                    @else
-                        <div class="col-md-1 d-none d-md-block header-international header-international-ukraine">
-                            <a href="{{ str_replace('international/','',route('home'))}}">Ukraine</a>
-                        </div>
-                    @endif
-                    <div class="col-md-1 col-2 header-search">
+                    <div class="col-md-2 col-2 header-search">
                         <div>Search</div>
                     </div>
                     <div class="col-md-2 col-3 lang">

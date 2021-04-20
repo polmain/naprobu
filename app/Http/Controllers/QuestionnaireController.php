@@ -320,12 +320,17 @@ class QuestionnaireController extends Controller
 	{
 		$locale = App::getLocale();
 
+        $questionnaire = Questionnaire::where([
+            ['lang', $locale],
+            ['type_id',5]
+        ])->first();
+
 		$base = Questionnaire::where([
 			['lang', 'ru'],
 			['type_id',5]
 		])->first();
 
-		if(empty($base)){
+		if(empty($questionnaire)){
 			abort(404);
 		}
 
@@ -335,11 +340,6 @@ class QuestionnaireController extends Controller
             ['parent', 0],
             ['questionnaire_id', $base->id],
         ])->orderBy('sort')->get();
-
-		$questionnaire = Questionnaire::where([
-			['lang', $locale],
-			['type_id',5]
-		])->first();
 
 		$title = str_replace(':page_name:',$questionnaire->name, \App\Model\Setting::where([['name','title_default'],['lang',$locale]])->first()->value);
 		$description = str_replace(':page_name:',$questionnaire->name, \App\Model\Setting::where([['name','description_default'],['lang',$locale]])->first()->value);

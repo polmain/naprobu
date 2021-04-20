@@ -1,8 +1,4 @@
 @extends('layouts.main')
-@section('lang_href',$alternet_url)
-@section('head')
-    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
-@endsection
 @section('content')
     <section class="breadcrumb-box mb-4">
         <div class="container">

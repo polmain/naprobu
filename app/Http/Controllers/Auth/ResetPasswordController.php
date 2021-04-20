@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App;
+use App\Services\LanguageServices\AlternativeUrlService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
@@ -66,26 +67,13 @@ class ResetPasswordController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('password.request'));
+        $routes = AlternativeUrlService::generateReplyRoutes('password/reset/');
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('auth.passwords.email',[
 			'page' => $page,
-			'alternet_url'	=> $alternet_url
+			'alternativeUrls'	=> $alternativeUrls
 		]);
 	}
 
@@ -113,29 +101,16 @@ class ResetPasswordController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('password.reset',[$token]));
+        $routes = AlternativeUrlService::generateReplyRoutes('password/reset/'.$token.'/');
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('auth.passwords.reset')->with(
 			[
 				'token' => $token,
 				'email' => $request->email,
 				'page' => $page,
-				'alternet_url'	=> $alternet_url
+				'alternativeUrls'	=> $alternativeUrls
 			]
 		);
 	}

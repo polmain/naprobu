@@ -39,7 +39,7 @@ Breadcrumbs::for('project_subpage', function ($trail,$category,$project,$subpage
 Breadcrumbs::for('project_questionnaire', function ($trail,$category,$project,$questionnaire) {
 	$trail->parent('project_single',$category,$project);
 	$lang = \App::getLocale();
-	$name = ($lang == "ru")? $questionnaire->name : $questionnaire->translate->firsteWhere('lang', $lang)->name;
+	$name = ($lang == "ru")? $questionnaire->name : $questionnaire->translate->firstWhere('lang', $lang)->name;
 	$trail->push($name, route('project.questionnaire',['id' => $questionnaire->id]));
 });
 /* End Project */

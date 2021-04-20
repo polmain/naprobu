@@ -176,7 +176,7 @@ class SearchController extends Controller
 			]
 		);
 
-        $routes = AlternativeUrlService::generateReplyRoutes('/search/?name='.$request->name);
+        $routes = AlternativeUrlService::generateReplyRoutes('search/?name='.$request->name);
 
         $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 

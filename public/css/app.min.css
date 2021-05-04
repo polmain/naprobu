@@ -20117,6 +20117,7 @@ form .btn-blue:hover {
 .cookieConsentContainer .cookieButton a:hover {
     cursor: pointer;
     opacity: 0.8;
+    color: #FFFFFF;
 }
 
 

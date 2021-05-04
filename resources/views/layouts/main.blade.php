@@ -13,8 +13,11 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-    @yield('head')
+    @foreach($alternativeUrls as $lang => $alternet_url)
+        <link rel="alternate" href="{{$alternet_url}}" hreflang="{{ $lang }}" />
+    @endforeach
 
+    @yield('head')
 
     <script src="{{ asset("/public/js/adriver.core.2.js")}}" ></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>

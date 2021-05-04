@@ -22,7 +22,9 @@
         <div class="sidebar-header">@lang('blog.popular_tag')</div>
         <div class="sidebar-content blog-tag-list massonry-list">
             @foreach($sidebar['tags'] as $tag)
-                <a href="{{route('blog.level2',[(App::getLocale() == 'ru')?$tag->url:$tag->translate->url])}}" class="blog-tag-item" data-count="{{$tag->posts_count}}">{{(App::getLocale() == 'ru')?$tag->name:$tag->translate->name}}</a>
+                @if(App::getLocale() == 'ru' || $tag->translate->firstWhere('lang', App::getLocale()))
+                <a href="{{route('blog.level2',[(App::getLocale() == 'ru')?$tag->url:$tag->translate->firstWhere('lang', App::getLocale())->url])}}" class="blog-tag-item" data-count="{{$tag->posts_count}}">{{(App::getLocale() == 'ru')?$tag->name:$tag->translate->firstWhere('lang', App::getLocale())->name}}</a>
+                @endif
             @endforeach
         </div>
     </div>
@@ -39,7 +41,7 @@
                     @if(App::getLocale() == 'ru')
                         <div class="user-role">{{$review->user->rang->name}}</div>
                     @else
-                        <div class="user-role">{{$review->user->rang->translate->name}}</div>
+                        <div class="user-role">{{$review->user->rang->translate->firstWhere('lang', App::getLocale())->name}}</div>
                     @endif
                 </div>
             </a>
@@ -47,8 +49,8 @@
             @if(App::getLocale() == 'ru')
                 <a class="review-project-name" href="{{route('project.level2',[$review->subpage->project->url])}}">{{$review->subpage->project->name}}</a>
             @else
-                @if($review->subpage->project->translate)
-                    <a class="review-project-name" href="{{route('project.level2',[$review->subpage->project->translate->url])}}">{{$review->subpage->project->translate->name}}</a>
+                @if($review->subpage->project->translate->firstWhere('lang', App::getLocale()))
+                    <a class="review-project-name" href="{{route('project.level2',[$review->subpage->project->translate->firstWhere('lang', App::getLocale())->url])}}">{{$review->subpage->project->translate->firstWhere('lang', App::getLocale())->name}}</a>
                 @endif
             @endif
             <div class="review-text">

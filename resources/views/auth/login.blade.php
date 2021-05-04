@@ -1,32 +1,4 @@
 @extends('layouts.main')
-@php
-    $lang = (App::getLocale() == 'ru')?'ua':'ru';
-            //разбиваем на массив по разделителю
-            $segments = explode('/', route('login'));
-
-            //Если URL (где нажали на переключение языка) содержал корректную метку языка
-            if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-                unset($segments[3]); //удаляем метку
-            }
-
-            //Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-            if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-                array_splice($segments, 3, 0, $lang);
-            }
-
-            //формируем полный URL
-            $alternet_url = implode("/", $segments);
-
-	$lang = \App::getLocale();
-	$page = App\Model\Page::where([
-		['url','login'],
-		['lang',$lang]
-	])->first();
-@endphp
-@section('lang_href',$alternet_url)
-@section('head')
-    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
-@endsection
 @section('content')
     <section class="breadcrumb-box mb-5">
         <div class="container">
@@ -105,11 +77,8 @@
                             </div>
                         </div>
                         <div class="row auth-social-container">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <a class="auth-social auth-facebook" href="/login/facebook/"><img src="{{asset('public/svg/icons/facebook-white.svg')}}" alt="Facebook Logo"></a>
-                            </div>
-                            <div class="col-6">
-                                <a class="auth-social auth-instagram" href="/login/instagram/"><img src="{{asset('public/svg/icons/instagram_white.svg')}}" alt="Instagram Logo"></a>
                             </div>
                         </div>
                     </form>

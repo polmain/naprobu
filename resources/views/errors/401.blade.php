@@ -1,9 +1,4 @@
 @extends('layouts.main')
-
-@section('lang_href',$alternet_url)
-@section('head')
-    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
-@endsection
 @section('content')
     <div class="container">
         <div class="row">
@@ -18,7 +13,7 @@
 
     <section class="main-projects error-project">
         <div class="container">
-            <h2 class="text-center">{{StringTranslate::translate('last_project_mainpage')}}</h2>
+            <h2 class="text-center">{{trans('home.last_project_mainpage')}}</h2>
             <div class="row project-list">
                 @foreach($projects  as  $project)
                     <a class="col-md-6 col-lg-4 project-item" href="{{route('project.level2',[$project->url])}}">

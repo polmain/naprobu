@@ -1,13 +1,9 @@
 @extends('layouts.main')
-@section('lang_href',$alternet_url)
-@section('head')
-    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
-@endsection
 @section('content')
     <section class="breadcrumb-box mb-0">
         <div class="container">
             <div class="row">
-                {{ ($post->project_id != 0)? Breadcrumbs::render('blog_single',(App::getLocale() == 'ua')?$post->project->category->translate:$post->project->category,$post): Breadcrumbs::render('blog_single_news',$post) }}
+                {{ ($post->project_id != 0)? Breadcrumbs::render('blog_single',(App::getLocale() == 'ru')?$post->project->category:$post->project->category->translate->firstWhere('lang',App::getLocale()),$post): Breadcrumbs::render('blog_single_news',$post) }}
             </div>
         </div>
     </section>
@@ -43,11 +39,13 @@
                     <div class="blog-single-container">
                         <div class="blog-header">
                             @if($post->project_id != 0)
-                            @if($locale == "ru")
-                                <div class="blog-project">@lang('blog.project'): <a href="{{route('project.level2',[$post->project->url])}}">{{$post->project->name}}</a></div>
-                            @else
-                                <div class="blog-project">@lang('blog.project'): <a href="{{route('project.level2',[$post->project->translate->url])}}">{{$post->project->translate->name}}</a></div>
-                            @endif
+                                @if($locale == "ru")
+                                    <div class="blog-project">@lang('blog.project'): <a href="{{route('project.level2',[$post->project->url])}}">{{$post->project->name}}</a></div>
+                                @else
+                                    @if($post->project->translate->firstWhere('lang', $locale))
+                                    <div class="blog-project">@lang('blog.project'): <a href="{{route('project.level2',[$post->project->translate->firstWhere('lang', $locale)->url])}}">{{$post->project->translate->firstWhere('lang', $locale)->name}}</a></div>
+                                    @endif
+                                @endif
                             @else
                                 <div class="blog-project">@lang('blog.news')</div>
                             @endif
@@ -65,7 +63,7 @@
                         </div>
                         <div class="blog-bottom">
                             <div class="blog-tag">
-                                <div class="blog-tag-title">@lang('blog.tags'):</div><div class="blog-tag-list">@foreach($base->tags as $tag) @if($locale == "ru")<a href="{{route('blog.level2',[$tag->url])}}" class="blog-tag-item">{{$tag->name}}</a>@else<a href="{{route('blog.level2',[$tag->translate->url])}}" class="blog-tag-item">{{$tag->translate->name}}</a>@endif @endforeach</div>
+                                <div class="blog-tag-title">@lang('blog.tags'):</div><div class="blog-tag-list">@foreach($base->tags as $tag) @if($locale == "ru")<a href="{{route('blog.level2',[$tag->url])}}" class="blog-tag-item">{{$tag->name}}</a>@else @if($tag->translate->firstWhere('lang', $locale))<a href="{{route('blog.level2',[$tag->translate->firstWhere('lang', $locale)->url])}}" class="blog-tag-item">{{$tag->translate->firstWhere('lang', $locale)->name}}</a>@endif @endif @endforeach</div>
                             </div>
                             <div class="blog-share">
                                 <a href="https://www.facebook.com/sharer/sharer.php?u={!!   urlencode(route('blog.level2',['url'=>$post->url])) !!}"
@@ -91,7 +89,7 @@
                                                 @if(App::getLocale() == 'ru')
                                                     <div class="user-role">{{$comment->user->rang->name}}</div>
                                                 @else
-                                                    <div class="user-role">{{$comment->user->rang->translate->name}}</div>
+                                                    <div class="user-role">{{$comment->user->rang->translate->firstWhere('lang', App::getLocale())->name}}</div>
                                                 @endif
                                             </div>
                                         </a>
@@ -134,7 +132,6 @@
             </div>
         </div>
     </div>
-
 
     @include('review.include.review_comment_success_modal')
 @endsection

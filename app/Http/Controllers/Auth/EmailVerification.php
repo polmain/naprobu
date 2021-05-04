@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App;
+use App\Services\LanguageServices\AlternativeUrlService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -22,35 +23,25 @@ class EmailVerification extends Controller
 
 		$locale = App::getLocale();
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('auth.verify',[$user_id,$verify_code]));
+        $routes = AlternativeUrlService::generateReplyRoutes('/verify/'.$user_id.'/'.$verify_code.'/');
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		if(empty($user)){
 			return view('message',[
 				'message'	=>	trans('page_message.user_not_found_message'),
-				'alternet_url' => $alternet_url
+				'alternativeUrls' => $alternativeUrls
 			]);
 		}
 		App::setlocale($user->lang);
+
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($user->lang, $routes);
+
 		$this->middleware('menu');
 		if($user->status_id != 5){
 			return view('message',[
 				'message'	=>	trans('page_message.already_verify_message'),
-				'alternet_url' => $alternet_url
+				'alternativeUrls' => $alternativeUrls
 			]);
 		}
 		if($user->email_verefy_code == $verify_code){
@@ -59,14 +50,14 @@ class EmailVerification extends Controller
 			return view('message',[
 				'header'	=>	trans('page_message.thankyou_email_header'),
 				'message'	=>	trans('page_message.thankyou_email_message'),
-				'alternet_url' => $alternet_url
+				'alternativeUrls' => $alternativeUrls
 			]);
 		}else{
 			static::sendVerifyCode($user);
 			return view('message',[
 				'header'	=>	trans('page_message.cod_not_valid_header'),
 				'message'	=>	trans('page_message.cod_not_valid_message',['email' => $user->email]),
-				'alternet_url' => $alternet_url
+				'alternativeUrls' => $alternativeUrls
 			]);
 		}
 	}

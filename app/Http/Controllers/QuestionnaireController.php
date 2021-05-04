@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\LanguageServices\AlternativeUrlService;
 use Illuminate\Http\Request;
 use Auth;
 use App;
@@ -26,6 +27,7 @@ class QuestionnaireController extends Controller
 		$user = Auth::user();
 
 		$base = Questionnaire::with(['translate','project','type'])->findOrFail($id);
+
 		if(!$base){
 			abort(404);
 		}elseif($base->type_id == 1){
@@ -106,7 +108,14 @@ class QuestionnaireController extends Controller
 				['lang', $locale],
 				['rus_lang_id', $base->project_id],
 			])->first();
-			$questionnaire = Questionnaire::where('rus_lang_id', $base->id)->first();
+			$questionnaire = Questionnaire::where([
+			    'rus_lang_id'=>$base->id,
+                'lang' => $locale
+            ])->first();
+
+            if(!$questionnaire || !$project){
+                abort(404);
+            }
 		}
 
 		$title = str_replace(':page_name:',$questionnaire->name, \App\Model\Setting::where([['name','title_default'],['lang',$locale]])->first()->value);
@@ -122,25 +131,9 @@ class QuestionnaireController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
+        $routes = AlternativeUrlService::generateReplyRoutes('projects/questionnaire/'.$id.'/');
 
-		$url = route('project.questionnaire',['questionnaire'=>$id]);
-
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
-
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 
 		return view('project.subpage.questionnaire',[
@@ -149,7 +142,7 @@ class QuestionnaireController extends Controller
 			'base' => $base,
 			'questions' => $questions,
 			'locale' => $locale,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -306,52 +299,28 @@ class QuestionnaireController extends Controller
 
 	public function thank_regiter(){
 		$locale = App::getLocale();
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('project.questionnaire.thank.regiter'));
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
+        $routes = AlternativeUrlService::generateReplyRoutes('thank-you-registration/');
 
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view("message",[
 			'header' => trans("questionnaire.thank_you_regiter_header"),
 			'message' => trans("questionnaire.thank_you_regiter_message"),
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 	public function thank_report(){
 		$locale = App::getLocale();
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('project.questionnaire.thank.report'));
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
+        $routes = AlternativeUrlService::generateReplyRoutes('thank-you-write-report/');
 
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view("message",[
 			'header' => trans("questionnaire.thank_you_report_header"),
 			'message' => trans("questionnaire.thank_you_report_message"),
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -359,12 +328,17 @@ class QuestionnaireController extends Controller
 	{
 		$locale = App::getLocale();
 
+        $questionnaire = Questionnaire::where([
+            ['lang', $locale],
+            ['type_id',5]
+        ])->first();
+
 		$base = Questionnaire::where([
 			['lang', 'ru'],
 			['type_id',5]
 		])->first();
 
-		if(empty($base)){
+		if(empty($questionnaire)){
 			abort(404);
 		}
 
@@ -374,11 +348,6 @@ class QuestionnaireController extends Controller
             ['parent', 0],
             ['questionnaire_id', $base->id],
         ])->orderBy('sort')->get();
-
-		$questionnaire = Questionnaire::where([
-			['lang', $locale],
-			['type_id',5]
-		])->first();
 
 		$title = str_replace(':page_name:',$questionnaire->name, \App\Model\Setting::where([['name','title_default'],['lang',$locale]])->first()->value);
 		$description = str_replace(':page_name:',$questionnaire->name, \App\Model\Setting::where([['name','description_default'],['lang',$locale]])->first()->value);
@@ -393,32 +362,16 @@ class QuestionnaireController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
+        $routes = AlternativeUrlService::generateReplyRoutes('partner/brif/');
 
-		$url = route('partner.brif');
-
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
-
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('questionnaire.brif',[
 			'questionnaire' => $questionnaire,
 			'base' => $base,
 			'questions' => $questions,
 			'locale' => $locale,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -506,27 +459,15 @@ class QuestionnaireController extends Controller
 
     public function thanksBrif(){
         $locale = App::getLocale();
-        $lang = ($locale == 'ru')?'ua':'ru';
-        //разбиваем на массив по разделителю
-        $segments = explode('/', route('partner.brif_thanks'));
 
-        //Если URL (где нажали на переключение языка) содержал корректную метку языка
-        if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-            unset($segments[3]); //удаляем метку
-        }
+        $routes = AlternativeUrlService::generateReplyRoutes('partner/brif/thanks/');
 
-        //Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-        if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-            array_splice($segments, 3, 0, $lang);
-        }
-
-        //формируем полный URL
-        $alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
         return view("message",[
             'header' => trans("page_message.brif_header"),
             'message' => trans("page_message.brif_message"),
-            'alternet_url' => $alternet_url
+            'alternativeUrls' => $alternativeUrls
         ]);
     }
 }

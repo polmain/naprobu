@@ -27,7 +27,11 @@ class Block
 	 */
 	public static function getBlockContent($name){
 		$instance = static::getInstance();
-		return $instance->blocks->where('name', $name)->first()->content;
+        $block = $instance->blocks->where('name', $name)->first();
+		if($block){
+            return  $block->content;
+        }
+		return '';
 	}
 
 	private static $instance;

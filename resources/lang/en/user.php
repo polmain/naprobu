@@ -28,6 +28,7 @@ return [
 
 	// страница рейтинга пользователя
 	'rating_history'		=> 'Last scoring history:',
+    'congratulation'        => 'Congratulation!',
 	'present_text'			=> 'You got the status ":rating_name:"! Today you will receive an email with information about the gift!',
 
 	// страница проектов пользователя

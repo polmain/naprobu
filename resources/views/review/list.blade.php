@@ -1,7 +1,5 @@
 @extends('layouts.main')
-@section('lang_href',$alternet_url)
 @section('head')
-    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
     @if($reviews->previousPageUrl())
         @if($reviews->currentPage() == 2)
             <link rel="prev" href="{{$reviews->resolveCurrentPath()}}/" />
@@ -37,9 +35,9 @@
                     <li class="category-item category-item-parent col-md col-12{{($page instanceof App\Model\Project\ProjectCategory)?($page->id == $category->id?" active":""):""}}">
                         <a href="{{route('review.level2',['url' =>  $category->url])}}">{{$category->name}}</a>
                         <ul class="category-projects">
-                            @foreach( ($locale == "ru")? $category->projects->reverse() : $category->base->projects->reverse() as $project)
+                            @foreach( (($locale == "ru")? $category->projects->reverse() : $category->base->projects->reverse()) as $project)
                                 @php
-                                    $subpages = ($project->lang == "ru") ? $project->subpages->where('lang','ru')->where('type_id',1)->first() : $project->base->subpages->where('lang','ua')->where('type_id',1)->first();
+                                    $subpages = ($project->lang == "ru") ? $project->subpages->where('lang','ru')->where('type_id',1)->first() : $project->base->subpages->where('lang',$project->lang)->where('type_id',1)->first();
                                 @endphp
                                 @if( !($project->isHide) && $subpages && $project->lang == $locale)
                                     <li>

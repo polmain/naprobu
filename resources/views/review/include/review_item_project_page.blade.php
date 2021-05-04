@@ -10,7 +10,7 @@
                     @if(App::getLocale() == 'ru')
                         <div class="user-role">{{$review->user->rang->name}}</div>
                     @else
-                        <div class="user-role">{{$review->user->rang->translate->name}}</div>
+                        <div class="user-role">{{$review->user->rang->translate->firstWhere('lang', App::getLocale())->name}}</div>
                     @endif
                 </div>
             </a>
@@ -83,7 +83,7 @@
                                 @if(App::getLocale() == 'ru')
                                     <div class="user-role">{{$comment->user->rang->name}}</div>
                                 @else
-                                    <div class="user-role">{{$comment->user->rang->translate->name}}</div>
+                                    <div class="user-role">{{$comment->user->rang->translate->firstWhere('lang', App::getLocale())->name}}</div>
                                 @endif
                             </div>
                         </a>

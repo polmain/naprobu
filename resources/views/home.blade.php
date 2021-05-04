@@ -1,7 +1,8 @@
 @extends('layouts.main')
-@section('lang_href',$alternet_url)
 @section('head')
-    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
+    @foreach($alternativeUrls as $lang => $alternet_url)
+    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{ $lang }}" />
+    @endforeach
 @endsection
 @section('content')
 <div class="home-page">
@@ -172,7 +173,7 @@
                                     <div class="rang-date"><span class="user-rang"> @if(App::getLocale() == 'ru')
                                                 {{$review->user->rang->name}}
                                             @else
-                                                {{$review->user->rang->translate->name}}
+                                                {{$review->user->rang->translate->firstWhere('lang', App::getLocale())->name}}
                                             @endif</span>, {{$review->created_at}}</div>
                                 </div>
                             </a>
@@ -181,8 +182,8 @@
                                 @if(App::getLocale() == 'ru')
                                     <a class="review-project-name" href="{{route('project.level2',[$review->subpage->project->url])}}">{{$review->subpage->project->name}}</a>
                                 @else
-                                    @if($review->subpage->project->translate)
-                                        <a class="review-project-name" href="{{route('project.level2',[$review->subpage->project->translate->url])}}">{{$review->subpage->project->translate->name}}</a>
+                                    @if($review->subpage->project->translate->firstWhere('lang', App::getLocale()))
+                                        <a class="review-project-name" href="{{route('project.level2',[$review->subpage->project->translate->firstWhere('lang', App::getLocale())->url])}}">{{$review->subpage->project->translate->firstWhere('lang', App::getLocale())->name}}</a>
                                     @endif
                                 @endif
                             </div>
@@ -243,12 +244,13 @@
         </div>
     </section>
     @endif
+    @if($posts->count() > 0)
     <section class="main-blog">
         <div class="container">
             <h2>{{trans('home.blog_mainpage')}}</h2>
             <div class="row post-list">
                 <div class="col-lg-6 mb-lg-0 mb-5">
-                    <a class="post-big" href="{{route('blog.level2',[(App::getLocale() == 'ru')?$posts->first()->url:$posts->first()->translate->url])}}">
+                    <a class="post-big" href="{{route('blog.level2',[(App::getLocale() == 'ru')?$posts->first()->url:$posts->first()->translate->firstWhere('lang', App::getLocale())->url])}}">
                         <div class="post-big-image" style="background-image: url({{$posts->first()->image}})">
 
                         </div>
@@ -262,10 +264,10 @@
                             </div>
                             @else
                                 <div class="post-big-name">
-                                    {{$posts->first()->translate->name}}
+                                    {{$posts->first()->translate->firstWhere('lang', App::getLocale())->name}}
                                 </div>
                                 <div class="post-big-description">
-                                    {{$posts->first()->translate->preview_text}}
+                                    {{$posts->first()->translate->firstWhere('lang', App::getLocale())->preview_text}}
                                 </div>
                             @endif
                             <div class="row align-items-center post-big-bottom">
@@ -288,7 +290,7 @@
                             @if($i++ == 0)
                                 @continue
                             @endif
-                            <a href="{{route('blog.level2',[(App::getLocale() == 'ru')?$post->url:$post->translate->url])}}" class="post-small-item">
+                            <a href="{{route('blog.level2',[(App::getLocale() == 'ru')?$post->url:$post->translate->firstWhere('lang', App::getLocale())->url])}}" class="post-small-item">
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="post-small-image" style="background-image: url({{$post->image}})"></div>
@@ -299,14 +301,14 @@
                                             @if(App::getLocale() == 'ru')
                                                 {{$post->name}}
                                             @else
-                                                {{$post->translate->name}}
+                                                {{$post->translate->firstWhere('lang', App::getLocale())->name}}
                                             @endif
                                         </div>
                                         <div class="post-small-description">
                                             @if(App::getLocale() == 'ru')
                                                 {{$post->preview_text}}
                                             @else
-                                                {{$post->translate->preview_text}}
+                                                {{$post->translate->firstWhere('lang', App::getLocale())->preview_text}}
                                             @endif
                                         </div>
                                         <div class="post-small-bottom">
@@ -316,7 +318,7 @@
                                                 @if(App::getLocale() == 'ru')
                                                     {{$post->project->category->name}}
                                                 @else
-                                                    {{$post->project->category->translate->name}}
+                                                    {{$post->project->category->translate->firstWhere('lang', App::getLocale())->name}}
                                                 @endif
                                                     @else
                                                     @lang('blog.news')
@@ -336,6 +338,7 @@
             </div>
         </div>
     </section>
+    @endif
     <section class="main-our-clients">
         <div class="container">
             <h2>{{trans('home.partners_mainpage')}}</h2>

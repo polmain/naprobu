@@ -10,8 +10,15 @@
                 <div class="col-lg-1 col-md-4 footer-button">
                     <a class="btn-blue btn-block" href="{{route('archive')}}">@lang('footer.archive')</a>
                 </div>
-                <div class="col-lg-2 col-md-4 footer-button">
+                {{--<div class="col-lg-2 col-md-4 footer-button">
                     <a class="btn-blue btn-block" href="{{route('partner')}}">@lang('footer.partner')</a>
+                </div>--}}
+                <div class="col-lg-2 col-md-4 footer-button">
+                    @if(!$international)
+                        <a class="btn-blue btn-block" href="{{route('home')}}international">@lang('footer.international')</a>
+                    @else
+                        <a class="btn-blue btn-block" href="{{ str_replace('international/','',route('home'))}}">@lang('footer.ukraine')</a>
+                    @endif
                 </div>
                 <div class="col-lg-2 col-md-4 footer-button">
                     <a class="btn-orange btn-block" href="#" data-toggle="modal" data-target="#feedback_form_modal">@lang('footer.send_us')</a>

@@ -19,6 +19,8 @@
 
     @yield('head')
 
+    <link rel="stylesheet" type="text/css" href="purecookie.css" async />
+
     <script src="{{ asset("/public/js/adriver.core.2.js")}}" ></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <!-- Facebook Pixel Code -->

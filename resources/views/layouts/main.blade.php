@@ -368,7 +368,7 @@
         var purecookie = {
             title: "@lang('global.purecookieTitle')",
             desc: "@lang('global.purecookieDesc')",
-            link: "@lang('global.purecookieLink')",
+            link: '@lang('global.purecookieLink')',
             button: "@lang('global.purecookieButton')",
         };
 

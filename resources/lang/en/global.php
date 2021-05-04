@@ -18,6 +18,8 @@ return [
 	'go_to_project'		=> 'Go to projects',
 	'go_to_home'		=> 'Go to home',
 
-	//Заголовки
-
+    'purecookieTitle'   => 'Cookies.',
+    'purecookieDesc'   => 'By using this website, you automatically accept that we use cookies.',
+    'purecookieLink'   => '<a href="/en/cookie/" target="_blank">What for?</a>',
+    'purecookieButton'   => 'Understood'
 ];

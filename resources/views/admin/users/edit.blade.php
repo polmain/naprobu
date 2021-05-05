@@ -106,10 +106,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>
-                                <input type="checkbox" class="minimal-red" name="isNewsletter" value="true"{{($user->isNewsletter)?" checked=checked":""}}>
-                                Рассылка на email
-                            </label>
+                            <div class="col-sm-12">
+                                <label>
+                                    <input type="checkbox" class="minimal-red" name="isNewsletter" value="true"{{($user->isNewsletter)?" checked=checked":""}}>
+                                    Рассылка на email
+                                </label>
+                            </div>
                         </div>
                     </div><!-- /.box-body -->
                     <div class="box-footer">

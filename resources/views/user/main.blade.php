@@ -81,7 +81,7 @@
                                             @if(App::getLocale() === 'en')
                                                 @foreach($countryCollection as $country)
                                                     @php
-                                                        if($country->getName == Auth::user()->country){
+                                                        if($country->getName() == Auth::user()->country){
                                                             $hasCountry = true;
                                                         }
                                                     @endphp
@@ -163,7 +163,7 @@
 @section('scripts')
     <script>
 		$(document).ready(function () {
-			var lang = "{{(App::getLocale() == 'ru'?'ru':'uk')}}";
+            var lang = "{{(App::getLocale() == 'ua'?'uk':App::getLocale())}}";
 
 			$("#country").change(function() {
 				var country = $('option:selected', this).data('iso');
@@ -212,6 +212,16 @@
                                     $("#city_select").html('');
                                 }
 
+                            }else{
+                                $("#region").removeAttr('disabled');
+                                $("#region_select").addClass('d-none');
+                                $("#region").removeClass('d-none');
+
+                                $("#city").removeAttr('disabled');
+                                $("#city_select").addClass('d-none');
+                                $("#city").removeClass('d-none');
+                                $("#city_select").attr('disabled','disabled');
+                                $("#city_select").html('');
                             }
                         },
                         error: function (xhr, str) {

@@ -1,7 +1,5 @@
 @extends('layouts.main')
-@section('lang_href',$alternet_url)
 @section('head')
-    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
     @if($comments->previousPageUrl())
         @if($comments->currentPage() == 2)
             <link rel="prev" href="{{$comments->resolveCurrentPath()}}/" />
@@ -31,7 +29,7 @@
                     @if(App::getLocale() == 'ru')
                         {{$user->rang->name}}
                     @else
-                        {{$user->rang->translate->name}}
+                        {{$user->rang->translate->firstWhere('lang', App::getLocale())->name}}
                     @endif
                 </div>
             </div>

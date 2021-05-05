@@ -1,5 +1,4 @@
 <header>
-
     <div class="container">
         <div class="row">
             <div class="col-lg-2 col-md-3 col-4 order-1 logo">
@@ -22,23 +21,18 @@
             </div>
             <div class="col-lg-5 col-md-7 col-6 offset-md-1 order-3 offset-lg-0">
                 <div class="row position-relative">
-                    <div class="col-md-2 col-3 header-search">
+                    <div class="col-md-2 col-2 header-search">
                         <div>Search</div>
                     </div>
                     <div class="col-md-2 col-3 lang">
-                        @foreach(\Config::get('app.locales') as $lang)
-                            @if(App::getLocale()==$lang)
-                                <div class="current-lang"><img src="{{asset('public/svg/icons/'.$lang.'.svg')}}" class="lang-flag" alt="{{$lang}}"/><span>{{strtoupper($lang)}}</span></div>
-                            @else
-                               <a class="other-lang" style="display: none" href="@yield('lang_href')"><img src="{{asset('public/svg/icons/'.$lang.'.svg')}}" class="lang-flag" alt="{{$lang}}"/><span>{{strtoupper($lang)}}</span></a>
-                                {{--<a class="other-lang" style="display: none" href="{{ route('setlocale',$lang)}}"><img src="{{asset('public/svg/icons/'.$lang.'.svg')}}" class="lang-flag" alt="{{$lang}}"/><span>{{strtoupper($lang)}}</span></a>
-                                @auth
-                                    @if(Auth::user()->hasRole('admin'))
-                                        <a class="other-lang" style="display: none" href="@yield('lang_href')"><img src="{{asset('public/svg/icons/'.$lang.'.svg')}}" class="lang-flag" alt="{{$lang}}"/><span>{{strtoupper($lang)}}</span></a>
-                                    @endif
-                                @endauth--}}
-                            @endif
-                        @endforeach
+                        <div class="current-lang"><img src="{{asset('public/svg/icons/'.App::getLocale().'.svg')}}" class="lang-flag" alt="{{App::getLocale()}}"/><span>{{strtoupper(App::getLocale())}}</span></div>
+                        <div class="other-lang" style="display: none; height: {{100 * count($alternativeUrls)}}%">
+                            @foreach(\Config::get('app.locales') as $lang)
+                                @if(App::getLocale() !== $lang && isset($alternativeUrls[$lang]))
+                                <a class="other-lang-item" href="{{$alternativeUrls[$lang]}}"><img src="{{asset('public/svg/icons/'.$lang.'.svg')}}" class="lang-flag" alt="{{$lang}}"/><span>{{strtoupper($lang)}}</span></a>
+                                @endif
+                            @endforeach
+                        </div>
                     </div>
                     @auth
                         <div class="col-md-2 col-3 auth-header user-notification">

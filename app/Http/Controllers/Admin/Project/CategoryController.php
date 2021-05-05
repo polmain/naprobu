@@ -20,6 +20,10 @@ use AdminPageData;
 
 class CategoryController extends Controller implements iAdminController
 {
+    private const UKRAINIAN_LANG = 'ua';
+    private const ENGLISH_LANG = 'en';
+    private const TRANSLATE_LANG = [self::UKRAINIAN_LANG, self::ENGLISH_LANG];
+
 	public function __construct()
 	{
 		AdminPageData::addBreadcrumbLevel('Проекты','project');
@@ -51,7 +55,7 @@ class CategoryController extends Controller implements iAdminController
 	public function create(Request $request)
 	{
 		$category = new ProjectCategory();
-		$this->createOrEdit($request, $category, "create");
+		$this->createOrEdit($request, $category);
 
 		ModeratorLogs::addLog("Создал Категорию для проектов: ".$request->name);
 
@@ -67,11 +71,7 @@ class CategoryController extends Controller implements iAdminController
 
 	public function edit(Request $request, $category_id)
 	{
-		$category =  ProjectCategory::find($category_id);
-		$translate =  ProjectCategory::where('rus_lang_id',$category->id)->first();
-		if(empty($translate)){
-			$translate = new ProjectCategory();
-		}
+		$category =  ProjectCategory::with('translate')->find($category_id);
 
 		SEO::setTitle('Редактирование категории проектов: '.$category->name);
 		AdminPageData::setPageName('Редактирование категории проектов');
@@ -79,15 +79,14 @@ class CategoryController extends Controller implements iAdminController
 		AdminPageData::addBreadcrumbLevel($category->name);
 
 		return view('admin.projects.category.edit',[
-			'category'	=>	$category,
-			'translate'	=>	$translate
+			'category'	=>	$category
 		]);
 	}
 
 	public function save(Request $request, $category_id)
 	{
 		$category = ProjectCategory::find($category_id);
-		$this->createOrEdit($request, $category, "update");
+		$this->createOrEdit($request, $category);
 
 		ModeratorLogs::addLog("Отредактировал Категорию для проектов: ".$request->name);
 
@@ -176,7 +175,7 @@ class CategoryController extends Controller implements iAdminController
 		return "ok";
 	}
 
-	protected function createOrEdit($request,$category,$mode){
+	protected function createOrEdit($request,$category){
 		$category->name = $request->name;
 		$category->url = $request->url;
 		$category->isHide = ($request->submit == "save-hide");
@@ -188,26 +187,44 @@ class CategoryController extends Controller implements iAdminController
 
 		$category->save();
 
-		//Translate
-		$categoryUA = ProjectCategory::where('rus_lang_id',$category->id)->first();
-
-		if(empty($categoryUA))
-		{
-			$categoryUA = new ProjectCategory();
-			$categoryUA->lang = 'ua';
-			$categoryUA->rus_lang_id = $category->id;
-
-		}
-
-		$categoryUA->name = $request->nameUA;
-		$categoryUA->url = $request->urlUA;
-		$categoryUA->isHide = ($request->submit == "save-hide");
-
-		//Seo
-		$categoryUA->seo_title = $request->titleUA;
-		$categoryUA->seo_description = $request->descriptionUA;
-		$categoryUA->seo_keyword = $request->keywordsUA;
-
-		$categoryUA->save();
+        foreach (self::TRANSLATE_LANG as $lang){
+            if($this->checkRequiredForLang($request, $lang)){
+                $this->saveOrCreateTranslate($category, $request, $lang);
+            }
+        }
 	}
+
+    private function checkRequiredForLang(Request $request, string $lang): bool
+    {
+        $upperLang = mb_strtoupper($lang);
+
+        return (bool) $request->input('name'.$upperLang);
+    }
+
+    private function saveOrCreateTranslate(ProjectCategory $category, Request $request, string $lang): void
+    {
+        $translate = ProjectCategory::where([
+            'rus_lang_id' => $category->id,
+            'lang' => $lang,
+        ])->first();
+
+        if(empty($translate)){
+            $translate = new ProjectCategory();
+            $translate->rus_lang_id = $category->id;
+            $translate->lang = $lang;
+        }
+
+        $upperLang = mb_strtoupper($lang);
+
+        $translate->name = $request->input('name'.$upperLang);
+        $translate->url = $request->input('url'.$upperLang);
+        $translate->isHide = ($request->submit == "save-hide");
+
+        $translate->seo_title = $request->input('title'.$upperLang);
+        $translate->seo_description = $request->input('description'.$upperLang);
+        $translate->seo_keyword = $request->input('keywords'.$upperLang);
+
+        $translate->save();
+
+    }
 }

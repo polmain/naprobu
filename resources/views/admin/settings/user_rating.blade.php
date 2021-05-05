@@ -19,13 +19,17 @@
                         @foreach($ratingActions as $ratingAction)
                             <div class="form-group">
                                 <input type="hidden" name="rating_action[]" class="question_id" value="{{$ratingAction->id}}">
-                                <div class="col-md-5">
+                                <div class="col-md-4">
                                     <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Действие<span class="input-request">*</span></label>
                                     <input type="text" name="rating_action_name[]" class="form-control question-name required" placeholder="Введите название действия..." value="{{$ratingAction->name}}">
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Действие<span class="input-request">*</span></label>
-                                    <input type="text" name="rating_action_name_ua[]" class="form-control required" placeholder="Введите название действия..." value="{{$ratingAction->translate->name}}">
+                                    <input type="text" name="rating_action_name_ua[]" class="form-control required" placeholder="Введите название действия..." value="{{$ratingAction->translate->firstWhere('lang', 'ua')? $ratingAction->translate->firstWhere('lang', 'ua')->name : ''}}">
+                                </div>
+                                <div class="col-md-3">
+                                    <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Действие<span class="input-request">*</span></label>
+                                    <input type="text" name="rating_action_name_en[]" class="form-control required" placeholder="Введите название действия..." value="{{$ratingAction->translate->firstWhere('lang', 'en')? $ratingAction->translate->firstWhere('lang', 'en')->name : ''}}">
                                 </div>
                                 <div class="col-md-2">
                                     <label> Баллы<span class="input-request">*</span></label>
@@ -53,15 +57,19 @@
                                     <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Ступень<span class="input-request">*</span></label>
                                     <input type="text" name="rating_status_name[]" class="form-control question-name required" placeholder="Введите название ступени..." value="{{$ratingStatus->name}}">
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Ступень<span class="input-request">*</span></label>
-                                    <input type="text" name="rating_status_name_ua[]" class="form-control required" placeholder="Введите название ступени..." value="{{$ratingStatus->translate->name}}">
+                                    <input type="text" name="rating_status_name_ua[]" class="form-control required" placeholder="Введите название ступени..." value="{{$ratingStatus->translate->firstWhere('lang', 'ua')? $ratingStatus->translate->firstWhere('lang', 'ua')->name : ''}}">
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
+                                    <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Ступень<span class="input-request">*</span></label>
+                                    <input type="text" name="rating_status_name_en[]" class="form-control required" placeholder="Введите название ступени..." value="{{$ratingStatus->translate->firstWhere('lang', 'en')? $ratingStatus->translate->firstWhere('lang', 'en')->name : ''}}">
+                                </div>
+                                <div class="col-md-1">
                                     <label> От<span class="input-request">*</span></label>
                                     <input type="text" name="rating_status_min[]" class="form-control required" placeholder="Введите количество баллов от..." value="{{$ratingStatus->min}}">
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     <label> До<span class="input-request">*</span></label>
                                     <input type="text" name="rating_status_max[]" class="form-control required" placeholder="Введите количество баллов до..." value="{{$ratingStatus->max}}">
                                 </div>
@@ -84,7 +92,6 @@
                 </div>
                 <div class="box-body">
                     <button type="submit" name="submit" value="save" class="btn btn-block btn-primary btn-lg">Сохранить</button>
-                    <button type="submit" name="submit" value="save-refresh" class="btn btn-block btn-primary btn-lg">Сохранить и пересчитать рейтинг</button>
                     <button type="button" class="btn btn-block btn-danger btn-lg" onclick="document.location.href='/admin/settings/user_rating';">Отмена</button>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->

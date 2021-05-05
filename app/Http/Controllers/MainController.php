@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App;
+use App\Entity\ProjectAudienceEnum;
+use App\Services\LanguageServices\AlternativeUrlService;
 use Illuminate\Http\Request;
 use App\Mail\PartnerNotificationMail;
 use App\Model\Project;
@@ -22,9 +24,12 @@ use OpenGraph;
 
 class MainController extends Controller
 {
-    const FAKE_PROJECT_COUNT_INCREMENTER = 37;
+    private const FAKE_PROJECT_COUNT_INCREMENTER = 37;
+    private const OPEN_GRAPH_IMAGE_WIDTH = 350;
+    private const OPEN_GRAPH_IMAGE_HEIGHT = 220;
 
     public function home(Request $request){
+        $international = $request->get('international');
 		$locale = App::getLocale();
 
 		$page = Page::where([
@@ -41,10 +46,15 @@ class MainController extends Controller
 		SEOMeta::setKeywords($page->seo_keywords);
 		OpenGraph::addImage([
 				'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
-				'width' => 350,
-				'height' => 220
+				'width' => self::OPEN_GRAPH_IMAGE_WIDTH,
+				'height' => self::OPEN_GRAPH_IMAGE_HEIGHT
 			]
 		);
+
+		$audience = ProjectAudienceEnum::UKRAINE;
+		if($international){
+            $audience = ProjectAudienceEnum::WORD;
+        }
 
     	$projects = Project::where([
     		['lang',$locale],
@@ -52,6 +62,7 @@ class MainController extends Controller
     		['status_id','<>',3],
     		['status_id','<>',10],
 			['type','<>','only-blogger'],
+            ['audience',$audience],
 		])->orderBy('start_registration_time','desc')->limit(6)->get();
 
 		$project_count = Project::where([
@@ -81,6 +92,9 @@ class MainController extends Controller
 							})->count();
 
     	$posts = Post::with(['project.category.translate'])
+            ->whereHas('translate', function ($translate) use ($locale){
+                return $translate->where('lang', $locale);
+            })
 			->withCount(['visible_comments'])->where([
 				['lang','ru'],
 				['isHide',0],
@@ -93,25 +107,10 @@ class MainController extends Controller
 			['isHide',0],
 		])->get();
 
+        $routes = AlternativeUrlService::generateReplyRoutes('');
 
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('home'));
-
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
-		
     	return view('home',[
     		'projects'	=>	$projects,
     		'reviews'	=>	$reviews,
@@ -120,7 +119,8 @@ class MainController extends Controller
     		'project_count'	=>	$project_count,
     		'review_count'	=>	$review_count,
     		'expert_count'	=>	$expert_count,
-			'alternet_url'	=> $alternet_url,
+			'alternativeUrls'	=> $alternativeUrls,
+			'international'	=> $international,
 		]);
 	}
 
@@ -155,32 +155,19 @@ class MainController extends Controller
 		SEOMeta::setKeywords($page->seo_keywords);
 		OpenGraph::addImage([
 				'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
-				'width' => 350,
-				'height' => 220
+                'width' => self::OPEN_GRAPH_IMAGE_WIDTH,
+                'height' => self::OPEN_GRAPH_IMAGE_HEIGHT
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('about'));
+		$routes = AlternativeUrlService::generateReplyRoutes('about/');
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
     	return view('about',[
     		'page' => $page,
     		'brands' => $brands,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -206,31 +193,19 @@ class MainController extends Controller
 		SEOMeta::setKeywords($page->seo_keywords);
 		OpenGraph::addImage([
 				'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
-				'width' => 350,
-				'height' => 220
+                'width' => self::OPEN_GRAPH_IMAGE_WIDTH,
+                'height' => self::OPEN_GRAPH_IMAGE_HEIGHT
 			]
 		);
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('faq'));
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
+        $routes = AlternativeUrlService::generateReplyRoutes('faq');
 
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
     	return view('faq',[
     		'page' => $page,
     		'faqCategories' => $faqCategories,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -251,31 +226,18 @@ class MainController extends Controller
 		SEOMeta::setKeywords($page->seo_keywords);
 		OpenGraph::addImage([
 				'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
-				'width' => 350,
-				'height' => 220
+                'width' => self::OPEN_GRAPH_IMAGE_WIDTH,
+                'height' => self::OPEN_GRAPH_IMAGE_HEIGHT
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('contact'));
+        $routes = AlternativeUrlService::generateReplyRoutes('contact/');
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
     	return view('contact',[
     		'page' => $page,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -310,32 +272,19 @@ class MainController extends Controller
 		SEOMeta::setKeywords($page->seo_keywords);
 		OpenGraph::addImage([
 				'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
-				'width' => 350,
-				'height' => 220
+                'width' => self::OPEN_GRAPH_IMAGE_WIDTH,
+                'height' => self::OPEN_GRAPH_IMAGE_HEIGHT
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('partner'));
+        $routes = AlternativeUrlService::generateReplyRoutes('partner/');
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('b2b',[
 			'page' => $page,
 			'brands' => $brands,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -362,33 +311,23 @@ class MainController extends Controller
 		SEOMeta::setKeywords($page->seo_keywords);
 		OpenGraph::addImage([
 				'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
-				'width' => 350,
-				'height' => 220
+                'width' => self::OPEN_GRAPH_IMAGE_WIDTH,
+                'height' => self::OPEN_GRAPH_IMAGE_HEIGHT
 			]
 		);
 
+        $routes = ['ru' => $base->url.'/'];
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('simple',$page->url));
+        foreach ($base->translate as $translate){
+            $routes[$translate->lang] = $translate->url.'/';
+        }
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('message',[
 			'header' => $page->name,
 			'message' => $page->content,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 

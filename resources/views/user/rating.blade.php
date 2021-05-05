@@ -1,7 +1,5 @@
 @extends('layouts.main')
-@section('lang_href',$alternet_url)
 @section('head')
-    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
     @if($userRatings->previousPageUrl())
         @if($userRatings->currentPage() == 2)
             <link rel="prev" href="{{$userRatings->resolveCurrentPath()}}/" />
@@ -38,7 +36,7 @@
                                     @lang('user.user_rating_count')
                                 </div>
                                 <div class="user-page-block-value">
-                                    {{Auth::user()->current_rating}} {{Lang::choice('user.rating_point',Auth::user()->current_rating)}}
+                                    {{Auth::user()->history->sum('score')}} {{Lang::choice('user.rating_point',Auth::user()->history->sum('score'))}}
                                 </div>
                             </div>
                         </div>

@@ -6,7 +6,7 @@
             @if(App::getLocale() == 'ru')
                 {{Auth::user()->rang->name}}
             @else
-                {{Auth::user()->rang->translate->name}}
+                {{Auth::user()->rang->translate->firstWhere('lang', App::getLocale())->name}}
             @endif
         </div>
     </div>

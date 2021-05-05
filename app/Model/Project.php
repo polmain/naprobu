@@ -2,6 +2,9 @@
 
 namespace App\Model;
 
+use App\Entity\Collection\CountryCollection;
+use App\Entity\Country;
+use App\Entity\ProjectAudienceEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
@@ -16,7 +19,7 @@ class Project extends Model
 	}
 
 	public function translate(){
-		return $this->hasOne('App\Model\Project', 'rus_lang_id');
+		return $this->hasMany('App\Model\Project', 'rus_lang_id');
 	}
 
 	public function base(){
@@ -78,4 +81,16 @@ class Project extends Model
 		}
 		return $likes;
 	}
+
+    public function getAudienceAttribute($value): ProjectAudienceEnum
+    {
+        return ProjectAudienceEnum::getInstance($value);
+    }
+
+    public function getCountryAttribute($value): ?Country
+    {
+        $countryCollection = CountryCollection::getInstance();
+
+        return $countryCollection->getFirstByCode($value);
+    }
 }

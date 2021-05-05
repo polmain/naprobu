@@ -19,7 +19,7 @@
                                     @if(App::getLocale() == 'ru')
                                         {{$post->project->category->name}}
                                     @else
-                                        {{$post->project->category->translate->name}}
+                                        {{$post->project->category->translate->firstWhere('lang', App::getLocale())->name}}
                                     @endif
                                 @else
                                     @lang('blog.news')

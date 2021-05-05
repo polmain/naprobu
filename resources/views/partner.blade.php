@@ -1,8 +1,4 @@
 @extends('layouts.main')
-@section('lang_href',$alternet_url)
-@section('head')
-    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
-@endsection
 @section('content')
 <section class="breadcrumb-box mb-0">
     <div class="container">
@@ -159,11 +155,11 @@
 <section class="partner-cases mb-30">
     <div class="container">
         <h2 class="mb-4">{{  PageBlock::getBlockContent('case_block_title') }}</h2>
-        
+
         <div class="partner-cases-list">
             {!! PageBlock::getBlockContent('case_block_images') !!}
         </div>
-        
+
     </div>
 </section>
 <section class="our-partners mb-5">

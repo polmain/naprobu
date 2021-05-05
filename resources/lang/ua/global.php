@@ -17,4 +17,9 @@ return [
 	'get_brif'			=> 'Отримати бриф',
 	'go_to_project'		=> 'Перейти до проектів',
 	'go_to_home'		=> 'Перейти на головну',
+
+    'purecookieTitle'   => 'Cookies.',
+    'purecookieDesc'   => 'Використовуючи цей сайт, ви автоматично погоджуєтеся з тим, що ми використовуємо файли cookie.',
+    'purecookieLink'   => '<a href="/cookie/" target="_blank">Для чого?</a>',
+    'purecookieButton'   => 'Зрозумів'
 ];

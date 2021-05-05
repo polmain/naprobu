@@ -121,7 +121,6 @@
                 <ul class="treeview-menu">
                     <li{{ (\Request::route()->getName() == 'adm_seo_settings') ? ' class=active' : '' }}><a href="{{route("adm_seo_settings")}}">Настройки SEO</a></li>
                     <li{{ (\Request::route()->getName() == 'adm_user_rating_settings') ? ' class=active' : '' }}><a href="{{route("adm_user_rating_settings")}}">Рейтинг пользователей</a></li>
-                    <li{{ (\Request::route()->getName() == 'adm_language_settings') ? ' class=active' : '' }}><a href="{{route("adm_language_settings")}}">Переводы строк</a></li>
                 </ul>
             </li>
             @endif

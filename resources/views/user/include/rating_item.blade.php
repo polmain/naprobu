@@ -4,7 +4,7 @@
             @if(App::getLocale() == "ru")
                 {{$userRating->rating_action->name}}
             @else
-                {{$userRating->rating_action->translate->name}}
+                {{$userRating->rating_action->translate->firstWhere('lang', App::getLocale())->name}}
             @endif
         </div>
         <div class="rating-history-item-point">

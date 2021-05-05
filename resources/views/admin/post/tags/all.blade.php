@@ -21,6 +21,7 @@
                             <th width="20">#</th>
                             <th>Тэг (RU)</th>
                             <th>Тэг (UA)</th>
+                            <th>Тэг (EN)</th>
                             <th width="20"></th>
                         </tr>
                         </thead>

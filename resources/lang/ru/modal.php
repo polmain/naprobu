@@ -30,7 +30,7 @@ return [
 	'your_message'			=>	'Ваше сообщение',
 	'send'					=>	'Отправить',
 
-	'message_sends_title'	=>	'Сообщение отправленно',
+	'message_sends_title'	=>	'Сообщение отправлено',
 	'message_sends_text'	=>	'Мы свяжемся с вами в ближайшее время.',
 
 	//brif запрос отправлен

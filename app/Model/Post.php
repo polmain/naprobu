@@ -8,7 +8,7 @@ class Post extends Model
 {
 
 	public function translate(){
-		return $this->hasOne('App\Model\Post', 'rus_lang_id');
+		return $this->hasMany('App\Model\Post', 'rus_lang_id');
 	}
 
 	public function base(){

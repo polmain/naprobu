@@ -1,8 +1,4 @@
 @extends('layouts.main')
-@section('lang_href',$alternet_url)
-@section('head')
-    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
-@endsection
 @section('body.attr')
     data-spy="scroll" data-target="#letter-list" data-offset="60"
 @endsection
@@ -10,7 +6,7 @@
 <section class="breadcrumb-box mb-4">
     <div class="container">
         <div class="row">
-            {{ Breadcrumbs::render('project_subpage',(App::getLocale() == 'ua')?$project->category->translate:$project->category,$project,$subpage) }}
+            {{ Breadcrumbs::render('project_subpage',(App::getLocale() !== 'ru')?$project->category->translate->firstWhere('lang', App::getLocale()):$project->category,$project,$subpage) }}
         </div>
     </div>
 </section>
@@ -69,7 +65,7 @@
                                     @if(App::getLocale() == 'ru')
                                         <div class="user-role">{{$request->user->rang->name}}</div>
                                     @else
-                                        <div class="user-role">{{$request->user->rang->translate->name}}</div>
+                                        <div class="user-role">{{$request->user->rang->translate->firstWhere('lang', App::getLocale())->name}}</div>
                                     @endif
                                 </div>
                             </a>

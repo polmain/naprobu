@@ -1,13 +1,9 @@
 @extends('layouts.main')
-@section('lang_href',$alternet_url)
-@section('head')
-    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
-@endsection
 @section('content')
 <section class="breadcrumb-box">
     <div class="container">
         <div class="row">
-                {{ Breadcrumbs::render('project_single',($lang == 'ua')?$project->category->translate:$project->category,$project) }}
+                {{ Breadcrumbs::render('project_single',($lang !== 'ru')?$project->category->translate->firstWhere('lang', $lang):$project->category,$project) }}
         </div>
     </div>
 </section>
@@ -201,21 +197,11 @@
                         <a href="#" class=" d-none d-lg-block questionnaite-link project-sidebar-link"  data-toggle="modal" data-target="#login">@lang('project.write_report')</a>
                     @endif
                 @endauth
-                {{--
-                @if(isset($projectRequest))
-                    @if($lang == 'ru')
-                    <div class="questionnaite-link project-sidebar-link">{{$projectRequest->status->name}}</div>
-                    @else
-                    <div class="questionnaite-link project-sidebar-link">{{$projectRequest->status->translate->name}}</div>
-                    @endif
-                @endif
-                --}}
-                
 
-                        @foreach($base->links->where('lang',$lang) as $links)
-                            <a href="{{$links->link}}" class="project-sidebar-link project-sidebar-link_blue" target="_blank">{{$links->text}}</a>
-                        @endforeach
-                    
+                @foreach($base->links->where('lang',$lang) as $links)
+                    <a href="{{$links->link}}" class="project-sidebar-link project-sidebar-link_blue" target="_blank">{{$links->text}}</a>
+                @endforeach
+
 
                 @if($base->subpages->where('type_id',9)->where('lang',$lang)->first())
                     <a href="{{route('project.subpage',[$project->url,$base->subpages->where('type_id',9)->where('lang',$lang)->first()->url])}}" class="project-rules project-sidebar-link">{{$base->subpages->where('type_id',9)->where('lang',$lang)->first()->name}}</a>
@@ -279,15 +265,21 @@
                 <section class="project-header ">
 
                     <h1>{{$project->name}}</h1>
-                    <img src="{{$project->main_image}}" alt="{{$project->name}}">
-
-                            <div class="share-project">
-                                <a href="https://www.facebook.com/sharer/sharer.php?u={!!   urlencode(route('project.level2',['url'=>$project->url])) !!}"
-                                   onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
-                                   target="_blank" title="@lang('global.facebook_share')">
-                                    @lang('global.facebook_share')
-                                </a>
+                    <div class="project-main-img">
+                        <img src="{{$project->main_image}}" alt="{{$project->name}}">
+                        @if($project->country && $project->audience->isWord())
+                            <div class="project-country">
+                                <img src="{{$project->country->getFlag()}}" alt="{{$project->country->getName()}}">
                             </div>
+                        @endif
+                    </div>
+                    <div class="share-project">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={!!   urlencode(route('project.level2',['url'=>$project->url])) !!}"
+                           onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
+                           target="_blank" title="@lang('global.facebook_share')">
+                            @lang('global.facebook_share')
+                        </a>
+                    </div>
                     @if($base->messages->where('isHide',0)->count()>0)
                         <div class="project-message">
                             <h2>@lang('project.project_message')</h2>
@@ -339,6 +331,22 @@
                         {!! $project->text !!}
                     </div>
                 </section>
+                @if($project->product_info)
+                    <section class="project-text">
+                        <h2>@lang('project.product_info')</h2>
+                        <div class="project-text-wrap">
+                            {!! $project->product_info !!}
+                        </div>
+                    </section>
+                @endif
+                @if($project->faq)
+                    <section class="project-text">
+                        <h2>@lang('project.faq')</h2>
+                        <div class="project-text-wrap">
+                            {!! $project->faq !!}
+                        </div>
+                    </section>
+                @endif
                 @if($reviews->count()>0)
                     <section class="project-review">
                         <h2>@lang('project.project_review')</h2>
@@ -347,7 +355,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xl-4 col-md-6 offset-xl-4 offset-md-3">
-                                <a href="{{route('project.subpage',[$project->url, ($lang == "ru")? $reviews->first()->subpage->url : $reviews->first()->subpage->translate->url])}}" class="more-link">@lang('project.project_review_all')</a>
+                                <a href="{{route('project.subpage',[$project->url, ($lang == "ru")? $reviews->first()->subpage->url : ($reviews->first()->subpage->translate->firstWhere('lang', $lang)? $reviews->first()->subpage->translate->firstWhere('lang', $lang)->url : $reviews->first()->subpage->url)])}}" class="more-link">@lang('project.project_review_all')</a>
                             </div>
                         </div>
                     </section>

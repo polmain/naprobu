@@ -19,6 +19,7 @@
                         <div class="form-group">
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs pull-right">
+                                    <li><a href="#text_2-3" data-toggle="tab"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"></a></li>
                                     <li><a href="#text_2-2" data-toggle="tab"><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"></a></li>
                                     <li class="active"><a href="#text_1-1" data-toggle="tab"><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"></a></li>
                                     <li class="pull-left header"><label>Полный текст сообщения<span class="input-request">*</span></label></li>
@@ -29,7 +30,11 @@
                                     </div>
                                     <!-- /.tab-pane -->
                                     <div class="tab-pane" id="text_2-2">
-                                        <textarea class="form-control required" id="text" name="textUA" rows="10" cols="80"></textarea>
+                                        <textarea class="form-control" id="text" name="textUA" rows="10" cols="80"></textarea>
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                    <div class="tab-pane" id="text_2-3">
+                                        <textarea class="form-control" id="text" name="textEN" rows="10" cols="80"></textarea>
                                     </div>
                                     <!-- /.tab-pane -->
                                 </div>

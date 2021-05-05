@@ -11,7 +11,7 @@ class Questionnaire extends Model
 		return $this->hasOne('App\Model\Questionnaire', 'id','rus_lang_id');
 	}
 	public function translate(){
-		return $this->hasOne('App\Model\Questionnaire', 'rus_lang_id');
+		return $this->hasMany('App\Model\Questionnaire', 'rus_lang_id');
 	}
 	public function type()
 	{

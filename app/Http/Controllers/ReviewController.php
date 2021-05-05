@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\LanguageServices\AlternativeUrlService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -83,31 +84,17 @@ class ReviewController extends Controller
 			]);
 		}
 
-		$lang = ($locale == 'ru')?'ua':'ru';
+        $url = 'reviews/'.($reviews->previousPageUrl() ?'?page='.$reviews->currentPage() : '');
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
 
-		$url = ($reviews->previousPageUrl())?route('review',['page'=>$reviews->currentPage()]):route('review');
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
-
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('review.list',[
 			'categories'	=>	$categories,
 			'reviews'	=>	$reviews,
 			'locale'	=>	$locale,
 			'page'	=> $page,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -191,45 +178,35 @@ class ReviewController extends Controller
 				'isNext' => $reviews->nextPageUrl() == false
 			]);
 		}
+        $categoryBase = ($locale === 'ru')? $category : $category->base;
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		$category_alt = ($locale == 'ru')? $category->translate->url : $category->base->url;
+        $routes = ['ru' => 'reviews/'.$categoryBase->url.'/'.($reviews->previousPageUrl() ?'?page='.$reviews->currentPage() : '')];
 
-		$url = ($reviews->previousPageUrl())?route('review.level2',['url'=>$category_alt,'page'=>$reviews->currentPage()]):route('review.level2',['url'=>$category_alt]);
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
+        foreach ($categoryBase->translate as $translate){
+            $routes[$translate->lang] = 'reviews/'.$translate->url.'/'.($reviews->previousPageUrl() ?'?page='.$reviews->currentPage() : '');
+        }
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('review.list',[
 			'categories'	=>	$categories,
 			'reviews'	=>	$reviews,
 			'locale'	=>	$locale,
 			'page'	=> $category,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
-	public function index(Request $request,$url){
+	public function index(Request $request,$reviewUrl){
 		$locale = App::getLocale();
 
 		$reviews	=	Review::with(['subpage.project','user.roles','visibleComments.user.roles','likes'])->where([
-			['id',$url],
+			['id',$reviewUrl],
 		])->get();
 
-		$project_name = ($locale == "ru")? $reviews->first()->subpage->project->name : $reviews->first()->subpage->project->translate->name;
-		$project = ($locale == "ru")? $reviews->first()->subpage->project : $reviews->first()->subpage->project->translate;
+		$project_name = ($locale == "ru")? $reviews->first()->subpage->project->name : ($reviews->first()->subpage->project->translate->firstWhere('lang', $locale)? $reviews->first()->subpage->project->translate->firstWhere('lang', $locale)->name:'');
+		$project_name = $project_name ?? $reviews->first()->subpage->project->name;
+		$project = $reviews->first()->subpage->project;
 
 		$title = str_replace(':user_name:',$reviews->first()->user->name, \App\Model\Setting::where([['name','review_single_title'],['lang',$locale]])->first()->value);
 		$title = str_replace(':project_name:',$project_name, $title);
@@ -246,28 +223,14 @@ class ReviewController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
+        $url = 'reviews/'.$reviewUrl.'/';
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
 
-		$url = route('review.level2',['url'=>$url]);
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
-
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('review.single',[
 			'reviews'	=>	$reviews,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 

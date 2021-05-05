@@ -20,6 +20,7 @@
 /* End Auth */
 
 Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications']],function (){
+
 		Route::group(['middleware'=>'role:admin'],function(){
 			/* Users pages */
 			Route::get('/users/moderator/', 'Admin\UsersController@moderators')->name('adm_users_moderators');
@@ -443,67 +444,69 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
 	Route::post('/blog/password/','BlogController@password')->name('blog.password');
 
 	Route::prefix(App\Http\Middleware\LocaleMiddleware::getLocale())->middleware('locale')->group(function($lang = 'ua') {
-		Route::get('/', 'MainController@home')->name('home');
+        Route::prefix(App\Http\Middleware\InternationalMiddleware::getInternational())->group(function($lang = 'ua'){
+            Route::get('/', 'MainController@home')->name('home');
 
-		Route::get('/about/', 'MainController@about')->name('about');
-		Route::get('/faq/','MainController@faq')->name('faq');
-		Route::get('/contact/','MainController@contact')->name('contact');
-		Route::get('/partner/','MainController@partner')->name('partner');
-		Route::get('/partner/brif','QuestionnaireController@brif')->name('partner.brif');
-		Route::post('/partner/brif','QuestionnaireController@brifSend')->name('partner.brif_send');
-		Route::get('/partner/brif/thanks','QuestionnaireController@thanksBrif')->name('partner.brif_thanks');
+            Route::get('/about/', 'MainController@about')->name('about');
+            Route::get('/faq/','MainController@faq')->name('faq');
+            Route::get('/contact/','MainController@contact')->name('contact');
+            Route::get('/partner/','MainController@partner')->name('partner');
+            Route::get('/partner/brif','QuestionnaireController@brif')->name('partner.brif');
+            Route::post('/partner/brif','QuestionnaireController@brifSend')->name('partner.brif_send');
+            Route::get('/partner/brif/thanks','QuestionnaireController@thanksBrif')->name('partner.brif_thanks');
 
-		Route::get('/projects/', 'ProjectController@all')->name('project');
-		Route::get('/projects/{url}/','ProjectController@lavel2')->name('project.level2');
-		Route::get('/projects/{project_url}/{subpage}/','ProjectController@subpage')->where(['project_url' => '^((?!questionnaire).)*'])->name('project.subpage');
+            Route::get('/projects/', 'ProjectController@all')->name('project');
+            Route::get('/projects/{url}/','ProjectController@lavel2')->name('project.level2');
+            Route::get('/projects/{project_url}/{subpage}/','ProjectController@subpage')->where(['project_url' => '^((?!questionnaire).)*'])->name('project.subpage');
 
-		Route::get('/reviews/','ReviewController@all')->name('review');
-		Route::get('/reviews/{url}/','ReviewController@lavel2')->name('review.level2');
+            Route::get('/reviews/','ReviewController@all')->name('review');
+            Route::get('/reviews/{url}/','ReviewController@lavel2')->name('review.level2');
 
-		Route::get('/blog/', 'BlogController@all')->name('blog');
-		Route::get('/blog/{url}/','BlogController@lavel2')->name('blog.level2');
+            Route::get('/blog/', 'BlogController@all')->name('blog');
+            Route::get('/blog/{url}/','BlogController@lavel2')->name('blog.level2');
 
-		Route::get('/archive/','ArchiveController@index')->name('archive');
+            Route::get('/archive/','ArchiveController@index')->name('archive');
 
-		Route::get('/registration/','Auth\RegisterController@showRegistrationForm')->name('registration');
+            Route::get('/registration/','Auth\RegisterController@showRegistrationForm')->name('registration');
 
-		Route::get('/search/','SearchController@index')->name('search');
+            Route::get('/search/','SearchController@index')->name('search');
 
-		Route::get('/user/{id}/','UserController@profile')->name('profile');
-		Route::get('/user/{id}/comment/','UserController@profileComment')->name('profile.comment');
+            Route::get('/user/{id}/','UserController@profile')->name('profile');
+            Route::get('/user/{id}/comment/','UserController@profileComment')->name('profile.comment');
 
-		Route::group(['middleware'=>'auth'],function(){
-			Route::get('/projects/questionnaire/{id}/','QuestionnaireController@questionnaire')->name('project.questionnaire');
+            Route::group(['middleware'=>'auth'],function(){
+                Route::get('/projects/questionnaire/{id}/','QuestionnaireController@questionnaire')->name('project.questionnaire');
 
-			Route::group(['middleware'=>'role:expert'],function(){
+                Route::group(['middleware'=>'role:expert'],function(){
 
-				Route::post('/project/questionnaire/{id}/','QuestionnaireController@questionnaireSend')->name('project.questionnaire.send');
-				Route::get('/thank-you-registration/','QuestionnaireController@thank_regiter')->name('project.questionnaire.thank.regiter');
-				Route::get('/thank-you-write-report/','QuestionnaireController@thank_report')->name('project.questionnaire.thank.report');
-			});
-			Route::group(['middleware'=>'role:bloger'],function(){
+                    Route::post('/project/questionnaire/{id}/','QuestionnaireController@questionnaireSend')->name('project.questionnaire.send');
+                    Route::get('/thank-you-registration/','QuestionnaireController@thank_regiter')->name('project.questionnaire.thank.regiter');
+                    Route::get('/thank-you-write-report/','QuestionnaireController@thank_report')->name('project.questionnaire.thank.report');
+                });
+                Route::group(['middleware'=>'role:bloger'],function(){
 
-			});
-			Route::group(['middleware'=>'role:user'],function(){
-				Route::get('/cabinet/','UserController@index')->name('user.cabinet');
-				Route::get('/cabinet/project/','UserController@project')->name('user.project');
-				Route::get('/cabinet/review/','UserController@review')->name('user.review');
-				Route::get('/cabinet/rating/','UserController@rating')->name('user.rating');
-				Route::get('/cabinet/notification/','UserController@notification')->name('user.notification');
-				Route::get('/cabinet/setting/','UserController@setting')->name('user.setting');
+                });
+                Route::group(['middleware'=>'role:user'],function(){
+                    Route::get('/cabinet/','UserController@index')->name('user.cabinet');
+                    Route::get('/cabinet/project/','UserController@project')->name('user.project');
+                    Route::get('/cabinet/review/','UserController@review')->name('user.review');
+                    Route::get('/cabinet/rating/','UserController@rating')->name('user.rating');
+                    Route::get('/cabinet/notification/','UserController@notification')->name('user.notification');
+                    Route::get('/cabinet/setting/','UserController@setting')->name('user.setting');
 
-				Route::get('/ban/','UserController@ban')->name('user.ban');
-			});
-		});
-		Auth::routes();
-		Route::get('/ref/{id}/','UserController@ref')->name('user.ref');
-		Route::get('/password/reset/','Auth\ResetPasswordController@showEmailForm')->name('password.request');
-		Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-		Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-		Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
+                    Route::get('/ban/','UserController@ban')->name('user.ban');
+                });
+            });
+            Auth::routes();
+            Route::get('/ref/{id}/','UserController@ref')->name('user.ref');
+            Route::get('/password/reset/','Auth\ResetPasswordController@showEmailForm')->name('password.request');
+            Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+            Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+            Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 
 
-		Route::post('/register/','Auth\RegisterController@register')->name('register');
+            Route::post('/register/','Auth\RegisterController@register')->name('register');
+        });
 	});
 
 	/*Route::prefix('amp')->group(function($lang = 'ua') {

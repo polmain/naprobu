@@ -18,6 +18,6 @@ class ProjectMessage extends Model
 		return $this->hasOne('App\Model\Project', 'id', 'project_id');
 	}
 	public function translate(){
-		return $this->hasOne('App\Model\Project\ProjectMessage', 'rus_lang_id');
+		return $this->hasMany('App\Model\Project\ProjectMessage', 'rus_lang_id');
 	}
 }

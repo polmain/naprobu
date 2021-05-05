@@ -13,8 +13,11 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-    @yield('head')
+    @foreach($alternativeUrls as $lang => $alternet_url)
+        <link rel="alternate" href="{{$alternet_url}}" hreflang="{{ $lang }}" />
+    @endforeach
 
+    @yield('head')
 
     <script src="{{ asset("/public/js/adriver.core.2.js")}}" ></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
@@ -74,9 +77,11 @@
 
 <div class="to-up"></div>
 @auth
+    @if(!env('APP_DEBUG', false))
     <div class="push-container">
 
     </div>
+    @endif
 @else
 
     <div class="modal fade modal-auth" id="login" tabindex="-1" role="dialog">
@@ -358,9 +363,17 @@
 		var readMore = {
 			more: "@lang('global.read_more')",
 			less: "@lang('global.read_less')",
-        }
+        };
+
+        var purecookie = {
+            title: "@lang('global.purecookieTitle')",
+            desc: "@lang('global.purecookieDesc')",
+            link: '@lang('global.purecookieLink')',
+            button: "@lang('global.purecookieButton')",
+        };
+
     </script>
-    <script src="{{ asset ("/public/js/app.min.js") }}?v=1.1.3" type="text/javascript"></script>
+    <script src="{{ asset ("/public/js/app.min.js") }}?v=1.1.4" type="text/javascript"></script>
 @yield('scripts')
 </body>
 </html>

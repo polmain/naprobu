@@ -18,6 +18,8 @@ return [
 	'blogger_header'	=>	'Блогеры тестируют',
 	'blogger_link'		=>	'Читать',
 	'project_message'	=>	'Важные сообщения проекта',
+	'product_info'	    =>	'Описание продукта',
+	'faq'	            =>	'FAQ',
 	'project_result'	=>	'Результаты тестирования',
 	'project_review'	=>	'Отзывы',
 	'project_review_all'=>	'Читать все отзывы',
@@ -48,4 +50,8 @@ return [
 	'hide_title'		=>	'Скрытый проект',
 	'password'			=>	'Введите пароль от проекта',
 	'password_submit'	=>	'Войти',
+
+    // Свойтва проекта
+    'audience_ukraine' => "Украина",
+    'audience_word' => "Международный",
 ];

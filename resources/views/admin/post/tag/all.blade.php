@@ -39,6 +39,7 @@
                             <th width="20">#</th>
                             <th>Тэг (RU)</th>
                             <th>Тэг (UA)</th>
+                            <th>Тэг (EN)</th>
                             <th width="20"></th>
                         </tr>
                         </thead>
@@ -77,6 +78,10 @@
                         <div class="form-group">
                             <label for="name_ua" class="col-form-label"><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Тег<span class="input-request">*</span></label>
                             <input type="text" class="form-control required" id="name_ua" name="name_ua">
+                        </div>
+                        <div class="form-group">
+                            <label for="name_en" class="col-form-label"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Тег<span class="input-request">*</span></label>
+                            <input type="text" class="form-control required" id="name_en" name="name_en">
                         </div>
 
                 </div>
@@ -125,7 +130,12 @@
 					data: 'name',
 				},
 				{
-					data: 'translate',
+					data: 'translate_ua',
+					searchable: false,
+					"orderable":      false,
+				},
+				{
+					data: 'translate_en',
 					searchable: false,
 					"orderable":      false,
 				},

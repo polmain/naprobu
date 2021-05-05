@@ -18,6 +18,10 @@ use AdminPageData;
 
 class BlogController extends Controller
 {
+    private const UKRAINIAN_LANG = 'ua';
+    private const ENGLISH_LANG = 'en';
+    private const TRANSLATE_LANG = [self::UKRAINIAN_LANG, self::ENGLISH_LANG];
+
 	public function all(){
 		$posts = Post::with(['project','comments'])->where('rus_lang_id',0)->get();
 
@@ -103,8 +107,16 @@ class BlogController extends Controller
 		$post = Post::find($post_id);
 		$post->isHide = true;
 		$post->save();
-		$post->translate->isHide = true;
-		$post->translate->save();
+
+		foreach (self::TRANSLATE_LANG as $lang){
+            $post = Post::where([
+                'rus_lang_id' => $post_id,
+                'lang' => $lang,
+            ]);
+            $post->isHide = true;
+            $post->save();
+        }
+
 		return "ok";
 	}
 	public function show($post_id){
@@ -112,8 +124,14 @@ class BlogController extends Controller
 		$post->isHide = false;
 		$post->save();
 
-		$post->translate->isHide = false;
-		$post->translate->save();
+        foreach (self::TRANSLATE_LANG as $lang){
+            $post = Post::where([
+                'rus_lang_id' => $post_id,
+                'lang' => $lang,
+            ]);
+            $post->isHide = false;
+            $post->save();
+        }
 		return "ok";
 	}
 
@@ -137,25 +155,51 @@ class BlogController extends Controller
 
 		$post->makeTags($request->tags);
 
-		$translate = Post::where('rus_lang_id',$post->id)->first();
-		if(empty($translate)){
-			$translate = new Post();
-			$translate->rus_lang_id = $post->id;
-			$translate->lang = 'ua';
-		}
-		$translate->name = $request->nameUA;
-		$translate->content = $request->contentUA;
-		$translate->url = $request->urlUA;
-		$translate->isHide = ($request->submit == "save-hide");
-		$translate->project_id = $request->project_id;
-		$translate->author_id = $request->author_id;
-		$translate->password = $post->password;
-
-		$translate->seo_title = $request->seo_titleUA;
-		$translate->seo_description = $request->seo_descriptionUA;
-		$translate->seo_keywords = $request->seo_keywordsUA;
-		$translate->save();
+        foreach (self::TRANSLATE_LANG as $lang){
+            if($this->checkRequiredForLang($request, $lang)){
+                $this->createOrUpdateTranslate($post, $request, $lang);
+            }
+        }
 	}
+
+    private function checkRequiredForLang(Request $request, string $lang): bool
+    {
+        $upperLang = mb_strtoupper($lang);
+
+        return $request->input('name'.$upperLang)
+            && $request->input('content'.$upperLang)
+            && $request->input('url'.$upperLang);
+    }
+
+    private function createOrUpdateTranslate(Post $post, Request $request, string $lang): void
+    {
+        $translate = Post::where([
+            'rus_lang_id' => $post->id,
+            'lang' => $lang,
+        ])->first();
+
+        if(empty($translate)){
+            $translate = new Post();
+            $translate->rus_lang_id = $post->id;
+            $translate->lang = $lang;
+        }
+
+        $upperLang = mb_strtoupper($lang);
+
+        $translate->name = $request->input('name'.$upperLang);
+        $translate->content = $request->input('content'.$upperLang);
+        $translate->url = $request->input('url'.$upperLang);
+        $translate->isHide = ($request->submit == "save-hide");
+        $translate->project_id = $request->project_id;
+        $translate->author_id = $request->author_id;
+        $translate->password = $post->password;
+
+
+        $translate->seo_title = $request->input('seo_title'.$upperLang);
+        $translate->seo_description = $request->input('seo_description'.$upperLang);
+        $translate->seo_keywords = $request->input('seo_keywords'.$upperLang);
+        $translate->save();
+    }
 
 	public function validURL(Request $request,$post_id)
 	{
@@ -178,34 +222,18 @@ class BlogController extends Controller
 	}
 
 	protected function isBusyUrlBlog($lang,$post_id,$url){
-		if($lang == 'ru'){
-			return Post::where([
-					['lang','ru'],
-					['id','<>',$post_id],
-					['url',$url],
-				])->first() !== null;
-		}else{
-			return Post::where([
-					['lang','ua'],
-					['rus_lang_id','<>',$post_id],
-					['url',$url],
-				])->first() !== null;
-		}
+        return Post::where([
+                ['lang',$lang],
+                ['id','<>',$post_id],
+                ['url',$url],
+            ])->first() !== null;
 	}
 
 	protected function isBusyUrlProjectCategory($lang,$category_id,$url){
-		if($lang == 'ru'){
-			return ProjectCategory::where([
-					['lang','ru'],
-					['id','<>',$category_id],
-					['url',$url],
-				])->first() !== null;
-		}else{
-			return ProjectCategory::where([
-					['lang','ua'],
-					['rus_lang_id','<>',$category_id],
-					['url',$url],
-				])->first() !== null;
-		}
+        return ProjectCategory::where([
+                ['lang',$lang],
+                ['id','<>',$category_id],
+                ['url',$url],
+            ])->first() !== null;
 	}
 }

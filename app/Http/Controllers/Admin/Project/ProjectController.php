@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Project;
 
+use App\Entity\Collection\CountryCollection;
+use App\Entity\ProjectAudienceEnum;
 use App\Http\Controllers\Admin\iAdminController;
 use App\Model\Blogger\BloggerUserProject;
 use App\Model\Questionnaire;
@@ -28,9 +30,20 @@ use Storage;
 
 class ProjectController extends Controller implements iAdminController
 {
+    private const UKRAINIAN_LANG = 'ua';
+    private const ENGLISH_LANG = 'en';
+    private const TRANSLATE_LANG = [self::UKRAINIAN_LANG, self::ENGLISH_LANG];
+
+    private $childsId = [];
+
+    public function __construct()
+    {
+        app()->setLocale('ru');
+    }
 
 	//Список всех проектов
 	public function all(){
+
 		$projects = Project::with(['category','status','requests'])
 			->withCount(['requests'])
 			->where('lang','ru')
@@ -96,41 +109,27 @@ class ProjectController extends Controller implements iAdminController
 	}
 
 	protected function isBusyUrlProject($lang,$project_id,$url){
-		if($lang == 'ru'){
-			return Project::where([
-				['lang','ru'],
-				['id','<>',$project_id],
-				['url',$url],
-			])->first() !== null;
-		}else{
-			return Project::where([
-					['lang','ua'],
-					['rus_lang_id','<>',$project_id],
-					['url',$url],
-				])->first() !== null;
-		}
+        return Project::where([
+                ['lang',$lang],
+                ['rus_lang_id','<>',$project_id],
+                ['url',$url],
+            ])->first() !== null;
 	}
 
 	protected function isBusyUrlProjectCategory($lang,$category_id,$url){
-		if($lang == 'ru'){
-			return ProjectCategory::where([
-					['lang','ru'],
-					['id','<>',$category_id],
-					['url',$url],
-				])->first() !== null;
-		}else{
-			return ProjectCategory::where([
-					['lang','ua'],
-					['rus_lang_id','<>',$category_id],
-					['url',$url],
-				])->first() !== null;
-		}
+        return ProjectCategory::where([
+                ['lang',$lang],
+                ['id','<>',$category_id],
+                ['url',$url],
+            ])->first() !== null;
 	}
 
 	// Страница добавления проекта
 	public function new(){
 		$statuses = ProjectStatus::where('lang','ru')->get();
 		$categories = ProjectCategory::where('lang','ru')->get();
+		$audienceArray = ProjectAudienceEnum::toArray();
+        $countryCollection = CountryCollection::getInstance();
 
 		SEO::setTitle('Новый проект');
 		AdminPageData::setPageName('Новый проект');
@@ -139,7 +138,9 @@ class ProjectController extends Controller implements iAdminController
 
 		return view('admin.projects.new',[
 			'categories' => $categories,
-			'statuses' => $statuses
+			'statuses' => $statuses,
+			'audienceArray' => $audienceArray,
+            'countryCollection' => $countryCollection
 		]);
 	}
 
@@ -178,12 +179,14 @@ class ProjectController extends Controller implements iAdminController
 		$reviewFilter = json_encode($array);
 		$translate = Project::with(['category','status'])
 			->where('rus_lang_id',$project_id)
-			->first();
+			->get();
 		if(empty($translate)){
 			$translate = new Project();
 		}
 		$categories = ProjectCategory::where('lang','ru')->get();
 		$statuses = ProjectStatus::where('lang','ru')->get();
+        $audienceArray = ProjectAudienceEnum::toArray();
+        $countryCollection = CountryCollection::getInstance();
 
 		SEO::setTitle('Редактирование проекта: '.$project->name);
 		AdminPageData::setPageName('Редактирование проекта');
@@ -197,13 +200,15 @@ class ProjectController extends Controller implements iAdminController
 			'statuses' => $statuses,
 			'countReviews' => $countReviews,
 			'reviewFilter' => $reviewFilter,
+			'audienceArray' => $audienceArray,
+			'countryCollection' => $countryCollection,
 		]);
 	}
 
 	// Добавление нового проекта
 	public function create(Request $request){
 		$project = new Project();
-		$this->createOrEdit($request, $project, "create");
+		$this->createOrEdit($request, $project);
 
 		ModeratorLogs::addLog("Создал Проект: ".$request->name);
 		if(($request->submit == "save-hide") || ($request->submit == "save")){
@@ -218,7 +223,7 @@ class ProjectController extends Controller implements iAdminController
 
 	public function save(Request $request, $project_id){
 		$project = Project::find($project_id);
-		$this->createOrEdit($request, $project, "update");
+		$this->createOrEdit($request, $project);
 
 		ModeratorLogs::addLog("Отредактировал Проект: ".$request->name);
 
@@ -280,18 +285,39 @@ class ProjectController extends Controller implements iAdminController
 		$project = Project::find($project_id);
 		$project->isHide = true;
 		$project->save();
-		$project = Project::where('rus_lang_id',$project_id)->first();
-		$project->isHide = true;
-		$project->save();
+
+        foreach (self::TRANSLATE_LANG as $lang){
+            $project = Project::where([
+                'rus_lang_id' => $project_id,
+                'lang' => $lang
+            ])->first();
+
+            if($project){
+                $project->isHide = true;
+                $project->save();
+            }
+        }
+
 		return "ok";
 	}
+
 	public function show($project_id){
 		$project = Project::find($project_id);
 		$project->isHide = false;
 		$project->save();
-		$project = Project::where('rus_lang_id',$project_id)->first();
-		$project->isHide = false;
-		$project->save();
+
+        foreach (self::TRANSLATE_LANG as $lang){
+            $project = Project::where([
+                'rus_lang_id' => $project_id,
+                'lang' => $lang
+            ])->first();
+
+            if($project){
+                $project->isHide = false;
+                $project->save();
+            }
+        }
+
 		return "ok";
 	}
 
@@ -314,15 +340,19 @@ class ProjectController extends Controller implements iAdminController
 	}
 
 	// Создание или сохранения проекта
-	protected function createOrEdit($request,$project,$mode){
+	protected function createOrEdit($request,$project){
 		// Main Data
 		$project->name = $request->name;
 		$project->type = $request->type;
+		$project->audience = $request->audience;
+		$project->country = $request->country;
 		$project->category_id = $request->category;
 		$project->url = $request->url;
 		$project->short_description = $request->short_description;
 		$project->text = $request->text;
 		$project->product_name = $request->product_name;
+		$project->product_info = $request->product_info;
+		$project->faq = $request->faq;
 		$project->rules = $request->rules;
 		$project->qa_text = $request->qa_text;
 		$project->count_users = $request->count_users;
@@ -377,52 +407,11 @@ class ProjectController extends Controller implements iAdminController
 
 		$project->save();
 
-		//**** Translate *****//
-
-		$projectUA = Project::where('rus_lang_id',$project->id)->first();
-
-		if(empty($projectUA))
-		{
-			$projectUA = new Project();
-			$projectUA->lang = 'ua';
-			$projectUA->rus_lang_id = $project->id;
-		}
-
-		$projectUA->type = $request->type;
-		$projectUA->category_id = $request->category;
-		$projectUA->name = $request->nameUA;
-		$projectUA->url = $request->urlUA;
-		$projectUA->short_description = $request->short_descriptionUA;
-		$projectUA->text = $request->textUA;
-		$projectUA->product_name = $request->product_nameUA;
-		$projectUA->rules = $request->rulesUA;
-		$projectUA->qa_text = $request->qa_textUA;
-		$projectUA->count_users = $request->count_users;
-		$projectUA->isHide = ($request->submit == "save-hide");
-		$projectUA->password = $project->password;
-
-		// Project Time
-		$projectUA->start_registration_time = $start_registration_time;
-		$projectUA->end_registration_time = $end_registration_time;
-		$projectUA->start_test_time = $start_test_time;
-		$projectUA->start_report_time = $start_report_time;
-		$projectUA->end_project_time = $end_project_time;
-
-		$projectUA->status_id = ProjectStatus::where([
-									["rus_lang_id",$project->status_id],
-									["lang","ua"]
-								])->first()
-								->id;
-
-		//SEO
-		$projectUA->seo_title = $request->titleUA;
-		$projectUA->seo_description = $request->seo_description_ua;
-		$projectUA->seo_keyword = $request->keywordsUA;
-
-		$projectUA->main_image = $request->main_image_ua;
-		$projectUA->preview_image = $request->preview_image_ua;
-
-		$projectUA->save();
+        foreach (self::TRANSLATE_LANG as $lang) {
+            if ($this->checkRequiredForLang($request, $lang)) {
+                $this->saveOrCreateTranslate($project, $request, $lang);
+            }
+        }
 
 		$sort = 1;
 		if($request->has('question')){
@@ -432,8 +421,72 @@ class ProjectController extends Controller implements iAdminController
 			}
 		}
 
-		$this->deleteQuestions($project->id, $request);
+		$this->deleteQuestions($project->id);
 	}
+
+    private function checkRequiredForLang(Request $request, string $lang): bool
+    {
+        $upperLang = mb_strtoupper($lang);
+
+        return (bool) $request->input('name'.$upperLang);
+    }
+
+    private function saveOrCreateTranslate(Project $project, Request $request, string $lang): void
+    {
+        $translate = Project::where([
+            'rus_lang_id' => $project->id,
+            'lang' => $lang
+        ])->first();
+
+        if(empty($translate))
+        {
+            $translate = new Project();
+            $translate->lang = $lang;
+            $translate->rus_lang_id = $project->id;
+        }
+
+        $upperLang = mb_strtoupper($lang);
+
+        $translate->type = $request->type;
+        $translate->audience = $request->audience;
+        $translate->country = $request->country;
+        $translate->category_id = $request->category;
+        $translate->name = $request->input('name'.$upperLang);
+        $translate->url = $request->input('url'.$upperLang);
+        $translate->short_description = $request->input('short_description'.$upperLang);
+        $translate->text = $request->input('text'.$upperLang);
+        $translate->product_name = $request->input('product_name'.$upperLang);
+        $translate->product_info = $request->input('product_info'.$upperLang);
+        $translate->faq = $request->input('faq'.$upperLang);
+        $translate->rules = $request->input('rules'.$upperLang);
+        $translate->qa_text = $request->input('qa_text'.$upperLang);
+        $translate->count_users = $request->count_users;
+        $translate->isHide = ($request->submit === "save-hide");
+        $translate->password = $project->password;
+
+        // Project Time
+        $translate->start_registration_time = $project->start_registration_time;
+        $translate->end_registration_time = $project->end_registration_time;
+        $translate->start_test_time = $project->start_test_time;
+        $translate->start_report_time = $project->start_report_time;
+        $translate->end_project_time = $project->end_project_time;
+
+        $translate->status_id = ProjectStatus::where([
+                ["rus_lang_id",$project->status_id],
+                ["lang",$lang]
+            ])->first()->id;
+
+        //SEO
+        $translate->seo_title = $request->input('title'.$upperLang);
+        $translate->seo_description = $request->input('seo_description_'.$lang);
+        $translate->seo_keyword = $request->input('keywords'.$upperLang);
+
+        $translate->main_image = $request->input('main_image_'.$lang);
+        $translate->preview_image = $request->input('preview_image_'.$lang);
+
+        $translate->save();
+
+    }
 
 	protected function saveImage($image, $nameModificator){
 		$newName = time().$nameModificator.'.'.$image->getClientOriginalExtension();
@@ -454,24 +507,40 @@ class ProjectController extends Controller implements iAdminController
 		$block->save();
 		$this->childsId[] = $block->id;
 
+		foreach (self::TRANSLATE_LANG as $lang){
+            if($this->checkRequiredQuestionForLang($request, $lang, $key)){
+                $this->createOrEditQuestionTranslate($block, $request, $lang, $key);
+            }
+        }
 
-		$ruId = $block->id;
-		/* UA */
-		$blockUA = ProjectBlock::where('rus_lang_id',$ruId)->first();
-
-		if(empty($blockUA))
-		{
-			$blockUA = new ProjectBlock();
-			$blockUA->lang = 'ua';
-			$blockUA->rus_lang_id = $ruId;
-		}
-
-		$blockUA->text = $request->label_ua[$key];
-		$blockUA->procent = $block->procent;
-		$blockUA->project_id = $project_id;
-
-		$blockUA->save();
 	}
+
+    private function checkRequiredQuestionForLang(Request $request, string $lang, $key): bool
+    {
+        return (bool) $request->input('label_'.$lang)[$key];
+    }
+
+
+	private function createOrEditQuestionTranslate(ProjectBlock $block, Request $request, string $lang, $key): void
+    {
+        $translate = ProjectBlock::where([
+            'rus_lang_id' => $block->id,
+            'lang' => $lang
+        ])->first();
+
+        if(empty($translate))
+        {
+            $translate = new ProjectBlock();
+            $translate->lang = $lang;
+            $translate->rus_lang_id = $block->id;
+        }
+
+        $translate->text = $request->input('label_'.$lang)[$key];
+        $translate->procent = $block->procent;
+        $translate->project_id = $block->project_id;
+
+        $translate->save();
+    }
 
 	protected function deleteQuestions($project_id){
 		$blocks = ProjectBlock::where([

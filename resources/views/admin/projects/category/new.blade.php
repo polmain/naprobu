@@ -15,13 +15,17 @@
                     </div>
                     <div class="box-body">
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Название категории<span class="input-request">*</span></label>
                                 <input type="text" id="name-ru" name="name" class="form-control project-name required" placeholder="Введите название категории...">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название категории<span class="input-request">*</span></label>
                                 <input type="text" id="name-ua" name="nameUA" class="form-control project-name required" placeholder="Введите название категории...">
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Название категории<span class="input-request">*</span></label>
+                                <input type="text" id="name-en" name="nameEN" class="form-control project-name required" placeholder="Введите название категории...">
                             </div>
                         </div>
                         <div class="form-group project-url edit" id="project-url-ru"><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Постоянная ссылка: <div class="edit-url">
@@ -48,6 +52,18 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group project-url edit" id="project-url-en"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Постоянная ссылка: <div class="edit-url">
+                                <div class="edit-a active">
+                                    <a href="{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/en/project/" class="link-url"><span class="static-part">{{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/en/project/</span><span class="edit-part"></span></a>
+                                    <button type="button" class="btn btn-default btn-sm change-url">Изменить</button>
+                                </div>
+                                <div class="edit-input">
+                                    {{(Request::secure())?"https://":"http://"}}{{Request::getHost()}}/en/project/<input type="text" class="new-url" name="urlEN">
+                                    <button type="button" class="btn btn-success btn-sm save-url">Ок</button>
+                                    <button type="button" class="btn btn-default btn-sm cancel-url">Отмена</button>
+                                </div>
+                            </div>
+                        </div>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
 
@@ -63,33 +79,45 @@
                     </div>
                     <div class="box-body">
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Title</label>
                                 <input type="text" id="title" name="title" class="form-control" placeholder="Введите Title проекта...">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Title</label>
                                 <input type="text" id="titleUA" name="titleUA" class="form-control" placeholder="Введите Title проекта...">
                             </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Title</label>
+                                <input type="text" id="titleEN" name="titleEN" class="form-control" placeholder="Введите Title проекта...">
+                            </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Description</label>
                                 <textarea class="form-control" name="description" rows="5" placeholder="Введите Description проекта..."></textarea>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Description</label>
                                 <textarea class="form-control" name="descriptionUA" rows="5" placeholder="Введите Description проекта..."></textarea>
                             </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Description</label>
+                                <textarea class="form-control" name="descriptionEN" rows="5" placeholder="Введите Description проекта..."></textarea>
+                            </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Keywords</label>
                                 <input type="text" class="form-control" name="keywords" placeholder="Введите Keywords проекта...">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Keywords</label>
                                 <input type="text" class="form-control" name="keywordsUA" placeholder="Введите Keywords проекта...">
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Keywords</label>
+                                <input type="text" class="form-control" name="keywordsEN" placeholder="Введите Keywords проекта...">
                             </div>
                         </div>
                     </div><!-- /.box-body -->

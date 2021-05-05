@@ -34,7 +34,7 @@
         @if(App::getLocale() == 'ru')
             <div class="rating-title">{{$ratingStatus->name}}</div>
         @else
-            <div class="rating-title">{{$ratingStatus->translate->name}}</div>
+            <div class="rating-title">{{$ratingStatus->translate->firstWhere('lang', App::getLocale())->name}}</div>
         @endif
     </div>
 @endforeach
@@ -43,7 +43,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Поздравляем!</h5>
+                <h5 class="modal-title">@lang('user.congratulation')</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <img src="{{asset('public/svg/icons/cross.svg')}}" alt="Cross">
                 </button>

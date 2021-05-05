@@ -18,7 +18,7 @@ class Subpage extends Model
 	}
 
 	public function translate(){
-		return $this->hasOne('App\Model\Project\Subpage', 'rus_lang_id');
+		return $this->hasMany('App\Model\Project\Subpage', 'rus_lang_id');
 	}
 
 	public function base(){

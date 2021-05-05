@@ -14,6 +14,10 @@ use AdminPageData;
 
 class MessageController extends Controller
 {
+    private const UKRAINIAN_LANG = 'ua';
+    private const ENGLISH_LANG = 'en';
+    private const TRANSLATE_LANG = [self::UKRAINIAN_LANG, self::ENGLISH_LANG];
+
 	public function __construct()
 	{
 		AdminPageData::addBreadcrumbLevel('Проекты','project');
@@ -103,18 +107,38 @@ class MessageController extends Controller
 		$message = ProjectMessage::find($message_id);
 		$message->isHide = true;
 		$message->save();
-		$message = ProjectMessage::where('rus_lang_id',$message_id)->first();
-		$message->isHide = true;
-		$message->save();
+
+        foreach (self::TRANSLATE_LANG as $lang){
+            $message = ProjectMessage::where([
+                'rus_lang_id' => $message_id,
+                'lang' => $lang
+            ])->first();
+
+            if($message){
+                $message->isHide = true;
+                $message->save();
+            }
+        }
+
 		return "ok";
 	}
 	public function show($message_id){
 		$message = ProjectMessage::find($message_id);
 		$message->isHide = false;
 		$message->save();
-		$message = ProjectMessage::where('rus_lang_id',$message_id)->first();
-		$message->isHide = false;
-		$message->save();
+
+        foreach (self::TRANSLATE_LANG as $lang){
+            $message = ProjectMessage::where([
+                'rus_lang_id' => $message_id,
+                'lang' => $lang
+            ])->first();
+
+            if($message){
+                $message->isHide = false;
+                $message->save();
+            }
+        }
+
 		return "ok";
 	}
 
@@ -128,23 +152,41 @@ class MessageController extends Controller
 		}
 		$message->save();
 
-		$translate = ProjectMessage::where([
-			['rus_lang_id',$message->id],
-			['lang','ua']
-		])->first();
-		if(empty($translate)){
-			$translate = new ProjectMessage();
-			$translate->rus_lang_id = $message->id;
-			$translate->lang = 'ua';
-		}
-
-		$translate->text = $request->textUA;
-		$translate->user_id = $message->user_id;
-		$translate->project_id = $request->project_id;
-		$translate->images = $message->images;
-		$translate->isHide = ($request->submit == "save-hide");
-		$translate->save();
+        foreach (self::TRANSLATE_LANG as $lang) {
+            if ($this->checkRequiredForLang($request, $lang)) {
+                $this->saveOrCreateTranslate($message, $request, $lang);
+            }
+        }
 	}
+    private function checkRequiredForLang(Request $request, string $lang): bool
+    {
+        $upperLang = mb_strtoupper($lang);
+
+        return (bool) $request->input('text'.$upperLang);
+    }
+
+    private function saveOrCreateTranslate(ProjectMessage $message, Request $request, string $lang): void
+    {
+        $translate = ProjectMessage::where([
+            ['rus_lang_id',$message->id],
+            ['lang',$lang]
+        ])->first();
+
+        if(empty($translate)){
+            $translate = new ProjectMessage();
+            $translate->rus_lang_id = $message->id;
+            $translate->lang = $lang;
+        }
+
+        $upperLang = mb_strtoupper($lang);
+
+        $translate->text = $request->input('text'.$upperLang);
+        $translate->user_id = $message->user_id;
+        $translate->project_id = $request->project_id;
+        $translate->images = $message->images;
+        $translate->isHide = ($request->submit == "save-hide");
+        $translate->save();
+    }
 
 	protected function saveImageGallery($images){
 		$out_images = [];

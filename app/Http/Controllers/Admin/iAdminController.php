@@ -11,7 +11,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-
+// todo this interface do not need
 interface iAdminController
 {
 	public function all();

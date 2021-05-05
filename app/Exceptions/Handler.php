@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App;
+use App\Services\LanguageServices\AlternativeUrlService;
 use SEO;
 use SEOMeta;
 use App\Model\Project;
@@ -62,57 +63,44 @@ class Handler extends ExceptionHandler
 		])->orderBy('start_registration_time','desc')->limit(3)->get();
 
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('home'));
+        $routes = AlternativeUrlService::generateReplyRoutes('');
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		if ($this->isHttpException($exception)) {
 			if ($exception->getStatusCode() == 401) {
 				SEO::setTitle('Unauthorized');
 				return response()->view('errors.' . '401', ['projects' => $projects,
-					'alternet_url'	=> $alternet_url], 401);
+					'alternativeUrls'	=> $alternativeUrls], 401);
 			}
 			if ($exception->getStatusCode() == 403) {
 				SEO::setTitle('Forbidden');
 				return response()->view('errors.' . '403', ['projects' => $projects,
-					'alternet_url'	=> $alternet_url], 403);
+					'alternativeUrls'	=> $alternativeUrls], 403);
 			}
 			if ($exception->getStatusCode() == 404) {
 				SEO::setTitle('Page not found');
 				return response()->view('errors.' . '404', ['projects' => $projects,
-					'alternet_url'	=> $alternet_url], 404);
+					'alternativeUrls'	=> $alternativeUrls], 404);
 			}
 			if ($exception->getStatusCode() == 419) {
 				SEO::setTitle('Page Expired');
 				return response()->view('errors.' . '419', ['projects' => $projects,
-					'alternet_url'	=> $alternet_url], 419);
+					'alternativeUrls'	=> $alternativeUrls], 419);
 			}
 			if ($exception->getStatusCode() == 429) {
 				SEO::setTitle('Too Many Requests');
 				return response()->view('errors.' . '429', ['projects' => $projects,
-					'alternet_url'	=> $alternet_url], 429);
+					'alternativeUrls'	=> $alternativeUrls], 429);
 			}
 
 			if ($exception->getStatusCode() == 500) {
 				SEO::setTitle('Error');
-				return response()->view('errors.' . '500', ['alternet_url'	=> $alternet_url], 500);
+				return response()->view('errors.' . '500', ['alternativeUrls'	=> $alternativeUrls], 500);
 			}
 			if ($exception->getStatusCode() == 503) {
 				SEO::setTitle('Service Unavailable');
-				return response()->view('errors.' . '503', ['alternet_url'	=> $alternet_url], 503);
+				return response()->view('errors.' . '503', ['alternativeUrls'	=> $alternativeUrls], 503);
 			}
 		}
 

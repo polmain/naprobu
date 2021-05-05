@@ -15,13 +15,17 @@
                     </div>
                     <div class="box-body">
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Название группы<span class="input-request">*</span></label>
                                 <input type="text" id="name" name="name" class="form-control required" placeholder="Введите название группы..." value="{{$faqCategory->name}}">
                             </div>
-                            <div class="col-md-6">
-                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название группы<span class="input-request">*</span></label>
-                                <input type="text" id="nameUA" name="nameUA" class="form-control required" placeholder="Введите название группы..." value="{{$faqCategory->translate->name}}">
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название группы</label>
+                                <input type="text" id="nameUA" name="nameUA" class="form-control" placeholder="Введите название группы..." value="{{ $faqCategory->translate->firstWhere('lang', 'ua')? $faqCategory->translate->firstWhere('lang', 'ua')->name : ''}}">
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Название группы</label>
+                                <input type="text" id="nameEN" name="nameEN" class="form-control" placeholder="Введите название группы..." value="{{ $faqCategory->translate->firstWhere('lang', 'en')? $faqCategory->translate->firstWhere('lang', 'en')->name : ''}}">
                             </div>
                         </div>
                     </div><!-- /.box-body -->
@@ -57,23 +61,31 @@
                                 </div>
                                 <div class="question-body">
                                     <div class="form-group row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Вопрос<span class="input-request">*</span></label>
                                             <input type="text" name="question_name[]" class="form-control question-name required" placeholder="Введите вопрос..." value="{{$question->question}}">
                                         </div>
-                                        <div class="col-md-6">
-                                            <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Вопрос<span class="input-request">*</span></label>
-                                            <input type="text" name="question_name_ua[]" class="form-control required" placeholder="Введите вопрос..." value="{{$question->translate->question}}">
+                                        <div class="col-md-4">
+                                            <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Вопрос</label>
+                                            <input type="text" name="question_name_ua[]" class="form-control" placeholder="Введите вопрос..." value="{{$question->translate->firstWhere('lang', 'ua')? $question->translate->firstWhere('lang', 'ua')->question : ''}}">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Вопрос</label>
+                                            <input type="text" name="question_name_en[]" class="form-control" placeholder="Введите вопрос..." value="{{$question->translate->firstWhere('lang', 'en')? $question->translate->firstWhere('lang', 'en')->question : ''}}">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Ответ<span class="input-request">*</span></label>
                                             <textarea name="question_answer[]" cols="30" rows="10" class="form-control editor" placeholder="Введите ответ...">{!! $question->answer !!}</textarea>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Ответ<span class="input-request">*</span></label>
-                                            <textarea name="question_answer_ua[]" cols="30" rows="10" class="form-control editor" placeholder="Введите ответ...">{!! $question->translate->answer !!}</textarea>
+                                        <div class="col-md-4">
+                                            <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Ответ</label>
+                                            <textarea name="question_answer_ua[]" cols="30" rows="10" class="form-control editor" placeholder="Введите ответ...">{!! $question->translate->firstWhere('lang', 'ua')? $question->translate->firstWhere('lang', 'ua')->answer : '' !!}</textarea>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Ответ</label>
+                                            <textarea name="question_answer_en[]" cols="30" rows="10" class="form-control editor" placeholder="Введите ответ...">{!! $question->translate->firstWhere('lang', 'en')? $question->translate->firstWhere('lang', 'en')->answer : '' !!}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -173,23 +185,31 @@
             </div>
             <div class="question-body">
                 <div class="form-group row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Вопрос<span class="input-request">*</span></label>
                         <input type="text" name="question_name[]" class="form-control question-name none-required" placeholder="Введите вопрос...">
                     </div>
-                    <div class="col-md-6">
-                        <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Вопрос<span class="input-request">*</span></label>
-                        <input type="text" name="question_name_ua[]" class="form-control none-required" placeholder="Введите вопрос...">
+                    <div class="col-md-4">
+                        <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Вопрос</label>
+                        <input type="text" name="question_name_ua[]" class="form-control" placeholder="Введите вопрос...">
+                    </div>
+                    <div class="col-md-4">
+                        <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Вопрос</label>
+                        <input type="text" name="question_name_en[]" class="form-control" placeholder="Введите вопрос...">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Ответ<span class="input-request">*</span></label>
                         <textarea name="question_answer[]" id="" cols="30" rows="10" class="form-control editor" placeholder="Введите ответ..."></textarea>
                     </div>
-                    <div class="col-md-6">
-                        <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Ответ<span class="input-request">*</span></label>
+                    <div class="col-md-4">
+                        <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Ответ</label>
                         <textarea name="question_answer_ua[]" id="" cols="30" rows="10" class="form-control editor" placeholder="Введите ответ..."></textarea>
+                    </div>
+                    <div class="col-md-4">
+                        <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Ответ</label>
+                        <textarea name="question_answer_en[]" id="" cols="30" rows="10" class="form-control editor" placeholder="Введите ответ..."></textarea>
                     </div>
                 </div>
             </div>

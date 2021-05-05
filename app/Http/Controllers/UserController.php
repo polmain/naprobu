@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App;
+use App\Entity\Collection\CountryCollection;
+use App\Services\LanguageServices\AlternativeUrlService;
 use Auth;
 use Cookie;
 use Image;
@@ -37,6 +39,7 @@ class UserController extends Controller
 			$review->where('user_id',$user->id);
 		})->count();
 		$ratingStatuses = UserRatingStatus::with(['translate'])->where('lang','ru')->get();
+        $countryCollection = CountryCollection::getInstance();
 
 		$locale = App::getLocale();
 		$countries = App\Model\User\UserCountry::all();
@@ -53,28 +56,17 @@ class UserController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('user.cabinet'));
+		$url = 'cabinet/';
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
     	return view('user.main',[
     		'userLikes' => $userLikes,
     		'ratingStatuses' => $ratingStatuses,
-			'alternet_url' => $alternet_url,
+			'alternativeUrls' => $alternativeUrls,
 			'countries' => $countries,
+			'countryCollection' => $countryCollection,
 		]);
 	}
 
@@ -110,29 +102,16 @@ class UserController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		$url = ($userRatings->previousPageUrl())?route('user.rating',['page'=>$userRatings->currentPage()]):route('user.rating');
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
+        $url = 'cabinet/rating/'.($userRatings->previousPageUrl()?'?page='.$userRatings->currentPage():'');
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
     	return view('user.rating',[
     		'userLikes' => $userLikes,
     		'ratingStatuses' => $ratingStatuses,
     		'userRatings' => $userRatings,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -173,29 +152,16 @@ class UserController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		$url = ($projects->previousPageUrl())?route('user.project',['page'=>$projects->currentPage()]):route('user.project');
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
+        $url = 'cabinet/project/'.($projects->previousPageUrl()?'?page='.$projects->currentPage():'');
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('user.project',[
 			'userLikes' => $userLikes,
 			'projects'	=>	$projects,
 			'lang'	=> $locale,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 
 	}
@@ -236,28 +202,15 @@ class UserController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		$url = ($reviews->previousPageUrl())?route('user.review',['page'=>$reviews->currentPage()]):route('user.review');
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
+        $url = 'cabinet/review/'.($reviews->previousPageUrl()?'?page='.$reviews->currentPage():'');
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('user.review',[
 			'userLikes' => $userLikes,
 			'reviews' => $reviews,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -295,28 +248,15 @@ class UserController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		$url = ($notifications->previousPageUrl())?route('user.notification',['page'=>$notifications->currentPage()]):route('user.notification');
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
+        $url = 'cabinet/notification/'.($notifications->previousPageUrl()?'?page='.$notifications->currentPage():'');
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('user.notification',[
 			'userLikes' => $userLikes,
 			'notifications' => $notifications,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -341,27 +281,14 @@ class UserController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		$url = route('user.setting');
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
+        $url = 'cabinet/setting/';
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('user.setting',[
 			'userLikes' => $userLikes,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -406,30 +333,16 @@ class UserController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
+        $url = 'profile/'.$id.'/'.($reviews->previousPageUrl()?'?page='.$reviews->currentPage():'');
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
 
-		$url = ($reviews->previousPageUrl())?route('profile',['id'=>$id,'page'=>$reviews->currentPage()]):route('profile',['id'=>$id]);
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
-
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('user.profile.index',[
 			'user'		=> $user,
 			'userLikes' => $userLikes,
 			'reviews'	=> $reviews,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -476,30 +389,16 @@ class UserController extends Controller
 			]
 		);
 
-		$lang = ($locale == 'ru')?'ua':'ru';
+        $url = 'profile/comment/'.$id.'/'.($comments->previousPageUrl()?'?page='.$comments->currentPage():'');
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
 
-		$url = ($comments->previousPageUrl())?route('profile.comment',['id'=>$id,'page'=>$comments->currentPage()]):route('profile.comment',['id'=>$id]);
-		//разбиваем на массив по разделителю
-		$segments = explode('/', $url);
-
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('user.profile.comment',[
 			'user'		=> $user,
 			'userLikes' => $userLikes,
 			'comments'	=> $comments,
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 
@@ -588,7 +487,7 @@ class UserController extends Controller
 	}
 
 	public function isNameRegister(Request $request){
-		
+
 
 		$name = $request->name;
 		$user = User::where('name',$name)->where('id','<>',Auth::user()->id)->first();
@@ -701,15 +600,22 @@ class UserController extends Controller
 	}*/
 
 	public function getRegion(Request $request){
-		$lang = $request->lang=='uk'?'ua':'ru';
-		$country = UserCountry::where('iso',$request->country)->first();
+	    if($request->lang === 'en'){
+            return response()->json([
+                'data' => null,
+                'result' => 'not_found'
+            ]);
+        }
 
-		$regions = UserRegion::select('name_'.$lang.' as name','iso as id')->where('country_id',$country->id)->get();
+        $lang = $request->lang=='uk'?'ua':'ru';
+        $country = UserCountry::where('iso',$request->country)->first();
 
-		return response()->json([
-			'data' => $regions,
-			'result' => 'ok'
-		]);
+        $regions = UserRegion::select('name_'.$lang.' as name','iso as id')->where('country_id',$country->id)->get();
+
+        return response()->json([
+            'data' => $regions,
+            'result' => 'ok'
+        ]);
 	}
 
 	/*public function getCity(Request $request){
@@ -732,6 +638,13 @@ class UserController extends Controller
 	}*/
 
 	public function getCity(Request $request){
+        if($request->lang === 'en'){
+            return response()->json([
+                'data' => null,
+                'result' => 'not_found'
+            ]);
+        }
+
 		$lang = $request->lang=='uk'?'ua':'ru';
 		$region = UserRegion::where('iso',$request->region)->first();
 

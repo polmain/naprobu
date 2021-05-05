@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App;
+use App\Entity\Collection\CountryCollection;
+use App\Services\LanguageServices\AlternativeUrlService;
 use Cookie;
 use App\Library\Users\UserRating;
 use App\User;
@@ -57,6 +59,7 @@ class RegisterController extends Controller
 		$locale = App::getLocale();
 
 		$countries = App\Model\User\UserCountry::all();
+        $countryCollection = CountryCollection::getInstance();
 
 		$page = Page::where([
 			['url','registration'],
@@ -77,28 +80,15 @@ class RegisterController extends Controller
 			]
 		);
 
+        $routes = AlternativeUrlService::generateReplyRoutes('registration/');
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('registration'));
-
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('auth.register',[
 			'page' => $page,
-			'alternet_url' => $alternet_url,
-			'countries'	=> $countries
+			'alternativeUrls' => $alternativeUrls,
+			'countries'	=> $countries,
+			'countryCollection'	=> $countryCollection,
 		]);
 	}
 
@@ -148,7 +138,7 @@ class RegisterController extends Controller
 	protected function registered(Request $request, $user)
 	{
 		$locale = App::getLocale();
-		
+
 		$this->user_rating($user);
 		$user->makeExployee('user');
 
@@ -162,27 +152,14 @@ class RegisterController extends Controller
 
 		$this->guard()->logout();
 
-		$lang = ($locale == 'ru')?'ua':'ru';
-		//разбиваем на массив по разделителю
-		$segments = explode('/', route('home'));
+        $routes = AlternativeUrlService::generateReplyRoutes('');
 
-		//Если URL (где нажали на переключение языка) содержал корректную метку языка
-		if (in_array($segments[3], App\Http\Middleware\LocaleMiddleware::$languages)) {
-			unset($segments[3]); //удаляем метку
-		}
-
-		//Добавляем метку языка в URL (если выбран не язык по-умолчанию)
-		if ($lang != App\Http\Middleware\LocaleMiddleware::$mainLanguage){
-			array_splice($segments, 3, 0, $lang);
-		}
-
-		//формируем полный URL
-		$alternet_url = implode("/", $segments);
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
 		return view('message',[
 			'header'	=>	trans('page_message.registered_header'),
 			'message'	=>	trans('page_message.registered_message',['email' => $user->email]),
-			'alternet_url' => $alternet_url
+			'alternativeUrls' => $alternativeUrls
 		]);
 	}
 

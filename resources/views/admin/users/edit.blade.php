@@ -18,6 +18,14 @@
                     <div class="box-body">
 
                         <div class="form-group">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <label>
+                                    <input type="checkbox" class="minimal-red" name="isNewsletter" value="true"{{($user->isNewsletter)?" checked=checked":""}}>
+                                    Рассылка на email
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="login" class="col-sm-3 control-label ">Логин</label>
 
                             <div class="col-sm-9">
@@ -114,7 +122,7 @@
         </div><!-- /.col -->
         <div class='col-md-6'>
             <!-- Box -->
-            <form action="{{route('adm_change_status',['user_id'    =>  $user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
+            <form action="{{route('adm_change_status',['user_id' => $user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
                 {{ csrf_field() }}
             <div class="box box-warning collapsed-box">
                 <div class="box-header with-border">
@@ -244,7 +252,7 @@
                 </div>
             </form>
 
-            <form action="{{route('adm_add_ratting',['user_id'    =>  $user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
+            <form action="{{route('adm_add_ratting',['user_id' => $user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="box box-warning collapsed-box">
                     <div class="box-header with-border">
@@ -258,13 +266,17 @@
                     </div>
                     <div class="box-body">
                         <div class="form-group row">
-                        <div class="col-md-6">
-                                <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> За что баллы<span class="input-request">*</span></label>
-                                <input type="text" class="form-control" name="name_ru" required>
+                        <div class="col-md-4">
+                            <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> За что баллы<span class="input-request">*</span></label>
+                            <input type="text" class="form-control" name="name_ru" required>
                         </div>
-                        <div class="col-md-6">
-                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> За что баллы<span class="input-request">*</span></label>
-                                <input type="text" class="form-control" name="name_ua" required>
+                        <div class="col-md-4">
+                            <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> За что баллы<span class="input-request">*</span></label>
+                            <input type="text" class="form-control" name="name_ua" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> За что баллы<span class="input-request">*</span></label>
+                            <input type="text" class="form-control" name="name_en" required>
                         </div>
                         </div>
                         <div class="col-md-12">

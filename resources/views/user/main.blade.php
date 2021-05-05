@@ -1,8 +1,4 @@
 @extends('layouts.main')
-@section('lang_href',$alternet_url)
-@section('head')
-    <link rel="alternate" href="{{$alternet_url}}" hreflang="{{(App::getLocale() == 'ru')?'uk':'ru'}}-UA" />
-@endsection
 @section('content')
 <section class="breadcrumb-box mb-4">
     <div class="container">
@@ -28,7 +24,7 @@
                                     @lang('user.user_rating_count')
                                 </div>
                                 <div class="user-page-block-value">
-                                    {{Auth::user()->current_rating}} {{Lang::choice('user.rating_point',Auth::user()->current_rating)}}
+                                    {{Auth::user()->history->sum('score')}} {{Lang::choice('user.rating_point',Auth::user()->history->sum('score'))}}
                                 </div>
                             </div>
                         </div>
@@ -38,6 +34,7 @@
                             @include("user.include.rating_scale")
                         </div>
                     </div>
+                    @auth
                     @if(!Auth::user()->hasRole('expert'))
                     <div class="user-page-block text-center">
                         <div class="user-page-title user-page-title-ref">
@@ -45,6 +42,7 @@
                         </div>
                     </div>
                     @endif
+                    @endauth
                     <div class="col-12">
                         <div class="row">
                         <form method="POST" id="user_data_form" action="{{ route('user.data_save') }}" class="form-user-edit-data">
@@ -82,15 +80,25 @@
 
                                                 $hasCountry = false;
                                             @endphp
-
-                                            @foreach($countries as $country)
-                                                @php
-                                                    if($country->name_ru == Auth::user()->country || $country->name_ua == Auth::user()->country){
-                                                        $hasCountry = true;
-                                                    }
-                                                @endphp
-                                                <option value="{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}" data-iso="{{$country->iso}}" @if($country->name_ru == Auth::user()->country || $country->name_ua == Auth::user()->country) selected="selected" @endif>{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}</option>
-                                            @endforeach
+                                            @if(App::getLocale() === 'en')
+                                                @foreach($countryCollection as $country)
+                                                    @php
+                                                        if($country->getName() == Auth::user()->country){
+                                                            $hasCountry = true;
+                                                        }
+                                                    @endphp
+                                                    <option value="{{$country->getName()}}">{{$country->getName()}}</option>
+                                                @endforeach
+                                            @else
+                                                @foreach($countries as $country)
+                                                    @php
+                                                        if($country->name_ru == Auth::user()->country || $country->name_ua == Auth::user()->country){
+                                                            $hasCountry = true;
+                                                        }
+                                                    @endphp
+                                                    <option value="{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}" data-iso="{{$country->iso}}" @if($country->name_ru == Auth::user()->country || $country->name_ua == Auth::user()->country) selected="selected" @endif>{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}</option>
+                                                @endforeach
+                                            @endif
                                             @if(!$hasCountry)
                                                 <option value="{{Auth::user()->country}}" selected="selected">{{Auth::user()->country}}</option>
                                             @endif
@@ -157,7 +165,7 @@
 @section('scripts')
     <script>
 		$(document).ready(function () {
-			var lang = "{{(App::getLocale() == 'ru'?'ru':'uk')}}";
+            var lang = "{{(App::getLocale() == 'ua'?'uk':App::getLocale())}}";
 
 			$("#country").change(function() {
 				var country = $('option:selected', this).data('iso');
@@ -206,6 +214,16 @@
                                     $("#city_select").html('');
                                 }
 
+                            }else{
+                                $("#region").removeAttr('disabled');
+                                $("#region_select").addClass('d-none');
+                                $("#region").removeClass('d-none');
+
+                                $("#city").removeAttr('disabled');
+                                $("#city_select").addClass('d-none');
+                                $("#city").removeClass('d-none');
+                                $("#city_select").attr('disabled','disabled');
+                                $("#city_select").html('');
                             }
                         },
                         error: function (xhr, str) {

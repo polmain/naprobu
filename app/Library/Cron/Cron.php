@@ -23,6 +23,7 @@ use App\Library\Users\Notification;
 use App\Mail\UserNotificationMail;
 use Illuminate\Support\Facades\Mail;
 use App\Model\Queue;
+use Throwable;
 
 class Cron
 {
@@ -175,14 +176,14 @@ class Cron
 
 		$users = User::where([
 			['id','>',$queue->start],
-			['id','<=',$queue->start + 150],
+			['id','<=',$queue->start + 50],
 			['status_id','<>',5],
 			['isNewsletter',1],
 		])->get();
-		if($queue->start + 150 > User::count()){
+		if($queue->start + 50 > User::count()){
 			$queue->delete();
 		}else{
-			$queue->start += 150;
+			$queue->start += 50;
 			$queue->save();
 		}
 		foreach ($users as $user)
@@ -203,7 +204,12 @@ class Cron
 				Notification::send('project_start_register', $user, 1, $link, ['project' => $projectName]);
 				if (isset($user->email) && $user->isNewsletter)
 				{
-					Mail::to($user)->send(new UserNotificationMail($user, 'project_start_register', url('/') . $link, ['project' => $projectName, 'end_registration_time' => Carbon::parse($project->end_registration_time)->format('H:i d.m.Y')]));
+                    try {
+                        Mail::to($user)->send(new UserNotificationMail($user, 'project_start_register', url('/') . $link, ['project' => $projectName, 'end_registration_time' => Carbon::parse($project->end_registration_time)->format('H:i d.m.Y')]));
+                    }catch (Throwable $exception)
+                    {
+
+                    }
 				}
 			}
 		}

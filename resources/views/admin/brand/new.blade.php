@@ -15,23 +15,31 @@
                     </div>
                     <div class="box-body">
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Название Брэнда<span class="input-request">*</span></label>
                                 <input type="text" id="name-ru" name="name" class="form-control required" placeholder="Введите название Брэнда...">
                             </div>
-                            <div class="col-md-6">
-                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название Брэнда<span class="input-request">*</span></label>
-                                <input type="text" id="name-ua" name="name_ua" class="form-control required" placeholder="Введите название Брэнда...">
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название Брэнда</label>
+                                <input type="text" id="name-ua" name="name_ua" class="form-control" placeholder="Введите название Брэнда...">
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Название Брэнда</label>
+                                <input type="text" id="name-en" name="name_en" class="form-control" placeholder="Введите название Брэнда...">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Alt Брэнда<span class="input-request">*</span></label>
                                 <input type="text" id="name-ru" name="alt" class="form-control required" placeholder="Введите alt Брэнда...">
                             </div>
-                            <div class="col-md-6">
-                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Alt Брэнда<span class="input-request">*</span></label>
-                                <input type="text" id="name-ua" name="alt_ua" class="form-control required" placeholder="Введите alt Брэнда...">
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Alt Брэнда</label>
+                                <input type="text" id="name-ua" name="alt_ua" class="form-control " placeholder="Введите alt Брэнда...">
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Alt Брэнда</label>
+                                <input type="text" id="name-en" name="alt_en" class="form-control " placeholder="Введите alt Брэнда...">
                             </div>
                         </div>
                         <div class="row">
@@ -51,6 +59,7 @@
                         <div class="form-group">
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs pull-right">
+                                    <li><a href="#text_3-3" data-toggle="tab"><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"></a></li>
                                     <li><a href="#text_2-2" data-toggle="tab"><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"></a></li>
                                     <li class="active"><a href="#text_1-1" data-toggle="tab"><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"></a></li>
                                     <li class="pull-left header"><label>Отзыв</label></li>
@@ -62,6 +71,10 @@
                                     <!-- /.tab-pane -->
                                     <div class="tab-pane" id="text_2-2">
                                         <textarea class="editor" name="review_ua" rows="10" cols="80"></textarea>
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                    <div class="tab-pane" id="text_3-3">
+                                        <textarea class="editor" name="review_en" rows="10" cols="80"></textarea>
                                     </div>
                                     <!-- /.tab-pane -->
                                 </div>

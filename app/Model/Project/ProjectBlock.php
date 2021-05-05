@@ -15,6 +15,6 @@ class ProjectBlock extends Model
 	}
 
 	public function translate(){
-		return $this->hasOne('App\Model\Project\ProjectBlock', 'rus_lang_id');
+		return $this->hasMany('App\Model\Project\ProjectBlock', 'rus_lang_id');
 	}
 }

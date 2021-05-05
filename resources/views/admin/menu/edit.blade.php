@@ -33,24 +33,32 @@
                                 </div>
                                 <div class="question-body">
                                     <div class="form-group row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Подпись<span class="input-request">*</span></label>
                                             <input type="text" name="item_label[{{$item->id}}]" class="form-control required" placeholder="Введите подпись..." value="{{$item->label}}">
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Подпись<span class="input-request">*</span></label>
-                                            <input type="text" name="item_label_ua[{{$item->id}}]" class="form-control required" placeholder="Введите подпись..." value="{{$item->translates->first()->label}}">
+                                            <input type="text" name="item_label_ua[{{$item->id}}]" class="form-control required" placeholder="Введите подпись..." value="{{$item->translates->firstWhere('lang', 'ua')->label}}">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Подпись<span class="input-request">*</span></label>
+                                            <input type="text" name="item_label_en[{{$item->id}}]" class="form-control required" placeholder="Введите подпись..." value="{{$item->translates->firstWhere('lang', 'en')->label}}">
                                         </div>
                                     </div>
                                     @if($menu->id == 3)
                                         <div class="form-group row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Ссылка<span class="input-request">*</span></label>
                                                 <input type="text" name="item_link[{{$item->id}}]" class="form-control required" placeholder="Введите ссылку..." value="{{$item->link}}">
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Ссылка<span class="input-request">*</span></label>
-                                                <input type="text" name="item_link_ua[{{$item->id}}]" class="form-control required" placeholder="Введите ссылку..." value="{{$item->translates->first()->link}}">
+                                                <input type="text" name="item_link_ua[{{$item->id}}]" class="form-control required" placeholder="Введите ссылку..." value="{{$item->translates->firstWhere('lang', 'ua')->link}}">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Ссылка<span class="input-request">*</span></label>
+                                                <input type="text" name="item_link_en[{{$item->id}}]" class="form-control required" placeholder="Введите ссылку..." value="{{$item->translates->firstWhere('lang', 'en')->link}}">
                                             </div>
                                         </div>
                                     @endif

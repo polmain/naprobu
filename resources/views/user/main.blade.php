@@ -24,7 +24,7 @@
                                     @lang('user.user_rating_count')
                                 </div>
                                 <div class="user-page-block-value">
-                                    {{Auth::user()->current_rating}} {{Lang::choice('user.rating_point',Auth::user()->current_rating)}}
+                                    {{Auth::user()->history->sum('score')}} {{Lang::choice('user.rating_point',Auth::user()->history->sum('score'))}}
                                 </div>
                             </div>
                         </div>

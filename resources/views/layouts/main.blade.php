@@ -373,7 +373,7 @@
         };
 
     </script>
-    <script src="{{ asset ("/public/js/app.min.js") }}?v=1.1.3" type="text/javascript"></script>
+    <script src="{{ asset ("/public/js/app.min.js") }}?v=1.1.4" type="text/javascript"></script>
 @yield('scripts')
 </body>
 </html>

@@ -20,6 +20,7 @@
 /* End Auth */
 
 Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications']],function (){
+
 		Route::group(['middleware'=>'role:admin'],function(){
 			/* Users pages */
 			Route::get('/users/moderator/', 'Admin\UsersController@moderators')->name('adm_users_moderators');

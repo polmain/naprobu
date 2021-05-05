@@ -1,7 +1,6 @@
 @extends('admin.layouts.layout')
 
 @section('content')
-
     <div class='row'>
         <form action="{{route('adm_project_save',['project_id'=>$project->id])}}" method="post" enctype="multipart/form-data" class="validation-form">
             {{ csrf_field() }}

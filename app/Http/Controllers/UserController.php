@@ -600,15 +600,22 @@ class UserController extends Controller
 	}*/
 
 	public function getRegion(Request $request){
-		$lang = $request->lang=='uk'?'ua':'ru';
-		$country = UserCountry::where('iso',$request->country)->first();
+	    if($request->lang === 'en'){
+            return response()->json([
+                'data' => null,
+                'result' => 'not_found'
+            ]);
+        }
 
-		$regions = UserRegion::select('name_'.$lang.' as name','iso as id')->where('country_id',$country->id)->get();
+        $lang = $request->lang=='uk'?'ua':'ru';
+        $country = UserCountry::where('iso',$request->country)->first();
 
-		return response()->json([
-			'data' => $regions,
-			'result' => 'ok'
-		]);
+        $regions = UserRegion::select('name_'.$lang.' as name','iso as id')->where('country_id',$country->id)->get();
+
+        return response()->json([
+            'data' => $regions,
+            'result' => 'ok'
+        ]);
 	}
 
 	/*public function getCity(Request $request){
@@ -631,6 +638,13 @@ class UserController extends Controller
 	}*/
 
 	public function getCity(Request $request){
+        if($request->lang === 'en'){
+            return response()->json([
+                'data' => null,
+                'result' => 'not_found'
+            ]);
+        }
+
 		$lang = $request->lang=='uk'?'ua':'ru';
 		$region = UserRegion::where('iso',$request->region)->first();
 

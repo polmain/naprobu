@@ -18,6 +18,9 @@ return [
 	'go_to_project'		=> 'Перейти к проектам',
 	'go_to_home'		=> 'Перейти на главную',
 
-	//Заголовки
+    'purecookieTitle'   => 'Cookies.',
+    'purecookieDesc'   => 'Используя этот сайт, вы автоматически соглашаетесь с тем, что мы используем файлы cookie.',
+    'purecookieLink'   => '<a href="/ru/cookie/" target="_blank">Зачем?</a>',
+    'purecookieButton'   => 'Понял'
 
 ];

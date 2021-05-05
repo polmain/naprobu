@@ -20063,3 +20063,77 @@ form .btn-blue:hover {
 }
 
 /* end error */
+
+/* Cookie */
+
+.cookieConsentContainer {
+    z-index: 999;
+    width: 350px;
+    min-height: 20px;
+    box-sizing: border-box;
+    padding: 30px 30px 30px 30px;
+    background: #052b5f;
+    overflow: hidden;
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    display: none;
+}
+
+.cookieConsentContainer .cookieTitle a {
+    color: #FFFFFF;
+    font-size: 22px;
+    line-height: 20px;
+    display: block;
+}
+
+.cookieConsentContainer .cookieDesc p {
+    margin: 0;
+    padding: 0;
+    color: #FFFFFF;
+    font-size: 13px;
+    line-height: 20px;
+    display: block;
+    margin-top: 10px;
+}
+.cookieConsentContainer .cookieDesc a {
+      color: #FFFFFF;
+      text-decoration: underline;
+  }
+
+.cookieConsentContainer .cookieButton a {
+    display: inline-block;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 14px;
+    background: #f9423a;
+    box-sizing: border-box;
+    padding: 15px 24px;
+    text-align: center;
+    transition: background 0.3s;
+}
+
+.cookieConsentContainer .cookieButton a:hover {
+    cursor: pointer;
+    opacity: 0.8;
+    color: #FFFFFF;
+}
+
+
+
+@media (max-width: 980px) {
+
+    .cookieConsentContainer {
+
+        bottom: 0px !important;
+
+        left: 0px !important;
+
+        width: 100%  !important;
+
+    }
+
+}
+
+/* end cookie */

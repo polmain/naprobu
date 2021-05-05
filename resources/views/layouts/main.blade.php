@@ -363,7 +363,15 @@
 		var readMore = {
 			more: "@lang('global.read_more')",
 			less: "@lang('global.read_less')",
-        }
+        };
+
+        var purecookie = {
+            title: "@lang('global.purecookieTitle')",
+            desc: "@lang('global.purecookieDesc')",
+            link: '@lang('global.purecookieLink')',
+            button: "@lang('global.purecookieButton')",
+        };
+
     </script>
     <script src="{{ asset ("/public/js/app.min.js") }}?v=1.1.3" type="text/javascript"></script>
 @yield('scripts')

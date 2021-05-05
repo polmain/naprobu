@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App;
+use App\Entity\Collection\CountryCollection;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Cookie;
 use App\Library\Users\UserRating;
@@ -58,6 +59,7 @@ class RegisterController extends Controller
 		$locale = App::getLocale();
 
 		$countries = App\Model\User\UserCountry::all();
+        $countryCollection = CountryCollection::getInstance();
 
 		$page = Page::where([
 			['url','registration'],
@@ -85,7 +87,8 @@ class RegisterController extends Controller
 		return view('auth.register',[
 			'page' => $page,
 			'alternativeUrls' => $alternativeUrls,
-			'countries'	=> $countries
+			'countries'	=> $countries,
+			'countryCollection'	=> $countryCollection,
 		]);
 	}
 

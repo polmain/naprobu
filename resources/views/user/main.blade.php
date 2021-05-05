@@ -78,15 +78,25 @@
 
                                                 $hasCountry = false;
                                             @endphp
-
-                                            @foreach($countries as $country)
-                                                @php
-                                                    if($country->name_ru == Auth::user()->country || $country->name_ua == Auth::user()->country){
-                                                        $hasCountry = true;
-                                                    }
-                                                @endphp
-                                                <option value="{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}" data-iso="{{$country->iso}}" @if($country->name_ru == Auth::user()->country || $country->name_ua == Auth::user()->country) selected="selected" @endif>{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}</option>
-                                            @endforeach
+                                            @if(App::getLocale() === 'en')
+                                                @foreach($countryCollection as $country)
+                                                    @php
+                                                        if($country->getName() == Auth::user()->country){
+                                                            $hasCountry = true;
+                                                        }
+                                                    @endphp
+                                                    <option value="{{$country->getName()}}">{{$country->getName()}}</option>
+                                                @endforeach
+                                            @else
+                                                @foreach($countries as $country)
+                                                    @php
+                                                        if($country->name_ru == Auth::user()->country || $country->name_ua == Auth::user()->country){
+                                                            $hasCountry = true;
+                                                        }
+                                                    @endphp
+                                                    <option value="{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}" data-iso="{{$country->iso}}" @if($country->name_ru == Auth::user()->country || $country->name_ua == Auth::user()->country) selected="selected" @endif>{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}</option>
+                                                @endforeach
+                                            @endif
                                             @if(!$hasCountry)
                                                 <option value="{{Auth::user()->country}}" selected="selected">{{Auth::user()->country}}</option>
                                             @endif
@@ -153,7 +163,7 @@
 @section('scripts')
     <script>
 		$(document).ready(function () {
-			var lang = "{{(App::getLocale() == 'ru'?'ru':'uk')}}";
+            var lang = "{{(App::getLocale() == 'ua'?'uk':App::getLocale())}}";
 
 			$("#country").change(function() {
 				var country = $('option:selected', this).data('iso');
@@ -202,6 +212,16 @@
                                     $("#city_select").html('');
                                 }
 
+                            }else{
+                                $("#region").removeAttr('disabled');
+                                $("#region_select").addClass('d-none');
+                                $("#region").removeClass('d-none');
+
+                                $("#city").removeAttr('disabled');
+                                $("#city_select").addClass('d-none');
+                                $("#city").removeClass('d-none');
+                                $("#city_select").attr('disabled','disabled');
+                                $("#city_select").html('');
                             }
                         },
                         error: function (xhr, str) {

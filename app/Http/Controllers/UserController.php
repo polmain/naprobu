@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App;
+use App\Entity\Collection\CountryCollection;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Auth;
 use Cookie;
@@ -38,6 +39,7 @@ class UserController extends Controller
 			$review->where('user_id',$user->id);
 		})->count();
 		$ratingStatuses = UserRatingStatus::with(['translate'])->where('lang','ru')->get();
+        $countryCollection = CountryCollection::getInstance();
 
 		$locale = App::getLocale();
 		$countries = App\Model\User\UserCountry::all();
@@ -64,6 +66,7 @@ class UserController extends Controller
     		'ratingStatuses' => $ratingStatuses,
 			'alternativeUrls' => $alternativeUrls,
 			'countries' => $countries,
+			'countryCollection' => $countryCollection,
 		]);
 	}
 
@@ -597,15 +600,22 @@ class UserController extends Controller
 	}*/
 
 	public function getRegion(Request $request){
-		$lang = $request->lang=='uk'?'ua':'ru';
-		$country = UserCountry::where('iso',$request->country)->first();
+	    if($request->lang === 'en'){
+            return response()->json([
+                'data' => null,
+                'result' => 'not_found'
+            ]);
+        }
 
-		$regions = UserRegion::select('name_'.$lang.' as name','iso as id')->where('country_id',$country->id)->get();
+        $lang = $request->lang=='uk'?'ua':'ru';
+        $country = UserCountry::where('iso',$request->country)->first();
 
-		return response()->json([
-			'data' => $regions,
-			'result' => 'ok'
-		]);
+        $regions = UserRegion::select('name_'.$lang.' as name','iso as id')->where('country_id',$country->id)->get();
+
+        return response()->json([
+            'data' => $regions,
+            'result' => 'ok'
+        ]);
 	}
 
 	/*public function getCity(Request $request){
@@ -628,6 +638,13 @@ class UserController extends Controller
 	}*/
 
 	public function getCity(Request $request){
+        if($request->lang === 'en'){
+            return response()->json([
+                'data' => null,
+                'result' => 'not_found'
+            ]);
+        }
+
 		$lang = $request->lang=='uk'?'ua':'ru';
 		$region = UserRegion::where('iso',$request->region)->first();
 

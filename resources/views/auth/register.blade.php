@@ -52,10 +52,15 @@
 
                                     <label for="country">@lang("registration.country")</label>
                                     <select name="country" id="country" class="form-control select2">
-
-                                       @foreach($countries as $country)
-                                            <option value="{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}" data-iso="{{$country->iso}}" @if($country->iso == 'UA') selected="selected" @endif>{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}</option>
-                                        @endforeach
+                                        @if(App::getLocale() === 'en')
+                                                @foreach($countryCollection as $country)
+                                                    <option value="{{$country->getName()}}">{{$country->getName()}}</option>
+                                                @endforeach
+                                            @else
+                                                @foreach($countries as $country)
+                                                    <option value="{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}" data-iso="{{$country->iso}}" @if($country->iso == 'UA') selected="selected" @endif>{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}</option>
+                                                @endforeach
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="form-group ">
@@ -115,7 +120,7 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
-        	var lang = "{{(App::getLocale() == 'ru'?'ru':'uk')}}";
+        	var lang = "{{(App::getLocale() == 'ua'?'uk':App::getLocale())}}";
 
             $("#country").change(function(){
             	var country = $('option:selected', this).data('iso');
@@ -140,19 +145,19 @@
 									$("#region_select").append('<option value="'+e.name+'" data-iso="'+e.id+'">'+e.name+'</option>')
 								})
 								$("#region_select").change();
-                            }else{
-								$("#region").removeAttr('disabled');
-								$("#region_select").addClass('d-none');
-								$("#region").removeClass('d-none');
-
-								$("#city").removeAttr('disabled');
-								$("#city_select").addClass('d-none');
-								$("#city").removeClass('d-none');
-								$("#city_select").attr('disabled','disabled');
-								$("#city_select").html('');
                             }
 
-						}
+						}else{
+                            $("#region").removeAttr('disabled');
+                            $("#region_select").addClass('d-none');
+                            $("#region").removeClass('d-none');
+
+                            $("#city").removeAttr('disabled');
+                            $("#city_select").addClass('d-none');
+                            $("#city").removeClass('d-none');
+                            $("#city_select").attr('disabled','disabled');
+                            $("#city_select").html('');
+                        }
 					},
 					error:  function(xhr, str){
 						console.log(xhr);

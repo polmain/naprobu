@@ -34,6 +34,7 @@
                             @include("user.include.rating_scale")
                         </div>
                     </div>
+                    @auth
                     @if(!Auth::user()->hasRole('expert'))
                     <div class="user-page-block text-center">
                         <div class="user-page-title user-page-title-ref">
@@ -41,6 +42,7 @@
                         </div>
                     </div>
                     @endif
+                    @endauth
                     <div class="col-12">
                         <div class="row">
                         <form method="POST" id="user_data_form" action="{{ route('user.data_save') }}" class="form-user-edit-data">

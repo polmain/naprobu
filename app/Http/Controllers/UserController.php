@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App;
+use App\Entity\Collection\CountryCollection;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Auth;
 use Cookie;
@@ -38,6 +39,7 @@ class UserController extends Controller
 			$review->where('user_id',$user->id);
 		})->count();
 		$ratingStatuses = UserRatingStatus::with(['translate'])->where('lang','ru')->get();
+        $countryCollection = CountryCollection::getInstance();
 
 		$locale = App::getLocale();
 		$countries = App\Model\User\UserCountry::all();
@@ -64,6 +66,7 @@ class UserController extends Controller
     		'ratingStatuses' => $ratingStatuses,
 			'alternativeUrls' => $alternativeUrls,
 			'countries' => $countries,
+			'countryCollection' => $countryCollection,
 		]);
 	}
 

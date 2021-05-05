@@ -78,15 +78,25 @@
 
                                                 $hasCountry = false;
                                             @endphp
-
-                                            @foreach($countries as $country)
-                                                @php
-                                                    if($country->name_ru == Auth::user()->country || $country->name_ua == Auth::user()->country){
-                                                        $hasCountry = true;
-                                                    }
-                                                @endphp
-                                                <option value="{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}" data-iso="{{$country->iso}}" @if($country->name_ru == Auth::user()->country || $country->name_ua == Auth::user()->country) selected="selected" @endif>{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}</option>
-                                            @endforeach
+                                            @if(App::getLocale() === 'en')
+                                                @foreach($countryCollection as $country)
+                                                    @php
+                                                        if($country->getName == Auth::user()->country){
+                                                            $hasCountry = true;
+                                                        }
+                                                    @endphp
+                                                    <option value="{{$country->getName()}}">{{$country->getName()}}</option>
+                                                @endforeach
+                                            @else
+                                                @foreach($countries as $country)
+                                                    @php
+                                                        if($country->name_ru == Auth::user()->country || $country->name_ua == Auth::user()->country){
+                                                            $hasCountry = true;
+                                                        }
+                                                    @endphp
+                                                    <option value="{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}" data-iso="{{$country->iso}}" @if($country->name_ru == Auth::user()->country || $country->name_ua == Auth::user()->country) selected="selected" @endif>{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}</option>
+                                                @endforeach
+                                            @endif
                                             @if(!$hasCountry)
                                                 <option value="{{Auth::user()->country}}" selected="selected">{{Auth::user()->country}}</option>
                                             @endif

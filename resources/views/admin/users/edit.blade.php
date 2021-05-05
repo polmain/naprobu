@@ -105,6 +105,12 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" class="minimal-red" name="isNewsletter" value="true"{{($user->isNewsletter)?" checked=checked":""}}>
+                                Рассылка на email
+                            </label>
+                        </div>
                     </div><!-- /.box-body -->
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary pull-right">Сохранить</button>

@@ -247,6 +247,7 @@ class UsersController extends Controller
 		$user->city = $request->city;
 		$user->region = $request->region;
 		$user->status_id = 1;
+		$user->isNewsletter = $request->has('isNewsletter');
 
 		$pass	= $request->password;
 		if(isset($pass)){

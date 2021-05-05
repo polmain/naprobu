@@ -18,6 +18,14 @@
                     <div class="box-body">
 
                         <div class="form-group">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <label>
+                                    <input type="checkbox" class="minimal-red" name="isNewsletter" value="true"{{($user->isNewsletter)?" checked=checked":""}}>
+                                    Рассылка на email
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="login" class="col-sm-3 control-label ">Логин</label>
 
                             <div class="col-sm-9">

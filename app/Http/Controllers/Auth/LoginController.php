@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Model\Page;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -48,9 +49,15 @@ class LoginController extends Controller
         $locale = App::getLocale();
         $routes = AlternativeUrlService::generateReplyRoutes('login/');
 
+        $page = Page::where([
+            ['url','login'],
+            ['lang',$locale],
+        ])->first();
+
         $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
         return view('auth.login',[
+            'page'  => $page,
             'alternativeUrls' => $alternativeUrls
         ]);
     }

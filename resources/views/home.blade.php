@@ -244,7 +244,7 @@
         </div>
     </section>
     @endif
-    @if($posts->count() > 0)
+    @if($posts->count() > 0 && !$international)
     <section class="main-blog">
         <div class="container">
             <h2>{{trans('home.blog_mainpage')}}</h2>

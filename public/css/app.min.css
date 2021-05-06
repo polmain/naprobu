@@ -15020,7 +15020,7 @@ header .auth-header.user-header .user-header-menu a:hover {
 @media screen and (max-width: 575px) {
     .social-links-fixed {
         top: unset;
-        bottom: 82px; /*width: auto; height: 32px; li{ width: 32px; }*/
+        bottom: 135px; /*width: auto; height: 32px; li{ width: 32px; }*/
     }
 }
 
@@ -15028,7 +15028,7 @@ header .auth-header.user-header .user-header-menu a:hover {
 .to-up {
     position: fixed;
     right: 5px;
-    bottom: 35px;
+    bottom: 90px;
     display: none;
     width: 32px;
     height: 32px;

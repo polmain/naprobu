@@ -60,9 +60,7 @@ class Cron
 
 			if($start_registration_time <= $now && $end_registration_time >= $now && $project->status_id != 2){
 				$project->status_id = 2;
-				$project->translate->status_id = 9;
-				$project->translate->save();
-				if($project->type != 'only-blogger' && $project->id != 263){
+				if($project->type != 'only-blogger' && $project->id != 263 && $project->audience->isUkraine()){
 					$project->save();
 					$queue = new Queue();
 					$queue->project_id = $project->id;
@@ -72,18 +70,12 @@ class Cron
 
 			} elseif ($end_registration_time <=  $now && $start_test_time >= $now && $project->status_id != 7){
 				$project->status_id = 7;
-				$project->translate->status_id = 14;
-				$project->translate->save();
 			} elseif ($start_test_time <=  $now && $start_report_time >= $now && $project->status_id != 6){
 				$project->status_id = 6;
-				$project->translate->status_id = 13;
-				$project->translate->save();
 
 			} elseif ($start_report_time <=  $now && $end_project_time >= $now && $project->status_id != 5){
 				$project->status_id = 5;
 				$project->save();
-				$project->translate->status_id = 12;
-				$project->translate->save();
 
 				$projectRequests = $project->requests;
 				$questionnaire = $project->questionnaires->where('type_id',3)->first();
@@ -92,10 +84,14 @@ class Cron
 					if($projectRequest->status_id >= 7){
 						$link = "/ru/projects/questionnaire/".$questionnaire->id.'/';
 						$projectName = $project->name;
-						if ($projectRequest->user->lang == "ua")
+						if ($projectRequest->user->lang !== "ru")
 						{
-							$link = "/projects/questionnaire/".$questionnaire->id.'/';
-							$projectName = $project->translate->name;
+                            $projectTranslate = $project->translate->firstWhere('lang', $projectRequest->user->lang);
+                            if($projectTranslate){
+                                $link = ($projectRequest->user->lang === "ua"?'':'/'.$projectRequest->user->lang)."/projects/questionnaire/".$questionnaire->id.'/';
+                                $projectName = $projectTranslate->name;
+                            }
+
 						}
 						if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter){
 							Mail::to($projectRequest->user)->send(new UserNotificationMail($projectRequest->user, 'questionnaire_report', url('/').$link, ['project' => $projectName]));
@@ -105,8 +101,6 @@ class Cron
 				}
 			} elseif ($end_project_time <= $now && $project->status_id != 1){
 				$project->status_id = 1;
-				$project->translate->status_id = 8;
-				$project->translate->save();
 			}
 
 			$project->save();
@@ -196,10 +190,13 @@ class Cron
 			{
 				$link = "ru/projects/" . $project->url . '/';
 				$projectName = $project->name;
-				if ($user->lang == "ua")
+				if ($user->lang !== "ru")
 				{
-					$link = "projects/" . $project->translate->url . '/';
-					$projectName = $project->translate->name;
+                    $projectTranslate = $project->translate->firstWhere('lang', $user->lang);
+                    if($projectTranslate){
+                        $link = ($user->lang === "ua"?'':'/'.$user->lang)."projects/" . $projectTranslate->url . '/';
+                        $projectName = $projectTranslate->name;
+                    }
 				}
 				Notification::send('project_start_register', $user, 1, $link, ['project' => $projectName]);
 				if (isset($user->email) && $user->isNewsletter)
@@ -218,7 +215,6 @@ class Cron
 	public static function queueProjectMembership($queue){
 
 		$subpage = Project\Subpage::find($queue->project_id);
-		$translate = $subpage->translate;
 		$project = $subpage->project;
 
 		$lastId = Project\ProjectRequest::where([
@@ -245,10 +241,14 @@ class Cron
 		{
 			$link = "/ru/projects/".$project->url."/".$subpage->url.'/';
 			$projectName = $project->name;
-			if ($projectRequest->user->lang == "ua")
+			if ($projectRequest->user->lang !== "ru")
 			{
-				$link = "/projects/".$project->translate->url."/".$translate->url.'/';
-				$projectName = $project->translate->name;
+                $projectTranslate = $project->translate->firstWhere('lang', $projectRequest->user->lang);
+                $subpageTranslate = $subpage->translate->firstWhere('lang', $projectRequest->user->lang);
+                if($projectTranslate && $subpageTranslate){
+                    $link = ($projectRequest->user->lang === "ua"?'':'/'.$projectRequest->user->lang)."/projects/".$projectTranslate->url."/".$subpageTranslate->url.'/';
+                    $projectName = $projectTranslate->name;
+                }
 			}
 			if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter)
 			{
@@ -263,7 +263,6 @@ class Cron
 	public static function queueProjectContest($queue){
 
 		$subpage = Project\Subpage::find($queue->project_id);
-		$translate = $subpage->translate;
 		$project = $subpage->project;
 
 		$lastId = Project\ProjectRequest::where([
@@ -291,11 +290,15 @@ class Cron
 			$link = "/ru/projects/".$project->url."/".$subpage->url.'/';
 			$projectName = $project->name;
 			$contest = $subpage->name;
-			if ($projectRequest->user->lang == "ua")
+			if ($projectRequest->user->lang !== "ru")
 			{
-				$link = "/projects/".$project->translate->url."/".$translate->url.'/';
-				$projectName = $project->translate->name;
-				$contest = $translate->name;
+                $projectTranslate = $project->translate->firstWhere('lang', $projectRequest->user->lang);
+                $subpageTranslate = $subpage->translate->firstWhere('lang', $projectRequest->user->lang);
+                if($projectTranslate && $subpageTranslate){
+                    $link = ($projectRequest->user->lang === "ua"?'':'/'.$projectRequest->user->lang)."/projects/".$projectTranslate->url."/".$subpageTranslate->url.'/';
+                    $projectName = $projectTranslate->name;
+                    $contest = $subpageTranslate->name;
+                }
 			}
 			if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter)
 			{

@@ -76,6 +76,28 @@
 </ul>
 
 <div class="to-up"></div>
+<!-- Messenger Плагин чата Code -->
+<div id="fb-root"></div>
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            xfbml            : true,
+            version          : 'v10.0'
+        });
+    };
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/ru_RU/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+<!-- Your Плагин чата code -->
+<div class="fb-customerchat"
+     attribution="page_inbox"
+     page_id="255194487920301">
+</div>
 @auth
     @if(!env('APP_DEBUG', false))
     <div class="push-container">

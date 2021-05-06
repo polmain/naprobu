@@ -78,3 +78,44 @@
 
 @endsection
 
+@section('scripts')
+    @if($project->audience->isWord() && App::getLocale() === 'ru')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script>
+            const googleTranslateConfig = {
+                lang: "ru",
+            };
+            TranslateSetCookie("{{strtolower($project->country->getCode())}}")
+
+            function TranslateInit() {
+                // Инициализируем виджет с языком по умолчанию
+                new google.translate.TranslateElement({
+                    pageLanguage: googleTranslateConfig.lang,
+                });
+            }
+
+            function TranslateGetCode() {
+                // Если куки нет, то передаем дефолтный язык
+                let lang = ($.cookie('googtrans') != undefined && $.cookie('googtrans') != "null") ? $.cookie('googtrans') : googleTranslateConfig.lang;
+                return lang.substr(-2);
+            }
+
+            function TranslateClearCookie() {
+                $.cookie('googtrans', null);
+                $.cookie("googtrans", null, {
+                    domain: "." + document.domain,
+                });
+            }
+
+            function TranslateSetCookie(code) {
+                // Записываем куки /язык_который_переводим/язык_на_который_переводим
+                $.cookie('googtrans', "/auto/" + code);
+                $.cookie("googtrans", "/auto/" + code, {
+                    domain: "." + document.domain,
+                });
+            }
+
+        </script>
+        <script src="//translate.google.com/translate_a/element.js?cb=TranslateInit"></script>
+    @endif
+@endsection

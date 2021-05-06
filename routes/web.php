@@ -442,6 +442,7 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
 
 	Route::post('/project/password/','ProjectController@password')->name('project.password');
 	Route::post('/blog/password/','BlogController@password')->name('blog.password');
+    Route::post('/project/conversionLink/{id}/','ProjectController@conversionLink')->name('project.conversion_link');
 
 	Route::prefix(App\Http\Middleware\LocaleMiddleware::getLocale())->middleware('locale')->group(function($lang = 'ua') {
         Route::prefix(App\Http\Middleware\InternationalMiddleware::getInternational())->group(function($lang = 'ua'){

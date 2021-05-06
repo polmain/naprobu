@@ -39,6 +39,7 @@
                             <th width="40">Выбрать</th>
                             <th width="20">#</th>
                             <th>Текст</th>
+                            <th>Количество кликов</th>
                             <th>Проект</th>
                             <th width="20">Скрыт</th>
                             <th width="20"></th>
@@ -54,6 +55,7 @@
                                 </td>
                                 <td class="text-center"><a href="{{route('adm_project_links_edit',['subpage_id'=>$link->id])}}">{{$link->id}}</a></td>
                                 <td><a href="{{route('adm_project_links_edit',['subpage_id'=>$link->id])}}">{{$link->text}}</a></td>
+                                <td>{{$link->conversion}}</td>
                                 <td>{{$link->project->name}}</td>
                                 <td class="text-center">
                                     <label>

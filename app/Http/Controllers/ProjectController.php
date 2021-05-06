@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App;
 use App\Entity\ProjectAudienceEnum;
 use App\Library\Users\UserRating;
+use App\Model\Project\ProjectLink;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Cookie;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -473,5 +475,18 @@ class ProjectController extends Controller
 			UserRating::addAction('share_project', Auth::user());
 		}
 	}
+
+	public function conversionLink(int $id): JsonResponse
+    {
+        $projectLink = ProjectLink::find($id);
+        if($projectLink){
+            $projectLink->conversion++;
+            $projectLink->save();
+        }
+
+        return response()->json([
+            'result' => 'ok'
+        ]);
+    }
 
 }

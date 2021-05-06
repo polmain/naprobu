@@ -20137,3 +20137,33 @@ form .btn-blue:hover {
 }
 
 /* end cookie */
+
+/* social network modal */
+
+.social-modal li{
+    display: inline-block;
+    padding: 23.5px 20px;
+    position: relative;
+}
+
+.social-modal li a{
+    line-height: 1;
+    color: #052b5f;
+}
+
+.social-modal li a:hover{
+    opacity: 0.8;
+}
+
+.social-modal li a img{
+    border-radius: 5px;
+    height: 25px;
+    width: 25px;
+}
+
+.social-modal li a span{
+    line-height: 25px;
+    vertical-align: middle;
+}
+
+/* End social network modal */

@@ -7,7 +7,7 @@
     <meta content="{{csrf_token()}}" name="csrf-token">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <link rel="shortcut icon" href="{{{ asset('public/favicon.ico') }}}">
-    <link href="{{ asset("/public/css/app.min.css")}}?v=1.2.0" rel="stylesheet" type="text/css" />
+    <link href="{{ asset("/public/css/app.min.css")}}?v=1.2.1" rel="stylesheet" type="text/css" />
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -352,6 +352,33 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="social_subscribe" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@lang('modal.social_subscribe_header')</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <img src="{{asset('public/svg/icons/cross.svg')}}" alt="Cross">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="social-modal">
+                        <li class="facebook-modal">
+                            <a href="https://www.facebook.com/naprobu.ua/" target="_blank"><img src="{{asset('public/svg/icons/facebook.svg')}}" alt="Facebook"> <span>Facebook</span></a>
+                        </li>
+                        <li class="telegram-modal">
+                            <a href="https://t.me/naprobu_ua" target="_blank"><img src="{{asset('public/svg/icons/telegram.svg')}}" alt="Telegram"> <span>Telegram</span></a>
+                        </li>
+                        <li class="instagram-modal">
+                            <a href="https://www.instagram.com/naprobu.ua/" target="_blank"><img src="{{asset('public/svg/icons/instagram.svg')}}" alt="Instagram"> <span>Instagram</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
 		var feedbackValidate = {
 			required:  "@lang('validation.required')",
@@ -373,7 +400,7 @@
         };
 
     </script>
-    <script src="{{ asset ("/public/js/app.min.js") }}?v=1.2.0" type="text/javascript"></script>
+    <script src="{{ asset ("/public/js/app.min.js") }}?v=1.2.1" type="text/javascript"></script>
 @yield('scripts')
 </body>
 </html>

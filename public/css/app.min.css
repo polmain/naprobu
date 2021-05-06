@@ -20151,6 +20151,11 @@ form .btn-blue:hover {
     color: #052b5f;
 }
 
+.social-modal li a{
+    line-height: 1;
+    color: #030b3f;
+}
+
 .social-modal li a img{
     border-radius: 5px;
     height: 25px;

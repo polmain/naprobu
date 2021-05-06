@@ -375,9 +375,6 @@
                         </li>
                     </ul>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('global.close')</button>
-                </div>
             </div>
         </div>
     </div>

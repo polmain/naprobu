@@ -198,8 +198,8 @@
                     @endif
                 @endauth
 
-                @foreach($base->links->where('lang',$lang) as $links)
-                    <a href="{{$links->link}}" class="project-sidebar-link project-sidebar-link_blue" target="_blank">{{$links->text}}</a>
+                @foreach($base->links->where('lang',$lang) as $link)
+                    <a href="{{$link->link}}" class="project-sidebar-link project-sidebar-link_blue" target="_blank" data-id_link="{{route('project.conversion_link',['id'=>$lang==='ru'?$link->id:$link->rus_lang_id]) }}">{{$links->text}}</a>
                 @endforeach
 
 

@@ -79,7 +79,7 @@
 @endsection
 
 @section('scripts')
-    @if($project->audience->isWord() && $lang === 'ru')
+    @if($project->audience->isWord() && App::getLocale() === 'ru')
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
         <script>
             const googleTranslateConfig = {

@@ -374,7 +374,7 @@
         const googleTranslateConfig = {
             lang: "ru",
         };
-        TranslateSetCookie("{{$project->country->getIso()}}")
+        TranslateSetCookie("{{$project->country->getCode()}}")
 
         function TranslateInit() {
             // Инициализируем виджет с языком по умолчанию

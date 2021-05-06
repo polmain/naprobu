@@ -402,8 +402,5 @@
     </script>
     <script src="{{ asset ("/public/js/app.min.js") }}?v=1.2.0" type="text/javascript"></script>
 @yield('scripts')
-<script>
-    $('#social_subscribe').modal('show');
-</script>
 </body>
 </html>

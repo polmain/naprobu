@@ -37,4 +37,7 @@ return [
 	'brif_message_sends_title'	=>	'Запрос на Бриф отправлен',
 	'brif_message_sends_text'	=>	'Ожидайте Бриф на указанном e-mail адресе.',
 
+    //Бесящее окошко
+    'social_subscribe_header'   => 'Подпишитесь на нас'
+
 ];

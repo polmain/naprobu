@@ -385,7 +385,11 @@ class Cron
 		    if($user->phone){
                 Viber::create([
                     'phone' => $user->phone,
-                    'user_id' => $user->id
+                    'first_name'  => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'nickname' => $user->name,
+                    'email' => $user->email,
+                    'lang' => $user->lang
                 ]);
             }else{
 		        $user->delete();

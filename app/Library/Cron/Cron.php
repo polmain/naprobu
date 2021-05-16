@@ -125,6 +125,8 @@ class Cron
 					break;*/
 				case 'new_score':
 					static::userRating($queue);
+				case 'new_account_form':
+					static::newAccountForm($queue);
 			}
 
 
@@ -334,6 +336,31 @@ class Cron
 				Mail::to($user)->send(new NewPassword($user,$password));
 			}
 		}*/
+	}
+
+	public static function newAccountForm($queue){
+		$users = User::where([
+			['id','>',$queue->start],
+			['id','<=',$queue->start + 150],
+			['email','<>',null],
+			['isHide',0],
+		])->whereNotIn('id',[1,2,7,8,9,11,12,13,14,15,16,17,18,43718,45645, 45765, 45766, 46648, 47336, 47355, 47356, 48566, 66942, 106249, 139119])->get();
+		if($queue->start + 150 > User::count()){
+			$queue->delete();
+		}else{
+			$queue->start += 150;
+			$queue->save();
+		}
+        $link = "/cabinet/";
+		foreach ($users as $user){
+            if ($user->lang !== "ua"){
+                $link = '/'.$user->lang.'/'.$link;
+            }
+            if($user->email){
+                Mail::to($user)->send(new UserNotificationMail($user, 'new_form', url('/') . $link));
+            }
+            Notification::send('new_form', $user, 0, $link);
+		}
 	}
 
 	private static $instance;

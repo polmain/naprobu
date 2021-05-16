@@ -38,7 +38,7 @@ class CommentController extends Controller
 
 		return datatables()->eloquent($comments)
 			->addColumn('user', function (Comment $comment) {
-				return $comment->user->name;
+				return $comment->user?$comment->user->name:'Пользователь удалён';
 			})->addColumn('project', function (Comment $comment) {
 				/*if($comment->review){
 					*/return $comment->review->subpage->project->name;/*

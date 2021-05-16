@@ -525,6 +525,10 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
 		Artisan::call('config:clear');
 		return "Cache is cleared";
 	});
+    Route::get('/migrate', function() {
+		Artisan::call('migrate');
+		return "Migrate";
+	});
 
 
 	Route::get('/login/facebook/','Auth\FacebookController@redirectToProvider');

@@ -351,10 +351,10 @@ class Cron
 			$queue->start += 150;
 			$queue->save();
 		}
-        $link = "/cabinet/";
+        $link = "cabinet/";
 		foreach ($users as $user){
             if ($user->lang !== "ua"){
-                $link = '/'.$user->lang.'/'.$link;
+                $link = $user->lang.'/'.$link;
             }
             if($user->email){
                 Mail::to($user)->send(new UserNotificationMail($user, 'new_form', url('/') . $link));

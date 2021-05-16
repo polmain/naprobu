@@ -43,8 +43,22 @@ class UsersController extends Controller
 
 		return view('admin.users.all');
 	}
+
+	public function all_archive()
+    {
+        SEO::setTitle('Архив');
+        AdminPageData::setPageName('Архив');
+        AdminPageData::addBreadcrumbLevel('Пользователи','users');
+        AdminPageData::addBreadcrumbLevel('Архив');
+
+        return view('admin.users.all',['isArchive' => true]);
+    }
+
 	public function all_ajax(Request $request){
 		$users = User::with(['roles','status']);
+        if($request->isArchive === 1){
+            $users = $users->onlyTrashed();
+        }
 
 		if($request->has('role')){
 			$users = $users->whereHas('roles', function($q) use	($request)

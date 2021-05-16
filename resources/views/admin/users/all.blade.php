@@ -77,7 +77,7 @@
 			},
 			"processing": true,
 			"serverSide": true,
-			"ajax": "{!! route('adm_users_ajax') !!}{{(isset($role))?('?role='.$role):''}}",
+			"ajax": "{!! route('adm_users_ajax') !!}?isArchive={{isset($isArchive)?1:0}}{{(isset($role))?('&role='.$role):''}}",
 			"columns": [
 				{
 					"className":      'text-center',

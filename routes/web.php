@@ -280,6 +280,7 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
 
 		/* Users pages */
 		Route::get('/users/', 'Admin\UsersController@all')->name('adm_users');
+		Route::get('/users/archive', 'Admin\UsersController@all_archive')->name('adm_users_archive');
 		Route::get('/users/ajax/', 'Admin\UsersController@all_ajax')->name('adm_users_ajax');
 		Route::get('/users/find/', 'Admin\UsersController@find')->name('adm_users_find');
 		Route::get('/users/bloger/', 'Admin\UsersController@bloger')->name('adm_users_bloger');

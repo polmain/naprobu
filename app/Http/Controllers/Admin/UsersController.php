@@ -43,8 +43,23 @@ class UsersController extends Controller
 
 		return view('admin.users.all');
 	}
+
+	public function all_archive()
+    {
+        SEO::setTitle('Архив');
+        AdminPageData::setPageName('Архив');
+        AdminPageData::addBreadcrumbLevel('Пользователи','users');
+        AdminPageData::addBreadcrumbLevel('Архив');
+
+        return view('admin.users.all',['isArchive' => true]);
+    }
+
 	public function all_ajax(Request $request){
-		$users = User::with(['roles','status']);
+        if($request->input('isArchive') == 1){
+            $users = User::with(['roles','status'])->onlyTrashed();
+        }else{
+            $users = User::with(['roles','status']);
+        }
 
 		if($request->has('role')){
 			$users = $users->whereHas('roles', function($q) use	($request)
@@ -128,7 +143,7 @@ class UsersController extends Controller
 	}
 
 	protected function getUserEditData($user_id){
-		$user = User::with(['roles','reviews','requests'])->withCount('requests')->find($user_id);
+		$user = User::withTrashed()->with(['roles','reviews','requests'])->withCount('requests')->find($user_id);
 
 		/*$user->current_rating = $user->history->sum('score');
 		$user->save();*/
@@ -235,7 +250,7 @@ class UsersController extends Controller
 	}
 
 	public function saveUser(Request $request,$user_id){
-		$user = User::with(['roles'])->find($user_id);
+		$user = User::withTrashed()->with(['roles'])->find($user_id);
 		$user->name = $request->login;
 		$user->first_name = $request->first_name;
 		$user->last_name = $request->last_name;
@@ -270,8 +285,9 @@ class UsersController extends Controller
 	}
 
 	public function delete($user_id){
-		User::destroy($user_id);
-
+		$user = User::find($user_id);
+        $user->delete();
+		/*
 		$reviews = Review::where('user_id',$user_id)->get();
 		foreach ($reviews as $review){
 			Review\Comment::where('review_id',$review->id)->delete();
@@ -302,7 +318,7 @@ class UsersController extends Controller
 		UserLog::where('user_id',$user_id)->delete();
 		UserNotification::where('user_id',$user_id)->delete();
 		UserPresents::where('user_id',$user_id)->delete();
-		UserRatingHistory::where('user_id',$user_id)->delete();
+		UserRatingHistory::where('user_id',$user_id)->delete();*/
 
 		return "ok";
 	}
@@ -321,7 +337,7 @@ class UsersController extends Controller
 	}
 
 	public function change_status(Request $request,$user_id){
-		$user = User::find($user_id);
+		$user = User::withTrashed()->find($user_id);
 
 		$userOldStatuse = UserChangeStatuses::all();
 		foreach ($userOldStatuse as $userOldStatus){
@@ -429,14 +445,14 @@ class UsersController extends Controller
 	}*/
 
 	public function delete_ratting(Request $request,$user_id){
-		$user = User::find($user_id);
+		$user = User::withTrashed()->find($user_id);
 		UserRating::addAction($request->fine,$user);
 
 		return redirect()->route('adm_users_edit',[$user_id]);
 	}
 
 	public function add_ratting(Request $request,$user_id){
-		$user = User::find($user_id);
+		$user = User::withTrashed()->find($user_id);
 		UserRating::newAction($request,$user);
 
 		return redirect()->route('adm_users_edit',[$user_id]);

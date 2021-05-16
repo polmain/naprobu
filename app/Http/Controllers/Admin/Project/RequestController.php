@@ -41,7 +41,7 @@ class RequestController extends Controller
 		$requests = ProjectRequest::with(['user','project','status'])
 			->where('user_id',$user_id)
 			->get();
-		$user = User::find($user_id);
+		$user = User::withTrashed()->find($user_id);
 
 		SEO::setTitle('Заявки на учатие в проектах: '.$user->name);
 		AdminPageData::setPageName('Заявки на учатие в проектах: '.$user->name);

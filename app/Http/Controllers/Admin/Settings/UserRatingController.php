@@ -89,7 +89,7 @@ class UserRatingController extends Controller
 	}
 
 	public function ajax_history($user_id){
-		$user = User::with(['history'])->find($user_id);
+		$user = User::withTrashed()->with(['history'])->find($user_id);
 		$userRatings = UserRatingHistory::with(['rating_action'])->where('user_id',$user_id)->orderBy('id','desc');
 
 		return datatables()->eloquent($userRatings)

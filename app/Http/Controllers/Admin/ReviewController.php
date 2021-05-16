@@ -31,7 +31,7 @@ class ReviewController extends Controller
 
 		return datatables()->eloquent($reviews)
 			->addColumn('user', function (Review $review) {
-				return $review->user?$review->user->name:'Пользователь удалён';
+				return $review->user;
 			})
             ->addColumn('project', function (Review $review) {
 				return $review->subpage->project->name;

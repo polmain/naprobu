@@ -404,6 +404,21 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
 		Route::get('/user/present/{id}', 'Admin\Message\PresentController@view')->name('adm_present_view');
 		Route::post('/user/present/{id}/send/', 'Admin\Message\PresentController@send')->name('adm_present_send');
 		/* End Presents pages */
+
+        Route::get('/clear-cache', function() {
+            Artisan::call('route:clear');
+            Artisan::call('view:clear');
+            Artisan::call('config:clear');
+            return "Cache is cleared";
+        });
+        Route::get('/migrate', function() {
+            Artisan::call('migrate');
+            return "Migrate";
+        });
+        Route::get('/cron', function() {
+            Artisan::call('schedule:run');
+            return "cron";
+        });
 	});
 });
 
@@ -520,16 +535,7 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
 	Route::get('parse-region','UserController@parceRegion');
 	Route::get('parse-city/{id}','UserController@parseCity');*/
 
-		Route::get('/clear-cache', function() {
-		Artisan::call('route:clear');
-		Artisan::call('view:clear');
-		Artisan::call('config:clear');
-		return "Cache is cleared";
-	});
-    Route::get('/migrate', function() {
-		Artisan::call('migrate');
-		return "Migrate";
-	});
+
 
 
 	Route::get('/login/facebook/','Auth\FacebookController@redirectToProvider');

@@ -55,9 +55,10 @@ class UsersController extends Controller
     }
 
 	public function all_ajax(Request $request){
-		$users = User::with(['roles','status']);
         if($request->isArchive === 1){
-            $users = $users->onlyTrashed();
+            $users = User::with(['roles','status'])->onlyTrashed();
+        }else{
+            $users = User::with(['roles','status']);
         }
 
 		if($request->has('role')){

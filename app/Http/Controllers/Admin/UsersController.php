@@ -270,8 +270,9 @@ class UsersController extends Controller
 	}
 
 	public function delete($user_id){
-		User::destroy($user_id);
-
+		$user = User::find($user_id);
+        $user->delete();
+		/*
 		$reviews = Review::where('user_id',$user_id)->get();
 		foreach ($reviews as $review){
 			Review\Comment::where('review_id',$review->id)->delete();
@@ -302,7 +303,7 @@ class UsersController extends Controller
 		UserLog::where('user_id',$user_id)->delete();
 		UserNotification::where('user_id',$user_id)->delete();
 		UserPresents::where('user_id',$user_id)->delete();
-		UserRatingHistory::where('user_id',$user_id)->delete();
+		UserRatingHistory::where('user_id',$user_id)->delete();*/
 
 		return "ok";
 	}

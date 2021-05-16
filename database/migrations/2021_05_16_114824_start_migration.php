@@ -1,11 +1,9 @@
 <?php
 
 use App\Exceptions\IrreversibleMigration;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateQueuesTable extends Migration
+class StartMigration extends Migration
 {
     /**
      * Run the migrations.

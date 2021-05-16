@@ -11,6 +11,7 @@ namespace App\Library\Cron;
 
 use App\Model\User\UserRatingHistory;
 use App\Model\User\UserRatingStatus;
+use App\Model\User\Viber;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
@@ -127,6 +128,8 @@ class Cron
 					static::userRating($queue);
 				case 'new_account_form':
 					static::newAccountForm($queue);
+				case 'viber':
+					static::viber($queue);
 			}
 
 
@@ -360,6 +363,33 @@ class Cron
                 Mail::to($user)->send(new UserNotificationMail($user, 'new_form', url('/') . $link));
             }
             Notification::send('new_form', $user, 0, $link);
+		}
+	}
+
+	public static function viber($queue){
+		$users = User::where([
+			['id','>',$queue->start],
+			['id','<=',$queue->start + 1000],
+			['email','<>',null],
+			['new_form_status',false],
+			['isHide',0],
+		])->whereNotIn('id',[1,2,7,8,9,11,12,13,14,15,16,17,18,43718,45645, 45765, 45766, 46648, 47336, 47355, 47356, 48566, 66942, 106249, 139119])->get();
+		if($queue->start + 1000 > User::count()){
+			$queue->delete();
+		}else{
+			$queue->start += 1000;
+			$queue->save();
+		}
+
+		foreach ($users as $user){
+		    if($user->phone){
+                Viber::create([
+                    'phone' => $user->phone,
+                    'user_id' => $user->id
+                ]);
+            }else{
+		        $user->delete();
+            }
 		}
 	}
 

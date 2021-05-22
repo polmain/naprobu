@@ -56,7 +56,7 @@
                             <path id="Эллипс_1" data-name="Эллипс 1" class="cls-6" d="M434.5,1558.66a23.655,23.655,0,1,1-23.656,23.65A23.654,23.654,0,0,1,434.5,1558.66Z" transform="translate(-409.344 -1551.03)"/>
                         </svg>
                     </div>
-                    <div class="status-name">{{$project->status->name}}</div>
+                    <div class="status-name">{{($lang == 'ru')?$project->status->name:$base->status->translate->firstWhere('lang',$lang)->name}}</div>
                     <div class="status-date">
                         @switch($base->status_id)
                             @case(4)
@@ -146,7 +146,7 @@
                             <path id="Эллипс_1" data-name="Эллипс 1" class="cls-6" d="M434.5,1558.66a23.655,23.655,0,1,1-23.656,23.65A23.654,23.654,0,0,1,434.5,1558.66Z" transform="translate(-409.344 -1551.03)"/>
                         </svg>
                     </div>
-                    <div class="status-name">{{$project->status->name}}</div>
+                    <div class="status-name">{{($lang == 'ru')?$project->status->name:$base->status->translate->firstWhere('lang',$lang)->name}}</div>
                     <div class="status-date">
                         @switch($base->status_id)
                             @case(4)

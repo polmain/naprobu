@@ -103,6 +103,13 @@
                     <li{{ (\Request::route()->getName() == 'adm_users_archive') ? ' class=active' : '' }}><a href="{{route("adm_users_archive")}}">Архив</a></li>
                 </ul>
             </li>
+            <li class="treeview{{ in_array (Request::segment(2),['countries','regions','cities']) ? ' active' : ''   }}">
+                <a href="#"><i class="fa fa-globe" aria-hidden="true"></i>
+                     <span>Локации</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li{{ (\Request::route()->getName() === 'admin.country.all') ? ' class=active' : '' }}><a href="{{ route('admin.country.all')}}">Страны</a></li>
+                </ul>
+            </li>
             <li class="treeview{{ in_array (Request::segment(2),['feedback']) ? ' active' : ''   }}">
                 <a href="#"><i class="fa fa-paper-plane-o" aria-hidden="true"></i>
                      <span>Уведомления</span> <i class="fa fa-angle-left pull-right"></i></a>

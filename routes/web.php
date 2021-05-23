@@ -410,9 +410,9 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
         Route::get('/countries/ajax', 'Admin\Geo\CountryController@all_ajax')->name('admin.country.ajax');
         Route::get('/countries/new/', 'Admin\Geo\CountryController@new')->name('admin.country.new');
         Route::post('/countries/new/', 'Admin\Geo\CountryController@create')->name('admin.country.create');
-        Route::get('/countries/edit/{review_id}/', 'Admin\Geo\CountryController@edit')->name('admin.country.edit');
-        Route::post('/countries/edit/{review_id}/', 'Admin\Geo\CountryController@save')->name('admin.country.save');
-        Route::get('/countries/delete/{review_id}/', 'Admin\Geo\CountryController@delete')->name('admin.country.delete');
+        Route::get('/countries/edit/{country_id}/', 'Admin\Geo\CountryController@edit')->name('admin.country.edit');
+        Route::post('/countries/edit/{country_id}/', 'Admin\Geo\CountryController@save')->name('admin.country.save');
+        Route::get('/countries/delete/{country_id}/', 'Admin\Geo\CountryController@delete')->name('admin.country.delete');
         /* End Countries pages */
 
         Route::get('/clear-cache', function() {

@@ -73,7 +73,7 @@
 			"processing": true,
 			"serverSide": true,
 			"ajax": "{!! route('admin.country.ajax') !!}",
-            "order": [[ 2, "desc" ]],
+            "order": [[ 2, "asc" ]],
 			"columns": [
 				{
 					"className":      'text-center',

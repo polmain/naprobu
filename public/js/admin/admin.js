@@ -1030,6 +1030,24 @@ function deleteFeedbacks() {
 /* End Faq */
 
 
+/* Countries page */
+
+function deleteCountry(id) {
+    $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
+    $('#modal-warning').find(".modal-body").html("<p>Удаление этой страны приведет к потери всех областей и городов связанных с ней.<br>Отменить действие будет невозможно!</p>");
+    $('#modal-warning').find("#success").attr('onclick','deleteAjax("/admin/countries/delete/'+id+'/")');
+    $('#modal-warning').modal('show');
+}
+
+function deleteCountries() {
+    $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
+    $('#modal-warning').find(".modal-body").html("<p>Удаление этих страны приведет к потери всех областей и городов связанных с ними.<br>Отменить действие будет невозможно!</p>");
+    $('#modal-warning').find("#success").attr('onclick','groupAjax("/admin/countries/delete/--id--/")');
+    $('#modal-warning').modal('show');
+}
+
+/* End Countries page */
+
 
 function endStatus(id){
 	$('#modal-warning').find(".modal-title").text("Подтвердите досрочную смену статуса");

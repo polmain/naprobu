@@ -405,6 +405,16 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
 		Route::post('/user/present/{id}/send/', 'Admin\Message\PresentController@send')->name('adm_present_send');
 		/* End Presents pages */
 
+        /* Countries pages */
+        Route::get('/countries', 'Admin\Geo\CountryController@all')->name('admin.country.all');
+        Route::get('/countries/ajax', 'Admin\Geo\CountryControlle@all_ajax')->name('admin.country.ajax');
+        Route::get('/countries/new/', 'Admin\Geo\CountryControlle@new')->name('admin.country.new');
+        Route::post('/countries/new/', 'Admin\Geo\CountryControlle@create')->name('admin.country.create');
+        Route::get('/countries/edit/{review_id}/', 'Admin\Geo\CountryControlle@edit')->name('admin.country.edit');
+        Route::post('/countries/edit/{review_id}/', 'Admin\Geo\CountryControlle@save')->name('admin.country.save');
+        Route::get('/countries/delete/{review_id}/', 'Admin\Geo\CountryControlle@delete')->name('admin.country.delete');
+        /* End Countries pages */
+
         Route::get('/clear-cache', function() {
             Artisan::call('route:clear');
             Artisan::call('view:clear');

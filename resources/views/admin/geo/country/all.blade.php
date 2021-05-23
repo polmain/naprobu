@@ -100,7 +100,7 @@
 					name: 'name',
 					"orderable":      true,
                     render: function ( data, type, row ) {
-                        return '<a href="/admin/countries/edit/'+data+'">'+data+'</a>';
+                        return '<a href="/admin/countries/edit/'+row.id+'">'+data+'</a>';
                     }
 				},
 				{

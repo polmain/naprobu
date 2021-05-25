@@ -311,7 +311,7 @@ class QuestionController extends Controller
 
     private function checkRequiredChildForLang(Request  $request, string $lang, int $i): bool
     {
-        return (bool) $request->input('question_children_'.$lang.'_question_'.$request->question)[$i];
+        return (bool) isset($request->input('question_children_'.$lang.'_question_'.$request->question)[$i]);
     }
 
 	private function newOrEditChildTranslate(

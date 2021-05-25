@@ -71,7 +71,14 @@ class RegionController extends Controller
 		AdminPageData::addBreadcrumbLevel('Области','regions');
 		AdminPageData::addBreadcrumbLevel('Новая область');
 
-		return view('admin.geo.region.new');
+		$defaultCountry = Country::where([
+		    ['lang','ru'],
+		    ['code','UA'],
+        ])->first();
+
+		return view('admin.geo.region.new',[
+		    'defaultCountry' => $defaultCountry
+        ]);
 	}
 
 	public function edit($id){

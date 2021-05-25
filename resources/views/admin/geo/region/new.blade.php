@@ -32,6 +32,7 @@
                             <div class="col-md-4">
                                 <label>Страна<span class="input-request">*</span></label>
                                 <select class="form-control select2 required" name="country_id" id="country_id">
+                                    <option value="{{$defaultCountry->id}}" selected="selected">{{$defaultCountry->name}}</option>
                                 </select>
                             </div>
                         </div>

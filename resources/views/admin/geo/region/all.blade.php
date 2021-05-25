@@ -37,7 +37,7 @@
                             <th width="40">Выбрать</th>
                             <th width="40">id</th>
                             <th>Название</th>
-                            <th>Код</th>
+                            <th>Страна</th>
 							<th width="20"></th>
                         </tr>
                         </thead>
@@ -51,7 +51,7 @@
                     <div class="inline">С выбранными:
                         <button class="btn btn-danger" onclick="deleteRegions()">Удалить</button>
                     </div>
-                    <a href="{{route('admin.region.new')}}" class="btn btn-primary pull-right">Добавить страны</a>
+                    <a href="{{route('admin.region.new')}}" class="btn btn-primary pull-right">Добавить область</a>
                 </div>
             </div><!-- /.box -->
         </div><!-- /.col -->

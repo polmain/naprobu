@@ -2,7 +2,7 @@
 
 @section('content')
     <div class='row'>
-        <form action="{{route('admin.region.crate')}}" method="post" enctype="multipart/form-data" class="validation-form">
+        <form action="{{route('admin.region.create')}}" method="post" enctype="multipart/form-data" class="validation-form">
             {{ csrf_field() }}
             <div class='col-md-9'>
                 <!-- Box -->

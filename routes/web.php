@@ -410,10 +410,22 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
         Route::get('/countries/ajax', 'Admin\Geo\CountryController@all_ajax')->name('admin.country.ajax');
         Route::get('/countries/new/', 'Admin\Geo\CountryController@new')->name('admin.country.new');
         Route::post('/countries/new/', 'Admin\Geo\CountryController@create')->name('admin.country.create');
+        Route::get('/countries/find/', 'Admin\Geo\CountryController@find')->name('admin.country.find');
         Route::get('/countries/edit/{country_id}/', 'Admin\Geo\CountryController@edit')->name('admin.country.edit');
         Route::post('/countries/edit/{country_id}/', 'Admin\Geo\CountryController@save')->name('admin.country.save');
         Route::get('/countries/delete/{country_id}/', 'Admin\Geo\CountryController@delete')->name('admin.country.delete');
         /* End Countries pages */
+
+        /* Regions pages */
+        Route::get('/regions', 'Admin\Geo\RegionController@all')->name('admin.region.all');
+        Route::get('/regions/ajax', 'Admin\Geo\RegionController@all_ajax')->name('admin.region.ajax');
+        Route::get('/regions/new/', 'Admin\Geo\RegionController@new')->name('admin.region.new');
+        Route::post('/regions/new/', 'Admin\Geo\RegionController@create')->name('admin.region.create');
+        Route::get('/regions/find/', 'Admin\Geo\RegionController@find')->name('admin.region.find');
+        Route::get('/regions/edit/{region_id}/', 'Admin\Geo\RegionController@edit')->name('admin.region.edit');
+        Route::post('/regions/edit/{region_id}/', 'Admin\Geo\RegionController@save')->name('admin.region.save');
+        Route::get('/regions/delete/{region_id}/', 'Admin\Geo\RegionController@delete')->name('admin.region.delete');
+        /* End Regions pages */
 
         Route::get('/clear-cache', function() {
             Artisan::call('route:clear');

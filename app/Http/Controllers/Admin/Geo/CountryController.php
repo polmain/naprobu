@@ -30,6 +30,21 @@ class CountryController extends Controller
         return datatables()->eloquent($countries)->toJson();
     }
 
+    public function find(Request $request)
+    {
+        $name = $request->name;
+
+        $countries = Country::where('lang','ru')->where('name','like',"%".$name."%")->limit(5)->get();
+
+        $formatted_countries = [];
+
+        foreach ($countries as $country) {
+            $formatted_countries[] = ['id' => $country->id, 'text' => $country->name];
+        }
+
+        return \Response::json($formatted_countries);
+    }
+
 	public function new(){
 		SEO::setTitle('Новая страна');
 		AdminPageData::setPageName('Новая страна');
@@ -44,7 +59,7 @@ class CountryController extends Controller
 
 		SEO::setTitle('Редактирование страны');
 		AdminPageData::setPageName('Редактирование страны');
-		AdminPageData::addBreadcrumbLevel('Страны','page');
+		AdminPageData::addBreadcrumbLevel('Страны','countries');
 		AdminPageData::addBreadcrumbLevel('Редактирование');
 
 		return view('admin.geo.country.edit',[
@@ -73,7 +88,7 @@ class CountryController extends Controller
 		$this->saveOrCreate($country,$request);
 
 
-		ModeratorLogs::addLog("Отредактировал страницу: ".$request->name);
+		ModeratorLogs::addLog("Отредактировал страну: ".$request->name);
 
         if(($request->submit == "save-hide") || ($request->submit == "save")){
             return redirect()->route('admin.country.edit',$country->id);
@@ -91,11 +106,11 @@ class CountryController extends Controller
 		return "ok";
 	}
 
-	protected function saveOrCreate($page,$request){
-        $this->saveOrCreateTranslate($page, $request);
+	protected function saveOrCreate($country,$request){
+        $this->saveOrCreateTranslate($country, $request);
 
         foreach (self::TRANSLATE_LANG as $lang){
-                $this->saveOrCreateTranslate($page, $request, $lang);
+                $this->saveOrCreateTranslate($country, $request, $lang);
         }
 	}
 

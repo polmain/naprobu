@@ -108,6 +108,7 @@
                      <span>Локации</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                     <li{{ (\Request::route()->getName() === 'admin.country.all') ? ' class=active' : '' }}><a href="{{ route('admin.country.all')}}">Страны</a></li>
+                    <li{{ (\Request::route()->getName() === 'admin.region.all') ? ' class=active' : '' }}><a href="{{ route('admin.region.all')}}">Области/Штаты</a></li>
                 </ul>
             </li>
             <li class="treeview{{ in_array (Request::segment(2),['feedback']) ? ' active' : ''   }}">

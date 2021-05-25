@@ -1049,6 +1049,25 @@ function deleteCountries() {
 /* End Countries page */
 
 
+/* Countries page */
+
+function deleteRegion(id) {
+    $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
+    $('#modal-warning').find(".modal-body").html("<p>Удаление этой области приведет к потери всех городов связанных с ней.<br>Отменить действие будет невозможно!</p>");
+    $('#modal-warning').find("#success").attr('onclick','deleteAjax("/admin/regions/delete/'+id+'/")');
+    $('#modal-warning').modal('show');
+}
+
+function deleteRegions() {
+    $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
+    $('#modal-warning').find(".modal-body").html("<p>Удаление этих областей приведет к потери всех городов связанных с ними.<br>Отменить действие будет невозможно!</p>");
+    $('#modal-warning').find("#success").attr('onclick','groupAjax("/admin/regions/delete/--id--/")');
+    $('#modal-warning').modal('show');
+}
+
+/* End Countries page */
+
+
 function endStatus(id){
 	$('#modal-warning').find(".modal-title").text("Подтвердите досрочную смену статуса");
 	$('#modal-warning').find(".modal-body").html("<p>Досрочная смена статуса приведёт к отмене текущего статуса и востановит пользователю его предыдущий статус.</p>");

@@ -14,22 +14,22 @@
 				<div class="box-footer">
 					<button type="button" class="btn btn-primary check_all">Отметить все</button>
 					<div class="inline">С выбранными:
-						<button class="btn btn-danger" onclick="deleteCountries()">Удалить</button>
+						<button class="btn btn-danger" onclick="deleteRegions()">Удалить</button>
 					</div>
-					<a href="{{route('admin.country.new')}}" class="btn btn-primary pull-right">Добавить страну</a>
+					<a href="{{route('admin.region.new')}}" class="btn btn-primary pull-right">Добавить область</a>
 				</div>
 			</div>
             <!-- Box -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Список стран</h3>
+                    <h3 class="box-title">Список областей</h3>
                     <div class="box-tools pull-right">
                         <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                         <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
                 <div class="box-body">
-					<input type="hidden" name="show-hide-url" value="/admin/countries/--action--/--id--/">
+					<input type="hidden" name="show-hide-url" value="/admin/regions/--action--/--id--/">
 					<div class="table-responsive">
                     <table id="countries-table" class="table table-bordered table-hover">
                         <thead>
@@ -49,9 +49,9 @@
                 <div class="box-footer">
                     <button type="button" class="btn btn-primary check_all">Отметить все</button>
                     <div class="inline">С выбранными:
-                        <button class="btn btn-danger" onclick="deleteCountries()">Удалить</button>
+                        <button class="btn btn-danger" onclick="deleteRegions()">Удалить</button>
                     </div>
-                    <a href="{{route('admin.country.new')}}" class="btn btn-primary pull-right">Добавить страну</a>
+                    <a href="{{route('admin.region.new')}}" class="btn btn-primary pull-right">Добавить страны</a>
                 </div>
             </div><!-- /.box -->
         </div><!-- /.col -->
@@ -72,7 +72,7 @@
 			},
 			"processing": true,
 			"serverSide": true,
-			"ajax": "{!! route('admin.country.ajax') !!}",
+			"ajax": "{!! route('admin.region.ajax') !!}",
             "order": [[ 2, "asc" ]],
 			"columns": [
 				{
@@ -104,8 +104,8 @@
                     }
 				},
 				{
-					data: 'code',
-					name: 'code',
+					data: 'country_name',
+					name: 'country_name',
 				},
 				{
 					"className":      'text-center',

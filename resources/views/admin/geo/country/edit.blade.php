@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <div class="box-body">
-                        <button type="submit" name="submit" value="save" class="btn btn-block btn-success btn-lg">Опубликовать</button>
+                        <button type="submit" name="submit" value="save" class="btn btn-block btn-success btn-lg">Сохранить</button>
                         <button type="submit" name="submit" value="save-close" class="btn btn-block btn-primary btn-lg">Сохранить и закрыть</button>
                         <button type="submit" name="submit" value="save-new" class="btn btn-block btn-primary btn-lg">Сохранить и создать</button>
                         <button type="button" class="btn btn-block btn-danger btn-lg" onclick="document.location.href='/admin/countries/';">Отмена</button>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Geo;
 
+use App\Library\Queries\QueryBuilder;
 use App\Model\Geo\City;
 use App\Model\Geo\Country;
 use Illuminate\Http\Request;
@@ -27,7 +28,8 @@ class RegionController extends Controller
 	}
 
     public function all_ajax(Request $request){
-        $regions = Region::where('lang','ru');
+        $filter = QueryBuilder::getFilter($request);
+        $regions = Region::where('lang','ru')->where($filter);
 
         return datatables()->eloquent($regions)
             ->addColumn('country_name', function (Region $region) {

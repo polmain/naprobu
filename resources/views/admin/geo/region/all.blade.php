@@ -73,7 +73,7 @@
 			},
 			"processing": true,
 			"serverSide": true,
-			"ajax": "{!! route('admin.region.ajax') !!}",
+			"ajax": "{!! route('admin.region.ajax') !!}{{(!empty(Request::getQueryString()))?'?'.Request::getQueryString():''}}",
             "order": [[ 2, "asc" ]],
 			"columns": [
 				{

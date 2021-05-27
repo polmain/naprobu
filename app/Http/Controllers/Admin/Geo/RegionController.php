@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Geo;
 
+use App\Model\Geo\City;
 use App\Model\Geo\Country;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -35,6 +36,9 @@ class RegionController extends Controller
                 $query->whereHas('country', function ($country) use ($keyword){
                     $country->where('name','like',["%{$keyword}%"]);
                 });
+            })
+            ->addColumn('verify', function (City $city) {
+                return $city->is_verify? "Да" : "Нет";
             })
             ->filter(function ($query) use ($request) {
                 if (request()->has('id')) {

@@ -30,10 +30,13 @@ class CityController extends Controller
 
         return datatables()->eloquent($cities)
             ->addColumn('region_name', function (City $city) {
-                return $city->region?$city->region->name:'---';
+                return $city->region? $city->region->name : '---';
             })
             ->addColumn('country_name', function (City $city) {
                 return $city->country->name;
+            })
+            ->addColumn('verify', function (City $city) {
+                return $city->is_verify? "Да" : "Нет";
             })
             ->filterColumn('region_name', function($query, $keyword) {
                 $query->whereHas('region', function ($region) use ($keyword){

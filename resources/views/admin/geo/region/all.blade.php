@@ -37,6 +37,7 @@
                             <th width="40">Выбрать</th>
                             <th width="40">id</th>
                             <th>Название</th>
+                            <th>Верифицированно</th>
                             <th>Страна</th>
 							<th width="20"></th>
                         </tr>
@@ -102,6 +103,10 @@
                     render: function ( data, type, row ) {
                         return '<a href="/admin/regions/edit/'+row.id+'">'+data+'</a>';
                     }
+				},
+				{
+					data: 'verify',
+					name: 'verify',
 				},
 				{
 					data: 'country_name',

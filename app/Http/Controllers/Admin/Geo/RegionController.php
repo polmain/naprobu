@@ -57,10 +57,10 @@ class RegionController extends Controller
 
         $regions = Region::where('lang','ru');
         if($country_id){
-            $regions->where('country_id', $country_id);
+            $regions = $regions->where('country_id', $country_id);
         }
 
-        $regions->where('name','like',"%".$name."%")->limit(5)->get();
+        $regions = $regions->where('name','like',"%".$name."%")->limit(5)->get();
 
         $formatted_regions = [];
 

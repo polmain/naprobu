@@ -37,8 +37,8 @@ class RegionController extends Controller
                     $country->where('name','like',["%{$keyword}%"]);
                 });
             })
-            ->addColumn('verify', function (City $city) {
-                return $city->is_verify? "Да" : "Нет";
+            ->addColumn('verify', function (Region $region) {
+                return $region->is_verify? "Да" : "Нет";
             })
             ->filter(function ($query) use ($request) {
                 if (request()->has('id')) {

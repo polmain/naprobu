@@ -35,7 +35,7 @@
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <label>Страна</label>
+                                <label>Область/Штат</label>
                                 <select class="form-control select2" name="region_id" id="region_id">
                                 </select>
                             </div>

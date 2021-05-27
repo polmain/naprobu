@@ -56,7 +56,7 @@ class RegionController extends Controller
         $country_id = $request->country_id;
 
         $regions = Region::where('lang','ru');
-        if($country_id !== ''){
+        if($country_id){
             $regions->where('country_id', $country_id);
         }
 

@@ -74,7 +74,7 @@
 			},
 			"processing": true,
 			"serverSide": true,
-			"ajax": "{!! route('admin.city.ajax') !!}{{(!empty(Request::getQueryString()))?'?'.Request::getQueryString():''}}\"",
+			"ajax": "{!! route('admin.city.ajax') !!}{{(!empty(Request::getQueryString()))?'?'.Request::getQueryString():''}}",
             "order": [[ 2, "asc" ]],
 			"columns": [
 				{

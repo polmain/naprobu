@@ -53,8 +53,14 @@ class RegionController extends Controller
     public function find(Request $request)
     {
         $name = $request->name;
+        $country_id = $request->country_id;
 
-        $regions = Region::where('lang','ru')->where('name','like',"%".$name."%")->limit(5)->get();
+        $regions = Region::where('lang','ru');
+        if($country_id !== ''){
+            $regions->where('country_id', $country_id);
+        }
+
+        $regions->where('name','like',"%".$name."%")->limit(5)->get();
 
         $formatted_regions = [];
 

@@ -427,6 +427,16 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
         Route::get('/regions/delete/{region_id}/', 'Admin\Geo\RegionController@delete')->name('admin.region.delete');
         /* End Regions pages */
 
+        /* Cities pages */
+        Route::get('/cities', 'Admin\Geo\CityController@all')->name('admin.city.all');
+        Route::get('/cities/ajax', 'Admin\Geo\CityController@all_ajax')->name('admin.city.ajax');
+        Route::get('/cities/new/', 'Admin\Geo\CityController@new')->name('admin.city.new');
+        Route::post('/cities/new/', 'Admin\Geo\CityController@create')->name('admin.city.create');
+        Route::get('/cities/edit/{city_id}/', 'Admin\Geo\CityController@edit')->name('admin.city.edit');
+        Route::post('/cities/edit/{city_id}/', 'Admin\Geo\CityController@save')->name('admin.city.save');
+        Route::get('/cities/delete/{city_id}/', 'Admin\Geo\CityController@delete')->name('admin.city.delete');
+        /* End Cities pages */
+
         Route::get('/clear-cache', function() {
             Artisan::call('route:clear');
             Artisan::call('view:clear');

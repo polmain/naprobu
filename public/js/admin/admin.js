@@ -1049,7 +1049,7 @@ function deleteCountries() {
 /* End Countries page */
 
 
-/* Countries page */
+/* Regions page */
 
 function deleteRegion(id) {
     $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
@@ -1065,7 +1065,26 @@ function deleteRegions() {
     $('#modal-warning').modal('show');
 }
 
-/* End Countries page */
+/* End Regions page */
+
+
+/* Regions page */
+
+function deleteCity(id) {
+    $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
+    $('#modal-warning').find(".modal-body").html("<p>Удаление этого горда приведет к потери этого города у пользователей.<br>Отменить действие будет невозможно!</p>");
+    $('#modal-warning').find("#success").attr('onclick','deleteAjax("/admin/cities/delete/'+id+'/")');
+    $('#modal-warning').modal('show');
+}
+
+function deleteCities() {
+    $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
+    $('#modal-warning').find(".modal-body").html("<p>Удаление этих городов приведет к потери этих городов у пользователей.<br>Отменить действие будет невозможно!</p>");
+    $('#modal-warning').find("#success").attr('onclick','groupAjax("/admin/cities/delete/--id--/")');
+    $('#modal-warning').modal('show');
+}
+
+/* End Regions page */
 
 
 function endStatus(id){

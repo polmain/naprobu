@@ -14,22 +14,22 @@
 				<div class="box-footer">
 					<button type="button" class="btn btn-primary check_all">Отметить все</button>
 					<div class="inline">С выбранными:
-						<button class="btn btn-danger" onclick="deleteRegions()">Удалить</button>
+						<button class="btn btn-danger" onclick="deleteCities()">Удалить</button>
 					</div>
-					<a href="{{route('admin.region.new')}}" class="btn btn-primary pull-right">Добавить область</a>
+					<a href="{{route('admin.city.new')}}" class="btn btn-primary pull-right">Добавить город</a>
 				</div>
 			</div>
             <!-- Box -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Список областей</h3>
+                    <h3 class="box-title">Список городов</h3>
                     <div class="box-tools pull-right">
                         <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                         <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
                 <div class="box-body">
-					<input type="hidden" name="show-hide-url" value="/admin/regions/--action--/--id--/">
+					<input type="hidden" name="show-hide-url" value="/admin/cities/--action--/--id--/">
 					<div class="table-responsive">
                     <table id="countries-table" class="table table-bordered table-hover">
                         <thead>
@@ -37,6 +37,7 @@
                             <th width="40">Выбрать</th>
                             <th width="40">id</th>
                             <th>Название</th>
+                            <th>Область</th>
                             <th>Страна</th>
 							<th width="20"></th>
                         </tr>
@@ -49,9 +50,9 @@
                 <div class="box-footer">
                     <button type="button" class="btn btn-primary check_all">Отметить все</button>
                     <div class="inline">С выбранными:
-                        <button class="btn btn-danger" onclick="deleteRegions()">Удалить</button>
+                        <button class="btn btn-danger" onclick="deleteCities()">Удалить</button>
                     </div>
-                    <a href="{{route('admin.region.new')}}" class="btn btn-primary pull-right">Добавить область</a>
+                    <a href="{{route('admin.city.new')}}" class="btn btn-primary pull-right">Добавить город</a>
                 </div>
             </div><!-- /.box -->
         </div><!-- /.col -->
@@ -72,7 +73,7 @@
 			},
 			"processing": true,
 			"serverSide": true,
-			"ajax": "{!! route('admin.region.ajax') !!}",
+			"ajax": "{!! route('admin.city.ajax') !!}",
             "order": [[ 2, "asc" ]],
 			"columns": [
 				{
@@ -92,7 +93,7 @@
 					name: 'id',
 					"orderable":      true,
 					render: function ( data, type, row ) {
-						return '<a href="/admin/regions/edit/'+data+'">'+data+'</a>';
+						return '<a href="/admin/cities/edit/'+data+'">'+data+'</a>';
 					}
 				},
 				{
@@ -100,8 +101,12 @@
 					name: 'name',
 					"orderable":      true,
                     render: function ( data, type, row ) {
-                        return '<a href="/admin/regions/edit/'+row.id+'">'+data+'</a>';
+                        return '<a href="/admin/cities/edit/'+row.id+'">'+data+'</a>';
                     }
+				},
+				{
+					data: 'region_name',
+					name: 'region_name',
 				},
 				{
 					data: 'country_name',
@@ -111,7 +116,7 @@
 					"className":      'text-center',
 					data: null,
 					render: function ( data, type, row ) {
-						    return '<button class="btn btn-danger delete-ajax" id="delete-'+row.id+'" onclick="deleteRegion('+row.id+')">Удалить</button>';
+						    return '<button class="btn btn-danger delete-ajax" id="delete-'+row.id+'" onclick="deleteCity('+row.id+')">Удалить</button>';
 					},
 					searchable: false,
 					"orderable":      false,

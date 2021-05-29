@@ -128,7 +128,7 @@
             tegs: true,
             minimumInputLength: 0,
             ajax: {
-                url: '{!! route('admin.cite.find') !!}',
+                url: '{!! route('admin.city.find') !!}',
                 dataType: 'json',
                 data: function (params) {
                     return {

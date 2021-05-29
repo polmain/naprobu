@@ -16,18 +16,23 @@
                     <div class="box-body">
                         <div class="form-group row">
                             <div class="col-md-4">
-                                <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Название страны<span class="input-request">*</span></label>
-                                <input type="text" id="name-ru" name="name" class="form-control required" placeholder="Введите название города..." value="{{$city->name}}">
+                                <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Название страны<span class="name-input-required input-request">*</span></label>
+                                <input type="text" id="name-ru" name="name" class="form-control name-required required" placeholder="Введите название города..." value="{{$city->name}}">
                             </div>
                             <div class="col-md-4">
-                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название страны<span class="input-request">*</span></label>
-                                <input type="text" id="name-ua" name="nameUA" class="form-control required" placeholder="Введите название города..." value="{{$city->translate->firstWhere('lang', 'ua')? $city->translate->firstWhere('lang', 'ua')->name : ''}}">
+                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название страны<span class="name-input-required input-request">*</span></label>
+                                <input type="text" id="name-ua" name="nameUA" class="form-control name-required required" placeholder="Введите название города..." value="{{$city->translate->firstWhere('lang', 'ua')? $city->translate->firstWhere('lang', 'ua')->name : ''}}">
                             </div>
                             <div class="col-md-4">
-                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Название страны<span class="input-request">*</span></label>
-                                <input type="text" id="name-en" name="nameEN" class="form-control required" placeholder="Введите название города..." value="{{$city->translate->firstWhere('lang', 'en')? $city->translate->firstWhere('lang', 'en')->name : ''}}">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Название страны<span class="name-input-required input-request">*</span></label>
+                                <input type="text" id="name-en" name="nameEN" class="form-control name-required required" placeholder="Введите название города..." value="{{$city->translate->firstWhere('lang', 'en')? $city->translate->firstWhere('lang', 'en')->name : ''}}">
                             </div>
                         </div>
+                        @if(!$city->is_verify)
+                            <label>Поменять этот город на этот город</label>
+                            <select class="form-control select2" name="new_city_id" id="new_city_id">
+                            </select>
+                        @endif
                         <div class="form-group row">
                             <div class="col-md-4">
                                 <label>Страна<span class="input-request">*</span></label>
@@ -42,6 +47,9 @@
                                     <option value="{{$city->region->id}}" selected="selected">{{$city->region->name}}</option>
                                     @endif
                                 </select>
+                                @if($city->region && !$city->region->is_verify)
+                                    <p class="text-red">Внимание!!! Обасть не верефицированна!</p>
+                                @endif
                             </div>
                         </div>
                     </div><!-- /.box-body -->
@@ -114,5 +122,32 @@
                 cache: true
             }
         });
+        @if(!$city->is_verify)
+        $('#new_city_id').select2({
+            placeholder: "Выберите другой город...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.cite.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        country_id: $('#country_id').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#new_city_id').change(function (e){
+            $('.name-required').removeClass('required');
+            $('.name-input-required').remove();
+        });
+        @endif
     </script>
 @endsection

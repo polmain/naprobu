@@ -69,6 +69,27 @@ class CityController extends Controller
             ->toJson();
     }
 
+    public function find(Request $request)
+    {
+        $name = $request->name;
+        $country_id = $request->country_id;
+
+        $cities = City::where('lang','ru');
+        if($country_id){
+            $cities = $cities->where('country_id', $country_id);
+        }
+
+        $cities = $cities->where('name','like',"%".$name."%")->limit(5)->get();
+
+        $formatted_cities = [];
+
+        foreach ($cities as $city) {
+            $formatted_cities[] = ['id' => $city->id, 'text' => $city->name];
+        }
+
+        return \Response::json($formatted_cities);
+    }
+
 	public function new(){
 		SEO::setTitle('Новый город');
 		AdminPageData::setPageName('Новый город');

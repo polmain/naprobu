@@ -15,9 +15,8 @@ class GeoController extends Controller
         $name = $request->name;
         $locale = $request->lang;
 
-        $countries = Country::where('lang','ru')
+        $countries = Country::where('lang',$locale)
             ->where('name','like',"%".$name."%")
-            ->where('lang',$locale)
             ->limit(5)
             ->get();
 
@@ -37,14 +36,13 @@ class GeoController extends Controller
         $locale = $request->lang;
         $country_id = $request->country_id;
 
-        $regions = Region::where('lang','ru');
+        $regions = Region::where('lang',$locale);
         if($country_id){
             $regions = $regions->where('country_id', $country_id);
         }
 
         $regions = $regions->where('name','like',"%".$name."%")
             ->where('is_verify',true)
-            ->where('lang',$locale)
             ->limit(20)
             ->get();
 
@@ -64,7 +62,7 @@ class GeoController extends Controller
         $country_id = $request->country_id;
         $region_id = $request->region_id;
 
-        $cities = City::where('lang','ru');
+        $cities = City::where('lang',$locale);
         if($country_id){
             $cities = $cities->where('country_id', $country_id);
         }
@@ -74,7 +72,6 @@ class GeoController extends Controller
 
         $cities = $cities->where('name','like',"%".$name."%")
             ->where('is_verify',true)
-            ->where('lang',$locale)
             ->limit(20)
             ->get();
 

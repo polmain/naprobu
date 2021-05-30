@@ -215,7 +215,7 @@
             success: function(response){
                 if(response.success){
                     response.data.forEach(function (item){
-                        $('nova_poshta_region').append("<option value='"+item.Ref+"'>"+item.Description+"</option>");
+                        $('#nova_poshta_region').append("<option value='"+item.Ref+"'>"+item.Description+"</option>");
                     });
                 }
             }

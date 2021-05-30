@@ -80,7 +80,7 @@ class CityController extends Controller
             $cities = $cities->where('country_id', $country_id);
         }
 
-        $cities = $cities->where('name','like',"%".$name."%")->limit(5)->get();
+        $cities = $cities->where('name','like',"%".$name."%")->where('is_verify',true)->limit(5)->get();
 
         $formatted_cities = [];
 

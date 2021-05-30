@@ -198,6 +198,7 @@
 
 
         $.ajax({
+            method: "POST",
             url: 'https://api.novaposhta.ua/v2.0/json/',
             data: JSON.stringify({
                 "apiKey": "561c40b8c8c50432066bc12cc25edefd",

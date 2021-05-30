@@ -73,9 +73,6 @@ class ExpertRegisterController extends Controller
 			'last_name' => $data['last_name'],
 			'patronymic' => $data['patronymic'],
 			'birsday' => $data['birsday'],
-			'country' => $data['country'],
-			'region' => $data['region'],
-			'city' => $data['city'],
 		]);
 		return $user;
 	}

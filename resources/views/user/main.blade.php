@@ -165,7 +165,7 @@
 		$(document).ready(function () {
             var lang = "{{App::getLocale()}}";
             $('#country_id').select2({
-                placeholder: "Выберите страну...",
+                placeholder: "{{trans('registration.country_select')}}",
                 tegs: true,
                 minimumInputLength: 0,
                 ajax: {
@@ -186,7 +186,7 @@
                 }
             });
             $('#region_id').select2({
-                placeholder: "Выберите область...",
+                placeholder: "{{trans('registration.region_select')}}",
                 tegs: true,
                 minimumInputLength: 0,
                 ajax: {
@@ -208,7 +208,7 @@
                 }
             });
             $('#city_id').select2({
-                placeholder: "Выберите город...",
+                placeholder: "{{trans('registration.city_select')}}",
                 tegs: true,
                 minimumInputLength: 0,
                 ajax: {

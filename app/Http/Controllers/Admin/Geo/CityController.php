@@ -141,19 +141,22 @@ class CityController extends Controller
 
         if($request->has('new_city_id') && $request->new_city_id){
             $this->changeCity($city,$request);
+            $city = City::find($request->new_city_id);
+            ModeratorLogs::addLog("Заменил город: ".$request->name." на ". $city->name);
+            return redirect()->route('admin.city.all',['filter=["is_verify",0]']);
         }else{
             $this->saveOrCreate($city,$request);
         }
 
-		ModeratorLogs::addLog("Отредактировал область: ".$request->name);
+		ModeratorLogs::addLog("Отредактировал город: ".$request->name);
 
         if(($request->submit == "save-hide") || ($request->submit == "save")){
-            return redirect()->route('admin.region.edit',$city->id);
+            return redirect()->route('admin.city.edit',$city->id);
         }
         elseif(($request->submit == "save-close")){
-            return redirect()->route('admin.region.all');
+            return redirect()->route('admin.city.all');
         }else{
-            return redirect()->route('admin.region.new');
+            return redirect()->route('admin.city.new');
         }
 	}
 
@@ -200,7 +203,7 @@ class CityController extends Controller
     private function changeCity(City $city, Request $request): void
     {
         User::where('city_id', $city->id)
-            ->update(['city_id'=> $request->new_city_id]);
+            ->update(['city_id' => $request->new_city_id]);
 
         $city->delete();
     }

@@ -200,7 +200,7 @@ class CityController extends Controller
     private function changeCity(City $city, Request $request): void
     {
         User::where('city_id', $city->id)
-            ->update(['city_id', $request->new_city_id]);
+            ->update(['city_id'=> $request->new_city_id]);
 
         $city->delete();
     }

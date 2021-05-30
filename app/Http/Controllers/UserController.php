@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App;
 use App\Entity\Collection\CountryCollection;
+use App\Model\Geo\City;
+use App\Model\Geo\Region;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Auth;
 use Cookie;
@@ -39,10 +41,8 @@ class UserController extends Controller
 			$review->where('user_id',$user->id);
 		})->count();
 		$ratingStatuses = UserRatingStatus::with(['translate'])->where('lang','ru')->get();
-        $countryCollection = CountryCollection::getInstance();
 
 		$locale = App::getLocale();
-		$countries = App\Model\User\UserCountry::all();
 		$title = str_replace(':user_name:',$user->name, \App\Model\Setting::where([['name','user_main_title'],['lang',$locale]])->first()->value);
 		$description = str_replace(':user_name:',$user->name, \App\Model\Setting::where([['name','user_main_description'],['lang',$locale]])->first()->value);
 		$og_image = \App\Model\Setting::where('name','og_image_default')->first()->value;
@@ -65,8 +65,6 @@ class UserController extends Controller
     		'userLikes' => $userLikes,
     		'ratingStatuses' => $ratingStatuses,
 			'alternativeUrls' => $alternativeUrls,
-			'countries' => $countries,
-			'countryCollection' => $countryCollection,
 		]);
 	}
 
@@ -434,9 +432,39 @@ class UserController extends Controller
 		$user->patronymic = $request->patronymic;
 		$user->sex = $request->sex;
 		$user->birsday = $request->birsday;
-		$user->country = $request->country;
-		$user->region = $request->region;
-		$user->city = $request->city;
+
+		$country_id = $request->country_id;
+        $user->country_id = $country_id;
+
+        $region_id = $request->region_id;
+		if($request->new_region != ""){
+            $region = new Region();
+            $region->name = $request->new_region;
+            $region->lang = 'ru';
+            $region->rus_lang_id = 0;
+            $region->country_id = $country_id;
+            $region->is_verify = false;
+            $region->save();
+
+            $region_id = $region->id;
+        }
+        $user->region_id = $region_id;
+
+        $city_id = $request->city_id;
+        if($request->new_city != ""){
+            $city = new City();
+            $city->name = $request->new_city;
+            $city->lang = 'ru';
+            $city->rus_lang_id = 0;
+            $city->country_id = $country_id;
+            $city->region_id = $region_id;
+            $city->is_verify = false;
+            $city->save();
+
+            $city_id = $city->id;
+        }
+		$user->city_id = $city_id;
+
 		$user->name = $request->name;
 		$user->phone = $request->phone;
 		$user->password = Hash::make($request->password);

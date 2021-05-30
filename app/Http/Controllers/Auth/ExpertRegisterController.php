@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App;
+use App\Model\Geo\City;
+use App\Model\Geo\Region;
 use Cookie;
 use App\Library\Users\UserRating;
 use App\User;
@@ -71,9 +73,6 @@ class ExpertRegisterController extends Controller
 			'last_name' => $data['last_name'],
 			'patronymic' => $data['patronymic'],
 			'birsday' => $data['birsday'],
-			'country' => $data['country'],
-			'region' => $data['region'],
-			'city' => $data['city'],
 		]);
 		return $user;
 	}
@@ -86,6 +85,39 @@ class ExpertRegisterController extends Controller
 	 */
 	protected function registered(Request $request, $user)
 	{
+        $country_id = $request->country_id;
+        $user->country_id = $country_id;
+
+        $region_id = $request->region_id;
+        if($request->new_region != ""){
+            $region = new Region();
+            $region->name = $request->new_region;
+            $region->lang = 'ru';
+            $region->rus_lang_id = 0;
+            $region->country_id = $country_id;
+            $region->is_verify = false;
+            $region->save();
+
+            $region_id = $region->id;
+        }
+        $user->region_id = $region_id;
+
+        $city_id = $request->city_id;
+        if($request->new_city != ""){
+            $city = new City();
+            $city->name = $request->new_city;
+            $city->lang = 'ru';
+            $city->rus_lang_id = 0;
+            $city->country_id = $country_id;
+            $city->region_id = $region_id;
+            $city->is_verify = false;
+            $city->save();
+
+            $city_id = $city->id;
+        }
+        $user->city_id = $city_id;
+        $user->save();
+
 		$this->user_rating($user);
 		$user->makeExployee('expert');
 		EmailVerification::sendVerifyCode($user);

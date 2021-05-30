@@ -76,10 +76,10 @@ class PageController extends Controller
 
 		ModeratorLogs::addLog("Создал страницу: ".$request->name);
 
-		if(($request->submit == "save-hide") || ($request->submit == "save")){
+		if($request->submit === "save"){
 			return redirect()->route('adm_page_edit',$page->id);
 		}
-		elseif(($request->submit == "save-close")){
+		elseif(($request->submit === "save-close")){
 			return redirect()->route('adm_page');
 		}else{
 			return redirect()->route('adm_page_new');
@@ -99,14 +99,14 @@ class PageController extends Controller
 
 		ModeratorLogs::addLog("Отредактировал страницу: ".$request->name);
 
-		if(($request->submit == "save-hide") || ($request->submit == "save")){
-			return redirect()->route('adm_page_edit',$page->id);
-		}
-		elseif(($request->submit == "save-close")){
-			return redirect()->route('adm_page');
-		}else{
-			return redirect()->route('adm_page_new');
-		}
+        if($request->submit === "save"){
+            return redirect()->route('adm_page_edit',$page->id);
+        }
+        elseif(($request->submit === "save-close")){
+            return redirect()->route('adm_page');
+        }else{
+            return redirect()->route('adm_page_new');
+        }
 	}
 
 	public function delete($page_id){

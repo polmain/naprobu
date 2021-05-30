@@ -73,50 +73,48 @@
 
                                 <div class="form-block">
                                     <div class="form-group ">
-
                                         <label for="country">@lang("registration.country")</label>
-                                        <select name="country" id="country" class="form-control select2">
-                                            @php
-
-                                                $hasCountry = false;
-                                            @endphp
-                                            @if(App::getLocale() === 'en')
-                                                @foreach($countryCollection as $country)
-                                                    @php
-                                                        if($country->getName() == Auth::user()->country){
-                                                            $hasCountry = true;
-                                                        }
-                                                    @endphp
-                                                    <option value="{{$country->getName()}}">{{$country->getName()}}</option>
-                                                @endforeach
-                                            @else
-                                                @foreach($countries as $country)
-                                                    @php
-                                                        if($country->name_ru == Auth::user()->country || $country->name_ua == Auth::user()->country){
-                                                            $hasCountry = true;
-                                                        }
-                                                    @endphp
-                                                    <option value="{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}" data-iso="{{$country->iso}}" @if($country->name_ru == Auth::user()->country || $country->name_ua == Auth::user()->country) selected="selected" @endif>{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}</option>
-                                                @endforeach
-                                            @endif
-                                            @if(!$hasCountry)
-                                                <option value="{{Auth::user()->country}}" selected="selected">{{Auth::user()->country}}</option>
+                                        <select name="country_id" id="country_id" class="form-control select2">
+                                            @if(Auth::user()->country_model)
+                                                @if(App::getLocale() === 'ru')
+                                                    <option value="{{Auth::user()->country_model->id}}" selected="selected">{{Auth::user()->country_model->id}}</option>
+                                                @else
+                                                    <option value="{{Auth::user()->country_model->id}}" selected="selected">{{Auth::user()->country_model->translate->firstWhere('lang', App::getLocale())->name}}</option>
+                                                @endif
                                             @endif
                                         </select>
                                     </div>
                                     <div class="form-group ">
-                                        <label for="region">@lang("registration.region")</label>
-                                        {{--<select name="region" id="region_select" class="form-control select2" disabled="disabled">
-
-                                        </select>--}}
-                                        <input id="region" type="text" class="form-control d-none" name="region" placeholder="@lang("registration.region")" value="{{Auth::user()->region}}">
+                                        <label for="region_id">@lang("registration.region")</label>
+                                        <select name="region_id" id="region_id" class="form-control select2">
+                                            @if(Auth::user()->region_model)
+                                                @if(App::getLocale() === 'ru')
+                                                    <option value="{{Auth::user()->region_model->id}}" selected="selected">{{Auth::user()->region_model->id}}</option>
+                                                @else
+                                                    <option value="{{Auth::user()->region_model->id}}" selected="selected">{{(Auth::user()->region_model->translate->firstWhere('lang', App::getLocale()) ?? Auth::user()->region_model)->name}}</option>
+                                                @endif
+                                            @endif
+                                        </select>
                                     </div>
                                     <div class="form-group ">
-                                        <label for="region">@lang("registration.city")</label>
-                                        {{--<select name="city" id="city_select" class="form-control select2" disabled="disabled">
-
-                                        </select>--}}
-                                        <input id="city" type="text" class="form-control d-none" name="city" placeholder="@lang("registration.city")" value="{{Auth::user()->city}}">
+                                        <label for="new_region">@lang("registration.new_region")</label>
+                                        <input id="new_region" type="text" class="form-control" name="new_region" placeholder="@lang("registration.new_region_placeholder")">
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="city_id">@lang("registration.city")</label>
+                                        <select name="city_id" id="city_id" class="form-control select2">
+                                            @if(Auth::user()->city_model)
+                                                @if(App::getLocale() === 'ru')
+                                                    <option value="{{Auth::user()->city_model->id}}" selected="selected">{{Auth::user()->city_model->id}}</option>
+                                                @else
+                                                    <option value="{{Auth::user()->city_model->id}}" selected="selected">{{(Auth::user()->city_model->translate->firstWhere('lang', App::getLocale()) ?? Auth::user()->city_model)->name}}</option>
+                                                @endif
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="new_city">@lang("registration.new_city")</label>
+                                        <input id="new_city" type="text" class="form-control" name="new_city" placeholder="@lang("registration.new_city_placeholder")">
                                     </div>
                                 </div>
                                 <div class="form-block">
@@ -127,7 +125,7 @@
                                         <input id="expert-email" type="email" class="form-control" name="email" value="{{Auth::user()->email}}" placeholder="Email">
                                     </div>
                                     <div class="form-group ">
-                                        <input id="phone" type="tel" class="form-control" name="phone" value="{{Auth::user()->phone}}" placeholder="Телефон">
+                                        <input id="phone" type="tel" class="form-control" name="phone" value="{{Auth::user()->phone}}" placeholder="@lang("registration.phone")">
                                     </div>
                                 </div>
                                 <div class="form-group ">
@@ -165,125 +163,73 @@
 @section('scripts')
     <script>
 		$(document).ready(function () {
-            var lang = "{{(App::getLocale() == 'ua'?'uk':App::getLocale())}}";
-
-			$("#country").change(function() {
-				var country = $('option:selected', this).data('iso');
-				$("#region, #region_select").attr('disabled', 'disabled');
-				$("#region_select").html('');
-                if(country){
-                    $.ajax({
-                        method: "get",
-                        url: "{{route('registration.region')}}",
-                        data: {
-                            country: country,
-                            lang: lang,
-                        },
-                        success: function (resp) {
-                            if (resp.result === "ok") {
-                                if (resp.data.length > 0) {
-                                    $("#region").addClass('d-none');
-                                    $("#region_select").removeClass('d-none');
-                                    $("#region_select").removeAttr('disabled');
-                                    let region = $("#region").val();
-                                    resp.data.forEach(function (e) {
-                                        $("#region_select").append('<option value="' + e.name + '" data-iso="' + e.id + '" ' + ((region == e.name) ? 'selected="selected"' : '') + '>' + e.name + '</option>')
-                                    })
-
-                                    $("#region_select").change();
-
-
-									$("#region").removeAttr('disabled');
-									$("#region_select").addClass('d-none');
-									$("#region").removeClass('d-none');
-
-									$("#city").removeAttr('disabled');
-									$("#city_select").addClass('d-none');
-									$("#city").removeClass('d-none');
-									$("#city_select").attr('disabled', 'disabled');
-									$("#city_select").html('');
-                                } else {
-                                    $("#region").removeAttr('disabled');
-                                    $("#region_select").addClass('d-none');
-                                    $("#region").removeClass('d-none');
-
-                                    $("#city").removeAttr('disabled');
-                                    $("#city_select").addClass('d-none');
-                                    $("#city").removeClass('d-none');
-                                    $("#city_select").attr('disabled', 'disabled');
-                                    $("#city_select").html('');
-                                }
-
-                            }else{
-                                $("#region").removeAttr('disabled');
-                                $("#region_select").addClass('d-none');
-                                $("#region").removeClass('d-none');
-
-                                $("#city").removeAttr('disabled');
-                                $("#city_select").addClass('d-none');
-                                $("#city").removeClass('d-none');
-                                $("#city_select").attr('disabled','disabled');
-                                $("#city_select").html('');
-                            }
-                        },
-                        error: function (xhr, str) {
-                            console.log(xhr);
-                        }
-                    });
-                }else{
-					$("#region").removeAttr('disabled');
-					$("#region_select").addClass('d-none');
-					$("#region").removeClass('d-none');
-
-					$("#city").removeAttr('disabled');
-					$("#city_select").addClass('d-none');
-					$("#city").removeClass('d-none');
-					$("#city_select").attr('disabled', 'disabled');
-					$("#city_select").html('');
+            var lang = "{{App::getLocale()}}";
+            $('#country_id').select2({
+                placeholder: "{{trans('registration.country_select')}}",
+                tegs: true,
+                minimumInputLength: 0,
+                ajax: {
+                    url: '{!! route('country.find') !!}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            name: params.term,
+                            lang: lang
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
                 }
-			});
-			$("#country").change();
-			$("#region_select").change(function(){
-				var region = $('option:selected', this).data('iso');
-				$("#city_select").attr('disabled','disabled');
-				$("#city_select").html('');
-
-				$.ajax({
-					method: "get",
-					url: "{{route('registration.city')}}",
-					data: {
-						region: region,
-						lang: lang,
-					},
-					success: function(resp)
-					{
-						if(resp.result==="ok"){
-
-							if(resp.data.length > 0) {
-								$("#city").addClass('d-none');
-								$("#city_select").removeClass('d-none');
-								$("#city_select").removeAttr('disabled');
-								var prevCity = "";
-								var city = $("#city").val();
-								resp.data.forEach(function (e) {
-									if (prevCity != e.name) {
-										prevCity = e.name;
-										$("#city_select").append('<option value="' + e.name + '" '+((city == e.name)?'selected="selected"':'')+'>' + e.name + '</option>');
-									}
-
-								})
-							}else{
-								$("#city").removeAttr('disabled');
-								$("#city_select").addClass('d-none');
-								$("#city").removeClass('d-none');
-							}
-						}
-					},
-					error:  function(xhr, str){
-						console.log(xhr);
-					}
-				});
-			});
+            });
+            $('#region_id').select2({
+                placeholder: "{{trans('registration.region_select')}}",
+                tegs: true,
+                minimumInputLength: 0,
+                ajax: {
+                    url: '{!! route('region.find') !!}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            name: params.term,
+                            lang: lang,
+                            country_id: $('#country_id').val()
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
+            });
+            $('#city_id').select2({
+                placeholder: "{{trans('registration.city_select')}}",
+                tegs: true,
+                minimumInputLength: 0,
+                ajax: {
+                    url: '{!! route('city.find') !!}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            name: params.term,
+                            lang: lang,
+                            region_id: $('#region_id').val() ?? 0,
+                            country_id: $('#country_id').val()
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
+            });
 		});
     </script>
 @endsection

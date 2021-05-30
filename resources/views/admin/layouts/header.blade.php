@@ -66,6 +66,16 @@
                                         <i class="fa fa-comments text-green"></i> {{ Request::Get('commentsBlogCount') }} новых комментариев к статьям
                                     </a>
                                 </li>
+                                <li><!-- start notification -->
+                                    <a href='{{ route('admin.region.all') }}?filter=["is_verify",0]'>
+                                        <i class="fa fa-globe text-navy" aria-hidden="true"></i> {{ Request::Get('noVerifyRegionCount') }} неверефицированных областей
+                                    </a>
+                                </li>
+                                <li><!-- start notification -->
+                                    <a href='{{ route('admin.city.all') }}?filter=["is_verify",0]'>
+                                        <i class="fa fa-map-marker text-light-blue" aria-hidden="true"></i> {{ Request::Get('noVerifyCityCount') }} неверефицированных городов
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     </ul>

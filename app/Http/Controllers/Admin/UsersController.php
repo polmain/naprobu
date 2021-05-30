@@ -225,8 +225,9 @@ class UsersController extends Controller
 		$user->phone = $request->phone;
 		$user->sex = $request->sex;
 		$user->birsday = $request->birsday;
-		$user->city = $request->city;
-		$user->region = $request->region;
+		$user->city_id = $request->city_id;
+		$user->region_id = $request->region_id;
+		$user->county_id = $request->county_id;
 		$pass	= $request->password;
 		$pass = Hash::make($pass);
 		$user->password = $pass;
@@ -259,8 +260,15 @@ class UsersController extends Controller
 		$user->sex = $request->sex;
 
 		$user->birsday = $request->birsday;
-		$user->city = $request->city;
-		$user->region = $request->region;
+		if($request->has('city') && $request->has('region')){
+            $user->city = $request->city;
+            $user->region = $request->region;
+        }else{
+            $user->city_id = $request->city_id;
+            $user->region_id = $request->region_id;
+            $user->county_id = $request->county_id;
+        }
+
 		$user->status_id = 1;
 		$user->isNewsletter = $request->has('isNewsletter');
 

@@ -15386,6 +15386,26 @@ aside .sidebar-block .sidebar-footer .sidebar-more-link:hover {
     box-shadow: none;
 }
 
+.form-group .select2-container--default .select2-selection--single{
+    border-radius: 0;
+    font-size: 16px;
+    color: #052b5f;
+    border-color: #dedede;
+    height: auto;
+}
+
+.form-group .select2-container--default .select2-selection--single .select2-selection__rendered{
+    padding: 0.375rem 0.75rem;
+}
+
+.form-group .select2-container--open .select2-dropdown--below{
+    border: 1px solid #dedede;
+}
+
+.form-group .select2-container--default .select2-selection--single .select2-selection__arrow{
+    top: 0.375rem;
+}
+
 form .btn-blue {
     display: inline-block;
     padding: 15px;

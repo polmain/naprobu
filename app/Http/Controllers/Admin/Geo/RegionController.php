@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Geo;
 use App\Library\Queries\QueryBuilder;
 use App\Model\Geo\City;
 use App\Model\Geo\Country;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\Geo\Region;
@@ -66,7 +67,7 @@ class RegionController extends Controller
             $regions = $regions->where('country_id', $country_id);
         }
 
-        $regions = $regions->where('name','like',"%".$name."%")->limit(5)->get();
+        $regions = $regions->where('name','like',"%".$name."%")->where('is_verify',true)->limit(5)->get();
 
         $formatted_regions = [];
 
@@ -124,7 +125,15 @@ class RegionController extends Controller
 
 	public function save(Request $request,$id){
         $region = Region::find($id);
-		$this->saveOrCreate($region,$request);
+
+        if($request->has('new_region_id') && $request->new_region_id){
+            $this->changeRegion($region,$request);
+            $region = Region::find($request->new_region_id);
+            ModeratorLogs::addLog("Заменил область: ".$request->name." на ". $region->name);
+            return redirect()->route('admin.region.all',['filter=["is_verify",0]']);
+        }else{
+            $this->saveOrCreate($region,$request);
+        }
 
 
 		ModeratorLogs::addLog("Отредактировал область: ".$request->name);
@@ -145,7 +154,7 @@ class RegionController extends Controller
 		return "ok";
 	}
 
-	protected function saveOrCreate($region,$request){
+	private function saveOrCreate($region,$request){
         $this->saveOrCreateTranslate($region, $request);
 
         foreach (self::TRANSLATE_LANG as $lang){
@@ -176,5 +185,16 @@ class RegionController extends Controller
         $translate->country_id = $request->input('country_id');
         $translate->save();
 
+    }
+
+    private function changeRegion(Region $region, Request $request): void
+    {
+        User::where('region_id', $region->id)
+            ->update(['region_id' => $request->new_region_id]);
+
+        City::where('region_id', $region->id)
+            ->update(['region_id' => $request->new_region_id]);
+
+        $region->delete();
     }
 }

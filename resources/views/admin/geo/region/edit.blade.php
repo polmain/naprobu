@@ -16,18 +16,27 @@
                     <div class="box-body">
                         <div class="form-group row">
                             <div class="col-md-4">
-                                <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Название страны<span class="input-request">*</span></label>
-                                <input type="text" id="name-ru" name="name" class="form-control required" placeholder="Введите название области..." value="{{$region->name}}">
+                                <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> Название страны<span class="name-input-required input-request">*</span></label>
+                                <input type="text" id="name-ru" name="name" class="form-control name-required required" placeholder="Введите название области..." value="{{$region->name}}">
                             </div>
                             <div class="col-md-4">
-                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название страны<span class="input-request">*</span></label>
-                                <input type="text" id="name-ua" name="nameUA" class="form-control required" placeholder="Введите название области..." value="{{$region->translate->firstWhere('lang', 'ua')? $region->translate->firstWhere('lang', 'ua')->name : ''}}">
+                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> Название страны<span class="name-input-required input-request">*</span></label>
+                                <input type="text" id="name-ua" name="nameUA" class="form-control name-required required" placeholder="Введите название области..." value="{{$region->translate->firstWhere('lang', 'ua')? $region->translate->firstWhere('lang', 'ua')->name : ''}}">
                             </div>
                             <div class="col-md-4">
-                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Название страны<span class="input-request">*</span></label>
-                                <input type="text" id="name-en" name="nameEN" class="form-control required" placeholder="Введите название области..." value="{{$region->translate->firstWhere('lang', 'en')? $region->translate->firstWhere('lang', 'en')->name : ''}}">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> Название страны<span class="name-input-required input-request">*</span></label>
+                                <input type="text" id="name-en" name="nameEN" class="form-control name-required required" placeholder="Введите название области..." value="{{$region->translate->firstWhere('lang', 'en')? $region->translate->firstWhere('lang', 'en')->name : ''}}">
                             </div>
                         </div>
+                        @if(!$region->is_verify)
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>Заменить на эту область</label>
+                                    <select class="form-control select2" name="new_region_id" id="new_region_id">
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
                         <div class="form-group row">
                             <div class="col-md-4">
                                 <label>Страна<span class="input-request">*</span></label>
@@ -85,5 +94,32 @@
                 cache: true
             }
         });
+        @if(!$region->is_verify)
+        $('#new_region_id').select2({
+            placeholder: "Выберите другую область...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.region.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        country_id: $('#country_id').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#new_region_id').change(function (e){
+            $('.name-required').removeClass('required');
+            $('.name-input-required').remove();
+        });
+        @endif
     </script>
 @endsection

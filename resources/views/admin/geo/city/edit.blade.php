@@ -29,9 +29,13 @@
                             </div>
                         </div>
                         @if(!$city->is_verify)
-                            <label>Поменять этот город на этот город</label>
-                            <select class="form-control select2" name="new_city_id" id="new_city_id">
-                            </select>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label>Заменить на этот город</label>
+                                    <select class="form-control select2" name="new_city_id" id="new_city_id">
+                                    </select>
+                                </div>
+                            </div>
                         @endif
                         <div class="form-group row">
                             <div class="col-md-4">

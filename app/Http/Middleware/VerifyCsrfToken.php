@@ -19,6 +19,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        "https://api.novaposhta.ua/v2.0/json/"
     ];
 }

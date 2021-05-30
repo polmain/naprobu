@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Geo;
 use App\Library\Queries\QueryBuilder;
 use App\Model\Geo\City;
 use App\Model\Geo\Country;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Library\Users\ModeratorLogs;
@@ -137,8 +138,12 @@ class CityController extends Controller
 
 	public function save(Request $request,$id){
         $city = City::find($id);
-		$this->saveOrCreate($city,$request);
 
+        if($request->has('new_city_id') && $request->new_city_id){
+            $this->changeCity($city,$request);
+        }else{
+            $this->saveOrCreate($city,$request);
+        }
 
 		ModeratorLogs::addLog("Отредактировал область: ".$request->name);
 
@@ -158,7 +163,7 @@ class CityController extends Controller
 		return "ok";
 	}
 
-	protected function saveOrCreate($city,$request){
+    private function saveOrCreate($city,$request){
         $this->saveOrCreateTranslate($city, $request);
 
         foreach (self::TRANSLATE_LANG as $lang){
@@ -190,5 +195,13 @@ class CityController extends Controller
         $translate->region_id = $request->input('region_id');
         $translate->save();
 
+    }
+
+    private function changeCity(City $city, Request $request): void
+    {
+        User::where('city_id', $city->id)
+            ->update(['city_id', $request->new_city_id]);
+
+        $city->delete();
     }
 }

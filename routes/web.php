@@ -524,6 +524,10 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
             Route::get('/user/{id}/','UserController@profile')->name('profile');
             Route::get('/user/{id}/comment/','UserController@profileComment')->name('profile.comment');
 
+            Route::get('/countries/find/', 'GeoController@countryFind')->name('country.find');
+            Route::get('/regions/find/', 'GeoController@regionFind')->name('region.find');
+            Route::get('/cities/find/', 'GeoController@cityFind')->name('city.find');
+
             Route::group(['middleware'=>'auth'],function(){
                 Route::get('/projects/questionnaire/{id}/','QuestionnaireController@questionnaire')->name('project.questionnaire');
 

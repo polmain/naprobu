@@ -211,12 +211,6 @@
                 "calledMethod": "getAreas",
                 "methodProperties": {}
             }),
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            xhrFields: {
-                withCredentials: false
-            },
             async: false,
             contentType: 'application/json',
             processData: false,

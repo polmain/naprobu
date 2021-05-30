@@ -213,6 +213,7 @@
             xhrFields: {
                 withCredentials: false
             },
+            crossDomain: true,
             success: function(response){
                 if(response.success){
                     response.data.foreach(function (item){

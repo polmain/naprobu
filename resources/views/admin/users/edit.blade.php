@@ -61,18 +61,47 @@
                                 <input name="birsday" type="text" class="form-control" id="birsday" placeholder="Год рождения" value="{{$user->birsday}}">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="birsday" class="col-sm-3 control-label ">Город</label>
-                            <div class="col-sm-9">
-                                <input name="city" type="text" class="form-control" id="city" placeholder="Город" value="{{$user->city}}">
+                        @if($user->new_form_status)
+                            <div class="form-group">
+                                <label for="country_id" class="col-sm-3 control-label ">Страна</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control select2" name="country_id" id="country_id">
+                                        <option value="{{$user->country_model->id}}" selected="selected">{{$user->country_model->name}}</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="birsday" class="col-sm-3 control-label ">Область</label>
-                            <div class="col-sm-9">
-                                <input name="region" type="text" class="form-control" id="region" placeholder="Область" value="{{$user->region}}">
+                            <div class="form-group">
+                                <label for="region_id" class="col-sm-3 control-label ">Область</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control select2" name="region_id" id="region_id">
+                                        @if($user->region_model)
+                                        <option value="{{$user->region_model->id}}" selected="selected">{{$user->region_model->name}}</option>
+                                        @endif
+                                    </select>
+                                </div>
                             </div>
-                        </div>
+                            <div class="form-group">
+                                <label for="city_id" class="col-sm-3 control-label ">Город</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control select2" name="city_id" id="city_id">
+                                        <option value="{{$user->city_model->id}}" selected="selected">{{$user->city_model->name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        @else
+                            <div class="form-group">
+                                <label for="birsday" class="col-sm-3 control-label ">Город</label>
+                                <div class="col-sm-9">
+                                    <input name="city" type="text" class="form-control" id="city" placeholder="Город" value="{{$user->city}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="birsday" class="col-sm-3 control-label ">Область</label>
+                                <div class="col-sm-9">
+                                    <input name="region" type="text" class="form-control" id="region" placeholder="Область" value="{{$user->region}}">
+                                </div>
+                            </div>
+                        @endif
                         <div class="form-group">
                             <label for="email" class="col-sm-3 control-label ">Email</label>
                             <div class="col-sm-9">
@@ -357,5 +386,70 @@
 		});
 
 		tableUsers.on( 'draw', afterDrawTabel() );
+
+        @if($user->new_form_status)
+        $('#country_id').select2({
+            placeholder: "Выберите страну...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.country.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#region_id').select2({
+            placeholder: "Выберите область...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.region.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        country_id: $('#country_id').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#city_id').select2({
+            placeholder: "Выберите город...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.city.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        country_id: $('#country_id').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        @endif
     </script>
 @endsection

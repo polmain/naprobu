@@ -32,36 +32,58 @@ class User extends Authenticatable
 	protected $hidden = [
 		'password', 'remember_token',
 	];
+
 	public function reviews(){
 		return $this->hasMany('App\Model\Review', 'user_id');
 	}
+
 	public function rang(){
 		return $this->hasOne('App\Model\User\UserRatingStatus', 'id', 'rang_id');
 	}
+
 	public function history(){
 		return $this->hasMany('App\Model\User\UserRatingHistory', 'user_id');
 	}
+
 	public function requests(){
 		return $this->hasMany('App\Model\Project\ProjectRequest', 'user_id');
 	}
+
 	public function comments(){
 		return $this->hasMany('App\Model\Review\Comment', 'user_id');
 	}
+
 	public function roles(){
 		return $this->belongsToMany('App\Model\Role','user_roles', 'user_id', 'role_id');
 	}
+
 	public function status(){
 		return $this->hasOne('App\Model\User\UserStatus','id', 'status_id');
 	}
+
 	public function ban(){
 		return $this->hasOne('App\Model\User\UserChangeStatuses','user_id', 'id')->orderBy('id','desc');
 	}
+
 	public function userNotifications(){
 		return $this->hasMany('App\Model\User\UserNotification','user_id')->orderBy('created_at','desc');
 	}
+
 	public function presents(){
 		return $this->hasMany('App\Model\User\UserPresents','user_id')->orderBy('rang_id','desc');
 	}
+
+    public function country_model(){
+        return $this->hasOne('App\Model\Geo\Country',  'id','country_id');
+    }
+
+    public function region_model(){
+        return $this->hasOne('App\Model\Geo\Region',  'id','region_id');
+    }
+
+    public function city_model(){
+        return $this->hasOne('App\Model\User\City','id', 'city_id');
+    }
 
 	public function isOnline(){
 		return ActiveUser::isOnline($this->last_active);

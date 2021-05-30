@@ -82,7 +82,7 @@ class User extends Authenticatable
     }
 
     public function city_model(){
-        return $this->hasOne('App\Model\User\City','id', 'city_id');
+        return $this->hasOne('App\Model\Geo\City','id', 'city_id');
     }
 
 	public function isOnline(){

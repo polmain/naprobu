@@ -79,7 +79,7 @@
                                                 @if(App::getLocale() === 'ru')
                                                     <option value="{{Auth::user()->country_model->id}}" selected="selected">{{Auth::user()->country_model->id}}</option>
                                                 @else
-                                                    <option value="{{Auth::user()->country_model->id}}" selected="selected">{{Auth::user()->country_model->translate->firstWhere('lang', App::getLocale()->name}}</option>
+                                                    <option value="{{Auth::user()->country_model->id}}" selected="selected">{{Auth::user()->country_model->translate->firstWhere('lang', App::getLocale())->name}}</option>
                                                 @endif
                                             @endif
                                         </select>

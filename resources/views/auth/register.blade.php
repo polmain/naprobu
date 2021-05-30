@@ -74,6 +74,19 @@
                             </div>
                             <div class="form-block">
                                 <div class="form-group ">
+                                    <label for="new_city">@lang("registration.nova_poshta_region")</label>
+                                    <select name="nova_poshta_region" id="nova_poshta_region" class="form-control">
+                                    </select>
+                                </div>
+                                <div class="form-group ">
+                                    <input id="expert-email" type="email" class="form-control" name="email" placeholder="Email">
+                                </div>
+                                <div class="form-group ">
+                                    <input id="phone" type="tel" class="form-control" name="phone" placeholder="@lang("registration.phone")">
+                                </div>
+                            </div>
+                            <div class="form-block">
+                                <div class="form-group ">
                                     <input id="expert-name" type="text" class="form-control" name="name" placeholder="@lang("registration.name")">
                                 </div>
                                 <div class="form-group ">
@@ -181,6 +194,24 @@
                     cache: true
                 }
             });
+        });
+
+
+        $.ajax({
+            url: 'https://api.novaposhta.ua/v2.0/json/',
+            data: JSON.stringify({
+                "apiKey": "561c40b8c8c50432066bc12cc25edefd",
+                "modelName": "Address",
+                "calledMethod": "getAreas",
+                "methodProperties": {}
+            }),
+            success: function(response){
+                if(response.success){
+                    response.data.foreach(function (item){
+                        $('nova_poshta_region').append("<option value='"+item.Ref+"'>"+item.Description+"</option>");
+                    });
+                }
+            }
         });
     </script>
 @endsection

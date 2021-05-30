@@ -443,6 +443,7 @@ class UserController extends Controller
             $region->lang = 'ru';
             $region->rus_lang_id = 0;
             $region->country_id = $country_id;
+            $region->is_verify = false;
             $region->save();
 
             $region_id = $region->id;
@@ -457,6 +458,7 @@ class UserController extends Controller
             $city->rus_lang_id = 0;
             $city->country_id = $country_id;
             $city->region_id = $region_id;
+            $city->is_verify = false;
             $city->save();
 
             $city_id = $city->id;

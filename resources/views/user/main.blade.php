@@ -218,7 +218,7 @@
                         return {
                             name: params.term,
                             lang: lang,
-                            region_id: $('#region_id').val(),
+                            region_id: $('#region_id').val() ?? 0,
                             country_id: $('#country_id').val()
                         };
                     },

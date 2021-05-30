@@ -211,10 +211,6 @@
                 "calledMethod": "getAreas",
                 "methodProperties": {}
             }),
-            async: false,
-            contentType: 'application/json',
-            processData: false,
-            crossDomain: true,
             success: function(response){
                 if(response.success){
                     response.data.foreach(function (item){

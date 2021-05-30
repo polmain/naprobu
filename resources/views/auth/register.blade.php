@@ -207,6 +207,13 @@
                 "calledMethod": "getAreas",
                 "methodProperties": {}
             }),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            xhrFields: {
+                withCredentials: false
+            },
+            crossDomain: true,
             success: function(response){
                 if(response.success){
                     response.data.foreach(function (item){

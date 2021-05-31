@@ -74,20 +74,15 @@
                             </div>
                             <div class="form-block">
                                 <div class="form-group ">
-                                    <label for="nova_poshta_region">@lang("registration.nova_poshta_region")</label>
-                                    <select name="nova_poshta_region" id="nova_poshta_region" class="form-control">
-                                    </select>
-                                </div>
-                                <div class="form-group ">
                                     <label for="nova_poshta_city">@lang("registration.nova_poshta_city")</label>
                                     <select name="nova_poshta_city" id="nova_poshta_city" class="form-control">
                                     </select>
                                 </div>
+                                <input type="hidden" name="nova_poshta_city_name">
                                 <div class="form-group ">
-                                    <input id="expert-email" type="email" class="form-control" name="email" placeholder="Email">
-                                </div>
-                                <div class="form-group ">
-                                    <input id="phone" type="tel" class="form-control" name="phone" placeholder="@lang("registration.phone")">
+                                    <label for="nova_poshta_warehouse">@lang("registration.nova_poshta_warehouse")</label>
+                                    <select name="nova_poshta_warehouse" id="nova_poshta_warehouse" class="form-control">
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-block">
@@ -206,24 +201,7 @@
                 }
             });
             delete $.ajaxSettings.headers["X-CSRF-TOKEN"];
-            $.ajax({
-                method: 'POST',
-                dataType: 'json',
-                url: 'https://api.novaposhta.ua/v2.0/json/',
-                data: JSON.stringify({
-                    "apiKey": "561c40b8c8c50432066bc12cc25edefd",
-                    "modelName": "Address",
-                    "calledMethod": "getAreas",
-                    "methodProperties": {}
-                }),
-                success: function(response){
-                    if(response.success){
-                        response.data.forEach(function (item){
-                            $('#nova_poshta_region').append("<option value='"+item.Ref+"'>"+item.Description+"</option>");
-                        });
-                    }
-                }
-            });
+
             $('#nova_poshta_city').select2({
                 placeholder: "Введіть населений пункт",
                 minimumInputLength: 3,
@@ -259,6 +237,45 @@
                     cache: false
                 },
             });
+
+            $('#nova_poshta_city').change(function(e){
+                var curOption = $("#nova_poshta_city option:selected");
+                $('input[name="nova_poshta_city_name"]').val(curOption.text());
+
+                var query = {
+                    "modelName": "AddressGeneral",
+                    "calledMethod": "getWarehouses",
+                    "methodProperties": {
+                        "CityRef": $(this).val(),
+                        "Language": "uk"
+                    },
+                    "apiKey": "561c40b8c8c50432066bc12cc25edefd"
+                };
+                var data =  JSON.stringify(query);
+
+                $.ajax({
+                    method: "POST",
+                    url: "https://api.novaposhta.ua/v2.0/json/",
+                    data: data,
+                    dataType: 'json',
+                    success: function(resp)
+                    {
+                        $('#nova_poshta_warehouse').html('');
+
+                        if(resp.success){
+                            resp.data.forEach(function(e){
+                                $('#nova_poshta_warehouse').append('<option val="'+e.Description+'">'+e.Description+'</option>');
+                            });
+                        }
+                    },
+                    error:  function(xhr, str){
+                        console.log(xhr);
+                    }
+                });
+            });
+
+            $('#nova_poshta_warehouse').select2();
+
         });
 
     </script>

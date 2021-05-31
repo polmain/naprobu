@@ -15392,6 +15392,7 @@ aside .sidebar-block .sidebar-footer .sidebar-more-link:hover {
     color: #052b5f;
     border-color: #dedede;
     height: auto;
+    min-height: 42px;
 }
 
 .form-group .select2-container--default .select2-selection--single .select2-selection__rendered{

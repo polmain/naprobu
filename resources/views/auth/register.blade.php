@@ -73,6 +73,7 @@
                                 </div>
                             </div>
                             <div class="form-block">
+                                <h3>@lang("registration.nova_poshta")</h3>
                                 <div class="form-group ">
                                     <label for="nova_poshta_city">@lang("registration.nova_poshta_city")</label>
                                     <select name="nova_poshta_city" id="nova_poshta_city" class="form-control">
@@ -203,7 +204,7 @@
             delete $.ajaxSettings.headers["X-CSRF-TOKEN"];
 
             $('#nova_poshta_city').select2({
-                placeholder: "Введіть населений пункт",
+                placeholder: "{{trans('registration.new_city_placeholder')}}",
                 minimumInputLength: 3,
                 ajax: {
                     url: 'https://api.novaposhta.ua/v2.0/json/',

@@ -150,7 +150,6 @@
                     cache: true
                 }
             });
-            $('#nova_poshta_block').hide();
             $('#country_id').change(function (e){
                 if($(this).val() == 637){
                     $('#nova_poshta_block').show();
@@ -286,6 +285,7 @@
 
             $('#nova_poshta_warehouse').select2();
 
+            $('#nova_poshta_block').hide();
         });
 
     </script>

@@ -72,7 +72,7 @@
                                     <input id="new_city" type="text" class="form-control" name="new_city" placeholder="@lang("registration.new_city_placeholder")">
                                 </div>
                             </div>
-                            <div class="form-block">
+                            <div class="form-block" id="nova_poshta_block">
                                 <h3>@lang("registration.nova_poshta")</h3>
                                 <div class="form-group ">
                                     <label for="nova_poshta_city">@lang("registration.nova_poshta_city")</label>
@@ -150,6 +150,15 @@
                     cache: true
                 }
             });
+            $('#nova_poshta_block').hide();
+            $('#country_id').change(function (e){
+                if($(this).val() == 637){
+                    $('#nova_poshta_block').show();
+                }else{
+                    $('#nova_poshta_block').hide();
+                }
+            });
+
             $('#region_id').select2({
                 placeholder: "{{trans('registration.region_select')}}.",
                 tegs: true,

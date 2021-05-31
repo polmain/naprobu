@@ -20,7 +20,7 @@ return [
     'new_city'	    		=>	'Населённого пункта нет в списке',
     'new_city_placeholder'  =>	'Введите населённый пункт',
     'nova_poshta'           =>	'Адрес Нова Пошта',
-    'nova_poshta_city'      =>	'Город',
+    'nova_poshta_city'      =>	'Населённый пункт',
     'nova_poshta_warehouse' =>	'Отделение',
 	'name'					=>	'Никнейм',
 	'phone'					=>	'Телефон',

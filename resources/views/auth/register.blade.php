@@ -74,8 +74,13 @@
                             </div>
                             <div class="form-block">
                                 <div class="form-group ">
-                                    <label for="new_city">@lang("registration.nova_poshta_region")</label>
+                                    <label for="nova_poshta_region">@lang("registration.nova_poshta_region")</label>
                                     <select name="nova_poshta_region" id="nova_poshta_region" class="form-control">
+                                    </select>
+                                </div>
+                                <div class="form-group ">
+                                    <label for="nova_poshta_city">@lang("registration.nova_poshta_city")</label>
+                                    <select name="nova_poshta_city" id="nova_poshta_city" class="form-control">
                                     </select>
                                 </div>
                                 <div class="form-group ">
@@ -220,5 +225,43 @@
                 }
             }
         });
+        $('#nova_poshta_city').select2({
+            placeholder: "Введіть населений пункт",
+            minimumInputLength: 3,
+            ajax: {
+                url: 'https://api.novaposhta.ua/v2.0/json/',
+                dataType: 'json',
+                type: 'POST',
+                data: function (params) {
+                    var query = {
+                        "modelName": "Address",
+                        "calledMethod": "searchSettlements",
+                        "methodProperties": {
+                            "CityName":params.term,
+                            "Limit": 10
+                        },
+                        "apiKey": "561c40b8c8c50432066bc12cc25edefd"
+                    };
+                    return JSON.stringify(query);
+                },
+
+                processResults: function (data) {
+                    var items = [];
+                    if(data.success){
+                        var cities = data.data[0].Addresses;
+                        cities.forEach(function (e) {
+                            items.push({'id':e.DeliveryCity,'text':e.Present});
+                        })
+                    }
+                    return {
+                        results: items,
+                    };
+                },
+                cache: false
+            },
+        });
+
+        });
+
     </script>
 @endsection

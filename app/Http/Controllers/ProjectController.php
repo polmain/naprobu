@@ -176,6 +176,9 @@ class ProjectController extends Controller
 	}
 
 	public function index(Request $request,$url){
+        if($url === 'libero-touch'){
+            return redirect('https://liberoam.naprobu.ua/');
+        }
 
 		$locale = App::getLocale();
 

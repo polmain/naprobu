@@ -164,7 +164,13 @@
 @endsection
 
 @section('scripts')
-    <script>
-        $('.content-container').load('https://naprobu.ua/inc/about_us/page16203292.html');
-    </script>
+    @if(App::getLocale() === 'en')
+        <script>
+            $('.content-container').load('https://naprobu.ua/inc/about_us_eng/page19888448.html');
+        </script>
+    @else
+        <script>
+            $('.content-container').load('https://naprobu.ua/inc/about_us/page16203292.html');
+        </script>
+    @endif
 @endsection

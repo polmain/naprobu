@@ -68,11 +68,12 @@ class ExpertRegisterController extends Controller
 			'status_id' => 5,
 			'current_rating' => 0,
 			'rang_id' => 1,
-
 			'first_name' => $data['first_name'],
 			'last_name' => $data['last_name'],
 			'patronymic' => $data['patronymic'],
 			'birsday' => $data['birsday'],
+			'nova_poshta_city' => $data['nova_poshta_city_name'],
+			'nova_poshta_warehouse' => $data['nova_poshta_warehouse'],
 		]);
 		return $user;
 	}

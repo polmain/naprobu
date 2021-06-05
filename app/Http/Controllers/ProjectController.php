@@ -112,6 +112,13 @@ class ProjectController extends Controller
 	}
 
 	public function category(Request $request,$url){
+        $international = $request->get('international');
+
+        $audience = ProjectAudienceEnum::UKRAINE;
+        if($international){
+            $audience = ProjectAudienceEnum::WORD;
+        }
+
 		$locale = App::getLocale();
 
 		$category = ProjectCategory::where([
@@ -147,6 +154,7 @@ class ProjectController extends Controller
 							['status_id','<>',10],
 							['isHide',0],
 							['type','<>','only-blogger'],
+                            ['audience',$audience]
 						])->orderBy('start_registration_time','desc')
 			->paginate(15);
 

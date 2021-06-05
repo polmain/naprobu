@@ -341,7 +341,7 @@
 
             $('#nova_poshta_warehouse').select2();
 
-            if($(this).val() != 637){
+            if($('#country_id').val() != 637){
                 $('#nova_poshta_block').hide();
             }
 		});

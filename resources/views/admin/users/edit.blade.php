@@ -150,6 +150,21 @@
             </div><!-- /.box -->
         </div><!-- /.col -->
         <div class='col-md-6'>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Дополнительная иформация</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <p><strong>Город НП:</strong> {{$user->nova_poshta_city}}</p>
+                    <p><strong>Отделение НП:</strong> {{$user->nova_poshta_warehouse}}</p>
+                    <p></p>
+                    <p></p>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
             <!-- Box -->
             <form action="{{route('adm_change_status',['user_id' => $user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
                 {{ csrf_field() }}

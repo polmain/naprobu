@@ -72,6 +72,20 @@
                                     <input id="new_city" type="text" class="form-control" name="new_city" placeholder="@lang("registration.new_city_placeholder")">
                                 </div>
                             </div>
+                            <div class="form-block" id="nova_poshta_block">
+                                <h3>@lang("registration.nova_poshta")</h3>
+                                <div class="form-group ">
+                                    <label for="nova_poshta_city">@lang("registration.nova_poshta_city")</label>
+                                    <select name="nova_poshta_city" id="nova_poshta_city" class="form-control">
+                                    </select>
+                                </div>
+                                <input type="hidden" name="nova_poshta_city_name">
+                                <div class="form-group ">
+                                    <label for="nova_poshta_warehouse">@lang("registration.nova_poshta_warehouse")</label>
+                                    <select name="nova_poshta_warehouse" id="nova_poshta_warehouse" class="form-control">
+                                    </select>
+                                </div>
+                            </div>
                             <div class="form-block">
                                 <div class="form-group ">
                                     <input id="expert-name" type="text" class="form-control" name="name" placeholder="@lang("registration.name")">
@@ -136,6 +150,14 @@
                     cache: true
                 }
             });
+            $('#country_id').change(function (e){
+                if($(this).val() == 637){
+                    $('#nova_poshta_block').show();
+                }else{
+                    $('#nova_poshta_block').hide();
+                }
+            });
+
             $('#region_id').select2({
                 placeholder: "{{trans('registration.region_select')}}.",
                 tegs: true,
@@ -181,6 +203,90 @@
                     cache: true
                 }
             });
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            delete $.ajaxSettings.headers["X-CSRF-TOKEN"];
+
+            $('#nova_poshta_city').select2({
+                placeholder: "{{trans('registration.new_city_placeholder')}}",
+                minimumInputLength: 3,
+                ajax: {
+                    url: 'https://api.novaposhta.ua/v2.0/json/',
+                    dataType: 'json',
+                    type: 'POST',
+                    data: function (params) {
+                        var query = {
+                            "modelName": "Address",
+                            "calledMethod": "searchSettlements",
+                            "methodProperties": {
+                                "CityName":params.term,
+                                "Limit": 10
+                            },
+                            "apiKey": "561c40b8c8c50432066bc12cc25edefd"
+                        };
+                        return JSON.stringify(query);
+                    },
+
+                    processResults: function (data) {
+                        var items = [];
+                        if(data.success){
+                            var cities = data.data[0].Addresses;
+                            cities.forEach(function (e) {
+                                items.push({'id':e.DeliveryCity,'text':e.Present});
+                            })
+                        }
+                        return {
+                            results: items,
+                        };
+                    },
+                    cache: false
+                },
+            });
+
+            $('#nova_poshta_city').change(function(e){
+                var curOption = $("#nova_poshta_city option:selected");
+                $('input[name="nova_poshta_city_name"]').val(curOption.text());
+
+                var query = {
+                    "modelName": "AddressGeneral",
+                    "calledMethod": "getWarehouses",
+                    "methodProperties": {
+                        "CityRef": $(this).val(),
+                        "Language": "uk"
+                    },
+                    "apiKey": "561c40b8c8c50432066bc12cc25edefd"
+                };
+                var data =  JSON.stringify(query);
+
+                $.ajax({
+                    method: "POST",
+                    url: "https://api.novaposhta.ua/v2.0/json/",
+                    data: data,
+                    dataType: 'json',
+                    success: function(resp)
+                    {
+                        $('#nova_poshta_warehouse').html('');
+
+                        if(resp.success){
+                            resp.data.forEach(function(e){
+                                $('#nova_poshta_warehouse').append('<option val="'+e.Description+'">'+e.Description+'</option>');
+                            });
+                        }
+                    },
+                    error:  function(xhr, str){
+                        console.log(xhr);
+                    }
+                });
+            });
+
+            $('#nova_poshta_warehouse').select2();
+
+            $('#nova_poshta_block').hide();
         });
+
     </script>
 @endsection

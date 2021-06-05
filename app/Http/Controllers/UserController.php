@@ -476,6 +476,8 @@ class UserController extends Controller
 			$user->status_id = 5;
 		}
 
+        $user->nova_poshta_city = $request->nova_poshta_city_name;
+        $user->nova_poshta_warehouse = $request->nova_poshta_warehouse;
 		$user->save();
 
 		if(

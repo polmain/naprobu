@@ -122,12 +122,18 @@
                                     <div class="form-group ">
                                         <label for="nova_poshta_city">@lang("registration.nova_poshta_city")</label>
                                         <select name="nova_poshta_city" id="nova_poshta_city" class="form-control">
+                                            @if( Auth::user()->nova_poshta_city )
+                                                <option value="{{Auth::user()->nova_poshta_city}}" selected="selected">{{Auth::user()->nova_poshta_city}}</option>
+                                            @endif
                                         </select>
                                     </div>
                                     <input type="hidden" name="nova_poshta_city_name" value="{{ Auth::user()->nova_poshta_city }}">
                                     <div class="form-group ">
                                         <label for="nova_poshta_warehouse">@lang("registration.nova_poshta_warehouse")</label>
                                         <select name="nova_poshta_warehouse" id="nova_poshta_warehouse" class="form-control">
+                                            @if( Auth::user()->nova_poshta_warehouse )
+                                                <option value="{{Auth::user()->nova_poshta_warehouse}}" selected="selected">{{Auth::user()->nova_poshta_warehouse}}</option>
+                                            @endif
                                         </select>
                                     </div>
                                 </div>
@@ -221,6 +227,7 @@
                     cache: true
                 }
             });
+
             $('#country_id').change(function (e){
                 if($(this).val() == 637){
                     $('#nova_poshta_block').show();
@@ -228,6 +235,7 @@
                     $('#nova_poshta_block').hide();
                 }
             });
+
             $('#city_id').select2({
                 placeholder: "{{trans('registration.city_select')}}",
                 tegs: true,
@@ -333,7 +341,9 @@
 
             $('#nova_poshta_warehouse').select2();
 
-            $('#nova_poshta_block').hide();
+            if($(this).val() != 637){
+                $('#nova_poshta_block').hide();
+            }
 		});
     </script>
 @endsection

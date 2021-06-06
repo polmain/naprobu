@@ -154,8 +154,8 @@
                                 <div class="form-group">
                                     <label for="hobbies">@lang("registration.hobbies")</label>
                                     @foreach($hobbiesArray as $hobby)
-                                    <label class="form-check">@lang("hobbies.".$materialCondition)
-                                        <input class="form-check-input" type="checkbox" name="hobbies[]" id="hobbies_{{$materialCondition}}" value="{{$materialCondition}}">
+                                    <label class="form-check">@lang("hobbies.".$hobby)
+                                        <input class="form-check-input" type="checkbox" name="hobbies[]" id="hobbies_{{$hobby}}" value="{{$hobby}}">
                                         <span class="checkmark"></span>
                                     </label>
                                     @endforeach

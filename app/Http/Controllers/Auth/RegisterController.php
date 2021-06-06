@@ -86,12 +86,12 @@ class RegisterController extends Controller
 
         $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
-        $educationArray = EducationEnum::ALL_VARIABLES;
-        $employmentArray = EmploymentEnum::ALL_VARIABLES;
-        $workArray = WorkEnum::ALL_VARIABLES;
-        $familyStatusArray = FamilyStatusEnum::ALL_VARIABLES;
-        $materialConditionArray = MaterialConditionEnum::ALL_VARIABLES;
-        $hobbiesArray = HobbiesEnum::ALL_VARIABLES;
+        $educationArray = EducationEnum::values();
+        $employmentArray = EmploymentEnum::values();
+        $workArray = WorkEnum::values();
+        $familyStatusArray = FamilyStatusEnum::values();
+        $materialConditionArray = MaterialConditionEnum::values();
+        $hobbiesArray = HobbiesEnum::values();
 
 		return view('auth.register',[
 			'page' => $page,

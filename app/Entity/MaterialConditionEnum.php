@@ -11,7 +11,7 @@ class MaterialConditionEnum extends Enum
     public const ENOUGH_FOOD_CLOTHING = 'enough_food_clothing';
     public const ENOUGH_EVERYTHING = 'enough_everything';
 
-    private const ALL_VARIABLES = [
+    public const ALL_VARIABLES = [
         self::NOT_ENOUGH_FOOD, self::ENOUGH_FOOD, self::ENOUGH_FOOD_CLOTHING, self::ENOUGH_EVERYTHING
     ];
 

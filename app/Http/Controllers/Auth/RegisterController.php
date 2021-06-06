@@ -63,12 +63,12 @@ class RegisterController extends Controller
 	{
 		$locale = App::getLocale();
 
-        $educationArray = EducationEnum::getArray();
-        $employmentArray = EmploymentEnum::getArray();
-        $workArray = WorkEnum::getArray();
-        $familyStatusArray = FamilyStatusEnum::getArray();
-        $materialConditionArray = MaterialConditionEnum::getArray();
-        $hobbiesArray = HobbiesEnum::getArray();
+        $educationArray = EducationEnum::ALL_VARIABLES;
+        $employmentArray = EmploymentEnum::ALL_VARIABLES;
+        $workArray = WorkEnum::ALL_VARIABLES;
+        $familyStatusArray = FamilyStatusEnum::ALL_VARIABLES;
+        $materialConditionArray = MaterialConditionEnum::ALL_VARIABLES;
+        $hobbiesArray = HobbiesEnum::ALL_VARIABLES;
 
 		$page = Page::where([
 			['url','registration'],

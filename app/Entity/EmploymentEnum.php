@@ -12,7 +12,7 @@ class EmploymentEnum extends Enum
     public const STUDENT = 'student';
     public const MATERNITY_LEAVE = 'maternity_leave';
 
-    private const ALL_VARIABLES = [
+    public const ALL_VARIABLES = [
         self::WORK, self::NOT_WORK, self::LOOKING_JOB, self::STUDENT, self::MATERNITY_LEAVE
     ];
 

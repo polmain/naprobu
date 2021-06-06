@@ -70,8 +70,6 @@ class RegisterController extends Controller
         $materialConditionArray = MaterialConditionEnum::ALL_VARIABLES;
         $hobbiesArray = HobbiesEnum::ALL_VARIABLES;
 
-        dd($educationArray);
-
 		$page = Page::where([
 			['url','registration'],
 			['lang',$locale],

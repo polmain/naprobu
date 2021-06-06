@@ -110,57 +110,6 @@
                                     <input id="expert-password_confirmation" type="password" class="form-control" name="password_confirmation" placeholder="@lang("registration.password_confirmation")">
                                 </div>
                             </div>
-                            <div class="form-block">
-                                <div class="form-group">
-                                    <label for="education">@lang("registration.education")</label>
-                                    <select name="education" id="education" class="form-control">
-                                        @foreach($educationArray as $education)
-                                            <option value="{{$education}}">@lang("education.".$education)</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="employment">@lang("registration.employment")</label>
-                                    <select name="employment" id="employment" class="form-control">
-                                        @foreach($employmentArray as $employment)
-                                            <option value="{{$employment}}">@lang("employment.".$employment)</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="work">@lang("registration.work")</label>
-                                    <select name="work" id="work" class="form-control">
-                                        @foreach($workArray as $work)
-                                            <option value="{{$work}}">@lang("work.".$work)</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="family_status">@lang("registration.family_status")</label>
-                                    <select name="family_status" id="family_status" class="form-control">
-                                        @foreach($familyStatusArray as $familyStatus)
-                                            <option value="{{$familyStatus}}">@lang("family_status.".$familyStatus)</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="material_condition">@lang("registration.material_condition")</label>
-                                    <select name="material_condition" id="material_condition" class="form-control">
-                                        @foreach($materialConditionArray as $materialCondition)
-                                            <option value="{{$materialCondition}}">@lang("material_condition.".$materialCondition)</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="hobbies">@lang("registration.hobbies")</label>
-                                    @foreach($hobbiesArray as $hobby)
-                                    <label class="form-check">@lang("hobbies.".$materialCondition)
-                                        <input class="form-check-input" type="checkbox" name="hobbies[]" id="hobbies_{{$materialCondition}}" value="{{$materialCondition}}">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                    @endforeach
-                                </div>
-                            </div>
                             <div class="form-group mb-30">
                                 <p class="text-center small-text">
                                     {!!  trans('modal.user_agreement',['url' => route('simple',['legal'])]) !!}

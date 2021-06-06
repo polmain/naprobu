@@ -28,18 +28,6 @@ class HobbiesEnum extends Enum
     public const MUSIC_AND_DANCING = 'music_and_dancing';
     public const OTHER = 'other';
 
-    public const ALL_VARIABLES = [
-        self::CHILDREN, self::BUSINESS, self::GADGETS, self::IT, self::MEDIA, self::MEDIA, self::MEDIA,
-        self::SPORT, self::TECHNIC, self::COOKING, self::EDUCATION, self::SCIENCE, self::ART, self::LEISURE,
-        self::TRAVELS, self::GARDEN, self::ANIMALS, self::CARS, self::MEDICINE, self::MARKETING, self::FISHING,
-        self::MUSIC_AND_DANCING, self::OTHER
-        ];
-
-    public static function getArray(): array
-    {
-        return self::ALL_VARIABLES;
-    }
-
     public function isChildren(): bool
     {
         return $this->getValue() === self::CHILDREN;

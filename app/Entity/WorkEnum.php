@@ -12,15 +12,6 @@ class WorkEnum extends Enum
     public const BUSINESS_OWNER = 'business_owner';
     public const SELF_EMPLOYED = 'self_employed';
 
-    public const ALL_VARIABLES = [
-        self::TOP_MANAGER, self::MIDDLE_MANAGER, self::EXECUTOR, self::BUSINESS_OWNER, self::SELF_EMPLOYED
-    ];
-
-    public static function getArray(): array
-    {
-        return self::ALL_VARIABLES;
-    }
-
     public function isTopManager(): bool
     {
         return $this->getValue() === self::TOP_MANAGER;

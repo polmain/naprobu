@@ -119,6 +119,7 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                {{--
                                 <div class="form-group">
                                     <label for="employment">@lang("registration.employment")</label>
                                     <select name="employment" id="employment" class="form-control">
@@ -159,7 +160,7 @@
                                         <span class="checkmark"></span>
                                     </label>
                                     @endforeach
-                                </div>
+                                </div>--}}
                             </div>
                             <div class="form-group mb-30">
                                 <p class="text-center small-text">

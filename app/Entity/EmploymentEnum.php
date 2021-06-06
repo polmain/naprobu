@@ -12,6 +12,15 @@ class EmploymentEnum extends Enum
     public const STUDENT = 'student';
     public const MATERNITY_LEAVE = 'maternity_leave';
 
+    private const ALL_VARIABLES = [
+        self::WORK, self::NOT_WORK, self::LOOKING_JOB, self::STUDENT, self::MATERNITY_LEAVE
+    ];
+
+    public static function getArray(): array
+    {
+        return self::ALL_VARIABLES;
+    }
+
     public function isWork(): bool
     {
         return $this->getValue() === self::WORK;

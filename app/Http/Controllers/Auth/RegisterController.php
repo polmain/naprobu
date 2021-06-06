@@ -66,12 +66,12 @@ class RegisterController extends Controller
 
 		$countries = App\Model\User\UserCountry::all();
 
-        $educationArray = EducationEnum::toArray();
-        $employmentArray = EmploymentEnum::toArray();
-        $workArray = WorkEnum::toArray();
-        $familyStatusArray = FamilyStatusEnum::toArray();
-        $materialConditionArray = MaterialConditionEnum::toArray();
-        $hobbiesArray = HobbiesEnum::toArray();
+        $educationArray = EducationEnum::getArray();
+        $employmentArray = EmploymentEnum::getArray();
+        $workArray = WorkEnum::getArray();
+        $familyStatusArray = FamilyStatusEnum::getArray();
+        $materialConditionArray = MaterialConditionEnum::getArray();
+        $hobbiesArray = HobbiesEnum::getArray();
 
 		$page = Page::where([
 			['url','registration'],

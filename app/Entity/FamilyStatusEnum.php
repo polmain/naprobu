@@ -10,6 +10,15 @@ class FamilyStatusEnum extends Enum
     public const SINGLE = 'single';
     public const CIVIL_MARRIAGE = 'civil_marriage';
 
+    private const ALL_VARIABLES = [
+        self::MARRIED, self::SINGLE, self::CIVIL_MARRIAGE
+    ];
+
+    public static function getArray(): array
+    {
+        return self::ALL_VARIABLES;
+    }
+
     public function isMarried(): bool
     {
         return $this->getValue() === self::MARRIED;

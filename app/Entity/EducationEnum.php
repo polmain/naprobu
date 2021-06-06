@@ -12,6 +12,15 @@ class EducationEnum extends Enum
     public const HIGHER = 'higher';
     public const ACADEMIC_DEGREE = 'academic_degree';
 
+    private const ALL_VARIABLES = [
+        self::SECONDARY, self::SPECIALIZED_SECONDARY, self::INCOMPLETE_HIGHER, self::HIGHER, self::ACADEMIC_DEGREE
+    ];
+
+    public static function getArray(): array
+    {
+        return self::ALL_VARIABLES;
+    }
+
     public function isSecondary(): bool
     {
         return $this->getValue() === self::SECONDARY;

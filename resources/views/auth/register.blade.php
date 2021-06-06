@@ -46,7 +46,7 @@
                                 <div class="form-group ">
                                     <label for="country">@lang("registration.birsday")</label>
                                     <select id="birsday" class="form-control" name="birsday">
-                                        @for($year = \Carbon\Carbon::now()->year; $year >= 1900; $year++)
+                                        @for($year = \Carbon\Carbon::now()->year; $year >= 1900; $year--)
                                         <option value="{{$year}}">{{$year}}</option>
                                         @endfor
                                     </select>

@@ -65,7 +65,7 @@ class RegisterController extends Controller
 		$locale = App::getLocale();
 
 		$countries = App\Model\User\UserCountry::all();
-        $countryCollection = CountryCollection::getInstance();
+
         $educationArray = EducationEnum::toArray();
         $employmentArray = EmploymentEnum::toArray();
         $workArray = WorkEnum::toArray();
@@ -100,7 +100,6 @@ class RegisterController extends Controller
 			'page' => $page,
 			'alternativeUrls' => $alternativeUrls,
 			'countries'	=> $countries,
-			'countryCollection'	=> $countryCollection,
 			'educationArray'	=> $educationArray,
 			'employmentArray'	=> $employmentArray,
 			'workArray'	=> $workArray,

@@ -115,7 +115,7 @@
                                     <label for="education">@lang("registration.education")</label>
                                     <select name="education" id="education" class="form-control">
                                         @foreach($educationArray as $education)
-                                            <option value="{{$education}}">{{trans("registration.education_".$education)}}</option>
+                                            <option value="{{$education}}">@lang("registration.education_".$education)</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -123,7 +123,7 @@
                                     <label for="employment">@lang("registration.employment")</label>
                                     <select name="employment" id="employment" class="form-control">
                                         @foreach($employmentArray as $employment)
-                                            <option value="{{$employment}}">{{trans("registration.employment_".$employment)}}</option>
+                                            <option value="{{$employment}}">@lang("registration.employment_".$employment)</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -131,7 +131,7 @@
                                     <label for="work">@lang("registration.work")</label>
                                     <select name="work" id="work" class="form-control">
                                         @foreach($workArray as $work)
-                                            <option value="{{$work}}">{{trans("registration.work_".$work)}}</option>
+                                            <option value="{{$work}}">@lang("registration.work_".$work)</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -139,7 +139,7 @@
                                     <label for="family_status">@lang("registration.family_status")</label>
                                     <select name="family_status" id="family_status" class="form-control">
                                         @foreach($familyStatusArray as $familyStatus)
-                                            <option value="{{$familyStatus}}">{{trans("registration.family_status_".$familyStatus)}}</option>
+                                            <option value="{{$familyStatus}}">@lang("registration.family_status_".$familyStatus)</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -147,14 +147,14 @@
                                     <label for="material_condition">@lang("registration.material_condition")</label>
                                     <select name="material_condition" id="material_condition" class="form-control">
                                         @foreach($materialConditionArray as $materialCondition)
-                                            <option value="{{$materialCondition}}">{{trans("registration.material_condition_".$materialCondition)}}</option>
+                                            <option value="{{$materialCondition}}">@lang("registration.material_condition_".$materialCondition)</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="hobbies">@lang("registration.hobbies")</label>
                                     @foreach($hobbiesArray as $hobby)
-                                    <label class="form-check">{{trans("registration.hobbies_".$materialCondition)}}
+                                    <label class="form-check">@lang("registration.hobbies_".$materialCondition)
                                         <input class="form-check-input" type="checkbox" name="hobbies[]" id="hobbies_{{$materialCondition}}" value="{{$materialCondition}}">
                                         <span class="checkmark"></span>
                                     </label>

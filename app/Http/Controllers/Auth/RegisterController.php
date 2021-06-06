@@ -63,13 +63,6 @@ class RegisterController extends Controller
 	{
 		$locale = App::getLocale();
 
-        $educationArray = EducationEnum::ALL_VARIABLES;
-        $employmentArray = EmploymentEnum::ALL_VARIABLES;
-        $workArray = WorkEnum::ALL_VARIABLES;
-        $familyStatusArray = FamilyStatusEnum::ALL_VARIABLES;
-        $materialConditionArray = MaterialConditionEnum::ALL_VARIABLES;
-        $hobbiesArray = HobbiesEnum::ALL_VARIABLES;
-
 		$page = Page::where([
 			['url','registration'],
 			['lang',$locale],
@@ -92,6 +85,13 @@ class RegisterController extends Controller
         $routes = AlternativeUrlService::generateReplyRoutes('registration/');
 
         $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
+
+        $educationArray = EducationEnum::ALL_VARIABLES;
+        $employmentArray = EmploymentEnum::ALL_VARIABLES;
+        $workArray = WorkEnum::ALL_VARIABLES;
+        $familyStatusArray = FamilyStatusEnum::ALL_VARIABLES;
+        $materialConditionArray = MaterialConditionEnum::ALL_VARIABLES;
+        $hobbiesArray = HobbiesEnum::ALL_VARIABLES;
 
 		return view('auth.register',[
 			'page' => $page,

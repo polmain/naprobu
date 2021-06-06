@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App;
-use App\Entity\Collection\CountryCollection;
 use App\Entity\EducationEnum;
 use App\Entity\EmploymentEnum;
 use App\Entity\FamilyStatusEnum;
 use App\Entity\HobbiesEnum;
 use App\Entity\MaterialConditionEnum;
 use App\Entity\WorkEnum;
+use App\Model\User\UserCountry;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Cookie;
 use App\Library\Users\UserRating;
@@ -18,7 +18,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use App\Http\Controllers\Auth\EmailVerification;
 use Illuminate\Http\Request;
 
 use App\Model\Page;
@@ -64,8 +63,6 @@ class RegisterController extends Controller
 	{
 		$locale = App::getLocale();
 
-		$countries = App\Model\User\UserCountry::all();
-
         $educationArray = EducationEnum::getArray();
         $employmentArray = EmploymentEnum::getArray();
         $workArray = WorkEnum::getArray();
@@ -99,7 +96,6 @@ class RegisterController extends Controller
 		return view('auth.register',[
 			'page' => $page,
 			'alternativeUrls' => $alternativeUrls,
-			'countries'	=> $countries,
 			'educationArray'	=> $educationArray,
 			'employmentArray'	=> $employmentArray,
 			'workArray'	=> $workArray,

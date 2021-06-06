@@ -101,7 +101,7 @@ class RegisterController extends Controller
 			'workArray'	=> $workArray,
 			'familyStatusArray'	=> $familyStatusArray,
 			'materialConditionArray'	=> $materialConditionArray,
-			'hobbiesArray'	=> $hobbiesArray,
+			'hobbiesArray'	=> $hobbiesArray
 		]);
 	}
 

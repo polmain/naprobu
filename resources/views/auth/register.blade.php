@@ -115,16 +115,15 @@
                                     <label for="education">@lang("registration.education")</label>
                                     <select name="education" id="education" class="form-control">
                                         @foreach($educationArray as $education)
-                                            <option value="{{$education->getValue()}}">{{trans("registration.education_".$education->getValue())}}</option>
+                                            <option value="{{$education}}">{{trans("registration.education_".$education)}}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                {{--
                                 <div class="form-group">
                                     <label for="employment">@lang("registration.employment")</label>
                                     <select name="employment" id="employment" class="form-control">
                                         @foreach($employmentArray as $employment)
-                                            <option value="{{$employment->getValue()}}">{{trans("registration.employment_".$employment->getValue())}}</option>
+                                            <option value="{{$employment}}">{{trans("registration.employment_".$employment)}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -132,7 +131,7 @@
                                     <label for="work">@lang("registration.work")</label>
                                     <select name="work" id="work" class="form-control">
                                         @foreach($workArray as $work)
-                                            <option value="{{$work->getValue()}}">{{trans("registration.work_".$work->getValue())}}</option>
+                                            <option value="{{$work}}">{{trans("registration.work_".$work)}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -140,7 +139,7 @@
                                     <label for="family_status">@lang("registration.family_status")</label>
                                     <select name="family_status" id="family_status" class="form-control">
                                         @foreach($familyStatusArray as $familyStatus)
-                                            <option value="{{$familyStatus->getValue()}}">{{trans("registration.family_status_".$familyStatus->getValue())}}</option>
+                                            <option value="{{$familyStatus}}">{{trans("registration.family_status_".$familyStatus)}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -148,19 +147,19 @@
                                     <label for="material_condition">@lang("registration.material_condition")</label>
                                     <select name="material_condition" id="material_condition" class="form-control">
                                         @foreach($materialConditionArray as $materialCondition)
-                                            <option value="{{$materialCondition->getValue()}}">{{trans("registration.material_condition_".$materialCondition->getValue())}}</option>
+                                            <option value="{{$materialCondition}}">{{trans("registration.material_condition_".$materialCondition)}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="hobbies">@lang("registration.hobbies")</label>
                                     @foreach($hobbiesArray as $hobby)
-                                    <label class="form-check">{{trans("registration.hobbies_".$materialCondition->getValue())}}
-                                        <input class="form-check-input" type="checkbox" name="hobbies[]" id="hobbies_{{$materialCondition->getValue()}}" value="{{$materialCondition->getValue()}}">
+                                    <label class="form-check">{{trans("registration.hobbies_".$materialCondition)}}
+                                        <input class="form-check-input" type="checkbox" name="hobbies[]" id="hobbies_{{$materialCondition}}" value="{{$materialCondition}}">
                                         <span class="checkmark"></span>
                                     </label>
                                     @endforeach
-                                </div>--}}
+                                </div>
                             </div>
                             <div class="form-group mb-30">
                                 <p class="text-center small-text">

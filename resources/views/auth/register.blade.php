@@ -127,7 +127,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="work-group">
                                     <label for="work">@lang("registration.work")</label>
                                     <select name="work" id="work" class="form-control">
                                         @foreach($workArray as $work)
@@ -342,6 +342,16 @@
             $('#nova_poshta_warehouse').select2();
 
             $('#nova_poshta_block').hide();
+
+            $('#employment').change(function (){
+                if($(this).val() == "{{\App\Entity\EmploymentEnum::WORK}}"){
+                    $('#work-group').show();
+                }else{
+                    $('#work-group').hide();
+                }
+            });
+
+            $('#employment').change();
         });
 
     </script>

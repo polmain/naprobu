@@ -4,6 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App;
 use App\Entity\Collection\CountryCollection;
+use App\Entity\EducationEnum;
+use App\Entity\EmploymentEnum;
+use App\Entity\FamilyStatusEnum;
+use App\Entity\HobbiesEnum;
+use App\Entity\MaterialConditionEnum;
+use App\Entity\WorkEnum;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Cookie;
 use App\Library\Users\UserRating;
@@ -60,6 +66,12 @@ class RegisterController extends Controller
 
 		$countries = App\Model\User\UserCountry::all();
         $countryCollection = CountryCollection::getInstance();
+        $educationArray = EducationEnum::toArray();
+        $employmentArray = EmploymentEnum::toArray();
+        $workArray = WorkEnum::toArray();
+        $familyStatusArray = FamilyStatusEnum::toArray();
+        $materialConditionArray = MaterialConditionEnum::toArray();
+        $hobbiesArray = HobbiesEnum::toArray();
 
 		$page = Page::where([
 			['url','registration'],
@@ -89,6 +101,12 @@ class RegisterController extends Controller
 			'alternativeUrls' => $alternativeUrls,
 			'countries'	=> $countries,
 			'countryCollection'	=> $countryCollection,
+			'educationArray'	=> $educationArray,
+			'employmentArray'	=> $employmentArray,
+			'workArray'	=> $workArray,
+			'familyStatusArray'	=> $familyStatusArray,
+			'materialConditionArray'	=> $materialConditionArray,
+			'hobbiesArray'	=> $hobbiesArray,
 		]);
 	}
 

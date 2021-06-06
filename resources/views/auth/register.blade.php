@@ -44,7 +44,12 @@
                                     </select>
                                 </div>
                                 <div class="form-group ">
-                                    <input id="birsday" type="text" class="form-control" name="birsday" placeholder="@lang("registration.birsday")">
+                                    <label for="country">@lang("registration.birsday")</label>
+                                    <select id="birsday" class="form-control" name="birsday">
+                                        @for($year = \Carbon\Carbon::now()->year; $year >= 1900; $year++)
+                                        <option value="{{$year}}">{{$year}}</option>
+                                        @endfor
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-block">
@@ -103,6 +108,57 @@
                                 </div>
                                 <div class="form-group mb-30">
                                     <input id="expert-password_confirmation" type="password" class="form-control" name="password_confirmation" placeholder="@lang("registration.password_confirmation")">
+                                </div>
+                            </div>
+                            <div class="form-block">
+                                <div class="form-group">
+                                    <label for="education">@lang("registration.education")</label>
+                                    <select name="education" id="education" class="form-control">
+                                        @foreach($educationArray as $education)
+                                            <option value="{{$education->getValue()}}">{{trans("registration.education_".$education->getValue())}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="employment">@lang("registration.employment")</label>
+                                    <select name="employment" id="employment" class="form-control">
+                                        @foreach($employmentArray as $employment)
+                                            <option value="{{$employment->getValue()}}">{{trans("registration.employment_".$employment->getValue())}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="work">@lang("registration.work")</label>
+                                    <select name="work" id="work" class="form-control">
+                                        @foreach($workArray as $work)
+                                            <option value="{{$work->getValue()}}">{{trans("registration.work_".$work->getValue())}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="family_status">@lang("registration.family_status")</label>
+                                    <select name="family_status" id="family_status" class="form-control">
+                                        @foreach($familyStatusArray as $familyStatus)
+                                            <option value="{{$familyStatus->getValue()}}">{{trans("registration.family_status_".$familyStatus->getValue())}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="material_condition">@lang("registration.material_condition")</label>
+                                    <select name="material_condition" id="material_condition" class="form-control">
+                                        @foreach($materialConditionArray as $materialCondition)
+                                            <option value="{{$materialCondition->getValue()}}">{{trans("registration.material_condition_".$materialCondition->getValue())}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="hobbies">@lang("registration.hobbies")</label>
+                                    @foreach($hobbiesArray as $hobby)
+                                    <label class="form-check">{{trans("registration.hobbies_".$materialCondition->getValue())}}
+                                        <input class="form-check-input" type="checkbox" name="hobbies[]" id="hobbies_{{$materialCondition->getValue()}}" value="{{$materialCondition->getValue()}}">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    @endforeach
                                 </div>
                             </div>
                             <div class="form-group mb-30">

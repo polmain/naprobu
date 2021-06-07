@@ -155,10 +155,13 @@
                                     <label for="hobbies">@lang("registration.hobbies")</label>
                                     @foreach($hobbiesArray as $hobby)
                                     <label class="form-check">@lang("hobbies.".$hobby)
-                                        <input class="form-check-input" type="checkbox" name="hobbies[]" id="hobbies_{{$hobby}}" value="{{$hobby}}">
+                                        <input class="form-check-input" type="checkbox" name="hobbies[]" @if($hobby->isOther())id="hobbies_other_checkbox"@endif value="{{$hobby}}">
                                         <span class="checkmark"></span>
                                     </label>
                                     @endforeach
+                                </div>
+                                <div class="form-group" id="hobbies_other-group">
+                                    <input id="hobbies_other" type="text" class="form-control" name="hobbies_other" placeholder="@lang("hobbies.other")">
                                 </div>
                             </div>
                             <div class="form-group mb-30">
@@ -352,6 +355,16 @@
             });
 
             $('#employment').change();
+
+            $('#hobbies_other_checkbox').change(function (e){
+                if($(this).is(':checked')){
+                    $('#hobbies_other-group').show();
+                }else{
+                    $('#hobbies_other-group').hide();
+                }
+            });
+
+            $('#hobbies_other_checkbox').change();
         });
 
     </script>

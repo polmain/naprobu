@@ -74,6 +74,13 @@ class ExpertRegisterController extends Controller
 			'birsday' => $data['birsday'],
 			'nova_poshta_city' => $data['nova_poshta_city_name'],
 			'nova_poshta_warehouse' => $data['nova_poshta_warehouse'],
+            'education' => $data['education'],
+            'employment' => $data['employment'],
+            'work' => $data['work'],
+            'family_status' => $data['family_status'],
+            'material_condition' => $data['material_condition'],
+            'hobbies' => $data['hobbies'],
+            'hobbies_other' => $data['hobbies_other'],
 		]);
 		return $user;
 	}

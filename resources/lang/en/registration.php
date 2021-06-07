@@ -28,6 +28,13 @@ return [
 	'password_confirmation'	=>	'Repeat password',
 	'submit'				=>	'Become an expert',
 
+    'education'				=>	'Education',
+    'employment'			=>	'Employment',
+    'work'		    		=>	'What do you work',
+    'family_status'			=>	'Marital status',
+    'material_condition'	=>	'How would you describe your family\'s material condition',
+    'hobbies'				=>	'Hobbies/interests',
+
 	/* Валидация */
 	'required'				=> 'This field is required',
 	'minlength'				=> 'Minimum number of characters {0}',

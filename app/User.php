@@ -38,7 +38,14 @@ class User extends Authenticatable
         'city',
         'sex',
         'nova_poshta_city',
-        'nova_poshta_warehouse'
+        'nova_poshta_warehouse',
+        'education',
+        'employment',
+        'work',
+        'family_status',
+        'material_condition',
+        'hobbies',
+        'hobbies_other',
 	];
 
 	/**
@@ -49,6 +56,10 @@ class User extends Authenticatable
 	protected $hidden = [
 		'password', 'remember_token',
 	];
+
+    protected $casts = [
+        'hobbies' => 'array',
+    ];
 
 	public function reviews(){
 		return $this->hasMany('App\Model\Review', 'user_id');

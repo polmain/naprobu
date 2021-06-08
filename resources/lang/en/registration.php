@@ -19,6 +19,7 @@ return [
     'city_select'	    	=>	'Select a city...',
     'new_city'	    		=>	'City not listed',
     'new_city_placeholder'  =>	'Enter city',
+    'other_select'          =>	'Not in the list',
     'nova_poshta'           =>	'Nova Poshta Address',
     'nova_poshta_city'      =>	'City',
     'nova_poshta_warehouse' =>	'Warehouse',

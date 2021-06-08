@@ -19,6 +19,7 @@ return [
     'city_select'	    	=>	'Выберите город...',
     'new_city'	    		=>	'Населённого пункта нет в списке',
     'new_city_placeholder'  =>	'Введите населённый пункт',
+    'other_select'          =>	'Нет в списке',
     'nova_poshta'           =>	'Адрес Нова Пошта',
     'nova_poshta_city'      =>	'Населённый пункт',
     'nova_poshta_warehouse' =>	'Отделение',

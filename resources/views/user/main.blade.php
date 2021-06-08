@@ -194,7 +194,7 @@
                                     <label for="hobbies">@lang("registration.hobbies")</label>
                                     @foreach($hobbiesArray as $hobby)
                                         <label class="form-check">@lang("hobbies.".$hobby)
-                                            <input class="form-check-input" type="checkbox" name="hobbies[]" @if($hobby->isOther())id="hobbies_other_checkbox"@endif  @if(!is_null(Auth::user()->hobbies) && in_array($familyStatus->getValue(), Auth::user()->hobbies))checked="checked" @endif value="{{$hobby}}">
+                                            <input class="form-check-input" type="checkbox" name="hobbies[]" @if($hobby->isOther())id="hobbies_other_checkbox"@endif  @if(is_array(Auth::user()->hobbies) && in_array($hobby->getValue(), Auth::user()->hobbies))checked="checked" @endif value="{{$hobby}}">
                                             <span class="checkmark"></span>
                                         </label>
                                     @endforeach

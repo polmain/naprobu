@@ -77,7 +77,7 @@
                                         <select name="country_id" id="country_id" class="form-control select2">
                                             @if(Auth::user()->country_model)
                                                 @if(App::getLocale() === 'ru')
-                                                    <option value="{{Auth::user()->country_model->id}}" selected="selected">{{Auth::user()->country_model->id}}</option>
+                                                    <option value="{{Auth::user()->country_model->id}}" selected="selected">{{Auth::user()->country_model->name}}</option>
                                                 @else
                                                     <option value="{{Auth::user()->country_model->id}}" selected="selected">{{Auth::user()->country_model->translate->firstWhere('lang', App::getLocale())->name}}</option>
                                                 @endif
@@ -89,7 +89,7 @@
                                         <select name="region_id" id="region_id" class="form-control select2">
                                             @if(Auth::user()->region_model)
                                                 @if(App::getLocale() === 'ru')
-                                                    <option value="{{Auth::user()->region_model->id}}" selected="selected">{{Auth::user()->region_model->id}}</option>
+                                                    <option value="{{Auth::user()->region_model->id}}" selected="selected">{{Auth::user()->region_model->name}}</option>
                                                 @else
                                                     <option value="{{Auth::user()->region_model->id}}" selected="selected">{{(Auth::user()->region_model->translate->firstWhere('lang', App::getLocale()) ?? Auth::user()->region_model)->name}}</option>
                                                 @endif
@@ -105,7 +105,7 @@
                                         <select name="city_id" id="city_id" class="form-control select2">
                                             @if(Auth::user()->city_model)
                                                 @if(App::getLocale() === 'ru')
-                                                    <option value="{{Auth::user()->city_model->id}}" selected="selected">{{Auth::user()->city_model->id}}</option>
+                                                    <option value="{{Auth::user()->city_model->id}}" selected="selected">{{Auth::user()->city_model->name}}</option>
                                                 @else
                                                     <option value="{{Auth::user()->city_model->id}}" selected="selected">{{(Auth::user()->city_model->translate->firstWhere('lang', App::getLocale()) ?? Auth::user()->city_model)->name}}</option>
                                                 @endif

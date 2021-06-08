@@ -94,9 +94,10 @@
                                                     <option value="{{Auth::user()->region_model->id}}" selected="selected">{{(Auth::user()->region_model->translate->firstWhere('lang', App::getLocale()) ?? Auth::user()->region_model)->name}}</option>
                                                 @endif
                                             @endif
+                                                <option value="other">@lang('registration.other_select')</option>
                                         </select>
                                     </div>
-                                    <div class="form-group ">
+                                    <div class="form-group new_region-group">
                                         <label for="new_region">@lang("registration.new_region")</label>
                                         <input id="new_region" type="text" class="form-control" name="new_region" placeholder="@lang("registration.new_region_placeholder")">
                                     </div>
@@ -110,9 +111,10 @@
                                                     <option value="{{Auth::user()->city_model->id}}" selected="selected">{{(Auth::user()->city_model->translate->firstWhere('lang', App::getLocale()) ?? Auth::user()->city_model)->name}}</option>
                                                 @endif
                                             @endif
+                                                <option value="other">@lang('registration.other_select')</option>
                                         </select>
                                     </div>
-                                    <div class="form-group ">
+                                    <div class="form-group new_city-group">
                                         <label for="new_city">@lang("registration.new_city")</label>
                                         <input id="new_city" type="text" class="form-control" name="new_city" placeholder="@lang("registration.new_city_placeholder")">
                                     </div>
@@ -260,6 +262,7 @@
                     cache: true
                 }
             });
+
             $('#region_id').select2({
                 placeholder: "{{trans('registration.region_select')}}",
                 tegs: true,
@@ -282,6 +285,15 @@
                     cache: true
                 }
             });
+
+            $('#region_id').change(function(e){
+                if($(this).val() == 'other'){
+                    $('.new_region-group').show();
+                }else{
+                    $('.new_region-group').hide();
+                }
+            });
+            $('#region_id').change();
 
             $('#country_id').change(function (e){
                 if($(this).val() == 637){
@@ -314,6 +326,15 @@
                     cache: true
                 }
             });
+
+            $('#city_id').change(function(e){
+                if($(this).val() == 'other'){
+                    $('.new_city-group').show();
+                }else{
+                    $('.new_city-group').hide();
+                }
+            });
+            $('#city_id').change();
 
             $.ajaxSetup({
                 headers: {

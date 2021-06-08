@@ -161,8 +161,21 @@
                 <div class="box-body">
                     <p><strong>Город НП:</strong> {{$user->nova_poshta_city}}</p>
                     <p><strong>Отделение НП:</strong> {{$user->nova_poshta_warehouse}}</p>
-                    <p></p>
-                    <p></p>
+                    <p><strong>Образование:</strong> @lang("education.".$user->education)</p>
+                    <p><strong>Занятость:</strong> @lang("employment.".$user->employment)</p>
+                    @if($user->work)
+                    <p><strong>Кем работаете:</strong> @lang("work.".$user->work)</p>
+                    @endif
+                    <p><strong>Семейное положение:</strong> @lang("family_status.".$user->family_status)</p>
+                    <p><strong>Как бы Вы описали материальное состояние вашей семьи?:</strong> @lang("material_condition.".$user->material_condition)</p>
+                    <p><strong>Увлечения/интересы:</strong>
+                        @foreach($user->hobbies as $hobby)
+                            @lang("hobbies.".$hobby);
+                        @endforeach
+                        @if($user->hobbies_other)
+                            {{$user->hobbies_other}}
+                        @endif
+                    </p>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
             <!-- Box -->

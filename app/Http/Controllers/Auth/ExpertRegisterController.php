@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App;
+use App\Entity\EmploymentEnum;
+use App\Entity\WorkEnum;
 use App\Model\Geo\City;
 use App\Model\Geo\Region;
 use Cookie;
@@ -74,6 +76,12 @@ class ExpertRegisterController extends Controller
 			'birsday' => $data['birsday'],
 			'nova_poshta_city' => $data['nova_poshta_city_name'],
 			'nova_poshta_warehouse' => $data['nova_poshta_warehouse'],
+            'education' => $data['education'],
+            'employment' => $data['employment'],
+            'family_status' => $data['family_status'],
+            'material_condition' => $data['material_condition'],
+            'hobbies' => $data['hobbies'],
+            'hobbies_other' => $data['hobbies_other'],
 		]);
 		return $user;
 	}
@@ -117,6 +125,11 @@ class ExpertRegisterController extends Controller
             $city_id = $city->id;
         }
         $user->city_id = $city_id;
+
+        if(EmploymentEnum::getInstance($request->employment)->isWork()){
+            $user->work = $request->work;
+        }
+
         $user->save();
 
 		$this->user_rating($user);

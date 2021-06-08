@@ -36,6 +36,11 @@ class UsersController extends Controller
 {
     private const TRANSLATE_LANG = ['ua', 'en'];
 
+    public function __construct()
+    {
+        app()->setLocale('ru');
+    }
+
 	public function all(){
 		SEO::setTitle('Все пользователи');
 		AdminPageData::setPageName('Все пользователи');

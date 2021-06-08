@@ -44,7 +44,12 @@
                                     </select>
                                 </div>
                                 <div class="form-group ">
-                                    <input id="birsday" type="text" class="form-control" name="birsday" placeholder="@lang("registration.birsday")">
+                                    <label for="country">@lang("registration.birsday")</label>
+                                    <select id="birsday" class="form-control" name="birsday">
+                                        @for($year = \Carbon\Carbon::now()->year; $year >= 1900; $year--)
+                                        <option value="{{$year}}">{{$year}}</option>
+                                        @endfor
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-block">
@@ -56,18 +61,20 @@
                                 <div class="form-group ">
                                     <label for="region_id">@lang("registration.region")</label>
                                     <select name="region_id" id="region_id" class="form-control select2">
+                                        <option value="other">@lang('registration.other_select')</option>
                                     </select>
                                 </div>
-                                <div class="form-group ">
+                                <div class="form-group new_region-group">
                                     <label for="new_region">@lang("registration.new_region")</label>
                                     <input id="new_region" type="text" class="form-control" name="new_region" placeholder="@lang("registration.new_region_placeholder")">
                                 </div>
                                 <div class="form-group ">
                                     <label for="city_id">@lang("registration.city")</label>
                                     <select name="city_id" id="city_id" class="form-control select2">
+                                        <option value="other">@lang('registration.other_select')</option>
                                     </select>
                                 </div>
-                                <div class="form-group ">
+                                <div class="form-group new_city-group">
                                     <label for="new_city">@lang("registration.new_city")</label>
                                     <input id="new_city" type="text" class="form-control" name="new_city" placeholder="@lang("registration.new_city_placeholder")">
                                 </div>
@@ -103,6 +110,60 @@
                                 </div>
                                 <div class="form-group mb-30">
                                     <input id="expert-password_confirmation" type="password" class="form-control" name="password_confirmation" placeholder="@lang("registration.password_confirmation")">
+                                </div>
+                            </div>
+                            <div class="form-block">
+                                <div class="form-group">
+                                    <label for="education">@lang("registration.education")</label>
+                                    <select name="education" id="education" class="form-control">
+                                        @foreach($educationArray as $education)
+                                            <option value="{{$education}}">@lang("education.".$education)</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="employment">@lang("registration.employment")</label>
+                                    <select name="employment" id="employment" class="form-control">
+                                        @foreach($employmentArray as $employment)
+                                            <option value="{{$employment}}">@lang("employment.".$employment)</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group" id="work-group">
+                                    <label for="work">@lang("registration.work")</label>
+                                    <select name="work" id="work" class="form-control">
+                                        @foreach($workArray as $work)
+                                            <option value="{{$work}}">@lang("work.".$work)</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="family_status">@lang("registration.family_status")</label>
+                                    <select name="family_status" id="family_status" class="form-control">
+                                        @foreach($familyStatusArray as $familyStatus)
+                                            <option value="{{$familyStatus}}">@lang("family_status.".$familyStatus)</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="material_condition">@lang("registration.material_condition")</label>
+                                    <select name="material_condition" id="material_condition" class="form-control">
+                                        @foreach($materialConditionArray as $materialCondition)
+                                            <option value="{{$materialCondition}}">@lang("material_condition.".$materialCondition)</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="hobbies">@lang("registration.hobbies")</label>
+                                    @foreach($hobbiesArray as $hobby)
+                                    <label class="form-check">@lang("hobbies.".$hobby)
+                                        <input class="form-check-input" type="checkbox" name="hobbies[]" @if($hobby->isOther())id="hobbies_other_checkbox"@endif value="{{$hobby}}">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                                <div class="form-group" id="hobbies_other-group">
+                                    <input id="hobbies_other" type="text" class="form-control" name="hobbies_other" placeholder="@lang("hobbies.other")">
                                 </div>
                             </div>
                             <div class="form-group mb-30">
@@ -180,6 +241,16 @@
                     cache: true
                 }
             });
+
+            $('#region_id').change(function(e){
+                if($(this).val() == 'other'){
+                    $('.new_region-group').show();
+                }else{
+                    $('.new_region-group').hide();
+                }
+            });
+            $('#region_id').change();
+
             $('#city_id').select2({
                 placeholder: "{{trans('registration.city_select')}}",
                 tegs: true,
@@ -203,6 +274,15 @@
                     cache: true
                 }
             });
+
+            $('#city_id').change(function(e){
+                if($(this).val() == 'other'){
+                    $('.new_city-group').show();
+                }else{
+                    $('.new_city-group').hide();
+                }
+            });
+            $('#city_id').change();
 
             $.ajaxSetup({
                 headers: {
@@ -286,6 +366,26 @@
             $('#nova_poshta_warehouse').select2();
 
             $('#nova_poshta_block').hide();
+
+            $('#employment').change(function (){
+                if($(this).val() == "{{\App\Entity\EmploymentEnum::WORK}}"){
+                    $('#work-group').show();
+                }else{
+                    $('#work-group').hide();
+                }
+            });
+
+            $('#employment').change();
+
+            $('#hobbies_other_checkbox').change(function (e){
+                if($(this).is(':checked')){
+                    $('#hobbies_other-group').show();
+                }else{
+                    $('#hobbies_other-group').hide();
+                }
+            });
+
+            $('#hobbies_other_checkbox').change();
         });
 
     </script>

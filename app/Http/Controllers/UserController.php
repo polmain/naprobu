@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use App;
 use App\Entity\Collection\CountryCollection;
+use App\Entity\EducationEnum;
+use App\Entity\EmploymentEnum;
+use App\Entity\FamilyStatusEnum;
+use App\Entity\HobbiesEnum;
+use App\Entity\MaterialConditionEnum;
+use App\Entity\WorkEnum;
 use App\Model\Geo\City;
 use App\Model\Geo\Region;
 use App\Services\LanguageServices\AlternativeUrlService;
@@ -42,6 +48,13 @@ class UserController extends Controller
 		})->count();
 		$ratingStatuses = UserRatingStatus::with(['translate'])->where('lang','ru')->get();
 
+        $educationArray = EducationEnum::values();
+        $employmentArray = EmploymentEnum::values();
+        $workArray = WorkEnum::values();
+        $familyStatusArray = FamilyStatusEnum::values();
+        $materialConditionArray = MaterialConditionEnum::values();
+        $hobbiesArray = HobbiesEnum::values();
+
 		$locale = App::getLocale();
 		$title = str_replace(':user_name:',$user->name, \App\Model\Setting::where([['name','user_main_title'],['lang',$locale]])->first()->value);
 		$description = str_replace(':user_name:',$user->name, \App\Model\Setting::where([['name','user_main_description'],['lang',$locale]])->first()->value);
@@ -65,6 +78,12 @@ class UserController extends Controller
     		'userLikes' => $userLikes,
     		'ratingStatuses' => $ratingStatuses,
 			'alternativeUrls' => $alternativeUrls,
+            'educationArray'	=> $educationArray,
+            'employmentArray'	=> $employmentArray,
+            'workArray'	=> $workArray,
+            'familyStatusArray'	=> $familyStatusArray,
+            'materialConditionArray'	=> $materialConditionArray,
+            'hobbiesArray'	=> $hobbiesArray
 		]);
 	}
 
@@ -478,20 +497,23 @@ class UserController extends Controller
 
         $user->nova_poshta_city = $request->nova_poshta_city_name;
         $user->nova_poshta_warehouse = $request->nova_poshta_warehouse;
+
+        $user->education = $request->education;
+        $user->employment = $request->employment;
+        $user->family_status = $request->family_status;
+        $user->material_condition = $request->material_condition;
+        $user->hobbies = $request->hobbies;
+        $user->hobbies_other = $request->hobbies_other;
+
+        if(EmploymentEnum::getInstance($request->employment)->isWork()){
+            $user->work = $request->work;
+        }else{
+            $user->work = null;
+        }
+
 		$user->save();
 
-		if(
-			isset($request->last_name)
-			&& isset($request->first_name)
-			&& isset($request->birsday)
-			&& isset($request->country)
-			&& isset($request->region)
-			&& isset($request->city)
-			&& isset($request->name)
-			&& isset($request->email)
-			&& isset($request->phone)
-			&& !$user->hasRole('expert')
-		){
+		if(!$user->hasRole('expert')){
 			$user->makeExployee('expert');
 		}
 

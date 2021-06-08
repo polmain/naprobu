@@ -19,6 +19,7 @@ return [
     'city_select'	    	=>	'Выберите город...',
     'new_city'	    		=>	'Населённого пункта нет в списке',
     'new_city_placeholder'  =>	'Введите населённый пункт',
+    'other_select'          =>	'Нет в списке',
     'nova_poshta'           =>	'Адрес Нова Пошта',
     'nova_poshta_city'      =>	'Населённый пункт',
     'nova_poshta_warehouse' =>	'Отделение',
@@ -27,6 +28,13 @@ return [
 	'password'				=>	'Пароль',
 	'password_confirmation'	=>	'Повторите пароль',
 	'submit'				=>	'Стать экспертом',
+
+	'education'				=>	'Образование',
+	'employment'			=>	'Занятость',
+	'work'		    		=>	'Кем работаете',
+	'family_status'			=>	'Семейное положение',
+	'material_condition'	=>	'Как бы Вы описали материальное состояние вашей семьи?',
+	'hobbies'				=>	'Увлечения/интересы',
 
 	/* Валидация */
 	'required'				=> 'Это поле обязательное',

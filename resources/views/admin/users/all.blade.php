@@ -131,6 +131,8 @@
 				},
 				{
 					"data": "priority",
+                    searchable: false,
+                    "orderable":      false,
 				},
 				{
 					"data": "current_rating",

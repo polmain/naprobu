@@ -164,6 +164,7 @@
 					@endforeach
 						<button name="submit" value="filter" type="submit" class="btn btn-primary btn-lg">Фильтровать</button>
 						<button name="submit" value="excel" type="submit" class="btn btn-default btn-lg pull-right">Геннерировать excel</button>
+						<button name="submit" value="randomList" type="submit" class="btn btn-default btn-lg btn-block">Рандомное добавление участников</button>
 					</form>
 				</div>
 			</div>

@@ -56,6 +56,9 @@ class RequestController extends Controller
 		if($request->submit == "excel"){
 			return $this->excel($request,$project_id);
 		}
+		if($request->submit == "randomList"){
+			return $this->randomList($request,$project_id);
+		}
 		$filters = Question::with(['questionnaire','options'])
 			->where([
 				['lang','ru']
@@ -144,80 +147,86 @@ class RequestController extends Controller
 			}, true)
 			->toJson();
 	}
+	private function getFilteredProjectRequest(Request $request,$project_id)
+    {
+        $projectRequests = ProjectRequest::with(['user','project','status','answers'])
+            ->where('project_id',$project_id );
+
+        $filters = Question::with(['questionnaire','options'])
+            ->whereHas('questionnaire', function ($questionnaire) use ($project_id){
+                $questionnaire->where([
+                    ['project_id',$project_id],
+                    ['type_id',2]
+                ]);
+            })->whereNotIn('type_id',[7,9])
+            ->get();
+        if($request->has('sex')){
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->where('sex', $request->sex);
+            });
+        }
+
+        if(isset($request->old_min)){
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->where('birsday','>=', $request->old_min);
+            });
+        }
+        if(isset($request->old_max)){
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->where('birsday','<=', $request->old_max);
+            });
+        }
+
+        if(isset($request->city))
+        {
+            $cities = explode(',', $request->city);
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($cities){
+                $user->whereIn('city', $cities);
+            });
+        }
+        if(isset($request->region))
+        {
+            $regions = explode(',', $request->region);
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($regions){
+                $user->whereIn('region', $regions);
+            });
+        }
+
+        if($request->has('user_status')){
+            $filterItem = [];
+            foreach ( $request->input('user_status') as $key => $item){
+                $filterItem[] = (int)$request->input('user_status')[$key];
+            }
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($filterItem){
+                $user->whereIn('status_id', $filterItem);
+            });
+        }
+        if($request->has('status')){
+            $filterItem = [];
+            foreach ( $request->input('status') as $key => $item){
+                $filterItem[] = (int)$request->input('status')[$key];
+            }
+            $projectRequests = $projectRequests->whereIn('status_id',$filterItem);
+        }
+        foreach ($filters as $filter){
+            if($request->has('option_'.$filter->id)){
+                $filterItem = [];
+                foreach ( $request->input('option_'.$filter->id) as $key => $item){
+                    $filterItem[] = (int)$request->input('option_'.$filter->id)[$key];
+                }
+                $projectRequests = $projectRequests->whereHas('answers', function ($answer) use ($filterItem){
+                    $answer->whereIn('question_id', $filterItem);
+                });
+            }
+        }
+
+        return $projectRequests;
+    }
 
 	public function project_all_ajax(Request $request,$project_id){
 
-		$projectRequests = ProjectRequest::with(['user','project','status','answers'])
-			->where('project_id',$project_id );
+		$projectRequests = $this->getFilteredProjectRequest($request, $project_id);
 
-		$filters = Question::with(['questionnaire','options'])
-			->whereHas('questionnaire', function ($questionnaire) use ($project_id){
-				$questionnaire->where([
-					['project_id',$project_id],
-					['type_id',2]
-				]);
-			})->whereNotIn('type_id',[7,9])
-			->get();
-		if($request->has('sex')){
-			$projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
-				$user->where('sex', $request->sex);
-			});
-		}
-
-		if(isset($request->old_min)){
-			$projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
-				$user->where('birsday','>=', $request->old_min);
-			});
-		}
-		if(isset($request->old_max)){
-			$projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
-				$user->where('birsday','<=', $request->old_max);
-			});
-		}
-
-		if(isset($request->city))
-		{
-			$cities = explode(',', $request->city);
-			$projectRequests = $projectRequests->whereHas('user', function ($user) use ($cities){
-				$user->whereIn('city', $cities);
-			});
-		}
-		if(isset($request->region))
-		{
-			$regions = explode(',', $request->region);
-			$projectRequests = $projectRequests->whereHas('user', function ($user) use ($regions){
-				$user->whereIn('region', $regions);
-			});
-		}
-
-		if($request->has('user_status')){
-			$filterItem = [];
-			foreach ( $request->input('user_status') as $key => $item){
-				$filterItem[] = (int)$request->input('user_status')[$key];
-			}
-			$projectRequests = $projectRequests->whereHas('user', function ($user) use ($filterItem){
-				$user->whereIn('status_id', $filterItem);
-			});
-		}
-		if($request->has('status')){
-			$filterItem = [];
-			foreach ( $request->input('status') as $key => $item){
-				$filterItem[] = (int)$request->input('status')[$key];
-			}
-			$projectRequests = $projectRequests->whereIn('status_id',$filterItem);
-		}
-		foreach ($filters as $filter){
-			if($request->has('option_'.$filter->id)){
-				$filterItem = [];
-				foreach ( $request->input('option_'.$filter->id) as $key => $item){
-					$filterItem[] = (int)$request->input('option_'.$filter->id)[$key];
-				}
-				$projectRequests = $projectRequests->whereHas('answers', function ($answer) use ($filterItem){
-					$answer->whereIn('question_id', $filterItem);
-				});
-			}
-		}
-		//$projectRequests = $projectRequests->orderBy('id','desc');
 		return datatables()->eloquent($projectRequests)
 			->addColumn('user', function (ProjectRequest $projectRequest) {
 				return $projectRequest->user->name;
@@ -375,4 +384,20 @@ class RequestController extends Controller
 		$excel->store('request_project_'.$project_id.'_'.time().'.xlsx','public_uploads');
 		return $excel->download('request_project_'.$project_id.'_'.time().'.xlsx');
 	}
+
+	private function randomList(Request $request, $project_id){
+        $projectRequests = $this->getFilteredProjectRequest($request, $project_id);
+
+        $project = Project::find($project_id);
+        $approvedRequestsCount = ProjectRequest::where([
+            ['project_id',$project_id],
+            ['status_id','>=',7]
+        ])->count();
+        $limit = $project->count_users - $approvedRequestsCount;
+        $projectRequests = $projectRequests->where('status_id','<',7)->inRandomOrder()->limit($limit)->get();
+        foreach ($projectRequests as $projectRequest){
+            $projectRequest->status_id = 7;
+            $projectRequest->save();
+        }
+    }
 }

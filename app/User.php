@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -168,4 +169,21 @@ class User extends Authenticatable
 	{
 		$this->notify(new ResetPassword($token));
 	}
+
+	public function getPriority(): int
+    {
+        $priority = $this->requests()->where('status_id', '>=', 7)->first()? 1 : 0;
+        if(Carbon::now()->diff(Carbon::parse($this->last_active))->m < 1 ){
+            if($this->history()->where('action_id', 27)->orWhere('action_id', 9)->first()){
+                return 1;
+            }
+            else {
+                return $priority + 1;
+            }
+        }elseif(Carbon::now()->diff(Carbon::parse($this->created_at))->y >= 1){
+            return $priority + 1;
+        }
+
+        return $priority + 2;
+    }
 }

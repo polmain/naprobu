@@ -169,9 +169,11 @@
                     <p><strong>Семейное положение:</strong> @lang("family_status.".$user->family_status)</p>
                     <p><strong>Как бы Вы описали материальное состояние вашей семьи?:</strong> @lang("material_condition.".$user->material_condition)</p>
                     <p><strong>Увлечения/интересы:</strong>
-                        @forelse($user->hobbies as $hobby)
-                            @lang("hobbies.".$hobby);
-                        @endforeach
+                        @if(is_array($user->hobbies))
+                            @foreach($user->hobbies as $hobby)
+                                @lang("hobbies.".$hobby);
+                            @endforeach
+                        @endif
                         @if($user->hobbies_other)
                             {{$user->hobbies_other}}
                         @endif

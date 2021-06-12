@@ -176,7 +176,7 @@
                     @if($user->material_condition)
                     <p><strong>Как бы Вы описали материальное состояние вашей семьи?:</strong> @lang("material_condition.".$user->material_condition)</p>
                     @endif
-                    @if($is_array($user->hobbies))
+                    @if(is_array($user->hobbies))
                         <p><strong>Увлечения/интересы:</strong>
                         @foreach($user->hobbies as $hobby)
                             @lang("hobbies.".$hobby);

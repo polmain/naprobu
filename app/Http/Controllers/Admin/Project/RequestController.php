@@ -71,6 +71,10 @@ class RequestController extends Controller
 		$statuses = ProjectRequestStatus::where('rus_lang_id',0)->get();
 		$userStatuses = UserStatus::where('rus_lang_id',0)->get();
 		$project = Project::find($project_id);
+		$approvedRequestsCount = ProjectRequest::where([
+            ['project_id',$project_id],
+            ['status_id','>=',7]
+        ])->count();
 
 		SEO::setTitle('Заявки на учатие в проекте: '.$project->name);
 		AdminPageData::setPageName('Заявки на учатие в проекте');
@@ -79,8 +83,10 @@ class RequestController extends Controller
 
 		return view('admin.projects.request.project',[
 			'project_id' => $project_id,
+			'project' => $project,
 			'filters' => $filters,
 			'statuses' => $statuses,
+			'approvedRequestsCount' => $approvedRequestsCount,
 			'userStatuses' => $userStatuses
 		]);
 	}

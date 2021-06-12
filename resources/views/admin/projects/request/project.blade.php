@@ -31,6 +31,7 @@
                     </div>
                 </div>
                 <div class="box-body">
+                    <p>Количество участников: {{$approvedRequestsCount}}/{{$project->count_users}}</p>
 					<input type="hidden" name="show-hide-url" value="/admin/project/request/--action--/--id--/">
 					<div class="table-responsive">
                     <table id="project_request_table" class="table table-bordered table-hover">

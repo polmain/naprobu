@@ -31,6 +31,7 @@
                     </div>
                 </div>
                 <div class="box-body">
+                    <p>Количество участников: {{$approvedRequestsCount}}/{{$project->count_users}}</p>
 					<input type="hidden" name="show-hide-url" value="/admin/project/request/--action--/--id--/">
 					<div class="table-responsive">
                     <table id="project_request_table" class="table table-bordered table-hover">
@@ -161,8 +162,13 @@
 						</div>
 						@endif
 					@endforeach
-						<button name="submit" value="filter" type="submit" class="btn btn-primary btn-lg">Фильтровать</button>
-						<button name="submit" value="excel" type="submit" class="btn btn-default btn-lg pull-right">Геннерировать excel</button>
+                        <div class="form-group">
+						    <button name="submit" value="filter" type="submit" class="btn btn-primary btn-lg">Фильтровать</button>
+						    <button name="submit" value="excel" type="submit" class="btn btn-default btn-lg pull-right">Геннерировать excel</button>
+                        </div>
+                        <div class="form-group mt-3">
+                            <button name="submit" value="randomList" type="submit" class="btn btn-success btn-lg btn-block" @if(($project->count_users - $approvedRequestsCount) === 0) disabled="disabled" @endif>Рандомный список участников ({{$project->count_users - $approvedRequestsCount}})</button>
+                        </div>
 					</form>
 				</div>
 			</div>

@@ -161,14 +161,23 @@
                 <div class="box-body">
                     <p><strong>Город НП:</strong> {{$user->nova_poshta_city}}</p>
                     <p><strong>Отделение НП:</strong> {{$user->nova_poshta_warehouse}}</p>
+                    @if($user->education)
                     <p><strong>Образование:</strong> @lang("education.".$user->education)</p>
+                    @endif
+                    @if($user->employment)
                     <p><strong>Занятость:</strong> @lang("employment.".$user->employment)</p>
+                    @endif
                     @if($user->work)
                     <p><strong>Кем работаете:</strong> @lang("work.".$user->work)</p>
                     @endif
+                    @if($user->family_status)
                     <p><strong>Семейное положение:</strong> @lang("family_status.".$user->family_status)</p>
+                    @endif
+                    @if($user->material_condition)
                     <p><strong>Как бы Вы описали материальное состояние вашей семьи?:</strong> @lang("material_condition.".$user->material_condition)</p>
-                    <p><strong>Увлечения/интересы:</strong>
+                    @endif
+                    @if(is_array($user->hobbies))
+                        <p><strong>Увлечения/интересы:</strong>
                         @foreach($user->hobbies as $hobby)
                             @lang("hobbies.".$hobby);
                         @endforeach
@@ -176,6 +185,19 @@
                             {{$user->hobbies_other}}
                         @endif
                     </p>
+                    @endif
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Расчётные поля</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <p><strong>Приоритет:</strong> {{$user->getPriority()}}</p>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
             <!-- Box -->

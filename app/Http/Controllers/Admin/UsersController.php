@@ -86,6 +86,9 @@ class UsersController extends Controller
 			->addColumn('lastOnline', function (User $user) {
 				return $user->lastOnline();
 			})
+			->addColumn('priority', function (User $user) {
+				return $user->getPriority();
+			})
 			->filterColumn('first_name', function($query, $keyword) {
 				$query->whereRaw("CONCAT(`first_name`, ' ', `last_name`) like ?", ["%{$keyword}%"]);
 			})

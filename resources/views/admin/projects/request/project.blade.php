@@ -164,7 +164,7 @@
 					@endforeach
 						<button name="submit" value="filter" type="submit" class="btn btn-primary btn-lg">Фильтровать</button>
 						<button name="submit" value="excel" type="submit" class="btn btn-default btn-lg pull-right">Геннерировать excel</button>
-                        <div class="form-group">
+                        <div class="form-group mt-3">
                             <button name="submit" value="randomList" type="submit" class="btn btn-success btn-lg btn-block">Рандомный список участников ({{$project->count_users - $approvedRequestsCount}})</button>
                         </div>
 					</form>

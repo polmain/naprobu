@@ -57,7 +57,7 @@ class RequestController extends Controller
 			return $this->excel($request,$project_id);
 		}
 		if($request->submit == "randomList"){
-			return $this->randomList($request,$project_id);
+			$this->randomList($request,$project_id);
 		}
 		$filters = Question::with(['questionnaire','options'])
 			->where([

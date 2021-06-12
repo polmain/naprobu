@@ -42,6 +42,7 @@
                             <th width="60">Роль</th>
                             <th>В сети</th>
                             <th>Статус</th>
+                            <th>Приоритет</th>
                             <th>Рейтинг</th>
 							<th width="20"></th>
                         </tr>
@@ -127,6 +128,9 @@
 				{
 					"data": "status",
 					"orderable":      false,
+				},
+				{
+					"data": "priority",
 				},
 				{
 					"data": "current_rating",

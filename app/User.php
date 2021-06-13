@@ -186,4 +186,14 @@ class User extends Authenticatable
 
         return $priority + 2;
     }
+
+    public function lastApproveRequest()
+    {
+        return $this->requests()->where('status_id', '>=', 7)->orderByDesc('created_at')->first();
+    }
+
+    public function approveRequestCount()
+    {
+        return $this->requests()->where('status_id', '>=', 7)->count();
+    }
 }

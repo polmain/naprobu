@@ -70,8 +70,6 @@ class RequestExport implements  WithTitle, FromQuery, WithMapping,WithHeadings
 				['project_id',$this->project_id],
 			]);
 
-
-
 		$filters = Question::with(['questionnaire','options'])
 			->whereHas('questionnaire', function ($questionnaire) use ($project_id){
 				$questionnaire->where([
@@ -192,7 +190,7 @@ class RequestExport implements  WithTitle, FromQuery, WithMapping,WithHeadings
         $row[] = $request->user->lastApproveRequest()?$request->user->lastApproveRequest()->updated_at : '-';
         $row[] = $request->user->approveRequestCount();
 
-		for ($i = 13; $i < $this->question_count+13; $i++){
+		for ($i = 26; $i < $this->question_count+26; $i++){
 			$row[$i] = "";
 		}
 		foreach ($request->answers as $answer){

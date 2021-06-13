@@ -138,7 +138,6 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
 		$row[] = $user->region_model ? $user->region_model->name : '-';
 		$row[] = $user->country_model ? $user->country_model->name : '-';
 
-
 		$row[] = $user->education ? trans("education.".$user->education) : '-';
 		$row[] = $user->employment ? trans("employment.".$user->employment) : '-';
 		$row[] = $user->work && $user->employment ? trans("work.".$user->work) : '-';
@@ -228,8 +227,6 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
 		$this->heads[] = 'Город';
 		$this->heads[] = 'Область';
 		$this->heads[] = 'Страна';
-		//-----
-
 		$this->heads[] = 'Образование';
 		$this->heads[] = 'Занятость';
 		$this->heads[] = 'Кем работает';
@@ -243,8 +240,6 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
 		$this->heads[] = 'Регистрация';
 		$this->heads[] = 'Последние участие в проекте';
 		$this->heads[] = 'Количество участий в проектах';
-
-		//-----
 		$this->heads[] = 'Подавал заявки в проекты';
 		$this->heads[] = 'Учавствовал в проектах';
 

@@ -257,7 +257,7 @@ class RequestExport implements  WithTitle, FromQuery, WithMapping,WithHeadings
         $this->heads[] = 'Последние участие в проекте';
         $this->heads[] = 'Количество участий в проектах';
 		$this->question_id = [];
-		for($i = 0; $i < 13; $i++){
+		for($i = 0; $i < 26; $i++){
 			$this->question_id[] = 0;
 		}
 		$this->question_count = 0;

@@ -70,8 +70,6 @@ class RequestExport implements  WithTitle, FromQuery, WithMapping,WithHeadings
 				['project_id',$this->project_id],
 			]);
 
-
-
 		$filters = Question::with(['questionnaire','options'])
 			->whereHas('questionnaire', function ($questionnaire) use ($project_id){
 				$questionnaire->where([
@@ -155,12 +153,44 @@ class RequestExport implements  WithTitle, FromQuery, WithMapping,WithHeadings
 		$row[] = $request->user->first_name;
 		$row[] = $request->user->patronymic;
 		$row[] = $request->user->birsday;
-		$row[] = $request->user->region;
-		$row[] = $request->user->city;
+
+        $row[] = $request->user->city_model ? $request->user->city_model->name : '-';
+        $row[] = $request->user->region_model ? $request->user->region_model->name : '-';
+
 		$row[] = $request->user->email;
 		$row[] = $request->user->phone;
 		$row[] = 'https://naprobu.ua/user/'.$request->user->id.'/';
-		for ($i = 13; $i < $this->question_count+13; $i++){
+
+        $row[] = $request->user->education ? trans("education.".$request->user->education) : '-';
+        $row[] = $request->user->employment ? trans("employment.".$request->user->employment) : '-';
+        $row[] = $request->user->work && $request->user->employment ? trans("work.".$request->user->work) : '-';
+        $row[] = $request->user->family_status ? trans("family_status.".$request->user->family_status) : '-';
+        $row[] = $request->user->material_condition ? trans("material_condition.".$request->user->material_condition) : '-';
+
+
+        if(is_array($request->user->hobbies)){
+            $hobbies = '';
+            foreach($request->user->hobbies as $hobby){
+                $hobbies.= trans("hobbies.".$hobby).'; ';
+            }
+            if($request->user->hobbies_other){
+                $hobbies.= $request->user->hobbies_other;
+            }
+            $row[] = $hobbies;
+        }
+        else {
+            $row[] = '-';
+        }
+
+        $row[] = $request->user->getPriority();
+        $row[] = $request->user->rang->name;
+        $row[] = $request->user->history->sum('score');
+        $row[] = $request->user->last_active;
+        $row[] = $request->user->created_at;
+        $row[] = $request->user->lastApproveRequest()?$request->user->lastApproveRequest()->updated_at : '-';
+        $row[] = $request->user->approveRequestCount();
+
+		for ($i = 26; $i < $this->question_count+26; $i++){
 			$row[$i] = "";
 		}
 		foreach ($request->answers as $answer){
@@ -212,8 +242,22 @@ class RequestExport implements  WithTitle, FromQuery, WithMapping,WithHeadings
 		$this->heads[] = 'E-mail';
 		$this->heads[] = 'Телефон';
 		$this->heads[] = 'Ссылка на профиль пользователя';
+
+		$this->heads[] = 'Образование';
+        $this->heads[] = 'Занятость';
+        $this->heads[] = 'Кем работает';
+        $this->heads[] = 'Семейное положение';
+        $this->heads[] = 'Материальное состояние';
+        $this->heads[] = 'Увлечения';
+        $this->heads[] = 'Приоритет';
+        $this->heads[] = 'Ранг';
+        $this->heads[] = 'Балы';
+        $this->heads[] = 'Был на сайте';
+        $this->heads[] = 'Регистрация';
+        $this->heads[] = 'Последние участие в проекте';
+        $this->heads[] = 'Количество участий в проектах';
 		$this->question_id = [];
-		for($i = 0; $i < 13; $i++){
+		for($i = 0; $i < 26; $i++){
 			$this->question_id[] = 0;
 		}
 		$this->question_count = 0;

@@ -198,6 +198,13 @@
                 </div>
                 <div class="box-body">
                     <p><strong>Приоритет:</strong> {{$user->getPriority()}}</p>
+                    <p><strong>Возраст:</strong> {{\Carbon\Carbon::now()->year - $user->birsday}}</p>
+                    <p><strong>Уровень пользователя:</strong> {{$ratingStatus->name}}</p>
+                    <p><strong>Количество балов:</strong> {{$user->history->sum('score')}}</p>
+                    <p><strong>Был на сайте:</strong> {{$user->last_active}}</p>
+                    <p><strong>Дата регистрации:</strong> {{$user->created_at}}</p>
+                    <p><strong>Дата учавстия в проекте:</strong> {{$user->lastApproveRequest()?$user->lastApproveRequest()->updated_at : '-' }}</p>
+                    <p><strong>Количество участий в проектах:</strong> {{$user->approveRequestCount() }}</p>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
             <!-- Box -->

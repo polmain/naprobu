@@ -134,9 +134,39 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
 		$row[] = $user->last_name . ' ' . $user->first_name . ' ' . $user->patronymic;
 		$row[] = ($user->sex)?'Мужской':'Женский';
 		$row[] = $user->birsday;
-		$row[] = $user->city;
-		$row[] = $user->region;
-		$row[] = $user->country;
+		$row[] = $user->city_model ? $user->city_model->name : '-';
+		$row[] = $user->region_model ? $user->region_model->name : '-';
+		$row[] = $user->country_model ? $user->country_model->name : '-';
+
+
+		$row[] = $user->education ? trans("education.".$user->education) : '-';
+		$row[] = $user->employment ? trans("employment.".$user->employment) : '-';
+		$row[] = $user->work && $user->employment ? trans("work.".$user->work) : '-';
+		$row[] = $user->family_status ? trans("family_status.".$user->family_status) : '-';
+		$row[] = $user->material_condition ? trans("material_condition.".$user->material_condition) : '-';
+
+
+		if(is_array($user->hobbies)){
+            $hobbies = '';
+            foreach($user->hobbies as $hobby){
+                $hobbies.= trans("hobbies.".$hobby).'; ';
+            }
+            if($user->hobbies_other){
+                $hobbies.= $user->hobbies_other;
+            }
+            $row[] = $hobbies;
+        }
+		else {
+            $row[] = '-';
+        }
+
+        $row[] = $user->getPriority();
+        $row[] = $user->rang->name;
+        $row[] = $user->history->sum('score');
+        $row[] = $user->last_active;
+        $row[] = $user->created_at;
+        $row[] = $user->lastApproveRequest()?$user->lastApproveRequest()->updated_at : '-';
+        $row[] = $user->approveRequestCount();
 
 		$projectNames = '';
 		$projectInNames = '';
@@ -198,6 +228,23 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
 		$this->heads[] = 'Город';
 		$this->heads[] = 'Область';
 		$this->heads[] = 'Страна';
+		//-----
+
+		$this->heads[] = 'Образование';
+		$this->heads[] = 'Занятость';
+		$this->heads[] = 'Кем работает';
+		$this->heads[] = 'Семейное положение';
+		$this->heads[] = 'Материальное состояние';
+		$this->heads[] = 'Увлечения';
+		$this->heads[] = 'Приоритет';
+		$this->heads[] = 'Ранг';
+		$this->heads[] = 'Балы';
+		$this->heads[] = 'Был на сайте';
+		$this->heads[] = 'Регистрация';
+		$this->heads[] = 'Последние участие в проекте';
+		$this->heads[] = 'Количество участий в проектах';
+
+		//-----
 		$this->heads[] = 'Подавал заявки в проекты';
 		$this->heads[] = 'Учавствовал в проектах';
 

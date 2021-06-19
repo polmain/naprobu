@@ -13,8 +13,6 @@
                 {{--<div class="col-lg-2 col-md-4 footer-button">
                     <a class="btn-blue btn-block" href="{{route('partner')}}">@lang('footer.partner')</a>
                 </div>--}}
-                @auth
-                @if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('moderator'))
                 <div class="col-lg-2 col-md-4 footer-button">
                     @if(!$international)
                         <a class="btn-blue btn-block" href="{{route('home')}}international">@lang('footer.international')</a>
@@ -22,8 +20,6 @@
                         <a class="btn-blue btn-block" href="{{ str_replace('international/','',route('home'))}}">@lang('footer.ukraine')</a>
                     @endif
                 </div>
-                @endif
-                @endauth
                 <div class="col-lg-2 col-md-4 footer-button">
                     <a class="btn-orange btn-block" href="#" data-toggle="modal" data-target="#feedback_form_modal">@lang('footer.send_us')</a>
                 </div>

@@ -8,6 +8,7 @@
     </div>
 </section>
 <div class="project-page">
+    @if(!request()->get('international'))
     <div class="container">
         <nav class="category-list categories-project ">
             <ul class="row ">
@@ -19,6 +20,7 @@
             </ul>
         </nav>
     </div>
+    @endif
     <div class="container">
         <div class="row">
             <div class="d-lg-none sidebar sidebar-project project-mobile-registration col-lg-4 order-lg-2">

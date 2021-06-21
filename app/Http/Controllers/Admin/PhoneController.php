@@ -57,6 +57,7 @@ class PhoneController extends Controller
         $phone = PhoneVerify::find($id);
 
         $phone->stus = PhoneStatusEnum::VERIFIED;
+        $phone->save();
 
         $nextPhone = PhoneVerify::where([
             ['id','>',$phone->id],
@@ -69,7 +70,7 @@ class PhoneController extends Controller
             return redirect()->route('admin.phone.edit',$phone->id);
         }
         elseif($request->submit === "save-next" && $nextPhone){
-            return redirect()->route('admin.phone.edit',$phone->id);
+            return redirect()->route('admin.phone.edit',$nextPhone->id);
         }else{
             return redirect()->route('admin.phone.all');
         }

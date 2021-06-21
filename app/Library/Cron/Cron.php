@@ -421,10 +421,7 @@ class Cron
             ])->orderBy('created_at','DESC')->get();
 
 		    if($duplicatePhoneUsers->count() > 0){
-                $cloneUsers = $duplicatePhoneUsers->where([
-                    ['first_name', $user->first_name],
-                    ['last_name', $user->last_name],
-                ]);
+                $cloneUsers = $duplicatePhoneUsers->where('first_name', $user->first_name)->where('last_name', $user->last_name);
                 if($cloneUsers->count() === $duplicatePhoneUsers->count()){
                     if($user->id !== $duplicatePhoneUsers->first()->id){
                         $user->delete();

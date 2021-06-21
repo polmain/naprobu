@@ -64,13 +64,13 @@
 					"className":      'text-center',
 					data: 'id',
 					render: function ( data, type, row ) {
-						return '<a href="/users/phones/edit/'+data+'">'+data+'</a>';
+						return '<a href="/admin/users/phones/edit/'+data+'">'+data+'</a>';
 					}
 				},
 				{
 					data: 'phone',
 					render: function ( data, type, row ) {
-						return '<a href="/users/phones/edit/'+row.id+'">'+data+'</a>';
+						return '<a href="/admin/users/phones/edit/'+row.id+'">'+data+'</a>';
 					}
 				},
 				{ "data": "duplicates" },

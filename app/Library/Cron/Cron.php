@@ -416,13 +416,12 @@ class Cron
 
 		foreach ($users as $user){
 		    $duplicatePhoneUsers = User::where([
-		        ['id','<>',$user->id],
 		        ['phone',$user->phone],
 		        ['phone','<>',''],
 		        ['phone','<>',null],
             ])->orderBy('created_at','DESC')->get();
 
-		    if($duplicatePhoneUsers->count() > 0){
+		    if($duplicatePhoneUsers->count() > 1){
                 $cloneUsers = $duplicatePhoneUsers->where('first_name', $user->first_name)->where('last_name', $user->last_name);
                 if($cloneUsers->count() === $duplicatePhoneUsers->count()){
                     if($user->id !== $duplicatePhoneUsers->first()->id){

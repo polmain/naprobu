@@ -54,26 +54,24 @@ class PhoneController extends Controller
 	}
 
 	public function save(Request $request,$id){
-        $city = City::find($id);
+        $phone = PhoneVerify::find($id);
 
-        if($request->has('new_city_id') && $request->new_city_id){
-            $this->changeCity($city,$request);
-            $city = City::find($request->new_city_id);
-            ModeratorLogs::addLog("Заменил город: ".$request->name." на ". $city->name);
-            return redirect()->route('admin.city.all',['filter=["is_verify",0]']);
-        }else{
-            $this->saveOrCreate($city,$request);
+        $phone->stus = PhoneStatusEnum::VERIFIED;
+
+        $nextPhone = PhoneVerify::where([
+            ['id','>',$phone->id],
+            ['status',PhoneStatusEnum::NOT_VERIFIED],
+        ])->first();
+
+		ModeratorLogs::addLog("Проверифицировал телефон: ".$phone->phone);
+
+        if($request->submit === "save"){
+            return redirect()->route('admin.phone.edit',$phone->id);
         }
-
-		ModeratorLogs::addLog("Отредактировал город: ".$request->name);
-
-        if(($request->submit == "save-hide") || ($request->submit == "save")){
-            return redirect()->route('admin.city.edit',$city->id);
-        }
-        elseif(($request->submit == "save-close")){
-            return redirect()->route('admin.city.all');
+        elseif($request->submit === "save-next" && $nextPhone){
+            return redirect()->route('admin.phone.edit',$phone->id);
         }else{
-            return redirect()->route('admin.city.new');
+            return redirect()->route('admin.phone.all');
         }
 	}
 

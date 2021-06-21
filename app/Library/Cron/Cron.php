@@ -428,7 +428,7 @@ class Cron
                         $user->delete();
                     }
                 }else{
-                    PhoneVerify::create([
+                    PhoneVerify::firstOrCreate([
                         'phone' => $user->phone,
                         'duplicates' => $duplicatePhoneUsers->count(),
                         'status' => PhoneStatusEnum::NOT_VERIFIED,

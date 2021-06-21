@@ -56,7 +56,7 @@ class PhoneController extends Controller
 	public function save(Request $request,$id){
         $phone = PhoneVerify::find($id);
 
-        $phone->stus = PhoneStatusEnum::VERIFIED;
+        $phone->status = PhoneStatusEnum::VERIFIED;
         $phone->save();
 
         $nextPhone = PhoneVerify::where([

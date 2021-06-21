@@ -78,8 +78,7 @@ class PhoneController extends Controller
 	}
 
 	public function delete($id){
-        City::destroy($id);
-        City::where('rus_lang_id',$id)->delete();
+        PhoneVerify::destroy($id);
 		return "ok";
 	}
 }

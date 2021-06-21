@@ -404,13 +404,13 @@ class Cron
 	public static function phoneDuplicate($queue){
 		$users = User::where([
 			['id','>',$queue->start],
-			['id','<=',$queue->start + 1000],
+			['id','<=',$queue->start + 150],
 			['phone','<>',null],
 		])->get();
-		if($queue->start + 1000 > User::count()){
+		if($queue->start + 150 > User::count()){
 			$queue->delete();
 		}else{
-			$queue->start += 1000;
+			$queue->start += 150;
 			$queue->save();
 		}
 

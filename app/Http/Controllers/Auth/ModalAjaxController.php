@@ -50,6 +50,15 @@ class ModalAjaxController extends Controller
 		return "true";
 	}
 
+	public function isPhoneRegister(Request $request){
+		$name = $request->name;
+		$user = User::where('phone',$name)->first();
+		if(!empty($user)){
+			return 'false';
+		}
+		return "true";
+	}
+
 	public function isEmailRegister(Request $request){
 		$email = mb_strtolower($request->email);
 		$user = User::where('email',$email)->first();

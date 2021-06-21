@@ -1086,6 +1086,17 @@ function deleteCities() {
 
 /* End Regions page */
 
+/* Phones */
+
+function deletePhones() {
+    $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
+    $('#modal-warning').find(".modal-body").html("<p>Удаление этой записи приведет к потери возможности верефицировать этот номер!<br>Отменить действие будет невозможно!</p>");
+    $('#modal-warning').find("#success").attr('onclick','groupAjax("/admin/users/phones/delete/--id--/")');
+    $('#modal-warning').modal('show');
+}
+
+/* Phones */
+
 
 function endStatus(id){
 	$('#modal-warning').find(".modal-title").text("Подтвердите досрочную смену статуса");

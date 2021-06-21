@@ -76,6 +76,11 @@
                                         <i class="fa fa-map-marker text-light-blue" aria-hidden="true"></i> {{ Request::Get('noVerifyCityCount') }} неверефицированных городов
                                     </a>
                                 </li>
+                                <li><!-- start notification -->
+                                    <a href='{{ route('admin.phone.all') }}?filter=["is_verify",0]'>
+                                        <i class="fa fa-phone  text-red" aria-hidden="true"></i> {{ Request::Get('notVerifyPhoneCount') }} неверефицированных телефонов
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     </ul>

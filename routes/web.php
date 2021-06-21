@@ -302,6 +302,15 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
 		Route::post('/users/add-ratting/{user_id}/', 'Admin\UsersController@add_ratting')->name('adm_add_ratting');
 		/* End User Pages */
 
+        /* Cities pages */
+        Route::get('/users/phones/', 'Admin\PhoneController@all')->name('admin.phone.all');
+        Route::get('/users/phones/ajax', 'Admin\PhoneController@all_ajax')->name('admin.phone.ajax');
+        Route::get('/users/phones/find/', 'Admin\PhoneController@find')->name('admin.phone.find');
+        Route::get('/users/phones/edit/{phone_id}/', 'Admin\PhoneController@edit')->name('admin.phone.edit');
+        Route::post('/users/phones/edit/{phone_id}/', 'Admin\PhoneController@save')->name('admin.phone.save');
+        Route::get('/users/phones/delete/{phone_id}/', 'Admin\PhoneController@delete')->name('admin.phone.delete');
+        /* End Cities pages */
+
 		/* Bloggers pages */
 
 		Route::get('/users/blogger/', 'Admin\BloggerUserController@all')->name('adm_users_bloger');
@@ -587,8 +596,10 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
 
 
 	Route::get('/check-name/','Auth\ModalAjaxController@isNameRegister');
+	Route::get('/check-phone/','Auth\ModalAjaxController@isPhoneRegister');
 	Route::get('/check-email/','Auth\ModalAjaxController@isEmailRegister');
 	Route::get('/check-name-register/','UserController@isNameRegister');
+	Route::get('/check-phone-register/','UserController@isPhoneRegister');
 	Route::get('/check-email-register/','UserController@isEmailRegister');
 
 /*});*/

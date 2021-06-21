@@ -100,6 +100,7 @@
                     @if(Auth::user()->hasRole('admin'))
                     <li{{ (\Request::route()->getName() == 'adm_users_export') ? ' class=active' : '' }}><a href="{{route('adm_users_export')}}">Экспорт пользователей Excel</a></li>
                         @endif
+                    <li{{ (\Request::route()->getName() == 'admin.phone.all') ? ' class=active' : '' }}><a href="{{route("admin.phone.all")}}">Верефикация телефонов</a></li>
                     <li{{ (\Request::route()->getName() == 'adm_users_archive') ? ' class=active' : '' }}><a href="{{route("adm_users_archive")}}">Архив</a></li>
                 </ul>
             </li>

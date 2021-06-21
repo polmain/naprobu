@@ -539,8 +539,6 @@ class UserController extends Controller
 	}
 
 	public function isNameRegister(Request $request){
-
-
 		$name = $request->name;
 		$user = User::where('name',$name)->where('id','<>',Auth::user()->id)->first();
 		if(!empty($user)){
@@ -549,9 +547,16 @@ class UserController extends Controller
 		return "true";
 	}
 
+	public function isPhoneRegister(Request $request){
+		$name = $request->name;
+		$user = User::where('phone',$name)->where('id','<>',Auth::user()->id)->first();
+		if(!empty($user)){
+			return 'false';
+		}
+		return "true";
+	}
+
 	public function isEmailRegister(Request $request){
-
-
 		$email = mb_strtolower($request->email);
 		$user = User::where('email',$email)->where('id','<>',Auth::user()->id)->first();
 		if(!empty($user)){

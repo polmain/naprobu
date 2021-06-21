@@ -35,12 +35,14 @@
                                     </thead>
                                     <tbody>
                                         @foreach($phone->users as $user)
-                                            <td><a href="{{route('adm_users_save',[$user->id])}}" target="_blank">{{$user->id}}</a></td>
-                                            <td>{{$user->name}}</td>
-                                            <td>{{$user->email}}</td>
-                                            <td>{{$user->last_name}}</td>
-                                            <td>{{$user->first_name}}</td>
-                                            <td>{{$user->patronymic}}</td>
+                                            <tr>
+                                                <td><a href="{{route('adm_users_save',[$user->id])}}" target="_blank">{{$user->id}}</a></td>
+                                                <td>{{$user->name}}</td>
+                                                <td>{{$user->email}}</td>
+                                                <td>{{$user->last_name}}</td>
+                                                <td>{{$user->first_name}}</td>
+                                                <td>{{$user->patronymic}}</td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                 </table>

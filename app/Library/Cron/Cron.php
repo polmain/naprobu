@@ -9,6 +9,8 @@
 namespace App\Library\Cron;
 
 
+use App\Entity\PhoneStatusEnum;
+use App\Model\User\PhoneVerify;
 use App\Model\User\UserRatingHistory;
 use App\Model\User\UserRatingStatus;
 use App\Model\User\Viber;
@@ -130,6 +132,8 @@ class Cron
 					static::newAccountForm($queue);
 				case 'viber':
 					static::viber($queue);
+				case 'phone_duplicate':
+					static::phoneDuplicate($queue);
 			}
 
 
@@ -393,6 +397,46 @@ class Cron
                 ]);
             }else{
 		        $user->delete();
+            }
+		}
+	}
+
+	public static function phoneDuplicate($queue){
+		$users = User::where([
+			['id','>',$queue->start],
+			['id','<=',$queue->start + 1000],
+			['phone','<>',null],
+		])->get();
+		if($queue->start + 1000 > User::count()){
+			$queue->delete();
+		}else{
+			$queue->start += 1000;
+			$queue->save();
+		}
+
+		foreach ($users as $user){
+		    $duplicatePhoneUsers = User::where([
+		        ['id','<>',$user->id],
+		        ['phone',$user->phone]
+            ])->orderBy('created_at','DESC')->get();
+
+		    if($duplicatePhoneUsers->count() > 0){
+                $cloneUsers = $duplicatePhoneUsers->where([
+                    ['first_name', $user->first_name],
+                    ['last_name', $user->last_name],
+                ]);
+                if($cloneUsers->count() === $duplicatePhoneUsers->count()){
+                    if($user->id !== $duplicatePhoneUsers->first()->id){
+                        $user->delete();
+                    }
+                }else{
+                    PhoneVerify::create([
+                        'phone' => $user->phone,
+                        'duplicates' => $duplicatePhoneUsers->count(),
+                        'status' => PhoneStatusEnum::NOT_VERIFIED,
+                        'is_new_user' => 0
+                    ]);
+                }
             }
 		}
 	}

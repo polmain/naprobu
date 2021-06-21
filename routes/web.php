@@ -587,8 +587,10 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
 
 
 	Route::get('/check-name/','Auth\ModalAjaxController@isNameRegister');
+	Route::get('/check-phone/','Auth\ModalAjaxController@isPhoneRegister');
 	Route::get('/check-email/','Auth\ModalAjaxController@isEmailRegister');
 	Route::get('/check-name-register/','UserController@isNameRegister');
+	Route::get('/check-phone-register/','UserController@isPhoneRegister');
 	Route::get('/check-email-register/','UserController@isEmailRegister');
 
 /*});*/

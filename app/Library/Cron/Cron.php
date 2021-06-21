@@ -417,7 +417,9 @@ class Cron
 		foreach ($users as $user){
 		    $duplicatePhoneUsers = User::where([
 		        ['id','<>',$user->id],
-		        ['phone',$user->phone]
+		        ['phone',$user->phone],
+		        ['phone','<>',''],
+		        ['phone','<>',null],
             ])->orderBy('created_at','DESC')->get();
 
 		    if($duplicatePhoneUsers->count() > 0){

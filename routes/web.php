@@ -302,6 +302,15 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
 		Route::post('/users/add-ratting/{user_id}/', 'Admin\UsersController@add_ratting')->name('adm_add_ratting');
 		/* End User Pages */
 
+        /* Cities pages */
+        Route::get('/users/phones/', 'Admin\Geo\CityController@all')->name('admin.phone.all');
+        Route::get('/users/phones/ajax', 'Admin\Geo\CityController@all_ajax')->name('admin.phone.ajax');
+        Route::get('/users/phones/find/', 'Admin\Geo\CityController@find')->name('admin.phone.find');
+        Route::get('/users/phones/edit/{city_id}/', 'Admin\Geo\CityController@edit')->name('admin.phone.edit');
+        Route::post('/users/phones/edit/{city_id}/', 'Admin\Geo\CityController@save')->name('admin.phone.save');
+        Route::get('/users/phones/delete/{city_id}/', 'Admin\Geo\CityController@delete')->name('admin.phone.delete');
+        /* End Cities pages */
+
 		/* Bloggers pages */
 
 		Route::get('/users/blogger/', 'Admin\BloggerUserController@all')->name('adm_users_bloger');

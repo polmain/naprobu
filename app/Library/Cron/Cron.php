@@ -259,11 +259,18 @@ class Cron
                     $projectName = $projectTranslate->name;
                 }
 			}
-			if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter)
-			{
-				Mail::to($projectRequest->user)->send(new UserNotificationMail($projectRequest->user, 'project_members', url('/') . $link, ['project' => $projectName]));
-			}
-			Notification::send('project_members', $projectRequest->user, 1, $link, ['project' => $projectName]);
+
+            Notification::send('project_members', $projectRequest->user, 1, $link, ['project' => $projectName]);
+
+            if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter)
+            {
+                try {
+                    Mail::to($projectRequest->user)->send(new UserNotificationMail($projectRequest->user, 'project_members', url('/') . $link, ['project' => $projectName]));
+                }catch (Throwable $exception)
+                {
+
+                }
+            }
 		}
 
 

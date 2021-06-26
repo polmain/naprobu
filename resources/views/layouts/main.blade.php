@@ -305,6 +305,7 @@
 			email: '{!!  trans('registration.email') !!}',
 			isName: '{!!  trans('registration.isName') !!}',
 			isEmail: '{!!  trans('registration.isEmail') !!}',
+            isPhone: '{!!  trans('registration.isPhone') !!}',
 			equalTo: '{!!  trans('registration.equalTo') !!}',
 		}
     </script>

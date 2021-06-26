@@ -102,7 +102,7 @@
                                 </div>
                                 <div class="form-group ">
                                     <label for="phone">@lang("registration.phone")</label>
-                                    <input id="phone" type="tel" class="input-custom input-text form-control" name="phone-mask" required autofocus>
+                                    <input id="phone" type="tel" class="input-custom input-text form-control" name="phone_mask" required autofocus>
                                     <input id="phone-db" type="hidden" class="input-custom input-text form-control" name="phone" required>
                                     <input type="text" class="hide-phone" style="display: none">
                                 </div>

@@ -101,7 +101,10 @@
                                     <input id="expert-email" type="email" class="form-control" name="email" placeholder="Email">
                                 </div>
                                 <div class="form-group ">
-                                    <input id="phone" type="tel" class="form-control" name="phone" placeholder="@lang("registration.phone")">
+                                    <label for="phone">@lang("registration.phone")</label>
+                                    <input id="phone" type="tel" class="input-custom input-text form-control" name="phone-mask" required autofocus>
+                                    <input id="phone-db" type="hidden" class="input-custom input-text form-control" name="phone" required>
+                                    <input type="text" class="hide-phone" style="display: none">
                                 </div>
                             </div>
                             <div class="form-block">
@@ -187,6 +190,9 @@
 @endsection
 
 @section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/utils.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/intlTelInput.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.js"></script>
     <script>
         $(document).ready(function () {
             var lang = "{{App::getLocale()}}";
@@ -388,5 +394,38 @@
             $('#hobbies_other_checkbox').change();
         });
 
+        /* INITIALIZE BOTH INPUTS WITH THE intlTelInput FEATURE*/
+
+        var telInput = $("#phone,.hide-phone").intlTelInput({
+            initialCountry: "ua",
+            separateDialCode: true,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/utils.js",
+        });
+
+        /* ADD A MASK IN PHONE1 INPUT (when document ready and when changing flag) FOR A BETTER USER EXPERIENCE */
+
+
+
+        $(document).ready(function () {
+            var mask1 = $("#phone").attr('placeholder').replace(/[0-9]/g, 0);
+            $('input[type="tel"]').mask(mask1)
+        });
+
+        $("#phone").on("countrychange", function (e, countryData) {
+            $(".hide-phone").intlTelInput('setCountry',countryData.iso2);
+            $(this).val('');
+            var placeholder = $(".hide-phone").attr('placeholder');
+            var mask1 = placeholder.replace(/[0-9]/g, 0);
+            $(this).unmask();
+            $(this).mask(mask1);
+            $(this).attr('placeholder',placeholder);
+        });
+
+        $("#phone").change(function () {
+            var phone = $("#phone").intlTelInput('getNumber');
+            $("#phone-db").val(phone);
+        });
+
+        $(".hide-phone").parent().hide();
     </script>
 @endsection

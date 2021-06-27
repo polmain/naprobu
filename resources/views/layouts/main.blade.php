@@ -7,6 +7,7 @@
     <meta content="{{csrf_token()}}" name="csrf-token">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <link rel="shortcut icon" href="{{{ asset('public/favicon.ico') }}}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/css/intlTelInput.css" rel="stylesheet" />
     <link href="{{ asset("/public/css/app.min.css")}}?v=1.2.1" rel="stylesheet" type="text/css" />
 
     <!--[if lt IE 9]>
@@ -304,6 +305,7 @@
 			email: '{!!  trans('registration.email') !!}',
 			isName: '{!!  trans('registration.isName') !!}',
 			isEmail: '{!!  trans('registration.isEmail') !!}',
+            isPhone: '{!!  trans('registration.isPhone') !!}',
 			equalTo: '{!!  trans('registration.equalTo') !!}',
 		}
     </script>

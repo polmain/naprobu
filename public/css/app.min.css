@@ -15503,7 +15503,15 @@ form .btn-blue:hover {
     border-bottom: 1px solid #dedede;
     margin-bottom: 20px;
 }
-
+.intl-tel-input{
+    width: 100%;
+}
+.intl-tel-input .selected-flag{
+    height: 40px;
+}
+.intl-tel-input .form-control.is-invalid{
+    background: #fff;
+}
 /* end form elements *//* modal */
 .modal .old-user-info {
     font-size: 14px;

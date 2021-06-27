@@ -36,6 +36,11 @@ return [
     'material_condition'	=>	'How would you describe your family\'s material condition',
     'hobbies'				=>	'Hobbies/interests',
 
+    'myPhone'				=> 'This is my number',
+    'validate_phone_sends_title'    => 'The number has been sent for verification',
+    'validate_phone_sends_text'     => 'An operator will contact you shortly. Then you can proceed with registration.',
+    'validate_phone_user_sends_text'     => 'An operator will contact you shortly. Then you can change the profile.',
+
 	/* Валидация */
 	'required'				=> 'This field is required',
 	'minlength'				=> 'Minimum number of characters {0}',
@@ -44,4 +49,5 @@ return [
 	'email'					=> 'Email is not correct',
 	'isEmail'				=> 'This email is already registered',
 	'isName'				=> 'This Nickname is busy',
+    'isPhone'				=> 'This number is already registered',
 ];

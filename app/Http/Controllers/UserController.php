@@ -548,8 +548,8 @@ class UserController extends Controller
 	}
 
 	public function isPhoneRegister(Request $request){
-		$name = $request->name;
-		$user = User::where('phone',$name)->where('id','<>',Auth::user()->id)->first();
+		$phone = $request->phone;
+		$user = User::where('phone',$phone)->where('id','<>',Auth::user()->id)->first();
 		if(!empty($user)){
 			return 'false';
 		}

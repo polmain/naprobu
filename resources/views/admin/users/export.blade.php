@@ -26,6 +26,15 @@
                             <div class="col-md-8">Фильтр</div>
                         </div>
                         <div class="form-group row">
+                            <div class="col-md-4">id</div>
+                            <div class="col-md-4">
+                                <input type="text" name="filter[id_min]" class="form-control" placeholder="от">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="filter[id_max]" class="form-control" placeholder="до">
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <div class="col-md-4">Пол</div>
 
                             <div class="col-md-8">
@@ -67,50 +76,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <div class="col-md-4">Роль пользователя</div>
-                            <div class="col-md-8">
-                                <select name="filter[role]" class="form-control">
-                                    <option value="">--</option>
-                                    <option value="admin">Администраторы</option>
-                                    <option value="moderator">Модераторы</option>
-                                    <option value="bloger">Блогеры</option>
-                                    <option value="expert">Эксперты</option>
-                                    <option value="user">Пользователи</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-4">Статус пользователя</div>
-                            <div class="col-md-8">
-                                <select name="filter[status]" class="form-control">
-                                    <option value="">--</option>
-                                    @foreach($statuses as $status)
-                                        <option value="{{$status->id}}">{{$status->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-4">Ранг пользователя</div>
-                            <div class="col-md-8">
-                                <select name="filter[rang]" class="form-control">
-                                    <option value="">--</option>
-                                    @foreach($ratingStatuses as $ratingStatus)
-                                        <option value="{{$ratingStatus->id}}">{{$ratingStatus->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-4">Количество баллов</div>
-                            <div class="col-md-4">
-                                <input type="text" name="filter[rating_min]" class="form-control" placeholder="от">
-                            </div>
-                            <div class="col-md-4">
-                                <input type="text" name="filter[rating_max]" class="form-control" placeholder="до">
-                            </div>
-                        </div>
                         <div class="form-group row">
                             <div class="col-md-4">Образование</div>
                             <div class="col-md-8">
@@ -175,6 +140,86 @@
                                         <option value="{{$hobby}}">@lang("hobbies.".$hobby)</option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Роль пользователя</div>
+                            <div class="col-md-8">
+                                <select name="filter[role]" class="form-control">
+                                    <option value="">--</option>
+                                    <option value="admin">Администраторы</option>
+                                    <option value="moderator">Модераторы</option>
+                                    <option value="bloger">Блогеры</option>
+                                    <option value="expert">Эксперты</option>
+                                    <option value="user">Пользователи</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Статус пользователя</div>
+                            <div class="col-md-8">
+                                <select name="filter[status]" class="form-control">
+                                    <option value="">--</option>
+                                    @foreach($statuses as $status)
+                                        <option value="{{$status->id}}">{{$status->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Ранг пользователя</div>
+                            <div class="col-md-8">
+                                <select name="filter[rang]" class="form-control">
+                                    <option value="">--</option>
+                                    @foreach($ratingStatuses as $ratingStatus)
+                                        <option value="{{$ratingStatus->id}}">{{$ratingStatus->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Количество баллов</div>
+                            <div class="col-md-4">
+                                <input type="text" name="filter[rating_min]" class="form-control" placeholder="от" autocomplete="false">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="filter[rating_max]" class="form-control" placeholder="до" autocomplete="false">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Был на сайте</div>
+                            <div class="col-md-4">
+                                <input type="text" name="filter[online_min]" class="form-control form_datetime" placeholder="от" autocomplete="false">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="filter[online_max]" class="form-control form_datetime" placeholder="до" autocomplete="false">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Дата регистрации</div>
+                            <div class="col-md-4">
+                                <input type="text" name="filter[registration_min]" class="form-control form_datetime" placeholder="от" autocomplete="false">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="filter[registration_max]" class="form-control form_datetime" placeholder="до" autocomplete="false">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Количество участий в проектах</div>
+                            <div class="col-md-4">
+                                <input type="text" name="filter[project_min]" class="form-control" placeholder="от" autocomplete="false">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="filter[project_max]" class="form-control" placeholder="до" autocomplete="false">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Последнее участие в проекте</div>
+                            <div class="col-md-4">
+                                <input type="text" name="filter[project_date_min]" class="form-control form_datetime" placeholder="от" autocomplete="false">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="filter[project_date_max]" class="form-control form_datetime" placeholder="до" autocomplete="false">
                             </div>
                         </div>
                         <div class="form-group row">

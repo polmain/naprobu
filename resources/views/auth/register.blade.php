@@ -105,7 +105,7 @@
                                     <input id="phone" type="tel" class="input-custom input-text form-control" name="phone_mask" required autofocus>
                                     <input id="phone-db" type="hidden" class="input-custom input-text form-control" name="phone" required>
                                     <input type="text" class="hide-phone" style="display: none">
-                                    <a href="#" id="myPhone" style="display: none">@lang("registration.myPhone")</a>
+                                    <a href="#" id="myPhone" class="btn-orange" style="display: none">@lang("registration.myPhone")</a>
                                 </div>
                             </div>
                             <div class="form-block">

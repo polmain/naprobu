@@ -148,7 +148,7 @@
                                     </div>
                                     <div class="form-group ">
                                         <label for="phone">@lang("registration.phone")</label>
-                                        <input id="phone" type="tel" class="input-custom input-text form-control" name="phone_mask" value="{{Auth::user()->phone}}" required autofocus>
+                                        <input id="phone" type="tel" class="input-custom input-text form-control" name="phone_mask" required autofocus>
                                         <input id="phone-db" type="hidden" class="input-custom input-text form-control" name="phone" required value="{{Auth::user()->phone}}">
                                         <input type="text" class="hide-phone" style="display: none">
                                         <a href="#" id="myPhone" class="btn-orange" style="display: none">@lang("registration.myPhone")</a>
@@ -472,10 +472,12 @@
 
         var telInput = $("#phone,.hide-phone").intlTelInput({
             initialCountry: "ua",
+            preferredCountries: ["ua"],
             separateDialCode: true,
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/utils.js",
         });
 
+        telInput.setNumber("{{$user->phone}}");
         /* ADD A MASK IN PHONE1 INPUT (when document ready and when changing flag) FOR A BETTER USER EXPERIENCE */
 
 

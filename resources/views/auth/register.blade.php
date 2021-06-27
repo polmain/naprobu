@@ -417,6 +417,7 @@
 
         var telInput = $("#phone,.hide-phone").intlTelInput({
             initialCountry: "ua",
+            preferredCountries: ["ua"],
             separateDialCode: true,
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/utils.js",
         });

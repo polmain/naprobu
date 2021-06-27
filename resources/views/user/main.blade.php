@@ -249,7 +249,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @lang('registration.validate_phone_sends_text')
+                @lang('registration.validate_phone_user_sends_text')
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('global.close')</button>

@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Entity\EducationEnum;
+use App\Entity\EmploymentEnum;
+use App\Entity\FamilyStatusEnum;
+use App\Entity\HobbiesEnum;
+use App\Entity\MaterialConditionEnum;
+use App\Entity\WorkEnum;
 use App\Exports\UserExport;
 use App\Library\Users\UserRating;
 use App\Model\Post;
@@ -426,9 +432,21 @@ class UsersController extends Controller
 		AdminPageData::addBreadcrumbLevel('Экспорт пользователей');
 
 		$statuses = UserStatus::all();
+        $educationArray = EducationEnum::values();
+        $employmentArray = EmploymentEnum::values();
+        $workArray = WorkEnum::values();
+        $familyStatusArray = FamilyStatusEnum::values();
+        $materialConditionArray = MaterialConditionEnum::values();
+        $hobbiesArray = HobbiesEnum::values();
 
 		return view('admin.users.export',[
-			'statuses'	=>	$statuses
+			'statuses'	=>	$statuses,
+            'educationArray'	=> $educationArray,
+            'employmentArray'	=> $employmentArray,
+            'workArray'	=> $workArray,
+            'familyStatusArray'	=> $familyStatusArray,
+            'materialConditionArray'	=> $materialConditionArray,
+            'hobbiesArray'	=> $hobbiesArray
 		]);
 	}
 

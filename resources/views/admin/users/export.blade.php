@@ -37,8 +37,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-4">Год рождения</div>
-
+                            <div class="col-md-4">Возраст</div>
                             <div class="col-md-4">
                                 <input type="text" name="filter[old_min]" class="form-control" placeholder="от">
                             </div>
@@ -47,15 +46,24 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-4">Город</div>
+                            <div class="col-md-4">Страна</div>
                             <div class="col-md-8">
-                                <input type="text" class="form-control tags" name="filter[city]" data-role="tagsinput">
+                                <select class="form-control select2" name="filter[country]" id="country_id">
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-md-4">Область</div>
                             <div class="col-md-8">
-                                <input type="text" class="form-control tags" name="filter[region]" data-role="tagsinput">
+                                <select class="form-control select2" name="filter[region]" id="region_id">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Город</div>
+                            <div class="col-md-8">
+                                <select class="form-control select2" name="filter[city][]" multiple="multiple" id="city_id">
+                                </select>
                             </div>
                         </div>
 
@@ -79,6 +87,72 @@
                                     <option value="">--</option>
                                     @foreach($statuses as $status)
                                         <option value="{{$status->id}}">{{$status->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Образование</div>
+                            <div class="col-md-8">
+                                <select name="filter[education][]" id="education" class="form-control" multiple="multiple">
+                                    <option></option>
+                                    @foreach($educationArray as $education)
+                                        <option value="{{$education}}">@lang("education.".$education)</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Занятость</div>
+                            <div class="col-md-8">
+                                <select name="filter[employment][]" id="employment" class="form-control" multiple="multiple">
+                                    <option></option>
+                                    @foreach($employmentArray as $employment)
+                                        <option value="{{$employment}}" >@lang("employment.".$employment)</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Кем работает</div>
+                            <div class="col-md-8">
+                                <select name="filter[work][]" id="work" class="form-control" multiple="multiple">
+                                    <option></option>
+                                    @foreach($workArray as $work)
+                                        <option value="{{$work}}">@lang("work.".$work)</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Семейное положение</div>
+                            <div class="col-md-8">
+                                <select name="filter[family_status][]" id="family_status" class="form-control" multiple="multiple">
+                                    <option></option>
+                                    @foreach($familyStatusArray as $familyStatus)
+                                        <option value="{{$familyStatus}}">@lang("family_status.".$familyStatus)</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Материальное положение</div>
+                            <div class="col-md-8">
+                                <select name="filter[material_condition][]" id="material_condition" class="form-control" multiple="multiple">
+                                    <option></option>
+                                    @foreach($materialConditionArray as $materialCondition)
+                                        <option value="{{$materialCondition}}">@lang("material_condition.".$materialCondition)</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Увлечения</div>
+                            <div class="col-md-8">
+                                <select name="filter[hobbies][]" id="hobbies" class="form-control" multiple="multiple">
+                                    <option></option>
+                                    @foreach($hobbiesArray as $hobby)
+                                        <option value="{{$hobby}}">@lang("hobbies.".$hobby)</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -173,6 +247,67 @@
 				cache: true
 			}
 		});
-
+        $('#country_id').select2({
+            placeholder: "Выберите страну...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.country.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#region_id').select2({
+            placeholder: "Выберите область...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.region.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        country_id: $('#country_id').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#city_id').select2({
+            placeholder: "Выберите город...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.city.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        country_id: $('#country_id').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
     </script>
 @endsection

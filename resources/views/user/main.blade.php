@@ -477,7 +477,7 @@
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/utils.js",
         });
 
-        telInput.setNumber("{{$user->phone}}");
+        telInput.setNumber("{{Auth::user()->phone}}");
         /* ADD A MASK IN PHONE1 INPUT (when document ready and when changing flag) FOR A BETTER USER EXPERIENCE */
 
 

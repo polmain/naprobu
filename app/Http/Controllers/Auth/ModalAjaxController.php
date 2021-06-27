@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Entity\PhoneStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Model\User\PhoneVerify;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\User;
@@ -53,7 +55,7 @@ class ModalAjaxController extends Controller
 	public function isPhoneRegister(Request $request){
 		$phone = $request->phone;
 		$user = User::where('phone',$phone)->first();
-		if(!empty($user)){
+		if($user){
 			return 'false';
 		}
 		return "true";
@@ -67,4 +69,18 @@ class ModalAjaxController extends Controller
 		}
 		return "true";
 	}
+
+	public function validatePhone(Request $request){
+
+        $duplicatesCount = User::where('phone',$request->phone)->count();
+
+	    PhoneVerify::create([
+            'phone' => $request->phone,
+            'duplicates' => $duplicatesCount,
+            'status' => PhoneStatusEnum::NOT_VERIFIED,
+            'is_new_user' => 1
+        ]);
+
+	    return "ok";
+    }
 }

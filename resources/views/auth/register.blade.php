@@ -105,6 +105,7 @@
                                     <input id="phone" type="tel" class="input-custom input-text form-control" name="phone_mask" required autofocus>
                                     <input id="phone-db" type="hidden" class="input-custom input-text form-control" name="phone" required>
                                     <input type="text" class="hide-phone" style="display: none">
+                                    <a href="#" id="myPhone" style="display: none">@lang("registration.myPhone")</a>
                                 </div>
                             </div>
                             <div class="form-block">
@@ -187,6 +188,24 @@
         </div>
     </div>
 
+    <div class="modal fade" id="validate_phone_sends" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@lang('registration.validate_phone_sends_title')</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <img src="{{asset('public/svg/icons/cross.svg')}}" alt="Cross">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @lang('registration.validate_phone_sends_text')
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('global.close')</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -427,5 +446,26 @@
         });
 
         $(".hide-phone").parent().hide();
+
+        $('#myPhone').click(function (e){
+            e.preventDefault();
+
+            $.ajax({
+                method: "POST",
+                url: "/validate-phone/",
+                data: {
+                    'phone': $("#phone-db").val()
+                },
+                success: function(resp)
+                {
+                    if(resp == 'ok'){
+                        $('#validate_phone_sends').modal('show');
+                    }
+                },
+                error:  function(xhr, str){
+                    console.log(xhr);
+                }
+            });
+        })
     </script>
 @endsection

@@ -602,6 +602,9 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
 	Route::get('/check-phone-register/','UserController@isPhoneRegister');
 	Route::get('/check-email-register/','UserController@isEmailRegister');
 
+
+    Route::post('/validate-phone/','Auth\ModalAjaxController@validatePhone');
+
 /*});*/
 
 Route::get('setlocale/{lang}', function ($lang) {

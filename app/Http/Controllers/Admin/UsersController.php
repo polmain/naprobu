@@ -432,6 +432,7 @@ class UsersController extends Controller
 		AdminPageData::addBreadcrumbLevel('Экспорт пользователей');
 
 		$statuses = UserStatus::all();
+		$ratingStatuses = UserRatingStatus::where('lang', 'ru')->get();
         $educationArray = EducationEnum::values();
         $employmentArray = EmploymentEnum::values();
         $workArray = WorkEnum::values();
@@ -441,6 +442,7 @@ class UsersController extends Controller
 
 		return view('admin.users.export',[
 			'statuses'	=>	$statuses,
+			'ratingStatuses'	=>	$ratingStatuses,
             'educationArray'	=> $educationArray,
             'employmentArray'	=> $employmentArray,
             'workArray'	=> $workArray,

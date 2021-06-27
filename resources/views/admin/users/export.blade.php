@@ -92,6 +92,26 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <div class="col-md-4">Ранг пользователя</div>
+                            <div class="col-md-8">
+                                <select name="filter[rang]" class="form-control">
+                                    <option value="">--</option>
+                                    @foreach($ratingStatuses as $ratingStatus)
+                                        <option value="{{$ratingStatus->id}}">{{$ratingStatus->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">Количество баллов</div>
+                            <div class="col-md-4">
+                                <input type="text" name="filter[rating_min]" class="form-control" placeholder="от">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="filter[rating_max]" class="form-control" placeholder="до">
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <div class="col-md-4">Образование</div>
                             <div class="col-md-8">
                                 <select name="filter[education][]" id="education" class="form-control" multiple="multiple">

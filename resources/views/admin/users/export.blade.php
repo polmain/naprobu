@@ -79,7 +79,7 @@
                         <div class="form-group row">
                             <div class="col-md-4">Образование</div>
                             <div class="col-md-8">
-                                <select name="filter[education][]" id="education" class="form-control" multiple="multiple">
+                                <select name="filter[education][]" id="education" class="form-control select2-multiple" multiple="multiple">
                                     <option></option>
                                     @foreach($educationArray as $education)
                                         <option value="{{$education}}">@lang("education.".$education)</option>
@@ -90,7 +90,7 @@
                         <div class="form-group row">
                             <div class="col-md-4">Занятость</div>
                             <div class="col-md-8">
-                                <select name="filter[employment][]" id="employment" class="form-control" multiple="multiple">
+                                <select name="filter[employment][]" id="employment" class="form-control select2-multiple" multiple="multiple">
                                     <option></option>
                                     @foreach($employmentArray as $employment)
                                         <option value="{{$employment}}" >@lang("employment.".$employment)</option>
@@ -101,7 +101,7 @@
                         <div class="form-group row">
                             <div class="col-md-4">Кем работает</div>
                             <div class="col-md-8">
-                                <select name="filter[work][]" id="work" class="form-control" multiple="multiple">
+                                <select name="filter[work][]" id="work" class="form-control select2-multiple" multiple="multiple">
                                     <option></option>
                                     @foreach($workArray as $work)
                                         <option value="{{$work}}">@lang("work.".$work)</option>
@@ -112,7 +112,7 @@
                         <div class="form-group row">
                             <div class="col-md-4">Семейное положение</div>
                             <div class="col-md-8">
-                                <select name="filter[family_status][]" id="family_status" class="form-control" multiple="multiple">
+                                <select name="filter[family_status][]" id="family_status" class="form-control select2-multiple" multiple="multiple">
                                     <option></option>
                                     @foreach($familyStatusArray as $familyStatus)
                                         <option value="{{$familyStatus}}">@lang("family_status.".$familyStatus)</option>
@@ -123,7 +123,7 @@
                         <div class="form-group row">
                             <div class="col-md-4">Материальное положение</div>
                             <div class="col-md-8">
-                                <select name="filter[material_condition][]" id="material_condition" class="form-control" multiple="multiple">
+                                <select name="filter[material_condition][]" id="material_condition" class="form-control select2-multiple" multiple="multiple">
                                     <option></option>
                                     @foreach($materialConditionArray as $materialCondition)
                                         <option value="{{$materialCondition}}">@lang("material_condition.".$materialCondition)</option>
@@ -134,7 +134,7 @@
                         <div class="form-group row">
                             <div class="col-md-4">Увлечения</div>
                             <div class="col-md-8">
-                                <select name="filter[hobbies][]" id="hobbies" class="form-control" multiple="multiple">
+                                <select name="filter[hobbies][]" id="hobbies" class="form-control select2-multiple" multiple="multiple">
                                     <option></option>
                                     @foreach($hobbiesArray as $hobby)
                                         <option value="{{$hobby}}">@lang("hobbies.".$hobby)</option>
@@ -270,7 +270,9 @@
 
 @section("scripts")
     <script>
-
+        $('.select2-multiple').select2({
+            tegs: true
+        });
 		$("input.tags").tagsinput('items');
 		$('#project,#projectExpert').select2({
 			placeholder: "Выберите проект...",

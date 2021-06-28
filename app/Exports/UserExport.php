@@ -7,6 +7,7 @@ use App\User;
 use App\Model\Questionnaire\Question;
 //use App\Model\Project\ProjectRequest;
 
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
@@ -56,6 +57,12 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
 		$projects = [];
 		$projectExpert = [];
 		$questions = [];
+        $educationArray = [];
+        $employmentArray = [];
+        $workArray = [];
+        $familyStatusArray = [];
+        $materialConditionArray = [];
+        $hobbiesArray = [];
 
 		if($filters->has('filter.city'))
 		{
@@ -65,6 +72,43 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
 		{
 			$regions = explode(',', $filters->filter['region']);
 		}
+
+		if($filters->has('filter.education')){
+			foreach ( $filters->filter['education'] as $key => $item){
+                $educationArray[] = (int)$filters->input('filter.education')[$key];
+			}
+		}
+
+		if($filters->has('filter.employment')){
+			foreach ( $filters->filter['employment'] as $key => $item){
+                $employmentArray[] = (int)$filters->input('filter.employment')[$key];
+			}
+		}
+
+		if($filters->has('filter.work')){
+			foreach ( $filters->filter['work'] as $key => $item){
+                $workArray[] = (int)$filters->input('filter.work')[$key];
+			}
+		}
+
+		if($filters->has('filter.family_status')){
+			foreach ( $filters->filter['family_status'] as $key => $item){
+                $familyStatusArray[] = (int)$filters->input('filter.family_status')[$key];
+			}
+		}
+
+		if($filters->has('filter.material_condition')){
+			foreach ( $filters->filter['material_condition'] as $key => $item){
+                $materialConditionArray[] = (int)$filters->input('filter.material_condition')[$key];
+			}
+		}
+
+		if($filters->has('filter.hobbies')){
+			foreach ( $filters->filter['hobbies'] as $key => $item){
+                $hobbiesArray[] = (int)$filters->input('filter.hobbies')[$key];
+			}
+		}
+
 		if($filters->has('filter.project')){
 			foreach ( $filters->filter['project'] as $key => $item){
 				$projects[] = (int)$filters->input('filter.project')[$key];
@@ -86,30 +130,84 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
 				'requests.project',
 				'roles'
 			])
+			->when( !empty($filters->filter['id_min']), function ($query) use ($filters){
+				$query->where('id','>=',$filters->filter['id_min']);
+			})
+			->when( !empty($filters->filter['id_max']), function ($query) use ($filters){
+				$query->where('id','<=',$filters->filter['id_max']);
+			})
 			->when( !empty($filters->filter['sex']), function ($query) use ($filters){
 				$query->where('sex',$filters->filter['sex']);
 			})
 			->when( !empty($filters->filter['status']), function ($query) use ($filters){
 				$query->where('status_id',$filters->filter['status']);
 			})->when( !empty($filters->filter['old_min']), function ($query) use ($filters){
-				$query->where('birsday','>=',$filters->filter['old_min']);
+				$query->where('birsday','>=',Carbon::now()->year - $filters->filter['old_min']);
 			})->when( !empty($filters->filter['old_max']), function ($query) use ($filters){
-				$query->where('birsday','<=',$filters->filter['old_max']);
+				$query->where('birsday','<=',Carbon::now()->year - $filters->filter['old_max']);
 			})->when( !empty($filters->filter['city']), function ($query) use ($cities){
-				$query->whereIn('city',    $cities );
-			})->when( !empty($filters->filter['region']), function ($query) use ($regions){
-				$query->whereIn('region',    $regions );
+				$query->whereIn('city_id',    $cities );
+			})->when( !empty($filters->filter['region']), function ($query) use ($filters){
+                $query->where('region_id',  $filters->filter['region'] );
+			})->when( !empty($filters->filter['country']), function ($query) use ($filters){
+                $query->where('country_id',  $filters->filter['country'] );
 			})->when( !empty($filters->filter['role']), function ($query) use ($filters){
 				$query->whereHas('roles', function($q) use ($filters){
 					$q->where('name', $filters->filter['role']);
 				});
-			})->when( $filters->has('filter.project'), function ($query) use ($projects){
+			})->when( $filters->has('filter.education'), function ($query) use ($educationArray){
+				$query->whereIn('education', $educationArray);
+			})->when( $filters->has('filter.employment'), function ($query) use ($employmentArray){
+				$query->whereIn('employment', $employmentArray);
+			})->when( $filters->has('filter.work'), function ($query) use ($workArray){
+				$query->whereIn('work', $workArray);
+			})->when( $filters->has('filter.family_status'), function ($query) use ($familyStatusArray){
+				$query->whereIn('family_status', $familyStatusArray);
+			})->when( $filters->has('filter.material_condition'), function ($query) use ($materialConditionArray){
+				$query->whereIn('material_condition', $materialConditionArray);
+			})->when( $filters->has('filter.hobbies'), function ($query) use ($hobbiesArray){
+				$query->where(function ($q) use ($hobbiesArray){
+				    foreach ($hobbiesArray as $hobby){
+                        $q->orWhere('hobbies', 'LIKE', $hobby);
+                    }
+                });
+			})->when( !empty($filters->filter['rang']), function ($query) use ($filters){
+                $query->where('rang_id',  $filters->filter['rang'] );
+            })->when( !empty($filters->filter['rating_min']), function ($query) use ($filters){
+                $query->where('current_rating', '>=',  $filters->filter['rating_min'] );
+            })->when( !empty($filters->filter['rating_max']), function ($query) use ($filters){
+                $query->where('current_rating', '<=',  $filters->filter['rating_max'] );
+            })->when( !empty($filters->filter['online_min']), function ($query) use ($filters){
+                $query->where('last_active', '>=',  Carbon::parse($filters->filter['online_min']) );
+            })->when( !empty($filters->filter['online_max']), function ($query) use ($filters){
+                $query->where('last_active', '<=',  Carbon::parse($filters->filter['online_max']) );
+            })->when( !empty($filters->filter['registration_min']), function ($query) use ($filters){
+                $query->where('created_at', '>=',  Carbon::parse($filters->filter['registration_min']) );
+            })->when( !empty($filters->filter['registration_max']), function ($query) use ($filters){
+                $query->where('created_at', '<=',  Carbon::parse($filters->filter['registration_max']) );
+            })->when( !empty($filters->filter['project_min']), function ($query) use ($filters){
+                $query->whereHas('requests', function($q){
+                    $q->where('project_id', '>=', 7);
+                },'>=',$filters->filter['project_min']);
+            })->when( !empty($filters->filter['project_max']), function ($query) use ($filters){
+                $query->whereHas('requests', function($q){
+                    $q->where('project_id', '>=', 7);
+                },'<=',$filters->filter['project_max']);
+            })->when( !empty($filters->filter['project_date_min']), function ($query) use ($filters){
+                $query->whereHas('requests', function($q) use ($filters){
+                    $q->where('project_id', '>=', 7)->where('created_at', '>=', $filters->filter['project_date_min']);
+                });
+            })->when( !empty($filters->filter['project_date_max']), function ($query) use ($filters){
+                $query->whereHas('requests', function($q) use ($filters){
+                    $q->where('project_id', '>=', 7)->where('created_at', '<=', $filters->filter['project_date_max']);
+                });
+            })->when( $filters->has('filter.project'), function ($query) use ($projects){
 				$query->whereHas('requests', function($q) use ($projects){
 					$q->whereIn('project_id', $projects);
 				});
 			})->when( $filters->has('filter.projectExpert'), function ($query) use ($projectExpert){
 				$query->whereHas('requests', function($q) use ($projectExpert){
-					$q->where('status_id', 9)->whereIn('project_id', $projectExpert);
+					$q->where('status_id', '>=', 7)->whereIn('project_id', $projectExpert);
 				});
 			})->when( $filters->has('filter.questions'), function ($query) use ($questions){
 				$query->whereHas('requests', function($requests) use ($questions){

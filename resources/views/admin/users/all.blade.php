@@ -389,7 +389,7 @@
                         </div>
                         <div class="form-group">
                             <label for="notification_text">Текст оповещения выбранным пользователям</label>
-                            <textarea class="form-control mb-4" name="notification_text" id="notification_text" cols="30" rows="10"></textarea>
+                            <textarea class="form-control" name="notification_text" id="notification_text" cols="30" rows="10" style="margin-bottom: 20px"></textarea>
                             <button name="submit" value="notification" type="submit" class="btn btn-primary btn-lg">Отправить</button>
                         </div>
                     </form>

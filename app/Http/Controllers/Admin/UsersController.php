@@ -103,7 +103,10 @@ class UsersController extends Controller
             'hobbiesArray'	=> $hobbiesArray,
             'country' => $country,
             'region' => $region,
-            'cities' => $cities
+            'cities' => $cities,
+            'projects' => $projects,
+            'projectsExpert' => $projectsExpert,
+            'questions' => $questions
         ]);
 	}
 

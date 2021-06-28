@@ -15,9 +15,11 @@ use App\Model\Geo\City;
 use App\Model\Geo\Country;
 use App\Model\Geo\Region;
 use App\Model\Post;
+use App\Model\Project;
 use App\Model\Project\ProjectMessage;
 use App\Model\Project\ProjectRequest;
 use App\Model\Questionnaire\Answer;
+use App\Model\Questionnaire\Question;
 use App\Model\Review;
 use App\Model\User\UserNotification;
 use App\Model\User\UserPresents;
@@ -81,6 +83,30 @@ class UsersController extends Controller
                 $citiesArray[] = $request->input('city')[$key];
             }
             $cities = City::whereIn('id', $citiesArray)->get();
+        }
+
+        if($request->has('project')){
+            $projectsArray = [];
+            foreach ( $request->project as $key => $item){
+                $projectsArray[] = $request->input('project')[$key];
+            }
+            $projects = Project::whereIn('id', $projectsArray)->get();
+        }
+
+        if($request->has('projectExpert')){
+            $projectsArray = [];
+            foreach ( $request->projectExpert as $key => $item){
+                $projectsArray[] = $request->input('projectExpert')[$key];
+            }
+            $projectsExpert = Project::whereIn('id', $projectsArray)->get();
+        }
+
+        if($request->has('questions')){
+            $questionsArray = [];
+            foreach ( $request->projectExpert as $key => $item){
+                $questionsArray[] = $request->input('questions')[$key];
+            }
+            $questions = Question::whereIn('id', $questionsArray)->get();
         }
 
         $statuses = UserStatus::where('lang', 'ru')->get();

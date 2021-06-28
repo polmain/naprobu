@@ -118,10 +118,10 @@
 							</div>
 						</div>
                         <div class="filter-item">
-                            <div class="filter-name{{(Request::has('country'))?' active':''}}">Область</div>
+                            <div class="filter-name{{(Request::has('country'))?' active':''}}">Страна</div>
                             <div class="filter-options" {{( Request::has('country'))?'style=display:block':''}}>
                                 <div class="filter-option-item">
-                                    <select class="form-control select2" name="country" id="region_id">
+                                    <select class="form-control select2" name="country" id="country_id">
                                         @if($country)
                                             <option value="{{$country->id}}" selected="selected">{{$country->name}}</option>
                                         @endif

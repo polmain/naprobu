@@ -88,7 +88,7 @@ class UsersController extends Controller
         if($request->has('project')){
             $projectsArray = [];
             foreach ( $request->project as $key => $item){
-                $projectsArray[] = $request->input('project')[$key];
+                $projectsArray[] = (int) $request->input('project')[$key];
             }
             $projects = Project::whereIn('id', $projectsArray)->get();
         }
@@ -96,15 +96,15 @@ class UsersController extends Controller
         if($request->has('projectExpert')){
             $projectsArray = [];
             foreach ( $request->projectExpert as $key => $item){
-                $projectsArray[] = $request->input('projectExpert')[$key];
+                $projectsArray[] = (int) $request->input('projectExpert')[$key];
             }
             $projectsExpert = Project::whereIn('id', $projectsArray)->get();
         }
 
         if($request->has('questions')){
             $questionsArray = [];
-            foreach ( $request->projectExpert as $key => $item){
-                $questionsArray[] = $request->input('questions')[$key];
+            foreach ( $request->questions as $key => $item){
+                $questionsArray[] = (int) $request->input('questions')[$key];
             }
             $questions = Question::whereIn('id', $questionsArray)->get();
         }

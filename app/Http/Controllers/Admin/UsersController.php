@@ -69,42 +69,42 @@ class UsersController extends Controller
         $projectsExpert = [];
         $questions = [];
 
-        if($request->has('country')){
-            $country = Country::where('id', $request->input('country'))->first();
+        if($request->has('filter.country')){
+            $country = Country::where('id', $request->input('filter.country'))->first();
         }
 
-        if($request->has('region')){
-            $region = Region::where('id', $request->input('region'))->first();
+        if($request->has('filter.region')){
+            $region = Region::where('id', $request->input('filter.region'))->first();
         }
 
-        if($request->has('city')){
+        if($request->has('filter.city')){
             $citiesArray = [];
-            foreach ( $request->city as $key => $item){
-                $citiesArray[] = $request->input('city')[$key];
+            foreach ( $request->filter['city'] as $key => $item){
+                $citiesArray[] = $request->input('filter.city')[$key];
             }
             $cities = City::whereIn('id', $citiesArray)->get();
         }
 
-        if($request->has('project')){
+        if($request->has('filter.project')){
             $projectsArray = [];
-            foreach ( $request->project as $key => $item){
-                $projectsArray[] = (int) $request->input('project')[$key];
+            foreach ( $request->filter['project'] as $key => $item){
+                $projectsArray[] = (int) $request->input('filter.project')[$key];
             }
             $projects = Project::whereIn('id', $projectsArray)->get();
         }
 
-        if($request->has('projectExpert')){
+        if($request->has('filter.projectExpert')){
             $projectsArray = [];
-            foreach ( $request->projectExpert as $key => $item){
-                $projectsArray[] = (int) $request->input('projectExpert')[$key];
+            foreach ( $request->filter['projectExpert'] as $key => $item){
+                $projectsArray[] = (int) $request->input('filter.projectExpert')[$key];
             }
             $projectsExpert = Project::whereIn('id', $projectsArray)->get();
         }
 
-        if($request->has('questions')){
+        if($request->has('filter.questions')){
             $questionsArray = [];
-            foreach ( $request->questions as $key => $item){
-                $questionsArray[] = (int) $request->input('questions')[$key];
+            foreach ( $request->filter['questions'] as $key => $item){
+                $questionsArray[] = (int) $request->input('filter.questions')[$key];
             }
             $questions = Question::whereIn('id', $questionsArray)->get();
         }

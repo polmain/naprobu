@@ -145,7 +145,7 @@
 							<div class="filter-name{{(Request::has('city'))?' active':''}}">Город</div>
 							<div class="filter-options" {{( Request::has('city'))?'style=display:block':''}}>
 								<div class="filter-option-item">
-                                    <select class="form-control select2" name="city" multiple="multiple" id="city_id">
+                                    <select class="form-control select2" name="city[]" multiple="multiple" id="city_id">
                                         @foreach($cities as $city)
                                             <option value="{{$city->id}}" selected="selected">{{$city->name}}</option>
                                         @endforeach

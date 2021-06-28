@@ -88,8 +88,8 @@
                             </div>
                         </div>
                         <div class="filter-item">
-                            <div class="filter-name{{(Request::has('filter.sex'))?' active':''}}">Пол</div>
-                            <div class="filter-options" {{(Request::has('filter.sex'))?'style=display:block':''}}>
+                            <div class="filter-name{{(Request::input('filter.sex') !== '')?' active':''}}">Пол</div>
+                            <div class="filter-options" {{(Request::input('filter.sex') !== '')?'style=display:block':''}}>
                                 <div class="filter-option-item">
                                     <select name="filter[sex]" class="form-control">
                                         <option value="">--</option>

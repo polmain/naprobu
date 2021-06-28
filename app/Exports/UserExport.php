@@ -53,7 +53,6 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
 		$filters = $this->filters;
 
 		$cities = [];
-		$regions = [];
 		$projects = [];
 		$projectExpert = [];
 		$questions = [];
@@ -66,11 +65,9 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
 
 		if($filters->has('filter.city'))
 		{
-			$cities = explode(',', $filters->filter['city']);
-		}
-		if($filters->has('filter.region'))
-		{
-			$regions = explode(',', $filters->filter['region']);
+            foreach ( $filters->filter['city'] as $key => $item){
+                $cities[] = $filters->input('filter.city')[$key];
+            }
 		}
 
 		if($filters->has('filter.education')){

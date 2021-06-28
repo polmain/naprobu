@@ -20,6 +20,7 @@ use App\Model\Questionnaire\Answer;
 use App\Model\Project\ProjectRequestStatus;
 use App\Model\Questionnaire;
 use App\Model\Questionnaire\Question;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\Project\ProjectRequest;
@@ -209,6 +210,7 @@ class RequestController extends Controller
                 ]);
             })->whereNotIn('type_id',[7,9])
             ->get();
+
         if($request->has('sex')){
             $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
                 $user->where('sex', $request->sex);
@@ -217,29 +219,39 @@ class RequestController extends Controller
 
         if(isset($request->old_min)){
             $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
-                $user->where('birsday','>=', $request->old_min);
+                $user->where('birsday','>=', Carbon::now()->year - $request->old_min);
             });
         }
         if(isset($request->old_max)){
             $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
-                $user->where('birsday','<=', $request->old_max);
+                $user->where('birsday','<=', Carbon::now()->year - $request->old_max);
             });
         }
 
         if(isset($request->city))
         {
-            $cities = explode(',', $request->city);
+            $cities = [];
+            foreach ( $request->city as $key => $item){
+                $cities[] = $request->input('city')[$key];
+            }
+
             $projectRequests = $projectRequests->whereHas('user', function ($user) use ($cities){
-                $user->whereIn('city', $cities);
+                $user->whereIn('city_id', $cities);
             });
         }
         if(isset($request->region))
         {
-            $regions = explode(',', $request->region);
-            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($regions){
-                $user->whereIn('region', $regions);
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->where('region_id', $request->region);
             });
         }
+        if(isset($request->country))
+        {
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->where('country_id', $request->country);
+            });
+        }
+
 
         if($request->has('user_status')){
             $filterItem = [];
@@ -256,6 +268,144 @@ class RequestController extends Controller
                 $filterItem[] = (int)$request->input('status')[$key];
             }
             $projectRequests = $projectRequests->whereIn('status_id',$filterItem);
+        }
+        if(isset($request->education))
+        {
+            $educationArray = [];
+            foreach ( $request->education as $key => $item){
+                $educationArray[] = $request->education[$key];
+            }
+
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($educationArray){
+                $user->whereIn('education', $educationArray);
+            });
+        }
+        if(isset($request->employment))
+        {
+            $employmentArray = [];
+            foreach ( $request->employment as $key => $item){
+                $employmentArray[] = $request->employment[$key];
+            }
+
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($employmentArray){
+                $user->whereIn('employment', $employmentArray);
+            });
+        }
+        if(isset($request->work))
+        {
+            $workArray = [];
+            foreach ( $request->work as $key => $item){
+                $workArray[] = $request->work[$key];
+            }
+
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($workArray){
+                $user->whereIn('work', $workArray);
+            });
+        }
+        if(isset($request->family_status))
+        {
+            $familyStatusArray = [];
+            foreach ( $request->family_status as $key => $item){
+                $familyStatusArray[] = $request->family_status[$key];
+            }
+
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($familyStatusArray){
+                $user->whereIn('family_status', $familyStatusArray);
+            });
+        }
+        if(isset($request->material_condition))
+        {
+            $materialConditionArray = [];
+            foreach ( $request->material_condition as $key => $item){
+                $materialConditionArray[] = $request->material_condition[$key];
+            }
+
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($materialConditionArray){
+                $user->whereIn('material_condition', $materialConditionArray);
+            });
+        }
+        if(isset($request->hobbies))
+        {
+            $hobbiesArray = [];
+            foreach ( $request->hobbies as $key => $item){
+                $hobbiesArray[] = $request->hobbies[$key];
+            }
+
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($hobbiesArray){
+                $i = 0;
+                foreach ($hobbiesArray as $hobby){
+                    if($i === 0){
+                        $user->where('hobbies', 'LIKE', '%'.$hobby.'%');
+                        $i++;
+                    }else{
+                        $user->orWhere('hobbies', 'LIKE', '%'.$hobby.'%');
+                    }
+                }
+            });
+        }
+        if(isset($request->rang))
+        {
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->where('rang_id',  $request->rang );
+            });
+        }
+        if(isset($request->rating_min)){
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->where('current_rating','>=', $request->rating_min);
+            });
+        }
+        if(isset($request->rating_max)){
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->where('current_rating','<=', $request->rating_max);
+            });
+        }
+        if(isset($request->online_min)){
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->where('last_active','>=', Carbon::parse($request->online_min));
+            });
+        }
+        if(isset($request->online_max)){
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->where('last_active','<=', Carbon::parse($request->online_max));
+            });
+        }
+        if(isset($request->registration_min)){
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->where('created_at','>=', Carbon::parse($request->registration_min));
+            });
+        }
+        if(isset($request->registration_max)){
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->where('created_at','<=', Carbon::parse($request->registration_max));
+            });
+        }
+        if(isset($request->project_min)){
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->whereHas('requests', function($q){
+                    $q->where('status_id', '>=', 7);
+                },'>=',$request->project_min);
+            });
+        }
+        if(isset($request->project_max)){
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->whereHas('requests', function($q){
+                    $q->where('status_id', '>=', 7);
+                },'<=',$request->project_max);
+            });
+        }
+        if(isset($request->project_date_min)){
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->whereHas('requests', function($q) use ($request){
+                    $q->where('status_id', '>=', 7)->where('created_at', '>=', Carbon::parse($request->project_date_min));
+                });
+            });
+        }
+        if(isset($request->project_date_max)){
+            $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
+                $user->whereHas('requests', function($q) use ($request){
+                    $q->where('status_id', '>=', 7)->where('created_at', '<=', Carbon::parse($request->project_date_max));
+                });
+            });
         }
         foreach ($filters as $filter){
             if($request->has('option_'.$filter->id)){

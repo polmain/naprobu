@@ -198,11 +198,11 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
                 },'<=',$filters->filter['project_max']);
             })->when( !empty($filters->filter['project_date_min']), function ($query) use ($filters){
                 $query->whereHas('requests', function($q) use ($filters){
-                    $q->where('status_id', '>=', 7)->where('created_at', '>=', $filters->filter['project_date_min']);
+                    $q->where('status_id', '>=', 7)->where('created_at', '>=', Carbon::parse($filters->filter['project_date_min']));
                 });
             })->when( !empty($filters->filter['project_date_max']), function ($query) use ($filters){
                 $query->whereHas('requests', function($q) use ($filters){
-                    $q->where('status_id', '>=', 7)->where('created_at', '<=', $filters->filter['project_date_max']);
+                    $q->where('status_id', '>=', 7)->where('created_at', '<=', Carbon::parse($filters->filter['project_date_max']));
                 });
             })->when( $filters->has('filter.project'), function ($query) use ($projects){
 				$query->whereHas('requests', function($q) use ($projects){

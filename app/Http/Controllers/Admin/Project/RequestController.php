@@ -219,12 +219,12 @@ class RequestController extends Controller
 
         if(isset($request->old_min)){
             $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
-                $user->where('birsday','>=', Carbon::now()->year - $request->old_min);
+                $user->where('birsday','<=', Carbon::now()->year - $request->old_min);
             });
         }
         if(isset($request->old_max)){
             $projectRequests = $projectRequests->whereHas('user', function ($user) use ($request){
-                $user->where('birsday','<=', Carbon::now()->year - $request->old_max);
+                $user->where('birsday','>=', Carbon::now()->year - $request->old_max);
             });
         }
 

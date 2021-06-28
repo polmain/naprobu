@@ -93,8 +93,8 @@
                                 <div class="filter-option-item">
                                     <select name="filter[sex]" class="form-control">
                                         <option value="">--</option>
-                                        <option value="1" @if(Request::has('filter.sex') && Request::input('filter.sex') == 1)selected="selected" @endif>Мужской</option>
-                                        <option value="0" @if(Request::has('filter.sex') && Request::input('filter.sex') == 0)selected="selected" @endif>Женский</option>
+                                        <option value="1" @if(Request::has('filter.sex') && Request::input('filter.sex') === "1")selected="selected" @endif>Мужской</option>
+                                        <option value="0" @if(Request::has('filter.sex') && Request::input('filter.sex') === "0")selected="selected" @endif>Женский</option>
                                     </select>
                                 </div>
                             </div>

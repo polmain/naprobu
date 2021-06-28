@@ -73,7 +73,6 @@
                 </div>
                 <div class="box-body">
                     <form action="{{ route('adm_users') }}" method="GET" enctype="multipart/form-data">
-
                         <div class="filter-item">
                             <div class="filter-name{{(Request::input('filter.id_min') || Request::input('filter.id_max'))?' active':''}}">id</div>
                             <div class="filter-options" {{(Request::input('filter.id_min') || Request::input('filter.id_max'))?'style=display:block':''}}>

@@ -51,7 +51,7 @@ class UsersController extends Controller
     }
 
 	public function all(Request $request){
-
+        dd($request);
         if($request->submit == "excel"){
             return $this->exportGenerate($request);
         }

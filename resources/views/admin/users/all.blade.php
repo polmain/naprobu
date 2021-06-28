@@ -405,7 +405,7 @@
 			},
 			"processing": true,
 			"serverSide": true,
-			"ajax": "{!! route('adm_users_ajax') !!}?isArchive={{isset($isArchive)?1:0}}{{(isset($role))?('&role='.$role):''}}",
+			"ajax": "{!! route('adm_users_ajax') !!}?isArchive={{isset($isArchive)?1:0}}{{(isset($role))?('&role='.$role):''}}{!!  (!empty(Request::getQueryString()))?(str_replace('&amp;','&',Request::getQueryString())):''!!}",
 			"columns": [
 				{
 					"className":      'text-center',

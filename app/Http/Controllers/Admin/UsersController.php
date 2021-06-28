@@ -10,6 +10,9 @@ use App\Entity\MaterialConditionEnum;
 use App\Entity\WorkEnum;
 use App\Exports\UserExport;
 use App\Library\Users\UserRating;
+use App\Model\Geo\City;
+use App\Model\Geo\Country;
+use App\Model\Geo\Region;
 use App\Model\Post;
 use App\Model\Project\ProjectMessage;
 use App\Model\Project\ProjectRequest;
@@ -47,12 +50,61 @@ class UsersController extends Controller
         app()->setLocale('ru');
     }
 
-	public function all(){
+	public function all(Request $request){
+
+        if($request->submit == "excel"){
+            return $this->exportGenerate($request);
+        }
+
 		SEO::setTitle('Все пользователи');
 		AdminPageData::setPageName('Все пользователи');
 		AdminPageData::addBreadcrumbLevel('Пользователи');
 
-		return view('admin.users.all');
+        $country = null;
+        $region = null;
+        $cities = [];
+        $projects = [];
+        $projectsExpert = [];
+        $questions = [];
+
+        if($request->has('country')){
+            $country = Country::where('id', $request->input('country'))->first();
+        }
+
+        if($request->has('region')){
+            $region = Region::where('id', $request->input('region'))->first();
+        }
+
+        if($request->has('city')){
+            $citiesArray = [];
+            foreach ( $request->city as $key => $item){
+                $citiesArray[] = $request->input('city')[$key];
+            }
+            $cities = City::whereIn('id', $citiesArray)->get();
+        }
+
+        $statuses = UserStatus::where('lang', 'ru')->get();
+        $ratingStatuses = UserRatingStatus::where('lang', 'ru')->get();
+        $educationArray = EducationEnum::values();
+        $employmentArray = EmploymentEnum::values();
+        $workArray = WorkEnum::values();
+        $familyStatusArray = FamilyStatusEnum::values();
+        $materialConditionArray = MaterialConditionEnum::values();
+        $hobbiesArray = HobbiesEnum::values();
+
+		return view('admin.users.all',[
+            'statuses'	=>	$statuses,
+            'ratingStatuses'	=>	$ratingStatuses,
+            'educationArray'	=> $educationArray,
+            'employmentArray'	=> $employmentArray,
+            'workArray'	=> $workArray,
+            'familyStatusArray'	=> $familyStatusArray,
+            'materialConditionArray'	=> $materialConditionArray,
+            'hobbiesArray'	=> $hobbiesArray,
+            'country' => $country,
+            'region' => $region,
+            'cities' => $cities
+        ]);
 	}
 
 	public function all_archive()

@@ -227,17 +227,17 @@
                         <div class="filter-item">
                             <div class="filter-name{{(Request::input('filter.role'))?' active':''}}">Роль</div>
                             <div class="filter-options" {{(Request::input('filter.role'))?'style=display:block':''}}>
-                                <div class="filter-option-item">
-                                <div class="col-md-12">
-                                    <select name="filter[role]" class="form-control">
-                                        <option value="">--</option>
-                                        <option value="admin" @if(Request::has('filter.role') && Request::input('filter.role') == "admin")selected="selected" @endif>Администраторы</option>
-                                        <option value="moderator" @if(Request::has('filter.role') && Request::input('filter.role') == "moderator")selected="selected" @endif>Модераторы</option>
-                                        <option value="bloger" @if(Request::has('filter.role') && Request::input('filter.role') == "bloger")selected="selected" @endif>Блогеры</option>
-                                        <option value="expert" @if(Request::has('filter.role') && Request::input('filter.role') == "expert")selected="selected" @endif>Эксперты</option>
-                                        <option value="user" @if(Request::has('filter.role') && Request::input('filter.role') == "user")selected="selected" @endif>Пользователи</option>
-                                    </select>
-                                </div>
+                                <div class="filter-option-item row">
+                                    <div class="col-md-12">
+                                        <select name="filter[role]" class="form-control">
+                                            <option value="">--</option>
+                                            <option value="admin" @if(Request::has('filter.role') && Request::input('filter.role') == "admin")selected="selected" @endif>Администраторы</option>
+                                            <option value="moderator" @if(Request::has('filter.role') && Request::input('filter.role') == "moderator")selected="selected" @endif>Модераторы</option>
+                                            <option value="bloger" @if(Request::has('filter.role') && Request::input('filter.role') == "bloger")selected="selected" @endif>Блогеры</option>
+                                            <option value="expert" @if(Request::has('filter.role') && Request::input('filter.role') == "expert")selected="selected" @endif>Эксперты</option>
+                                            <option value="user" @if(Request::has('filter.role') && Request::input('filter.role') == "user")selected="selected" @endif>Пользователи</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>

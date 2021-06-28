@@ -157,9 +157,69 @@
 							<div class="filter-name{{(Request::has('education'))?' active':''}}">Образование</div>
 							<div class="filter-options" {{( Request::has('education'))?'style=display:block':''}}>
 								<div class="filter-option-item">
-                                    <select class="form-control select2" name="education[]" multiple="multiple" id="education">
+                                    <select class="form-control select2-multiple" name="education[]" multiple="multiple" id="education">
                                         @foreach($educationArray as $education)
                                             <option value="{{$education}}" @if(is_array(Request::input('education')) && in_array($education->getValue(), Request::input('education')))selected="selected" @endif>@lang("education.".$education)</option>
+                                        @endforeach
+                                    </select>
+								</div>
+							</div>
+						</div>
+						<div class="filter-item">
+							<div class="filter-name{{(Request::has('employment'))?' active':''}}">Занятость</div>
+							<div class="filter-options" {{( Request::has('employment'))?'style=display:block':''}}>
+								<div class="filter-option-item">
+                                    <select class="form-control select2-multiple" name="employment[]" multiple="multiple" id="employment">
+                                        @foreach($employmentArray as $employment)
+                                            <option value="{{$employment}}" @if(is_array(Request::input('employment')) && in_array($employment->getValue(), Request::input('employment')))selected="selected" @endif>@lang("employment.".$employment)</option>
+                                        @endforeach
+                                    </select>
+								</div>
+							</div>
+						</div>
+						<div class="filter-item">
+							<div class="filter-name{{(Request::has('work'))?' active':''}}">Кем работает</div>
+							<div class="filter-options" {{( Request::has('work'))?'style=display:block':''}}>
+								<div class="filter-option-item">
+                                    <select class="form-control select2-multiple" name="work[]" multiple="multiple" id="work">
+                                        @foreach($workArray as $work)
+                                            <option value="{{$work}}" @if(is_array(Request::input('work')) && in_array($work->getValue(), Request::input('work')))selected="selected" @endif>@lang("work.".$work)</option>
+                                        @endforeach
+                                    </select>
+								</div>
+							</div>
+						</div>
+						<div class="filter-item">
+							<div class="filter-name{{(Request::has('family_status'))?' active':''}}">Семейное положение</div>
+							<div class="filter-options" {{( Request::has('family_status'))?'style=display:block':''}}>
+								<div class="filter-option-item">
+                                    <select class="form-control select2-multiple" name="family_status[]" multiple="multiple" id="family_status">
+                                        @foreach($familyStatusArray as $familyStatus)
+                                            <option value="{{$familyStatus}}" @if(is_array(Request::input('family_status')) && in_array($familyStatus->getValue(), Request::input('family_status')))selected="selected" @endif>@lang("family_status.".$familyStatus)</option>
+                                        @endforeach
+                                    </select>
+								</div>
+							</div>
+						</div>
+						<div class="filter-item">
+							<div class="filter-name{{(Request::has('material_condition'))?' active':''}}">Материальное положение</div>
+							<div class="filter-options" {{( Request::has('material_condition'))?'style=display:block':''}}>
+								<div class="filter-option-item">
+                                    <select class="form-control select2-multiple" name="material_condition[]" multiple="multiple" id="material_condition">
+                                        @foreach($materialConditionArray as $materialCondition)
+                                            <option value="{{$materialCondition}}" @if(is_array(Request::input('material_condition')) && in_array($materialCondition->getValue(), Request::input('material_condition')))selected="selected" @endif>@lang("material_condition.".$materialCondition)</option>
+                                        @endforeach
+                                    </select>
+								</div>
+							</div>
+						</div>
+						<div class="filter-item">
+							<div class="filter-name{{(Request::has('hobbies'))?' active':''}}">Увлечения</div>
+							<div class="filter-options" {{( Request::has('hobbies'))?'style=display:block':''}}>
+								<div class="filter-option-item">
+                                    <select class="form-control select2-multiple" name="hobbies[]" multiple="multiple" id="hobbies">
+                                        @foreach($hobbiesArray as $hobby)
+                                            <option value="{{$hobby}}" @if(is_array(Request::input('hobbies')) && in_array($hobby->getValue(), Request::input('hobbies')))selected="selected" @endif>@lang("hobbies.".$hobby)</option>
                                         @endforeach
                                     </select>
 								</div>
@@ -178,6 +238,20 @@
 								@endforeach
 							</div>
 						</div>
+
+                        <div class="filter-item">
+                            <div class="filter-name{{(Request::input('rang'))?' active':''}}">Ранг пользователя</div>
+                            <div class="filter-options" {{( Request::input('rang'))?'style=display:block':''}}>
+                                <div class="filter-option-item">
+                                    <select class="form-control" name="rang" id="rang">
+                                        <option value="">--</option>
+                                        @foreach($ratingStatuses as $ratingStatus)
+                                            <option value="{{$ratingStatus->id}}" {{$ratingStatus->id == Request::input('rang')?"selected=selected":""}}>{{$ratingStatus->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 					@foreach($filters as $filter)
 						@if(($filter->type_id == 3) || ($filter->type_id == 4) || ($filter->type_id == 5))
 						<div class="filter-item">

@@ -36,6 +36,7 @@ class RequestController extends Controller
 	public function __construct()
 	{
 		AdminPageData::addBreadcrumbLevel('Проекты','project');
+        app()->setLocale('ru');
 	}
 
 	public function all()

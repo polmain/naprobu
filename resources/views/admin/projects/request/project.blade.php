@@ -153,6 +153,18 @@
 								</div>
 							</div>
 						</div>
+						<div class="filter-item">
+							<div class="filter-name{{(Request::has('education'))?' active':''}}">Образование</div>
+							<div class="filter-options" {{( Request::has('education'))?'style=display:block':''}}>
+								<div class="filter-option-item">
+                                    <select class="form-control select2" name="education[]" multiple="multiple" id="education">
+                                        @foreach($educationArray as $education)
+                                            <option value="{{$education}}" @if(in_array($education->getValue(), $request->education))selected="selected" @endif>@lang("education.".$education)</option>
+                                        @endforeach
+                                    </select>
+								</div>
+							</div>
+						</div>
 
 						<div class="filter-item">
 							<div class="filter-name{{(Request::has('user_status'))?' active':''}}">Статус пользователя</div>

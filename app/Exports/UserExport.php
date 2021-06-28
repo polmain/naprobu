@@ -168,7 +168,7 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
 			})->when( $filters->has('filter.hobbies'), function ($query) use ($hobbiesArray){
 				$query->where(function ($q) use ($hobbiesArray){
 				    foreach ($hobbiesArray as $hobby){
-                        $q->orWhere('hobbies', 'LIKE', $hobby);
+                        $q->orWhere('hobbies', 'LIKE', '%'.$hobby.'%');
                     }
                 });
 			})->when( !empty($filters->filter['rang']), function ($query) use ($filters){

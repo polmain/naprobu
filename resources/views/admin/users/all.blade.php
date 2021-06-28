@@ -241,8 +241,8 @@
                         </div>
 
                         <div class="filter-item">
-                            <div class="filter-name{{(Request::has('filter.status'))?' active':''}}">Статус пользователя</div>
-                            <div class="filter-options" {{(Request::has('filter.status'))?'style=display:block':''}}>
+                            <div class="filter-name{{(Request::input('filter.status'))?' active':''}}">Статус пользователя</div>
+                            <div class="filter-options" {{(Request::input('filter.status'))?'style=display:block':''}}>
                                 <select name="filter[status]" class="form-control">
                                     <option value="">--</option>
                                     @foreach($statuses as $status)

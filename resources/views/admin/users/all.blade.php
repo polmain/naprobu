@@ -225,10 +225,10 @@
                         </div>
 
                         <div class="filter-item">
-                            <div class="filter-name{{(Request::has('filter.role'))?' active':''}}">Пол</div>
-                            <div class="filter-options" {{(Request::has('filter.role'))?'style=display:block':''}}>
+                            <div class="filter-name{{(Request::input('filter.role'))?' active':''}}">Пол</div>
+                            <div class="filter-options" {{(Request::input('filter.role'))?'style=display:block':''}}>
                                 <div class="col-md-12">
-                                    <select name="filter[sex]" class="form-control">
+                                    <select name="filter[role]" class="form-control">
                                         <option value="">--</option>
                                         <option value="admin" @if(Request::has('filter.role') && Request::input('filter.role') == "admin")selected="selected" @endif>Администраторы</option>
                                         <option value="moderator" @if(Request::has('filter.role') && Request::input('filter.role') == "moderator")selected="selected" @endif>Модераторы</option>

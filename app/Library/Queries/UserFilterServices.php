@@ -99,9 +99,9 @@ class UserFilterServices
             ->when( !empty($filters->filter['status']), function ($query) use ($filters){
                 $query->where('status_id',$filters->filter['status']);
             })->when( !empty($filters->filter['old_min']), function ($query) use ($filters){
-                $query->where('birsday','>=',Carbon::now()->year - $filters->filter['old_min']);
+                $query->where('birsday','<=',Carbon::now()->year - $filters->filter['old_min']);
             })->when( !empty($filters->filter['old_max']), function ($query) use ($filters){
-                $query->where('birsday','<=',Carbon::now()->year - $filters->filter['old_max']);
+                $query->where('birsday','>=',Carbon::now()->year - $filters->filter['old_max']);
             })->when( !empty($filters->filter['city']), function ($query) use ($cities){
                 $query->whereIn('city_id',    $cities );
             })->when( !empty($filters->filter['region']), function ($query) use ($filters){

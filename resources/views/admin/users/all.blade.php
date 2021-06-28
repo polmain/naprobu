@@ -90,7 +90,7 @@
                         <div class="filter-item">
                             <div class="filter-name{{(Request::has('filter.sex'))?' active':''}}">Пол</div>
                             <div class="filter-options" {{(Request::has('filter.sex'))?'style=display:block':''}}>
-                                <div class="filter-option-item row">
+                                <div class="filter-option-item">
                                     <select name="filter[sex]" class="form-control">
                                         <option value="">--</option>
                                         <option value="1" @if(Request::has('filter.sex') && Request::input('filter.sex') == 1)selected="selected" @endif>Мужской</option>

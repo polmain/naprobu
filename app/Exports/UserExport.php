@@ -3,10 +3,12 @@
 namespace App\Exports;
 
 
+use App\Library\Queries\UserFilterServices;
 use App\User;
 use App\Model\Questionnaire\Question;
 //use App\Model\Project\ProjectRequest;
 
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
@@ -49,80 +51,9 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
 	}
 	public function query()
 	{
-		$filters = $this->filters;
-
-		$cities = [];
-		$regions = [];
-		$projects = [];
-		$projectExpert = [];
-		$questions = [];
-
-		if($filters->has('filter.city'))
-		{
-			$cities = explode(',', $filters->filter['city']);
-		}
-		if($filters->has('filter.region'))
-		{
-			$regions = explode(',', $filters->filter['region']);
-		}
-		if($filters->has('filter.project')){
-			foreach ( $filters->filter['project'] as $key => $item){
-				$projects[] = (int)$filters->input('filter.project')[$key];
-			}
-		}
-		if($filters->has('filter.projectExpert')){
-			foreach ( $filters->filter['projectExpert'] as $key => $item){
-				$projectExpert[] = (int)$filters->input('filter.projectExpert')[$key];
-			}
-		}
-		if($filters->has('filter.questions')){
-			foreach ( $filters->filter['questions'] as $key => $item){
-				$questions[] = (int)$filters->input('filter.questions')[$key];
-			}
-		}
-
-		$users = User::with([
-				'requests.answers.question.parent_question',
-				'requests.project',
-				'roles'
-			])
-			->when( !empty($filters->filter['sex']), function ($query) use ($filters){
-				$query->where('sex',$filters->filter['sex']);
-			})
-			->when( !empty($filters->filter['status']), function ($query) use ($filters){
-				$query->where('status_id',$filters->filter['status']);
-			})->when( !empty($filters->filter['old_min']), function ($query) use ($filters){
-				$query->where('birsday','>=',$filters->filter['old_min']);
-			})->when( !empty($filters->filter['old_max']), function ($query) use ($filters){
-				$query->where('birsday','<=',$filters->filter['old_max']);
-			})->when( !empty($filters->filter['city']), function ($query) use ($cities){
-				$query->whereIn('city',    $cities );
-			})->when( !empty($filters->filter['region']), function ($query) use ($regions){
-				$query->whereIn('region',    $regions );
-			})->when( !empty($filters->filter['role']), function ($query) use ($filters){
-				$query->whereHas('roles', function($q) use ($filters){
-					$q->where('name', $filters->filter['role']);
-				});
-			})->when( $filters->has('filter.project'), function ($query) use ($projects){
-				$query->whereHas('requests', function($q) use ($projects){
-					$q->whereIn('project_id', $projects);
-				});
-			})->when( $filters->has('filter.projectExpert'), function ($query) use ($projectExpert){
-				$query->whereHas('requests', function($q) use ($projectExpert){
-					$q->where('status_id', 9)->whereIn('project_id', $projectExpert);
-				});
-			})->when( $filters->has('filter.questions'), function ($query) use ($questions){
-				$query->whereHas('requests', function($requests) use ($questions){
-					$requests->whereHas('answers', function($answers) use ($questions){
-						$answers->whereIn('question_id', $questions)
-							->orWhereHas('question', function($question) use ($questions){
-								$question->whereIn('parent',$questions);
-							});
-					});
-				});
-			});
-		return $users;
+		return UserFilterServices::getFilteredUsersQuery($this->filters);
 	}
+
 	public function map($user): array
 	{
 		$row = [];

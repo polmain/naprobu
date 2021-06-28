@@ -2,12 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Entity\EducationEnum;
+use App\Entity\EmploymentEnum;
+use App\Entity\FamilyStatusEnum;
+use App\Entity\HobbiesEnum;
+use App\Entity\MaterialConditionEnum;
+use App\Entity\WorkEnum;
 use App\Exports\UserExport;
+use App\Library\Queries\UserFilterServices;
 use App\Library\Users\UserRating;
+use App\Model\Geo\City;
+use App\Model\Geo\Country;
+use App\Model\Geo\Region;
 use App\Model\Post;
+use App\Model\Project;
 use App\Model\Project\ProjectMessage;
 use App\Model\Project\ProjectRequest;
 use App\Model\Questionnaire\Answer;
+use App\Model\Questionnaire\Question;
 use App\Model\Review;
 use App\Model\User\UserNotification;
 use App\Model\User\UserPresents;
@@ -41,12 +53,87 @@ class UsersController extends Controller
         app()->setLocale('ru');
     }
 
-	public function all(){
+	public function all(Request $request){
+        if($request->submit == "excel"){
+            return $this->exportGenerate($request);
+        }
+
 		SEO::setTitle('Все пользователи');
 		AdminPageData::setPageName('Все пользователи');
 		AdminPageData::addBreadcrumbLevel('Пользователи');
 
-		return view('admin.users.all');
+        $country = null;
+        $region = null;
+        $cities = [];
+        $projects = [];
+        $projectsExpert = [];
+        $questions = [];
+
+        if($request->has('filter.country')){
+            $country = Country::where('id', $request->input('filter.country'))->first();
+        }
+
+        if($request->has('filter.region')){
+            $region = Region::where('id', $request->input('filter.region'))->first();
+        }
+
+        if($request->has('filter.city')){
+            $citiesArray = [];
+            foreach ( $request->filter['city'] as $key => $item){
+                $citiesArray[] = $request->input('filter.city')[$key];
+            }
+            $cities = City::whereIn('id', $citiesArray)->get();
+        }
+
+        if($request->has('filter.project')){
+            $projectsArray = [];
+            foreach ( $request->filter['project'] as $key => $item){
+                $projectsArray[] = (int) $request->input('filter.project')[$key];
+            }
+            $projects = Project::whereIn('id', $projectsArray)->get();
+        }
+
+        if($request->has('filter.projectExpert')){
+            $projectsArray = [];
+            foreach ( $request->filter['projectExpert'] as $key => $item){
+                $projectsArray[] = (int) $request->input('filter.projectExpert')[$key];
+            }
+            $projectsExpert = Project::whereIn('id', $projectsArray)->get();
+        }
+
+        if($request->has('filter.questions')){
+            $questionsArray = [];
+            foreach ( $request->filter['questions'] as $key => $item){
+                $questionsArray[] = (int) $request->input('filter.questions')[$key];
+            }
+            $questions = Question::whereIn('id', $questionsArray)->get();
+        }
+
+        $statuses = UserStatus::where('lang', 'ru')->get();
+        $ratingStatuses = UserRatingStatus::where('lang', 'ru')->get();
+        $educationArray = EducationEnum::values();
+        $employmentArray = EmploymentEnum::values();
+        $workArray = WorkEnum::values();
+        $familyStatusArray = FamilyStatusEnum::values();
+        $materialConditionArray = MaterialConditionEnum::values();
+        $hobbiesArray = HobbiesEnum::values();
+
+		return view('admin.users.all',[
+            'statuses'	=>	$statuses,
+            'ratingStatuses'	=>	$ratingStatuses,
+            'educationArray'	=> $educationArray,
+            'employmentArray'	=> $employmentArray,
+            'workArray'	=> $workArray,
+            'familyStatusArray'	=> $familyStatusArray,
+            'materialConditionArray'	=> $materialConditionArray,
+            'hobbiesArray'	=> $hobbiesArray,
+            'country' => $country,
+            'region' => $region,
+            'cities' => $cities,
+            'projects' => $projects,
+            'projectsExpert' => $projectsExpert,
+            'questions' => $questions
+        ]);
 	}
 
 	public function all_archive()
@@ -63,7 +150,7 @@ class UsersController extends Controller
         if($request->input('isArchive') == 1){
             $users = User::with(['roles','status'])->onlyTrashed();
         }else{
-            $users = User::with(['roles','status']);
+            $users = UserFilterServices::getFilteredUsersQuery($request);
         }
 
 		if($request->has('role')){
@@ -425,10 +512,24 @@ class UsersController extends Controller
 		AdminPageData::addBreadcrumbLevel('Пользователи','users');
 		AdminPageData::addBreadcrumbLevel('Экспорт пользователей');
 
-		$statuses = UserStatus::all();
+		$statuses = UserStatus::where('lang', 'ru')->get();
+		$ratingStatuses = UserRatingStatus::where('lang', 'ru')->get();
+        $educationArray = EducationEnum::values();
+        $employmentArray = EmploymentEnum::values();
+        $workArray = WorkEnum::values();
+        $familyStatusArray = FamilyStatusEnum::values();
+        $materialConditionArray = MaterialConditionEnum::values();
+        $hobbiesArray = HobbiesEnum::values();
 
 		return view('admin.users.export',[
-			'statuses'	=>	$statuses
+			'statuses'	=>	$statuses,
+			'ratingStatuses'	=>	$ratingStatuses,
+            'educationArray'	=> $educationArray,
+            'employmentArray'	=> $employmentArray,
+            'workArray'	=> $workArray,
+            'familyStatusArray'	=> $familyStatusArray,
+            'materialConditionArray'	=> $materialConditionArray,
+            'hobbiesArray'	=> $hobbiesArray
 		]);
 	}
 

@@ -2,6 +2,16 @@
 
 namespace App\Http\Controllers\Admin\Project;
 
+use App\Entity\EducationEnum;
+use App\Entity\EmploymentEnum;
+use App\Entity\FamilyStatusEnum;
+use App\Entity\HobbiesEnum;
+use App\Entity\MaterialConditionEnum;
+use App\Entity\WorkEnum;
+use App\Model\Geo\City;
+use App\Model\Geo\Country;
+use App\Model\Geo\Region;
+use App\Model\User\UserRatingStatus;
 use App\User;
 use App\Model\User\UserStatus;
 use App\Model\User\UserShipping;
@@ -79,6 +89,34 @@ class RequestController extends Controller
             ['status_id','>=',7]
         ])->count();
 
+		$country = null;
+		$region = null;
+		$cities = [];
+
+		if($request->has('country')){
+            $country = Country::where('id', $request->input('country'))->first();
+        }
+
+		if($request->has('region')){
+            $region = Region::where('id', $request->input('region'))->first();
+        }
+
+		if($request->has('city')){
+            $citiesArray = [];
+            foreach ( $request->city as $key => $item){
+                $citiesArray[] = $request->input('city')[$key];
+            }
+		    $cities = City::whereIn('id', $citiesArray)->get();
+        }
+
+        $ratingStatuses = UserRatingStatus::where('lang', 'ru')->get();
+        $educationArray = EducationEnum::values();
+        $employmentArray = EmploymentEnum::values();
+        $workArray = WorkEnum::values();
+        $familyStatusArray = FamilyStatusEnum::values();
+        $materialConditionArray = MaterialConditionEnum::values();
+        $hobbiesArray = HobbiesEnum::values();
+
 		SEO::setTitle('Заявки на учатие в проекте: '.$project->name);
 		AdminPageData::setPageName('Заявки на учатие в проекте');
 		AdminPageData::addBreadcrumbLevel($project->name,'edit/'.$project->id);
@@ -90,7 +128,17 @@ class RequestController extends Controller
 			'filters' => $filters,
 			'statuses' => $statuses,
 			'approvedRequestsCount' => $approvedRequestsCount,
-			'userStatuses' => $userStatuses
+			'userStatuses' => $userStatuses,
+            'ratingStatuses'	=>	$ratingStatuses,
+            'educationArray'	=> $educationArray,
+            'employmentArray'	=> $employmentArray,
+            'workArray'	=> $workArray,
+            'familyStatusArray'	=> $familyStatusArray,
+            'materialConditionArray'	=> $materialConditionArray,
+            'hobbiesArray'	=> $hobbiesArray,
+            'country' => $country,
+            'region' => $region,
+            'cities' => $cities
 		]);
 	}
 

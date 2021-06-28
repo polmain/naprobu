@@ -117,19 +117,39 @@
 								</div>
 							</div>
 						</div>
+                        <div class="filter-item">
+                            <div class="filter-name{{(Request::has('country'))?' active':''}}">Область</div>
+                            <div class="filter-options" {{( Request::has('country'))?'style=display:block':''}}>
+                                <div class="filter-option-item">
+                                    <select class="form-control select2" name="country" id="region_id">
+                                        @if($country)
+                                            <option value="{{$country->id}}" selected="selected">{{$country->name}}</option>
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <div class="filter-name{{(Request::has('region'))?' active':''}}">Область</div>
+                            <div class="filter-options" {{( Request::has('region'))?'style=display:block':''}}>
+                                <div class="filter-option-item">
+                                    <select class="form-control select2" name="region" id="region_id">
+                                        @if($region)
+                                            <option value="{{$region->id}}" selected="selected">{{$region->name}}</option>
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 						<div class="filter-item">
-							<div class="filter-name{{(Request::input('city'))?' active':''}}">Город</div>
-							<div class="filter-options" {{( Request::input('city'))?'style=display:block':''}}>
+							<div class="filter-name{{(Request::has('city'))?' active':''}}">Город</div>
+							<div class="filter-options" {{( Request::has('city'))?'style=display:block':''}}>
 								<div class="filter-option-item">
-									<input type="text" class="form-control tags" data-role="tagsinput" name="city" value="{{Request::input('city')}}">
-								</div>
-							</div>
-						</div>
-						<div class="filter-item">
-							<div class="filter-name{{(Request::input('region'))?' active':''}}">Область</div>
-							<div class="filter-options" {{( Request::input('region'))?'style=display:block':''}}>
-								<div class="filter-option-item">
-									<input type="text" class="form-control tags" data-role="tagsinput" name="region" value="{{Request::input('region')}}">
+                                    <select class="form-control select2" name="city" multiple="multiple" id="city_id">
+                                        @foreach($cities as $city)
+                                            <option value="{{$city->id}}" selected="selected">{{$city->name}}</option>
+                                        @endforeach
+                                    </select>
 								</div>
 							</div>
 						</div>
@@ -258,5 +278,73 @@
 		});
 
 		tableUsers.on( 'draw', afterDrawTabel() );
+
+
+        $('.select2-multiple').select2({
+            tegs: true
+        });
+
+        $('#country_id').select2({
+            placeholder: "Выберите страну...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.country.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#region_id').select2({
+            placeholder: "Выберите область...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.region.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        country_id: $('#country_id').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#city_id').select2({
+            placeholder: "Выберите город...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.city.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        country_id: $('#country_id').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
 	</script>
 @endsection

@@ -9,6 +9,7 @@ use App\Entity\HobbiesEnum;
 use App\Entity\MaterialConditionEnum;
 use App\Entity\WorkEnum;
 use App\Exports\UserExport;
+use App\Library\Queries\UserFilterServices;
 use App\Library\Users\UserRating;
 use App\Model\Geo\City;
 use App\Model\Geo\Country;
@@ -123,7 +124,7 @@ class UsersController extends Controller
         if($request->input('isArchive') == 1){
             $users = User::with(['roles','status'])->onlyTrashed();
         }else{
-            $users = User::with(['roles','status']);
+            $users = UserFilterServices::getFilteredUsersQuery($request);
         }
 
 		if($request->has('role')){

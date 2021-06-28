@@ -387,10 +387,14 @@
                             <button name="submit" value="filter" type="submit" class="btn btn-primary btn-lg">Фильтровать</button>
                             <button name="submit" value="excel" type="submit" class="btn btn-default btn-lg pull-right">Геннерировать excel</button>
                         </div>
-                        <div class="form-group">
-                            <label for="notification_text">Текст оповещения выбранным пользователям</label>
-                            <textarea class="form-control" name="notification_text" id="notification_text" cols="30" rows="10" style="margin-bottom: 20px"></textarea>
-                            <button name="submit" value="notification" type="submit" class="btn btn-primary btn-lg">Отправить</button>
+                        <div class="filter-item">
+                            <div class="filter-name">Оповещение выбранным пользователям</div>
+                            <div class="filter-options">
+                                <div class="filter-option-item">
+                                    <textarea class="form-control" name="notification_text" id="notification_text" cols="30" rows="10" style="margin-bottom: 20px"></textarea>
+                                    <button name="submit" value="notification" type="submit" class="btn btn-primary btn-lg">Отправить</button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>

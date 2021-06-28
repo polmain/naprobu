@@ -478,5 +478,112 @@
 		});
 
 		tableUsers.on( 'draw', afterDrawTabel() );
+
+        $('.select2-multiple').select2({
+            tegs: true
+        });
+        $("input.tags").tagsinput('items');
+        $('#project,#projectExpert').select2({
+            placeholder: "Выберите проект...",
+            tegs: true,
+            minimumInputLength: 2,
+            ajax: {
+                url: '{!! route('adm_project_find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#questions').select2({
+            placeholder: "Выберите вопрос...",
+            tegs: true,
+            minimumInputLength: 2,
+            ajax: {
+                url: '{!! route('adm_question_find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#country_id').select2({
+            placeholder: "Выберите страну...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.country.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#region_id').select2({
+            placeholder: "Выберите область...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.region.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        country_id: $('#country_id').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#city_id').select2({
+            placeholder: "Выберите город...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.city.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        country_id: $('#country_id').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
     </script>
 @endsection

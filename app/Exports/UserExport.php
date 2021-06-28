@@ -187,19 +187,19 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
                 $query->where('created_at', '<=',  Carbon::parse($filters->filter['registration_max']) );
             })->when( !empty($filters->filter['project_min']), function ($query) use ($filters){
                 $query->whereHas('requests', function($q){
-                    $q->where('project_id', '>=', 7);
+                    $q->where('status_id', '>=', 7);
                 },'>=',$filters->filter['project_min']);
             })->when( !empty($filters->filter['project_max']), function ($query) use ($filters){
                 $query->whereHas('requests', function($q){
-                    $q->where('project_id', '>=', 7);
+                    $q->where('status_id', '>=', 7);
                 },'<=',$filters->filter['project_max']);
             })->when( !empty($filters->filter['project_date_min']), function ($query) use ($filters){
                 $query->whereHas('requests', function($q) use ($filters){
-                    $q->where('project_id', '>=', 7)->where('created_at', '>=', $filters->filter['project_date_min']);
+                    $q->where('status_id', '>=', 7)->where('created_at', '>=', $filters->filter['project_date_min']);
                 });
             })->when( !empty($filters->filter['project_date_max']), function ($query) use ($filters){
                 $query->whereHas('requests', function($q) use ($filters){
-                    $q->where('project_id', '>=', 7)->where('created_at', '<=', $filters->filter['project_date_max']);
+                    $q->where('status_id', '>=', 7)->where('created_at', '<=', $filters->filter['project_date_max']);
                 });
             })->when( $filters->has('filter.project'), function ($query) use ($projects){
 				$query->whereHas('requests', function($q) use ($projects){

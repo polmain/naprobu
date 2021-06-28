@@ -103,7 +103,7 @@
 							</div>
 						</div>
 						<div class="filter-item">
-							<div class="filter-name{{(Request::input('old_min') || Request::input('old_max'))?' active':''}}">Год рождения</div>
+							<div class="filter-name{{(Request::input('old_min') || Request::input('old_max'))?' active':''}}">Возраст</div>
 							<div class="filter-options" {{(Request::input('old_min') || Request::input('old_max'))?'style=display:block':''}}>
 								<div class="filter-option-item row">
 									<div class="col-md-6">
@@ -252,6 +252,87 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="filter-item">
+                            <div class="filter-name{{(Request::input('rating_min') || Request::input('rating_max'))?' active':''}}">Количество баллов</div>
+                            <div class="filter-options" {{(Request::input('rating_min') || Request::input('rating_max'))?'style=display:block':''}}>
+                                <div class="filter-option-item row">
+                                    <div class="col-md-6">
+                                        <lable>От</lable>
+                                        <input type="text" class="form-control" name="rating_min" value="{{Request::input('rating_min')}}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <lable>До</lable>
+                                        <input type="text" class="form-control" name="rating_max" value="{{Request::input('rating_max')}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="filter-item">
+                            <div class="filter-name{{(Request::input('online_min') || Request::input('online_max'))?' active':''}}">Был на сайте</div>
+                            <div class="filter-options" {{(Request::input('online_min') || Request::input('online_max'))?'style=display:block':''}}>
+                                <div class="filter-option-item row">
+                                    <div class="col-md-6">
+                                        <lable>От</lable>
+                                        <input type="text" class="form-control form_datetime" name="online_min" value="{{Request::input('online_min')}}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <lable>До</lable>
+                                        <input type="text" class="form-control form_datetime" name="online_max" value="{{Request::input('online_max')}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="filter-item">
+                            <div class="filter-name{{(Request::input('registration_min') || Request::input('registration_max'))?' active':''}}">Дата регистрации</div>
+                            <div class="filter-options" {{(Request::input('registration_min') || Request::input('registration_max'))?'style=display:block':''}}>
+                                <div class="filter-option-item row">
+                                    <div class="col-md-6">
+                                        <lable>От</lable>
+                                        <input type="text" class="form-control form_datetime" name="registration_min" value="{{Request::input('registration_min')}}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <lable>До</lable>
+                                        <input type="text" class="form-control form_datetime" name="registration_max" value="{{Request::input('registration_max')}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="filter-item">
+                            <div class="filter-name{{(Request::input('project_min') || Request::input('project_max'))?' active':''}}">Количество участий в проектах</div>
+                            <div class="filter-options" {{(Request::input('project_min') || Request::input('project_max'))?'style=display:block':''}}>
+                                <div class="filter-option-item row">
+                                    <div class="col-md-6">
+                                        <lable>От</lable>
+                                        <input type="text" class="form-control" name="project_min" value="{{Request::input('project_min')}}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <lable>До</lable>
+                                        <input type="text" class="form-control" name="project_max" value="{{Request::input('project_max')}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="filter-item">
+                            <div class="filter-name{{(Request::input('project_date_min') || Request::input('project_date_max'))?' active':''}}">Последнее участие в проекте</div>
+                            <div class="filter-options" {{(Request::input('project_date_min') || Request::input('project_date_max'))?'style=display:block':''}}>
+                                <div class="filter-option-item row">
+                                    <div class="col-md-6">
+                                        <lable>От</lable>
+                                        <input type="text" class="form-control form_datetime" name="project_date_min" value="{{Request::input('project_date_min')}}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <lable>До</lable>
+                                        <input type="text" class="form-control form_datetime" name="project_date_max" value="{{Request::input('project_date_max')}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
 					@foreach($filters as $filter)
 						@if(($filter->type_id == 3) || ($filter->type_id == 4) || ($filter->type_id == 5))
 						<div class="filter-item">

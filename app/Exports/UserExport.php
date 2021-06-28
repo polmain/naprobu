@@ -75,37 +75,37 @@ class UserExport implements  WithTitle, FromQuery, WithMapping,WithHeadings,Shou
 
 		if($filters->has('filter.education')){
 			foreach ( $filters->filter['education'] as $key => $item){
-                $educationArray[] = (int)$filters->input('filter.education')[$key];
+                $educationArray[] = $filters->input('filter.education')[$key];
 			}
 		}
 
 		if($filters->has('filter.employment')){
 			foreach ( $filters->filter['employment'] as $key => $item){
-                $employmentArray[] = (int)$filters->input('filter.employment')[$key];
+                $employmentArray[] = $filters->input('filter.employment')[$key];
 			}
 		}
 
 		if($filters->has('filter.work')){
 			foreach ( $filters->filter['work'] as $key => $item){
-                $workArray[] = (int)$filters->input('filter.work')[$key];
+                $workArray[] = $filters->input('filter.work')[$key];
 			}
 		}
 
 		if($filters->has('filter.family_status')){
 			foreach ( $filters->filter['family_status'] as $key => $item){
-                $familyStatusArray[] = (int)$filters->input('filter.family_status')[$key];
+                $familyStatusArray[] = $filters->input('filter.family_status')[$key];
 			}
 		}
 
 		if($filters->has('filter.material_condition')){
 			foreach ( $filters->filter['material_condition'] as $key => $item){
-                $materialConditionArray[] = (int)$filters->input('filter.material_condition')[$key];
+                $materialConditionArray[] = $filters->input('filter.material_condition')[$key];
 			}
 		}
 
 		if($filters->has('filter.hobbies')){
 			foreach ( $filters->filter['hobbies'] as $key => $item){
-                $hobbiesArray[] = (int)$filters->input('filter.hobbies')[$key];
+                $hobbiesArray[] = $filters->input('filter.hobbies')[$key];
 			}
 		}
 

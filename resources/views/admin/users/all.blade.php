@@ -77,13 +77,15 @@
                         <div class="filter-item">
                             <div class="filter-name{{(Request::input('filter.id_min') || Request::input('filter.id_max'))?' active':''}}">id</div>
                             <div class="filter-options" {{(Request::input('filter.id_min') || Request::input('filter.id_max'))?'style=display:block':''}}>
-                                <div class="col-md-6">
-                                    <lable>От</lable>
-                                    <input type="text" class="form-control" name="filter[id_min]" value="{{Request::input('filter.id_min')}}">
-                                </div>
-                                <div class="col-md-6">
-                                    <lable>До</lable>
-                                    <input type="text" class="form-control" name="filter[id_max]" value="{{Request::input('filter.id_max')}}">
+                                <div class="filter-option-item row">
+                                    <div class="col-md-6">
+                                        <lable>От</lable>
+                                        <input type="text" class="form-control" name="filter[id_min]" value="{{Request::input('filter.id_min')}}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <lable>До</lable>
+                                        <input type="text" class="form-control" name="filter[id_max]" value="{{Request::input('filter.id_max')}}">
+                                    </div>
                                 </div>
                             </div>
                         </div>

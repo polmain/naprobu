@@ -159,7 +159,7 @@
 								<div class="filter-option-item">
                                     <select class="form-control select2" name="education[]" multiple="multiple" id="education">
                                         @foreach($educationArray as $education)
-                                            <option value="{{$education}}" @if(in_array($education->getValue(), $request->education))selected="selected" @endif>@lang("education.".$education)</option>
+                                            <option value="{{$education}}" @if(in_array($education->getValue(), Request::input('education')))selected="selected" @endif>@lang("education.".$education)</option>
                                         @endforeach
                                     </select>
 								</div>

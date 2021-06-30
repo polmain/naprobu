@@ -187,6 +187,12 @@ class ProjectController extends Controller
         if($url === 'libero-touch'){
             return redirect('https://liberoam.naprobu.ua/');
         }
+        $international = $request->get('international');
+
+        $audience = ProjectAudienceEnum::getInstance(ProjectAudienceEnum::UKRAINE);
+        if($international){
+            $audience = ProjectAudienceEnum::getInstance(ProjectAudienceEnum::WORD);
+        }
 
 		$locale = App::getLocale();
 
@@ -213,6 +219,14 @@ class ProjectController extends Controller
         }
 
         $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
+
+        if(
+            strpos(url()->previous(), 'international/projects/') === false
+            && $audience->isWord()
+            && $locale !== 'ru'
+        ){
+            return redirect($alternativeUrls['ru'], 302);
+        }
 
 		if($project->isHide || $project->type == 'only-blogger'){
 			SEO::setTitle(trans('project.hide_title'));

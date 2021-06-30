@@ -10,6 +10,7 @@ namespace App\Library\Cron;
 
 
 use App\Entity\PhoneStatusEnum;
+use App\Library\Queries\UserFilterServices;
 use App\Model\User\PhoneVerify;
 use App\Model\User\UserRatingHistory;
 use App\Model\User\UserRatingStatus;
@@ -27,6 +28,7 @@ use App\Mail\UserNotificationMail;
 use Illuminate\Support\Facades\Mail;
 use App\Model\Queue;
 use Throwable;
+use Illuminate\Http\Request;
 
 class Cron
 {
@@ -134,6 +136,8 @@ class Cron
 					static::viber($queue);
 				case 'phone_duplicate':
 					static::phoneDuplicate($queue);
+				case 'user_custom_notification':
+					static::customNotification($queue);
 			}
 
 
@@ -183,7 +187,9 @@ class Cron
 			['status_id','<>',5],
 			['isNewsletter',1],
 		])->get();
-		if($queue->start + 50 > User::count()){
+
+		$lastUser = User::orderBy('id','DESC')->first();
+		if($queue->start + 50 > $lastUser->id){
 			$queue->delete();
 		}else{
 			$queue->start += 50;
@@ -359,7 +365,10 @@ class Cron
 			['email','<>',null],
 			['isHide',0],
 		])->whereNotIn('id',[1,2,7,8,9,11,12,13,14,15,16,17,18,43718,45645, 45765, 45766, 46648, 47336, 47355, 47356, 48566, 66942, 106249, 139119])->get();
-		if($queue->start + 150 > User::count()){
+
+
+        $lastUser = User::orderBy('id','DESC')->first();
+		if($queue->start + 150 > $lastUser->id){
 			$queue->delete();
 		}else{
 			$queue->start += 150;
@@ -385,7 +394,8 @@ class Cron
 			['new_form_status',false],
 			['isHide',0],
 		])->whereNotIn('id',[1,2,7,8,9,11,12,13,14,15,16,17,18,43718,45645, 45765, 45766, 46648, 47336, 47355, 47356, 48566, 66942, 106249, 139119])->get();
-		if($queue->start + 1000 > User::count()){
+        $lastUser = User::orderBy('id','DESC')->first();
+		if($queue->start + 1000 > $lastUser->id){
 			$queue->delete();
 		}else{
 			$queue->start += 1000;
@@ -414,7 +424,9 @@ class Cron
 			['id','<=',$queue->start + 150],
 			['phone','<>',null],
 		])->get();
-		if($queue->start + 150 > User::count()){
+
+        $lastUser = User::orderBy('id','DESC')->first();
+		if($queue->start + 150 > $lastUser->id){
 			$queue->delete();
 		}else{
 			$queue->start += 150;
@@ -445,6 +457,35 @@ class Cron
             }
 		}
 	}
+
+	public static function customNotification($queue)
+    {
+        $data = unserialize($queue->data);
+        $message = $data['text'];
+        $request = new Request($data['request']);
+
+        $users = UserFilterServices::getFilteredUsersQuery($request);
+        $users = $users->where([
+                ['id','>',$queue->start],
+                ['id','<=',$queue->start + 10000]
+            ])
+            ->orderBy('id')
+            ->get();
+
+        $lastUser = UserFilterServices::getFilteredUsersQuery($request)->orderBy('id','DESC')->first();
+        if($queue->start + 10000 > $lastUser->id){
+            $queue->delete();
+        }else{
+            $queue->start += 10000;
+            $queue->save();
+        }
+
+        foreach ($users as $user){
+            $notificationText = str_replace(':user_name:',$user->first_name,$message);
+            Notification::send('custom',$user, 0, null, [], $notificationText);
+        }
+
+    }
 
 	private static $instance;
 	public static function getInstance()

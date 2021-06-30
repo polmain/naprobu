@@ -580,7 +580,7 @@ class UsersController extends Controller
 
 	private function sendCustomNotification(Request $request){
 	    $users = UserFilterServices::getFilteredUsersQuery($request);
-	    $users = $users->orderBy('id')->pluck('word_two')->toArray();
+	    $users = $users->orderBy('id')->pluck('id')->toArray();
 
 	    $text = $request->hello_text.' :user_name: '.$request->notification_text;
 	    $data = [

@@ -130,14 +130,22 @@ class Cron
 					break;*/
 				case 'new_score':
 					static::userRating($queue);
+                    break;
 				case 'new_account_form':
 					static::newAccountForm($queue);
+                    break;
 				case 'viber':
 					static::viber($queue);
+                    break;
+				case 'to_archive':
+					static::toArchive($queue);
+                    break;
 				case 'phone_duplicate':
 					static::phoneDuplicate($queue);
+                    break;
 				case 'user_custom_notification':
 					static::customNotification($queue);
+                    break;
 			}
 
 
@@ -188,8 +196,11 @@ class Cron
 			['isNewsletter',1],
 		])->get();
 
-		$lastUser = User::orderBy('id','DESC')->first();
-		if($queue->start + 50 > $lastUser->id){
+		$lastUser = User::where([
+            ['status_id','<>',5],
+            ['isNewsletter',1],
+        ])->orderBy('id','DESC')->first();
+		if($lastUser && $queue->start + 50 > $lastUser->id){
 			$queue->delete();
 		}else{
 			$queue->start += 50;
@@ -367,8 +378,11 @@ class Cron
 		])->whereNotIn('id',[1,2,7,8,9,11,12,13,14,15,16,17,18,43718,45645, 45765, 45766, 46648, 47336, 47355, 47356, 48566, 66942, 106249, 139119])->get();
 
 
-        $lastUser = User::orderBy('id','DESC')->first();
-		if($queue->start + 150 > $lastUser->id){
+        $lastUser = User::where([
+            ['email','<>',null],
+            ['isHide',0],
+        ])->orderBy('id','DESC')->first();
+		if($lastUser && $queue->start + 150 > $lastUser->id){
 			$queue->delete();
 		}else{
 			$queue->start += 150;
@@ -394,8 +408,13 @@ class Cron
 			['new_form_status',false],
 			['isHide',0],
 		])->whereNotIn('id',[1,2,7,8,9,11,12,13,14,15,16,17,18,43718,45645, 45765, 45766, 46648, 47336, 47355, 47356, 48566, 66942, 106249, 139119])->get();
-        $lastUser = User::orderBy('id','DESC')->first();
-		if($queue->start + 1000 > $lastUser->id){
+
+		$lastUser = User::where([
+            ['email','<>',null],
+            ['new_form_status',false],
+            ['isHide',0],
+        ])->orderBy('id','DESC')->first();
+		if($lastUser && $queue->start + 1000 > $lastUser->id){
 			$queue->delete();
 		}else{
 			$queue->start += 1000;
@@ -418,6 +437,33 @@ class Cron
 		}
 	}
 
+	public static function toArchive($queue)
+    {
+        $users = User::where([
+            ['id','>',$queue->start],
+            ['id','<=',$queue->start + 1000],
+            ['email','<>',null],
+            ['new_form_status',false],
+            ['isHide',0],
+        ])->whereNotIn('id',[1,2,7,8,9,11,12,13,14,15,16,17,18,43718,45645, 45765, 45766, 46648, 47336, 47355, 47356, 48566, 66942, 106249, 139119])->get();
+
+        $lastUser = User::where([
+            ['email','<>',null],
+            ['new_form_status',false],
+            ['isHide',0],
+        ])->orderBy('id','DESC')->first();
+        if($lastUser && $queue->start + 1000 > $lastUser->id){
+            $queue->delete();
+        }else{
+            $queue->start += 1000;
+            $queue->save();
+        }
+
+        foreach ($users as $user){
+            $user->delete();
+        }
+    }
+
 	public static function phoneDuplicate($queue){
 		$users = User::where([
 			['id','>',$queue->start],
@@ -425,8 +471,10 @@ class Cron
 			['phone','<>',null],
 		])->get();
 
-        $lastUser = User::orderBy('id','DESC')->first();
-		if($queue->start + 150 > $lastUser->id){
+        $lastUser = User::where([
+            ['phone','<>',null],
+        ])->orderBy('id','DESC')->first();
+		if($lastUser && $queue->start + 150 > $lastUser->id){
 			$queue->delete();
 		}else{
 			$queue->start += 150;

@@ -467,16 +467,16 @@ class Cron
         $users = UserFilterServices::getFilteredUsersQuery($request);
         $users = $users->where([
                 ['id','>',$queue->start],
-                ['id','<=',$queue->start + 500]
+                ['id','<=',$queue->start + 5000]
             ])
             ->orderBy('id')
             ->get();
 
         $lastUser = UserFilterServices::getFilteredUsersQuery($request)->orderBy('id','DESC')->first();
-        if($queue->start + 500 > $lastUser->id){
+        if($queue->start + 5000 > $lastUser->id){
             $queue->delete();
         }else{
-            $queue->start += 500;
+            $queue->start += 5000;
             $queue->save();
         }
 

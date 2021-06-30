@@ -465,7 +465,7 @@ class Cron
         $request = new Request($data['request']);
 
         $users = UserFilterServices::getFilteredUsersQuery($request);
-        $users->where([
+        $users = $users->where([
                 ['id','>',$queue->start],
                 ['id','<=',$queue->start + 500]
             ])

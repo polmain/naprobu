@@ -580,7 +580,7 @@ class UsersController extends Controller
 
 	private function sendCustomNotification(Request $request){
 	    $users = UserFilterServices::getFilteredUsersQuery($request);
-	    $users = $users->orderBy('id')->pluck('id')->toArray();
+	    $users = $users->orderBy('id');
 
 	    $text = $request->hello_text.' :user_name: '.$request->notification_text;
 	    $data = [
@@ -590,7 +590,7 @@ class UsersController extends Controller
 
 	    $queue = new Queue();
         $queue->name = 'user_custom_notification';
-        $queue->start = $users[0];
+        $queue->start = $users->first()->id;
         $queue->data = serialize($data);
         $queue->save();
 

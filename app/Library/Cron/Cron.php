@@ -130,16 +130,22 @@ class Cron
 					break;*/
 				case 'new_score':
 					static::userRating($queue);
+                    break;
 				case 'new_account_form':
 					static::newAccountForm($queue);
+                    break;
 				case 'viber':
 					static::viber($queue);
+                    break;
 				case 'to_archive':
 					static::toArchive($queue);
+                    break;
 				case 'phone_duplicate':
 					static::phoneDuplicate($queue);
+                    break;
 				case 'user_custom_notification':
 					static::customNotification($queue);
+                    break;
 			}
 
 

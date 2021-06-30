@@ -585,7 +585,7 @@ class UsersController extends Controller
 	    $text = $request->hello_text.' :user_name: '.$request->notification_text;
 	    $data = [
 	        'text' => $text,
-            'users' => $users
+            'request' => $request->toArray()
         ];
 
 	    $queue = new Queue();

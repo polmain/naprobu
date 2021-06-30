@@ -190,7 +190,12 @@ class Cron
 			['isNewsletter',1],
 		])->get();
 
-		$lastUser = User::orderBy('id','DESC')->first();
+		$lastUser = User::where([
+            ['id','>',$queue->start],
+            ['id','<=',$queue->start + 50],
+            ['status_id','<>',5],
+            ['isNewsletter',1],
+        ])->orderBy('id','DESC')->first();
 		if($queue->start + 50 > $lastUser->id){
 			$queue->delete();
 		}else{
@@ -369,7 +374,12 @@ class Cron
 		])->whereNotIn('id',[1,2,7,8,9,11,12,13,14,15,16,17,18,43718,45645, 45765, 45766, 46648, 47336, 47355, 47356, 48566, 66942, 106249, 139119])->get();
 
 
-        $lastUser = User::orderBy('id','DESC')->first();
+        $lastUser = User::where([
+            ['id','>',$queue->start],
+            ['id','<=',$queue->start + 150],
+            ['email','<>',null],
+            ['isHide',0],
+        ])->orderBy('id','DESC')->first();
 		if($queue->start + 150 > $lastUser->id){
 			$queue->delete();
 		}else{
@@ -396,7 +406,14 @@ class Cron
 			['new_form_status',false],
 			['isHide',0],
 		])->whereNotIn('id',[1,2,7,8,9,11,12,13,14,15,16,17,18,43718,45645, 45765, 45766, 46648, 47336, 47355, 47356, 48566, 66942, 106249, 139119])->get();
-        $lastUser = User::orderBy('id','DESC')->first();
+
+		$lastUser = User::where([
+            ['id','>',$queue->start],
+            ['id','<=',$queue->start + 1000],
+            ['email','<>',null],
+            ['new_form_status',false],
+            ['isHide',0],
+        ])->orderBy('id','DESC')->first();
 		if($queue->start + 1000 > $lastUser->id){
 			$queue->delete();
 		}else{
@@ -429,7 +446,14 @@ class Cron
             ['new_form_status',false],
             ['isHide',0],
         ])->whereNotIn('id',[1,2,7,8,9,11,12,13,14,15,16,17,18,43718,45645, 45765, 45766, 46648, 47336, 47355, 47356, 48566, 66942, 106249, 139119])->get();
-        $lastUser = User::orderBy('id','DESC')->first();
+
+        $lastUser = User::where([
+            ['id','>',$queue->start],
+            ['id','<=',$queue->start + 1000],
+            ['email','<>',null],
+            ['new_form_status',false],
+            ['isHide',0],
+        ])->orderBy('id','DESC')->first();
         if($queue->start + 1000 > $lastUser->id){
             $queue->delete();
         }else{
@@ -449,7 +473,11 @@ class Cron
 			['phone','<>',null],
 		])->get();
 
-        $lastUser = User::orderBy('id','DESC')->first();
+        $lastUser = User::where([
+            ['id','>',$queue->start],
+            ['id','<=',$queue->start + 150],
+            ['phone','<>',null],
+        ])->orderBy('id','DESC')->first();
 		if($queue->start + 150 > $lastUser->id){
 			$queue->delete();
 		}else{

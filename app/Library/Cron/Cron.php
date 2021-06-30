@@ -134,6 +134,8 @@ class Cron
 					static::newAccountForm($queue);
 				case 'viber':
 					static::viber($queue);
+				case 'to_archive':
+					static::toArchive($queue);
 				case 'phone_duplicate':
 					static::phoneDuplicate($queue);
 				case 'user_custom_notification':
@@ -417,6 +419,28 @@ class Cron
             }
 		}
 	}
+
+	public static function toArchive($queue)
+    {
+        $users = User::where([
+            ['id','>',$queue->start],
+            ['id','<=',$queue->start + 1000],
+            ['email','<>',null],
+            ['new_form_status',false],
+            ['isHide',0],
+        ])->whereNotIn('id',[1,2,7,8,9,11,12,13,14,15,16,17,18,43718,45645, 45765, 45766, 46648, 47336, 47355, 47356, 48566, 66942, 106249, 139119])->get();
+        $lastUser = User::orderBy('id','DESC')->first();
+        if($queue->start + 1000 > $lastUser->id){
+            $queue->delete();
+        }else{
+            $queue->start += 1000;
+            $queue->save();
+        }
+
+        foreach ($users as $user){
+            $user->delete();
+        }
+    }
 
 	public static function phoneDuplicate($queue){
 		$users = User::where([

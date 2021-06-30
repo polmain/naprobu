@@ -125,6 +125,7 @@ class ExpertRegisterController extends Controller
             $city_id = $city->id;
         }
         $user->city_id = $city_id;
+        $user->new_form_status = true;
 
         if(EmploymentEnum::getInstance($request->employment)->isWork()){
             $user->work = $request->work;

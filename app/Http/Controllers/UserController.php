@@ -511,6 +511,8 @@ class UserController extends Controller
             $user->work = null;
         }
 
+		$user->new_form_status = true;
+
 		$user->save();
 
 		if(!$user->hasRole('expert')){

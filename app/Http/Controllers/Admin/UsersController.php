@@ -263,15 +263,91 @@ class UsersController extends Controller
 			->toJson();
 	}
 
-	public function expert(){
+	public function expert(Request $request){
+        if($request->submit == "excel"){
+            return $this->exportGenerate($request);
+        }elseif ($request->submit == "notification"){
+            return $this->sendCustomNotification($request);
+        }
 
+        SEO::setTitle('Все Эксерты');
+        AdminPageData::setPageName('Все Эксерты');
+        AdminPageData::addBreadcrumbLevel('Пользователи','users');
+        AdminPageData::addBreadcrumbLevel('Эксерты');
 
-		SEO::setTitle('Все Эксерты');
-		AdminPageData::setPageName('Все Эксерты');
-		AdminPageData::addBreadcrumbLevel('Пользователи','users');
-		AdminPageData::addBreadcrumbLevel('Эксерты');
+        $country = null;
+        $region = null;
+        $cities = [];
+        $projects = [];
+        $projectsExpert = [];
+        $questions = [];
 
-		return view('admin.users.all',['role'=>'expert']);
+        if($request->has('filter.country')){
+            $country = Country::where('id', $request->input('filter.country'))->first();
+        }
+
+        if($request->has('filter.region')){
+            $region = Region::where('id', $request->input('filter.region'))->first();
+        }
+
+        if($request->has('filter.city')){
+            $citiesArray = [];
+            foreach ( $request->filter['city'] as $key => $item){
+                $citiesArray[] = $request->input('filter.city')[$key];
+            }
+            $cities = City::whereIn('id', $citiesArray)->get();
+        }
+
+        if($request->has('filter.project')){
+            $projectsArray = [];
+            foreach ( $request->filter['project'] as $key => $item){
+                $projectsArray[] = (int) $request->input('filter.project')[$key];
+            }
+            $projects = Project::whereIn('id', $projectsArray)->get();
+        }
+
+        if($request->has('filter.projectExpert')){
+            $projectsArray = [];
+            foreach ( $request->filter['projectExpert'] as $key => $item){
+                $projectsArray[] = (int) $request->input('filter.projectExpert')[$key];
+            }
+            $projectsExpert = Project::whereIn('id', $projectsArray)->get();
+        }
+
+        if($request->has('filter.questions')){
+            $questionsArray = [];
+            foreach ( $request->filter['questions'] as $key => $item){
+                $questionsArray[] = (int) $request->input('filter.questions')[$key];
+            }
+            $questions = Question::whereIn('id', $questionsArray)->get();
+        }
+
+        $statuses = UserStatus::where('lang', 'ru')->get();
+        $ratingStatuses = UserRatingStatus::where('lang', 'ru')->get();
+        $educationArray = EducationEnum::values();
+        $employmentArray = EmploymentEnum::values();
+        $workArray = WorkEnum::values();
+        $familyStatusArray = FamilyStatusEnum::values();
+        $materialConditionArray = MaterialConditionEnum::values();
+        $hobbiesArray = HobbiesEnum::values();
+
+        return view('admin.users.all',[
+            'role'=>'expert',
+            'statuses'	=>	$statuses,
+            'ratingStatuses'	=>	$ratingStatuses,
+            'educationArray'	=> $educationArray,
+            'employmentArray'	=> $employmentArray,
+            'workArray'	=> $workArray,
+            'familyStatusArray'	=> $familyStatusArray,
+            'materialConditionArray'	=> $materialConditionArray,
+            'hobbiesArray'	=> $hobbiesArray,
+            'country' => $country,
+            'region' => $region,
+            'cities' => $cities,
+            'projects' => $projects,
+            'projectsExpert' => $projectsExpert,
+            'questions' => $questions
+        ]);
 	}
 
 	public function find(Request $request)

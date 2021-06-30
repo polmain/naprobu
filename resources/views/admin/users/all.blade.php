@@ -391,6 +391,9 @@
                             <div class="filter-name">Оповещение выбранным пользователям</div>
                             <div class="filter-options">
                                 <div class="filter-option-item">
+                                    <label for="hello_text">Приветсвие. Например Уважаемый</label>
+                                    <input class="form-control" type="text" id="hello_text" name="hello_text" placeholder="Приветсвие. Например Уважаемый" value="Уважаемый">
+                                    <label for="notification_text">Текст сообщения</label>
                                     <textarea class="form-control" name="notification_text" id="notification_text" cols="30" rows="10" style="margin-bottom: 20px"></textarea>
                                     <button name="submit" value="notification" type="submit" class="btn btn-primary btn-lg">Отправить</button>
                                 </div>

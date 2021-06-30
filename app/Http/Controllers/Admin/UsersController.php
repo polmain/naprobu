@@ -20,6 +20,7 @@ use App\Model\Project\ProjectMessage;
 use App\Model\Project\ProjectRequest;
 use App\Model\Questionnaire\Answer;
 use App\Model\Questionnaire\Question;
+use App\Model\Queue;
 use App\Model\Review;
 use App\Model\User\UserNotification;
 use App\Model\User\UserPresents;
@@ -56,6 +57,8 @@ class UsersController extends Controller
 	public function all(Request $request){
         if($request->submit == "excel"){
             return $this->exportGenerate($request);
+        }elseif ($request->submit == "notification"){
+            return $this->sendCustomNotification($request);
         }
 
 		SEO::setTitle('Все пользователи');
@@ -574,4 +577,33 @@ class UsersController extends Controller
 
 		return redirect()->route('adm_users_edit',[$user_id]);
 	}
+
+	private function sendCustomNotification(Request $request){
+	    $users = UserFilterServices::getFilteredUsersQuery($request);
+	    $users = $users->orderBy('id')->get();
+
+	    $text = $request->hello_text.' :user_name: '.$request->notification_text;
+	    $data = [
+	        'text' => $text,
+            'users' => $users->jsonSerialize()
+        ];
+
+	    $queue = new Queue();
+        $queue->name = 'user_custom_notification';
+        $queue->start = $users->first()->id;
+        $queue->data = serialize($data);
+        $queue->save();
+
+        return redirect()->route('adm_users_notification_send');
+    }
+
+    public function notificationSend()
+    {
+        SEO::setTitle('Сообщение отправленно');
+        AdminPageData::setPageName('Сообщение отправленно');
+        AdminPageData::addBreadcrumbLevel('Пользователи','users');
+        AdminPageData::addBreadcrumbLevel('Сообщение отправленно');
+
+        return view('admin.users.notification');
+    }
 }

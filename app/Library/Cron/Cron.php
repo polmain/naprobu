@@ -217,6 +217,7 @@ class Cron
                     }
 				}
 				Notification::send('project_start_register', $user, 1, $link, ['project' => $projectName]);
+
 				if (isset($user->email) && $user->isNewsletter)
 				{
                     try {
@@ -325,7 +326,9 @@ class Cron
                     $contest = $subpageTranslate->name;
                 }
 			}
-			if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter)
+            Notification::send('project_contest', $projectRequest->user, 0, $link, ['project' => $projectName]);
+
+            if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter)
 			{
                 try{
                     Mail::to($projectRequest->user)->send(new UserNotificationMail($projectRequest->user, 'project_contest', url('/') . $link, ['contest' => $contest, 'project' => $projectName]));
@@ -333,7 +336,6 @@ class Cron
                 {
                 }
 			}
-			Notification::send('project_contest', $projectRequest->user, 0, $link, ['project' => $projectName]);
 		}
 
 	}

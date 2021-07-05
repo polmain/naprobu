@@ -79,31 +79,20 @@ class Cron
 				$project->status_id = 6;
 
 			} elseif ($start_report_time <=  $now && $end_project_time >= $now && $project->status_id != 5){
-				$project->status_id = 5;
-				$project->save();
+                $project->status_id = 5;
+                $project->save();
 
-				$projectRequests = $project->requests;
-				$questionnaire = $project->questionnaires->where('type_id',3)->first();
-				foreach ($projectRequests as $projectRequest)
-				{
-					if($projectRequest->status_id >= 7){
-						$link = "/ru/projects/questionnaire/".$questionnaire->id.'/';
-						$projectName = $project->name;
-						if ($projectRequest->user->lang !== "ru")
-						{
-                            $projectTranslate = $project->translate->firstWhere('lang', $projectRequest->user->lang);
-                            if($projectTranslate){
-                                $link = ($projectRequest->user->lang === "ua"?'':'/'.$projectRequest->user->lang)."/projects/questionnaire/".$questionnaire->id.'/';
-                                $projectName = $projectTranslate->name;
-                            }
+                $projectRequests = $project->requests;
 
-						}
-						if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter){
-							Mail::to($projectRequest->user)->send(new UserNotificationMail($projectRequest->user, 'questionnaire_report', url('/').$link, ['project' => $projectName]));
-						}
-						Notification::send('questionnaire_report', $projectRequest->user, 1, $link, ['project' => $projectName]);
-					}
-				}
+                $firstProjectRequest = $projectRequests->firstWhere('status_id', '>=', 7);
+
+                if($firstProjectRequest){
+                    $queue = new Queue();
+                    $queue->project_id = $project->id;
+                    $queue->name = "project_report";
+                    $queue->start = $firstProjectRequest->id;
+                    $queue->save();
+                }
 			} elseif ($end_project_time <= $now && $project->status_id != 1){
 				$project->status_id = 1;
 			}
@@ -125,6 +114,9 @@ class Cron
 				case 'project_contest':
 					static::queueProjectContest($queue);
 					break;
+                case 'project_report':
+                    static::queueProjectReport($queue);
+                    break;
 				/*case 'new_pass':
 					static::queueNewPass($queue);
 					break;*/
@@ -335,12 +327,78 @@ class Cron
 			}
 			if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter)
 			{
-				Mail::to($projectRequest->user)->send(new UserNotificationMail($projectRequest->user, 'project_contest', url('/') . $link, ['contest' => $contest, 'project' => $projectName]));
+                try{
+                    Mail::to($projectRequest->user)->send(new UserNotificationMail($projectRequest->user, 'project_contest', url('/') . $link, ['contest' => $contest, 'project' => $projectName]));
+                }catch (Throwable $exception)
+                {
+                }
 			}
 			Notification::send('project_contest', $projectRequest->user, 0, $link, ['project' => $projectName]);
 		}
 
 	}
+
+    public static function queueProjectReport($queue){
+
+        $project = Project::find($queue->project_id);
+
+        $lastId = Project\ProjectRequest::where([
+            ['project_id', $project->id],
+            ['status_id', '>=', 7],
+        ])
+            ->orderBy('id','desc')
+            ->first();
+
+        $projectRequests = Project\ProjectRequest::where([
+            ['id','>',$queue->start],
+            ['id','<=',$queue->start + 150],
+            ['status_id', '>=', 7],
+            ['project_id', $project->id]
+        ])
+            ->get();
+
+        if($queue->start + 150 > $lastId->id){
+            $queue->delete();
+        }else{
+            $queue->start += 150;
+            $queue->save();
+        }
+
+        $questionnaire = $project->questionnaires->where('type_id',3)->first();
+
+        foreach ($projectRequests as $projectRequest)
+        {
+            $link = "/ru/projects/questionnaire/".$questionnaire->id.'/';
+            $projectName = $project->name;
+            if ($projectRequest->user->lang !== "ru")
+            {
+                $projectTranslate = $project->translate->firstWhere('lang', $projectRequest->user->lang);
+                if($projectTranslate){
+                    $link = ($projectRequest->user->lang === "ua"?'':'/'.$projectRequest->user->lang)."/projects/questionnaire/".$questionnaire->id.'/';
+                    $projectName = $projectTranslate->name;
+                }
+
+            }
+            if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter){
+                try{
+                    Mail::to($projectRequest->user)
+                        ->send(
+                            new UserNotificationMail(
+                                $projectRequest->user,
+                                'questionnaire_report',
+                                url('/').$link,
+                                ['project' => $projectName]
+                            )
+                        );
+                }catch (Throwable $exception)
+                {
+                }
+            }
+            Notification::send('questionnaire_report', $projectRequest->user, 1, $link, ['project' => $projectName]);
+
+        }
+
+    }
 
 	public static function queueNewPass($queue){
 		/*$users = User::where([
@@ -394,7 +452,11 @@ class Cron
                 $link = $user->lang.'/'.$link;
             }
             if($user->email){
-                Mail::to($user)->send(new UserNotificationMail($user, 'new_form', url('/') . $link));
+                try {
+                    Mail::to($user)->send(new UserNotificationMail($user, 'new_form', url('/').$link));
+                }catch (Throwable $exception)
+                {
+                }
             }
             Notification::send('new_form', $user, 0, $link);
 		}

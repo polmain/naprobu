@@ -59,7 +59,7 @@
                         </svg>
                     </div>
                     <div class="status-name">{{($lang == 'ru')?$project->status->name:$base->status->translate->firstWhere('lang',$lang)->name}}</div>
-                    <div class="status-date">
+                    <div class="status-date" translate="no">
                         @switch($base->status_id)
                             @case(4)
                             {{ Carbon::parse($base->start_registration_time)->format('d.m.Y')}}
@@ -149,7 +149,7 @@
                         </svg>
                     </div>
                     <div class="status-name">{{($lang == 'ru')?$project->status->name:$base->status->translate->firstWhere('lang',$lang)->name}}</div>
-                    <div class="status-date">
+                    <div class="status-date" translate="no">
                         @switch($base->status_id)
                             @case(4)
                                 {{ Carbon::parse($base->start_registration_time)->format('d.m.Y')}}

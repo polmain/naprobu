@@ -9659,7 +9659,7 @@
                      data-field-width-value="260" data-field-axisy-value="top" data-field-axisx-value="left"
                      data-field-container-value="grid" data-field-topunits-value="px" data-field-leftunits-value="px"
                      data-field-heightunits-value="px" data-field-widthunits-value="px"><a class='tn-atom'
-                                                                                           href="https://mmr.ua/show/pyat-faktov-o-sarafannom-marketinge"> </a>
+                                                                                           href="https://sostav.ua/publication/burda-media-ukraine-voplotila-pervyj-kejs-potrebitelskogo-testirovaniya-v-84426.html?fbclid=IwAR0AmFOIEIM8uEMeUe65G5baL2KkLmalhhaTg9tITYvNpHb82nchLo0k7is"> </a>
                 </div>
                 <div class='t396__elem tn-elem tn-elem__2488911241603825445313' data-elem-id='1603825445313'
                      data-elem-type='image' data-field-top-value="339" data-field-top-res-320-value="690"
@@ -9667,7 +9667,7 @@
                      data-field-axisy-value="top" data-field-axisx-value="left" data-field-container-value="grid"
                      data-field-topunits-value="px" data-field-leftunits-value="px" data-field-heightunits-value=""
                      data-field-widthunits-value="px"><a class='tn-atom'
-                                                         href="https://mmr.ua/show/pyat-faktov-o-sarafannom-marketinge">
+                                                         href="https://sostav.ua/publication/burda-media-ukraine-voplotila-pervyj-kejs-potrebitelskogo-testirovaniya-v-84426.html?fbclid=IwAR0AmFOIEIM8uEMeUe65G5baL2KkLmalhhaTg9tITYvNpHb82nchLo0k7is">
                         <img class='tn-atom__img t-img'
                              data-original='{{url('/')}}public/b2b/images/tild6663-3364-4739-b333-333233386463__sostavua.svg'
                              imgfield='tn_img_1603825445313'> </a></div>
@@ -9794,7 +9794,7 @@
                      data-field-container-value="grid" data-field-topunits-value="px" data-field-leftunits-value="px"
                      data-field-heightunits-value="px" data-field-widthunits-value="px" data-animate-sbs-event="hover"
                      data-animate-sbs-opts="[{'ti':'0','mx':'0','my':'0','sx':'1','sy':'1','op':'1','ro':'0','bl':'0','ea':'','dt':'0'},{'ti':300,'mx':'0','my':'0','sx':'1','sy':'1','op':0,'ro':'0','bl':'0','ea':'','dt':'0'}]">
-                    <a class='tn-atom' href="https://mmr.ua/show/pyat-faktov-o-sarafannom-marketinge"> </a></div>
+                    <a class='tn-atom' href="https://sostav.ua/publication/burda-media-ukraine-voplotila-pervyj-kejs-potrebitelskogo-testirovaniya-v-84426.html?fbclid=IwAR0AmFOIEIM8uEMeUe65G5baL2KkLmalhhaTg9tITYvNpHb82nchLo0k7is"> </a></div>
                 <div class='t396__elem tn-elem tn-elem__2488911241603826809931' data-elem-id='1603826809931'
                      data-elem-type='image' data-field-top-value="219" data-field-top-res-320-value="960"
                      data-field-left-value="733" data-field-left-res-320-value="123" data-field-width-value="50"
@@ -9907,7 +9907,7 @@
                      data-field-topunits-value="px" data-field-leftunits-value="px" data-field-heightunits-value=""
                      data-field-widthunits-value="px" data-animate-sbs-event="hover"
                      data-animate-sbs-opts="[{'ti':'0','mx':'0','my':'0','sx':'1','sy':'1','op':'1','ro':'0','bl':'0','ea':'','dt':'0'},{'ti':300,'mx':'0','my':'0','sx':'1','sy':'1','op':0,'ro':'0','bl':'0','ea':'','dt':'0'}]">
-                    <a class='tn-atom' href="https://mmr.ua/show/pyat-faktov-o-sarafannom-marketinge">Burda Media
+                    <a class='tn-atom' href="https://sostav.ua/publication/burda-media-ukraine-voplotila-pervyj-kejs-potrebitelskogo-testirovaniya-v-84426.html?fbclid=IwAR0AmFOIEIM8uEMeUe65G5baL2KkLmalhhaTg9tITYvNpHb82nchLo0k7is">Burda Media
                         Ukraine воплотила первый кейс потребительского тестирования в Армении</a></div>
                 <div class='t396__elem tn-elem tn-elem__2488911241606739718216' data-elem-id='1606739718216'
                      data-elem-type='text' data-field-top-value="382" data-field-top-res-320-value="1113"

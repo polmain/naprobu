@@ -15,7 +15,7 @@
                 </div>--}}
                 <div class="col-lg-2 col-md-4 footer-button">
                     @if(!$international)
-                        <a class="btn-blue btn-block" href="{{route('home')}}international">@lang('footer.international')</a>
+                        <a class="btn-blue btn-block" href="https://naprobu.ua/en/international">@lang('footer.international')</a>
                     @else
                         <a class="btn-blue btn-block" href="{{ str_replace('international/','',route('home'))}}">@lang('footer.ukraine')</a>
                     @endif

@@ -79,20 +79,20 @@ class Cron
 				$project->status_id = 6;
 
 			} elseif ($start_report_time <=  $now && $end_project_time >= $now && $project->status_id != 5){
-                $project->status_id = 5;
-                $project->save();
+          $project->status_id = 5;
+          $project->save();
 
-                $projectRequests = $project->requests;
+          $projectRequests = $project->requests;
 
-                $firstProjectRequest = $projectRequests->firstWhere('status_id', '>=', 7);
+          $firstProjectRequest = $projectRequests->firstWhere('status_id', '>=', 7);
 
-                if($firstProjectRequest){
-                    $queue = new Queue();
-                    $queue->project_id = $project->id;
-                    $queue->name = "project_report";
-                    $queue->start = $firstProjectRequest->id;
-                    $queue->save();
-                }
+          if($firstProjectRequest){
+              $queue = new Queue();
+              $queue->project_id = $project->id;
+              $queue->name = "project_report";
+              $queue->start = $firstProjectRequest->id;
+              $queue->save();
+          }
 			} elseif ($end_project_time <= $now && $project->status_id != 1){
 				$project->status_id = 1;
 			}

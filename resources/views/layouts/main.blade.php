@@ -8,7 +8,7 @@
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <link rel="shortcut icon" href="{{{ asset('public/favicon.ico') }}}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/css/intlTelInput.css" rel="stylesheet" />
-    <link href="{{ asset("/public/css/app.min.css")}}?v=1.2.1" rel="stylesheet" type="text/css" />
+    <link href="{{ asset("/public/css/app.min.css")}}?v=1.2.2" rel="stylesheet" type="text/css" />
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -427,7 +427,7 @@
         };
 
     </script>
-    <script src="{{ asset ("/public/js/app.min.js") }}?v=1.2.4" type="text/javascript"></script>
+    <script src="{{ asset ("/public/js/app.min.js") }}?v=1.2.5" type="text/javascript"></script>
 @yield('scripts')
 </body>
 </html>

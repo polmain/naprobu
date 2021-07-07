@@ -37,4 +37,7 @@ return [
 	'brif_message_sends_title'	=>	'Brief request sent',
 	'brif_message_sends_text'	=>	'Wait for the Brief at the indicated e-mail address.',
 
+    //Бесящее окошко
+    'social_subscribe_header'   => 'Subscribe to us'
+
 ];

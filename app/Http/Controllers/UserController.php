@@ -4,6 +4,14 @@ namespace App\Http\Controllers;
 
 use App;
 use App\Entity\Collection\CountryCollection;
+use App\Entity\EducationEnum;
+use App\Entity\EmploymentEnum;
+use App\Entity\FamilyStatusEnum;
+use App\Entity\HobbiesEnum;
+use App\Entity\MaterialConditionEnum;
+use App\Entity\WorkEnum;
+use App\Model\Geo\City;
+use App\Model\Geo\Region;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Auth;
 use Cookie;
@@ -39,10 +47,15 @@ class UserController extends Controller
 			$review->where('user_id',$user->id);
 		})->count();
 		$ratingStatuses = UserRatingStatus::with(['translate'])->where('lang','ru')->get();
-        $countryCollection = CountryCollection::getInstance();
+
+        $educationArray = EducationEnum::values();
+        $employmentArray = EmploymentEnum::values();
+        $workArray = WorkEnum::values();
+        $familyStatusArray = FamilyStatusEnum::values();
+        $materialConditionArray = MaterialConditionEnum::values();
+        $hobbiesArray = HobbiesEnum::values();
 
 		$locale = App::getLocale();
-		$countries = App\Model\User\UserCountry::all();
 		$title = str_replace(':user_name:',$user->name, \App\Model\Setting::where([['name','user_main_title'],['lang',$locale]])->first()->value);
 		$description = str_replace(':user_name:',$user->name, \App\Model\Setting::where([['name','user_main_description'],['lang',$locale]])->first()->value);
 		$og_image = \App\Model\Setting::where('name','og_image_default')->first()->value;
@@ -65,8 +78,12 @@ class UserController extends Controller
     		'userLikes' => $userLikes,
     		'ratingStatuses' => $ratingStatuses,
 			'alternativeUrls' => $alternativeUrls,
-			'countries' => $countries,
-			'countryCollection' => $countryCollection,
+            'educationArray'	=> $educationArray,
+            'employmentArray'	=> $employmentArray,
+            'workArray'	=> $workArray,
+            'familyStatusArray'	=> $familyStatusArray,
+            'materialConditionArray'	=> $materialConditionArray,
+            'hobbiesArray'	=> $hobbiesArray
 		]);
 	}
 
@@ -434,9 +451,39 @@ class UserController extends Controller
 		$user->patronymic = $request->patronymic;
 		$user->sex = $request->sex;
 		$user->birsday = $request->birsday;
-		$user->country = $request->country;
-		$user->region = $request->region;
-		$user->city = $request->city;
+
+		$country_id = $request->country_id;
+        $user->country_id = $country_id;
+
+        $region_id = $request->region_id;
+		if($request->new_region != ""){
+            $region = new Region();
+            $region->name = $request->new_region;
+            $region->lang = 'ru';
+            $region->rus_lang_id = 0;
+            $region->country_id = $country_id;
+            $region->is_verify = false;
+            $region->save();
+
+            $region_id = $region->id;
+        }
+        $user->region_id = $region_id;
+
+        $city_id = $request->city_id;
+        if($request->new_city != ""){
+            $city = new City();
+            $city->name = $request->new_city;
+            $city->lang = 'ru';
+            $city->rus_lang_id = 0;
+            $city->country_id = $country_id;
+            $city->region_id = $region_id;
+            $city->is_verify = false;
+            $city->save();
+
+            $city_id = $city->id;
+        }
+		$user->city_id = $city_id;
+
 		$user->name = $request->name;
 		$user->phone = $request->phone;
 		$user->password = Hash::make($request->password);
@@ -448,20 +495,27 @@ class UserController extends Controller
 			$user->status_id = 5;
 		}
 
+        $user->nova_poshta_city = $request->nova_poshta_city_name;
+        $user->nova_poshta_warehouse = $request->nova_poshta_warehouse;
+
+        $user->education = $request->education;
+        $user->employment = $request->employment;
+        $user->family_status = $request->family_status;
+        $user->material_condition = $request->material_condition;
+        $user->hobbies = $request->hobbies;
+        $user->hobbies_other = $request->hobbies_other;
+
+        if(EmploymentEnum::getInstance($request->employment)->isWork()){
+            $user->work = $request->work;
+        }else{
+            $user->work = null;
+        }
+
+		$user->new_form_status = true;
+
 		$user->save();
 
-		if(
-			isset($request->last_name)
-			&& isset($request->first_name)
-			&& isset($request->birsday)
-			&& isset($request->country)
-			&& isset($request->region)
-			&& isset($request->city)
-			&& isset($request->name)
-			&& isset($request->email)
-			&& isset($request->phone)
-			&& !$user->hasRole('expert')
-		){
+		if(!$user->hasRole('expert')){
 			$user->makeExployee('expert');
 		}
 
@@ -487,8 +541,6 @@ class UserController extends Controller
 	}
 
 	public function isNameRegister(Request $request){
-
-
 		$name = $request->name;
 		$user = User::where('name',$name)->where('id','<>',Auth::user()->id)->first();
 		if(!empty($user)){
@@ -497,9 +549,16 @@ class UserController extends Controller
 		return "true";
 	}
 
+	public function isPhoneRegister(Request $request){
+		$phone = $request->phone;
+		$user = User::where('phone',$phone)->where('id','<>',Auth::user()->id)->first();
+		if(!empty($user)){
+			return 'false';
+		}
+		return "true";
+	}
+
 	public function isEmailRegister(Request $request){
-
-
 		$email = mb_strtolower($request->email);
 		$user = User::where('email',$email)->where('id','<>',Auth::user()->id)->first();
 		if(!empty($user)){

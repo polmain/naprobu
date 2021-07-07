@@ -53,15 +53,24 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="birsday" class="col-sm-3 control-label ">Город</label>
+                            <label for="country_id" class="col-sm-3 control-label ">Страна</label>
                             <div class="col-sm-9">
-                                <input name="city" type="text" class="form-control" id="city" placeholder="Город">
+                                <select class="form-control select2" name="country_id" id="country_id">
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="birsday" class="col-sm-3 control-label ">Область</label>
+                            <label for="region_id" class="col-sm-3 control-label ">Область</label>
                             <div class="col-sm-9">
-                                <input name="region" type="text" class="form-control" id="region" placeholder="Область">
+                                <select class="form-control select2" name="region_id" id="region_id">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="city_id" class="col-sm-3 control-label ">Город</label>
+                            <div class="col-sm-9">
+                                <select class="form-control select2" name="city_id" id="city_id">
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -121,4 +130,70 @@
 
 
     </div><!-- /.row -->
+@endsection
+@section("scripts")
+    <script>
+        $('#country_id').select2({
+            placeholder: "Выберите страну...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.country.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#region_id').select2({
+            placeholder: "Выберите область...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.region.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        country_id: $('#country_id').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#city_id').select2({
+            placeholder: "Выберите город...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.city.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        country_id: $('#country_id').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+    </script>
 @endsection

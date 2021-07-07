@@ -9,8 +9,12 @@
 namespace App\Library\Cron;
 
 
+use App\Entity\PhoneStatusEnum;
+use App\Library\Queries\UserFilterServices;
+use App\Model\User\PhoneVerify;
 use App\Model\User\UserRatingHistory;
 use App\Model\User\UserRatingStatus;
+use App\Model\User\Viber;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
@@ -24,6 +28,7 @@ use App\Mail\UserNotificationMail;
 use Illuminate\Support\Facades\Mail;
 use App\Model\Queue;
 use Throwable;
+use Illuminate\Http\Request;
 
 class Cron
 {
@@ -74,31 +79,20 @@ class Cron
 				$project->status_id = 6;
 
 			} elseif ($start_report_time <=  $now && $end_project_time >= $now && $project->status_id != 5){
-				$project->status_id = 5;
-				$project->save();
+          $project->status_id = 5;
+          $project->save();
 
-				$projectRequests = $project->requests;
-				$questionnaire = $project->questionnaires->where('type_id',3)->first();
-				foreach ($projectRequests as $projectRequest)
-				{
-					if($projectRequest->status_id >= 7){
-						$link = "/ru/projects/questionnaire/".$questionnaire->id.'/';
-						$projectName = $project->name;
-						if ($projectRequest->user->lang !== "ru")
-						{
-                            $projectTranslate = $project->translate->firstWhere('lang', $projectRequest->user->lang);
-                            if($projectTranslate){
-                                $link = ($projectRequest->user->lang === "ua"?'':'/'.$projectRequest->user->lang)."/projects/questionnaire/".$questionnaire->id.'/';
-                                $projectName = $projectTranslate->name;
-                            }
+          $projectRequests = $project->requests;
 
-						}
-						if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter){
-							Mail::to($projectRequest->user)->send(new UserNotificationMail($projectRequest->user, 'questionnaire_report', url('/').$link, ['project' => $projectName]));
-						}
-						Notification::send('questionnaire_report', $projectRequest->user, 1, $link, ['project' => $projectName]);
-					}
-				}
+          $firstProjectRequest = $projectRequests->firstWhere('status_id', '>=', 7);
+
+          if($firstProjectRequest){
+              $queue = new Queue();
+              $queue->project_id = $project->id;
+              $queue->name = "project_report";
+              $queue->start = $firstProjectRequest->id;
+              $queue->save();
+          }
 			} elseif ($end_project_time <= $now && $project->status_id != 1){
 				$project->status_id = 1;
 			}
@@ -120,11 +114,30 @@ class Cron
 				case 'project_contest':
 					static::queueProjectContest($queue);
 					break;
+                case 'project_report':
+                    static::queueProjectReport($queue);
+                    break;
 				/*case 'new_pass':
 					static::queueNewPass($queue);
 					break;*/
 				case 'new_score':
 					static::userRating($queue);
+                    break;
+				case 'new_account_form':
+					static::newAccountForm($queue);
+                    break;
+				case 'viber':
+					static::viber($queue);
+                    break;
+				case 'to_archive':
+					static::toArchive($queue);
+                    break;
+				case 'phone_duplicate':
+					static::phoneDuplicate($queue);
+                    break;
+				case 'user_custom_notification':
+					static::customNotification($queue);
+                    break;
 			}
 
 
@@ -174,7 +187,12 @@ class Cron
 			['status_id','<>',5],
 			['isNewsletter',1],
 		])->get();
-		if($queue->start + 50 > User::count()){
+
+		$lastUser = User::where([
+            ['status_id','<>',5],
+            ['isNewsletter',1],
+        ])->orderBy('id','DESC')->first();
+		if($lastUser && $queue->start + 50 > $lastUser->id){
 			$queue->delete();
 		}else{
 			$queue->start += 50;
@@ -199,6 +217,7 @@ class Cron
                     }
 				}
 				Notification::send('project_start_register', $user, 1, $link, ['project' => $projectName]);
+
 				if (isset($user->email) && $user->isNewsletter)
 				{
                     try {
@@ -250,11 +269,18 @@ class Cron
                     $projectName = $projectTranslate->name;
                 }
 			}
-			if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter)
-			{
-				Mail::to($projectRequest->user)->send(new UserNotificationMail($projectRequest->user, 'project_members', url('/') . $link, ['project' => $projectName]));
-			}
-			Notification::send('project_members', $projectRequest->user, 1, $link, ['project' => $projectName]);
+
+            Notification::send('project_members', $projectRequest->user, 1, $link, ['project' => $projectName]);
+
+            if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter)
+            {
+                try {
+                    Mail::to($projectRequest->user)->send(new UserNotificationMail($projectRequest->user, 'project_members', url('/') . $link, ['project' => $projectName]));
+                }catch (Throwable $exception)
+                {
+
+                }
+            }
 		}
 
 
@@ -300,14 +326,81 @@ class Cron
                     $contest = $subpageTranslate->name;
                 }
 			}
-			if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter)
+            Notification::send('project_contest', $projectRequest->user, 0, $link, ['project' => $projectName]);
+
+            if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter)
 			{
-				Mail::to($projectRequest->user)->send(new UserNotificationMail($projectRequest->user, 'project_contest', url('/') . $link, ['contest' => $contest, 'project' => $projectName]));
+                try{
+                    Mail::to($projectRequest->user)->send(new UserNotificationMail($projectRequest->user, 'project_contest', url('/') . $link, ['contest' => $contest, 'project' => $projectName]));
+                }catch (Throwable $exception)
+                {
+                }
 			}
-			Notification::send('project_contest', $projectRequest->user, 0, $link, ['project' => $projectName]);
 		}
 
 	}
+
+    public static function queueProjectReport($queue){
+
+        $project = Project::find($queue->project_id);
+
+        $lastId = Project\ProjectRequest::where([
+            ['project_id', $project->id],
+            ['status_id', '>=', 7],
+        ])
+            ->orderBy('id','desc')
+            ->first();
+
+        $projectRequests = Project\ProjectRequest::where([
+            ['id','>',$queue->start],
+            ['id','<=',$queue->start + 150],
+            ['status_id', '>=', 7],
+            ['project_id', $project->id]
+        ])
+            ->get();
+
+        if($queue->start + 150 > $lastId->id){
+            $queue->delete();
+        }else{
+            $queue->start += 150;
+            $queue->save();
+        }
+
+        $questionnaire = $project->questionnaires->where('type_id',3)->first();
+
+        foreach ($projectRequests as $projectRequest)
+        {
+            $link = "/ru/projects/questionnaire/".$questionnaire->id.'/';
+            $projectName = $project->name;
+            if ($projectRequest->user->lang !== "ru")
+            {
+                $projectTranslate = $project->translate->firstWhere('lang', $projectRequest->user->lang);
+                if($projectTranslate){
+                    $link = ($projectRequest->user->lang === "ua"?'':'/'.$projectRequest->user->lang)."/projects/questionnaire/".$questionnaire->id.'/';
+                    $projectName = $projectTranslate->name;
+                }
+
+            }
+            if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter){
+                try{
+                    Mail::to($projectRequest->user)
+                        ->send(
+                            new UserNotificationMail(
+                                $projectRequest->user,
+                                'questionnaire_report',
+                                url('/').$link,
+                                ['project' => $projectName]
+                            )
+                        );
+                }catch (Throwable $exception)
+                {
+                }
+            }
+            Notification::send('questionnaire_report', $projectRequest->user, 1, $link, ['project' => $projectName]);
+
+        }
+
+    }
 
 	public static function queueNewPass($queue){
 		/*$users = User::where([
@@ -335,6 +428,176 @@ class Cron
 			}
 		}*/
 	}
+
+	public static function newAccountForm($queue){
+		$users = User::where([
+			['id','>',$queue->start],
+			['id','<=',$queue->start + 150],
+			['email','<>',null],
+			['isHide',0],
+		])->whereNotIn('id',[1,2,7,8,9,11,12,13,14,15,16,17,18,43718,45645, 45765, 45766, 46648, 47336, 47355, 47356, 48566, 66942, 106249, 139119])->get();
+
+
+        $lastUser = User::where([
+            ['email','<>',null],
+            ['isHide',0],
+        ])->orderBy('id','DESC')->first();
+		if($lastUser && $queue->start + 150 > $lastUser->id){
+			$queue->delete();
+		}else{
+			$queue->start += 150;
+			$queue->save();
+		}
+        $link = "cabinet/";
+		foreach ($users as $user){
+            if ($user->lang !== "ua"){
+                $link = $user->lang.'/'.$link;
+            }
+            if($user->email){
+                try {
+                    Mail::to($user)->send(new UserNotificationMail($user, 'new_form', url('/').$link));
+                }catch (Throwable $exception)
+                {
+                }
+            }
+            Notification::send('new_form', $user, 0, $link);
+		}
+	}
+
+	public static function viber($queue){
+		$users = User::where([
+			['id','>',$queue->start],
+			['id','<=',$queue->start + 1000],
+			['email','<>',null],
+			['new_form_status',false],
+			['isHide',0],
+		])->whereNotIn('id',[1,2,7,8,9,11,12,13,14,15,16,17,18,43718,45645, 45765, 45766, 46648, 47336, 47355, 47356, 48566, 66942, 106249, 139119])->get();
+
+		$lastUser = User::where([
+            ['email','<>',null],
+            ['new_form_status',false],
+            ['isHide',0],
+        ])->orderBy('id','DESC')->first();
+		if($lastUser && $queue->start + 1000 > $lastUser->id){
+			$queue->delete();
+		}else{
+			$queue->start += 1000;
+			$queue->save();
+		}
+
+		foreach ($users as $user){
+		    if($user->phone){
+                Viber::create([
+                    'phone' => $user->phone,
+                    'first_name'  => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'nickname' => $user->name,
+                    'email' => $user->email,
+                    'lang' => $user->lang
+                ]);
+            }else{
+		        $user->delete();
+            }
+		}
+	}
+
+	public static function toArchive($queue)
+    {
+        $users = User::where([
+            ['id','>',$queue->start],
+            ['id','<=',$queue->start + 1000],
+            ['email','<>',null],
+            ['new_form_status',false],
+            ['isHide',0],
+        ])->whereNotIn('id',[1,2,7,8,9,11,12,13,14,15,16,17,18,43718,45645, 45765, 45766, 46648, 47336, 47355, 47356, 48566, 66942, 106249, 139119])->get();
+
+        $lastUser = User::where([
+            ['email','<>',null],
+            ['new_form_status',false],
+            ['isHide',0],
+        ])->orderBy('id','DESC')->first();
+        if($lastUser && $queue->start + 1000 > $lastUser->id){
+            $queue->delete();
+        }else{
+            $queue->start += 1000;
+            $queue->save();
+        }
+
+        foreach ($users as $user){
+            $user->delete();
+        }
+    }
+
+	public static function phoneDuplicate($queue){
+		$users = User::where([
+			['id','>',$queue->start],
+			['id','<=',$queue->start + 150],
+			['phone','<>',null],
+		])->get();
+
+        $lastUser = User::where([
+            ['phone','<>',null],
+        ])->orderBy('id','DESC')->first();
+		if($lastUser && $queue->start + 150 > $lastUser->id){
+			$queue->delete();
+		}else{
+			$queue->start += 150;
+			$queue->save();
+		}
+
+		foreach ($users as $user){
+		    $duplicatePhoneUsers = User::where([
+		        ['phone',$user->phone],
+		        ['phone','<>',''],
+		        ['phone','<>',null],
+            ])->orderBy('created_at','DESC')->get();
+
+		    if($duplicatePhoneUsers->count() > 1){
+                $cloneUsers = $duplicatePhoneUsers->where('first_name', $user->first_name)->where('last_name', $user->last_name);
+                if($cloneUsers->count() === $duplicatePhoneUsers->count()){
+                    if($user->id !== $duplicatePhoneUsers->first()->id){
+                        $user->delete();
+                    }
+                }else{
+                    PhoneVerify::firstOrCreate([
+                        'phone' => $user->phone,
+                        'duplicates' => $duplicatePhoneUsers->count(),
+                        'status' => PhoneStatusEnum::NOT_VERIFIED,
+                        'is_new_user' => 0
+                    ]);
+                }
+            }
+		}
+	}
+
+	public static function customNotification($queue)
+    {
+        $data = unserialize($queue->data);
+        $message = $data['text'];
+        $request = new Request($data['request']);
+
+        $users = UserFilterServices::getFilteredUsersQuery($request);
+        $users = $users->where([
+                ['id','>',$queue->start],
+                ['id','<=',$queue->start + 10000]
+            ])
+            ->orderBy('id')
+            ->get();
+
+        $lastUser = UserFilterServices::getFilteredUsersQuery($request)->orderBy('id','DESC')->first();
+        if($queue->start + 10000 > $lastUser->id){
+            $queue->delete();
+        }else{
+            $queue->start += 10000;
+            $queue->save();
+        }
+
+        foreach ($users as $user){
+            $notificationText = str_replace(':user_name:',$user->first_name,$message);
+            Notification::send('custom',$user, 0, null, [], $notificationText);
+        }
+
+    }
 
 	private static $instance;
 	public static function getInstance()

@@ -3,7 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App;
-use App\Entity\Collection\CountryCollection;
+use App\Entity\EducationEnum;
+use App\Entity\EmploymentEnum;
+use App\Entity\FamilyStatusEnum;
+use App\Entity\HobbiesEnum;
+use App\Entity\MaterialConditionEnum;
+use App\Entity\WorkEnum;
+use App\Model\User\UserCountry;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Cookie;
 use App\Library\Users\UserRating;
@@ -12,7 +18,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use App\Http\Controllers\Auth\EmailVerification;
 use Illuminate\Http\Request;
 
 use App\Model\Page;
@@ -58,9 +63,6 @@ class RegisterController extends Controller
 	{
 		$locale = App::getLocale();
 
-		$countries = App\Model\User\UserCountry::all();
-        $countryCollection = CountryCollection::getInstance();
-
 		$page = Page::where([
 			['url','registration'],
 			['lang',$locale],
@@ -84,11 +86,22 @@ class RegisterController extends Controller
 
         $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
+        $educationArray = EducationEnum::values();
+        $employmentArray = EmploymentEnum::values();
+        $workArray = WorkEnum::values();
+        $familyStatusArray = FamilyStatusEnum::values();
+        $materialConditionArray = MaterialConditionEnum::values();
+        $hobbiesArray = HobbiesEnum::values();
+
 		return view('auth.register',[
 			'page' => $page,
 			'alternativeUrls' => $alternativeUrls,
-			'countries'	=> $countries,
-			'countryCollection'	=> $countryCollection,
+			'educationArray'	=> $educationArray,
+			'employmentArray'	=> $employmentArray,
+			'workArray'	=> $workArray,
+			'familyStatusArray'	=> $familyStatusArray,
+			'materialConditionArray'	=> $materialConditionArray,
+			'hobbiesArray'	=> $hobbiesArray
 		]);
 	}
 

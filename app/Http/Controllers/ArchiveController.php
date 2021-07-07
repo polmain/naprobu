@@ -64,18 +64,18 @@ class ArchiveController extends Controller
 
 	public function sitemap(Request $request){
 
-		$categories = ProjectCategory::where([
+		$categories = ProjectCategory::with('translate')->where([
 			['lang','ru'],
 			['isHide',0],
 		])->get();
 
-		$projects = Project::where([
+		$projects = Project::with('translate')->where([
 			['lang','ru'],
 			['isHide',0],
 			['type','<>','only-blogger'],
 		])->orderBy('start_registration_time','desc')->get();
 
-		$posts = Post::where([
+		$posts = Post::with('translate')->where([
 			['lang','ru'],
 			['isHide',0],
 		])->orderBy('id','desc')

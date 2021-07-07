@@ -280,6 +280,7 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
 
 		/* Users pages */
 		Route::get('/users/', 'Admin\UsersController@all')->name('adm_users');
+		Route::get('/users/archive', 'Admin\UsersController@all_archive')->name('adm_users_archive');
 		Route::get('/users/ajax/', 'Admin\UsersController@all_ajax')->name('adm_users_ajax');
 		Route::get('/users/find/', 'Admin\UsersController@find')->name('adm_users_find');
 		Route::get('/users/bloger/', 'Admin\UsersController@bloger')->name('adm_users_bloger');
@@ -289,6 +290,7 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
 		Route::get('/users/history/{user_id}/', 'Admin\Settings\UserRatingController@ajax_history')->name('adm_users_history');
 		Route::get('/users/edit/{user_id}/', 'Admin\UsersController@edit')->name('adm_users_edit');
         Route::get('/users/delete/{user_id}/', 'Admin\UsersController@delete');
+        Route::get('/users/notification-send', 'Admin\UsersController@notificationSend')->name('adm_users_notification_send');
 
 		Route::get('/users/statuses-log/', 'Admin\UsersController@statusesLog')->name('adm_users_statuses_log');
 		Route::get('/users/statuses-log/ajax/', 'Admin\UsersController@statusesLog_ajax')->name('adm_users_statuses_log_ajax');
@@ -300,6 +302,15 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
 		Route::post('/users/delete-ratting/{user_id}/', 'Admin\UsersController@delete_ratting')->name('adm_delete_ratting');
 		Route::post('/users/add-ratting/{user_id}/', 'Admin\UsersController@add_ratting')->name('adm_add_ratting');
 		/* End User Pages */
+
+        /* Cities pages */
+        Route::get('/users/phones/', 'Admin\PhoneController@all')->name('admin.phone.all');
+        Route::get('/users/phones/ajax', 'Admin\PhoneController@all_ajax')->name('admin.phone.ajax');
+        Route::get('/users/phones/find/', 'Admin\PhoneController@find')->name('admin.phone.find');
+        Route::get('/users/phones/edit/{phone_id}/', 'Admin\PhoneController@edit')->name('admin.phone.edit');
+        Route::post('/users/phones/edit/{phone_id}/', 'Admin\PhoneController@save')->name('admin.phone.save');
+        Route::get('/users/phones/delete/{phone_id}/', 'Admin\PhoneController@delete')->name('admin.phone.delete');
+        /* End Cities pages */
 
 		/* Bloggers pages */
 
@@ -403,6 +414,54 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
 		Route::get('/user/present/{id}', 'Admin\Message\PresentController@view')->name('adm_present_view');
 		Route::post('/user/present/{id}/send/', 'Admin\Message\PresentController@send')->name('adm_present_send');
 		/* End Presents pages */
+
+        /* Countries pages */
+        Route::get('/countries', 'Admin\Geo\CountryController@all')->name('admin.country.all');
+        Route::get('/countries/ajax', 'Admin\Geo\CountryController@all_ajax')->name('admin.country.ajax');
+        Route::get('/countries/new/', 'Admin\Geo\CountryController@new')->name('admin.country.new');
+        Route::post('/countries/new/', 'Admin\Geo\CountryController@create')->name('admin.country.create');
+        Route::get('/countries/find/', 'Admin\Geo\CountryController@find')->name('admin.country.find');
+        Route::get('/countries/edit/{country_id}/', 'Admin\Geo\CountryController@edit')->name('admin.country.edit');
+        Route::post('/countries/edit/{country_id}/', 'Admin\Geo\CountryController@save')->name('admin.country.save');
+        Route::get('/countries/delete/{country_id}/', 'Admin\Geo\CountryController@delete')->name('admin.country.delete');
+        /* End Countries pages */
+
+        /* Regions pages */
+        Route::get('/regions', 'Admin\Geo\RegionController@all')->name('admin.region.all');
+        Route::get('/regions/ajax', 'Admin\Geo\RegionController@all_ajax')->name('admin.region.ajax');
+        Route::get('/regions/new/', 'Admin\Geo\RegionController@new')->name('admin.region.new');
+        Route::post('/regions/new/', 'Admin\Geo\RegionController@create')->name('admin.region.create');
+        Route::get('/regions/find/', 'Admin\Geo\RegionController@find')->name('admin.region.find');
+        Route::get('/regions/edit/{region_id}/', 'Admin\Geo\RegionController@edit')->name('admin.region.edit');
+        Route::post('/regions/edit/{region_id}/', 'Admin\Geo\RegionController@save')->name('admin.region.save');
+        Route::get('/regions/delete/{region_id}/', 'Admin\Geo\RegionController@delete')->name('admin.region.delete');
+        /* End Regions pages */
+
+        /* Cities pages */
+        Route::get('/cities', 'Admin\Geo\CityController@all')->name('admin.city.all');
+        Route::get('/cities/ajax', 'Admin\Geo\CityController@all_ajax')->name('admin.city.ajax');
+        Route::get('/cities/new/', 'Admin\Geo\CityController@new')->name('admin.city.new');
+        Route::post('/cities/new/', 'Admin\Geo\CityController@create')->name('admin.city.create');
+        Route::get('/cities/find/', 'Admin\Geo\CityController@find')->name('admin.city.find');
+        Route::get('/cities/edit/{city_id}/', 'Admin\Geo\CityController@edit')->name('admin.city.edit');
+        Route::post('/cities/edit/{city_id}/', 'Admin\Geo\CityController@save')->name('admin.city.save');
+        Route::get('/cities/delete/{city_id}/', 'Admin\Geo\CityController@delete')->name('admin.city.delete');
+        /* End Cities pages */
+
+        Route::get('/clear-cache', function() {
+            Artisan::call('route:clear');
+            Artisan::call('view:clear');
+            Artisan::call('config:clear');
+            return "Cache is cleared";
+        });
+        Route::get('/migrate', function() {
+            Artisan::call('migrate');
+            return "Migrate";
+        });
+        Route::get('/cron', function() {
+            Artisan::call('schedule:run');
+            return "cron";
+        });
 	});
 });
 
@@ -442,6 +501,7 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
 
 	Route::post('/project/password/','ProjectController@password')->name('project.password');
 	Route::post('/blog/password/','BlogController@password')->name('blog.password');
+    Route::post('/project/conversionLink/{id}/','ProjectController@conversionLink')->name('project.conversion_link');
 
 	Route::prefix(App\Http\Middleware\LocaleMiddleware::getLocale())->middleware('locale')->group(function($lang = 'ua') {
         Route::prefix(App\Http\Middleware\InternationalMiddleware::getInternational())->group(function($lang = 'ua'){
@@ -473,6 +533,10 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
 
             Route::get('/user/{id}/','UserController@profile')->name('profile');
             Route::get('/user/{id}/comment/','UserController@profileComment')->name('profile.comment');
+
+            Route::get('/countries/find/', 'GeoController@countryFind')->name('country.find');
+            Route::get('/regions/find/', 'GeoController@regionFind')->name('region.find');
+            Route::get('/cities/find/', 'GeoController@cityFind')->name('city.find');
 
             Route::group(['middleware'=>'auth'],function(){
                 Route::get('/projects/questionnaire/{id}/','QuestionnaireController@questionnaire')->name('project.questionnaire');
@@ -518,12 +582,7 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
 	Route::get('parse-region','UserController@parceRegion');
 	Route::get('parse-city/{id}','UserController@parseCity');*/
 
-		Route::get('/clear-cache', function() {
-		Artisan::call('route:clear');
-		Artisan::call('view:clear');
-		Artisan::call('config:clear');
-		return "Cache is cleared";
-	});
+
 
 
 	Route::get('/login/facebook/','Auth\FacebookController@redirectToProvider');
@@ -538,9 +597,14 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
 
 
 	Route::get('/check-name/','Auth\ModalAjaxController@isNameRegister');
+	Route::get('/check-phone/','Auth\ModalAjaxController@isPhoneRegister');
 	Route::get('/check-email/','Auth\ModalAjaxController@isEmailRegister');
 	Route::get('/check-name-register/','UserController@isNameRegister');
+	Route::get('/check-phone-register/','UserController@isPhoneRegister');
 	Route::get('/check-email-register/','UserController@isEmailRegister');
+
+
+    Route::post('/validate-phone/','Auth\ModalAjaxController@validatePhone');
 
 /*});*/
 

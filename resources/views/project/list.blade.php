@@ -29,6 +29,7 @@
         <div class="col-md-12"><h1>{{$page->name}}</h1></div>
     </div>
 </div>
+    @if(!request()->get('international'))
     <div class="container">
         <nav class="category-list categories-project ">
             <ul class="row">
@@ -40,6 +41,7 @@
             </ul>
         </nav>
     </div>
+    @endif
     <section class="project-list">
         <div class="container">
             <div class="row" id="ajax-list">

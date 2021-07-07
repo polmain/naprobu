@@ -21,7 +21,7 @@
                 @if(Auth::user()->rang_id >= 7)
                     @if( $present = Auth::user()->presents->where('rang_id',$ratingStatus->id)->first())
                         @if(!$present->isGet)
-                            <div data-toggle="tooltip" data-placement="top" title="Получить подарок" present-id="{{$present->id}}" role-name="{{(App::getLocale() == 'ru')?$ratingStatus->name:$ratingStatus->translate->name}}" class="present active"></div>
+                            <div data-toggle="tooltip" data-placement="top" title="Получить подарок" present-id="{{$present->id}}" role-name="{{(App::getLocale() == 'ru')?$ratingStatus->name:$ratingStatus->translate->firstWhere('lang', App::getLocale())->name}}" class="present active"></div>
                         @endif
                         @else
                             <div class="present"></div>

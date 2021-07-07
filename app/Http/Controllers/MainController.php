@@ -91,16 +91,34 @@ class MainController extends Controller
 								$q->where('name', 'expert');
 							})->count();
 
-    	$posts = Post::with(['project.category.translate'])
-            ->whereHas('translate', function ($translate) use ($locale){
-                return $translate->where('lang', $locale);
-            })
-			->withCount(['visible_comments'])->where([
-				['lang','ru'],
-				['isHide',0],
-			])->orderBy('created_at','desc')
-			->limit(4)
-			->get();
+		if($locale === 'ru'){
+            $posts = Post::with(['project.category.translate'])->where([
+                    ['lang',$locale],
+                    ['isHide',0]
+                ])
+                ->withCount(['visible_comments'])->where([
+                    ['lang','ru'],
+                    ['isHide',0],
+                ])->orderBy('created_at','desc')
+                ->limit(4)
+                ->get();
+        }else{
+            $posts = Post::with(['project.category.translate'])
+                ->whereHas('translate', function ($translate) use ($locale){
+                    return $translate->where('lang', $locale);
+                })
+                ->where([
+                    ['lang','ru'],
+                    ['isHide',0]
+                ])
+                ->withCount(['visible_comments'])->where([
+                    ['lang','ru'],
+                    ['isHide',0],
+                ])->orderBy('created_at','desc')
+                ->limit(4)
+                ->get();
+        }
+
 
 		$brands = Brand::where([
 			['lang',$locale],

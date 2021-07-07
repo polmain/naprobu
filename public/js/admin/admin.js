@@ -1030,6 +1030,73 @@ function deleteFeedbacks() {
 /* End Faq */
 
 
+/* Countries page */
+
+function deleteCountry(id) {
+    $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
+    $('#modal-warning').find(".modal-body").html("<p>Удаление этой страны приведет к потери всех областей и городов связанных с ней.<br>Отменить действие будет невозможно!</p>");
+    $('#modal-warning').find("#success").attr('onclick','deleteAjax("/admin/countries/delete/'+id+'/")');
+    $('#modal-warning').modal('show');
+}
+
+function deleteCountries() {
+    $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
+    $('#modal-warning').find(".modal-body").html("<p>Удаление этих страны приведет к потери всех областей и городов связанных с ними.<br>Отменить действие будет невозможно!</p>");
+    $('#modal-warning').find("#success").attr('onclick','groupAjax("/admin/countries/delete/--id--/")');
+    $('#modal-warning').modal('show');
+}
+
+/* End Countries page */
+
+
+/* Regions page */
+
+function deleteRegion(id) {
+    $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
+    $('#modal-warning').find(".modal-body").html("<p>Удаление этой области приведет к потери всех городов связанных с ней.<br>Отменить действие будет невозможно!</p>");
+    $('#modal-warning').find("#success").attr('onclick','deleteAjax("/admin/regions/delete/'+id+'/")');
+    $('#modal-warning').modal('show');
+}
+
+function deleteRegions() {
+    $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
+    $('#modal-warning').find(".modal-body").html("<p>Удаление этих областей приведет к потери всех городов связанных с ними.<br>Отменить действие будет невозможно!</p>");
+    $('#modal-warning').find("#success").attr('onclick','groupAjax("/admin/regions/delete/--id--/")');
+    $('#modal-warning').modal('show');
+}
+
+/* End Regions page */
+
+
+/* Regions page */
+
+function deleteCity(id) {
+    $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
+    $('#modal-warning').find(".modal-body").html("<p>Удаление этого горда приведет к потери этого города у пользователей.<br>Отменить действие будет невозможно!</p>");
+    $('#modal-warning').find("#success").attr('onclick','deleteAjax("/admin/cities/delete/'+id+'/")');
+    $('#modal-warning').modal('show');
+}
+
+function deleteCities() {
+    $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
+    $('#modal-warning').find(".modal-body").html("<p>Удаление этих городов приведет к потери этих городов у пользователей.<br>Отменить действие будет невозможно!</p>");
+    $('#modal-warning').find("#success").attr('onclick','groupAjax("/admin/cities/delete/--id--/")');
+    $('#modal-warning').modal('show');
+}
+
+/* End Regions page */
+
+/* Phones */
+
+function deletePhones() {
+    $('#modal-warning').find(".modal-title").text("Подтвердите удаление");
+    $('#modal-warning').find(".modal-body").html("<p>Удаление этой записи приведет к потери возможности верефицировать этот номер!<br>Отменить действие будет невозможно!</p>");
+    $('#modal-warning').find("#success").attr('onclick','groupAjax("/admin/users/phones/delete/--id--/")');
+    $('#modal-warning').modal('show');
+}
+
+/* Phones */
+
 
 function endStatus(id){
 	$('#modal-warning').find(".modal-title").text("Подтвердите досрочную смену статуса");

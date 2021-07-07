@@ -2,6 +2,10 @@
 
 namespace App\Http\Middleware\Admin;
 
+use App\Entity\PhoneStatusEnum;
+use App\Model\Geo\City;
+use App\Model\Geo\Region;
+use App\Model\User\PhoneVerify;
 use Closure;
 use App\Model\User\UserPresents;
 use App\Model\Project\ProjectRequest;
@@ -25,12 +29,15 @@ class Notifications
     	$reviewsCount = Review::where('status_id',1)->count();
     	$commentsCount = Comment::where('status_id',1)->count();
     	$commentsBlogCount = PostComment::where('status_id',1)->count();
+        $cityCount = City::where('is_verify',0)->count();
+        $regionCount = Region::where('is_verify',0)->count();
+        $phoneCount = PhoneVerify::where('status',PhoneStatusEnum::NOT_VERIFIED)->count();
 
     	$feedbackCount = Feedback::where('isNew',1)->count();
 
     	$presentCount = UserPresents::where([['isGet','1'],['isSent','0']])->count();
 
-    	$total = $reviewsCount + $commentsCount + $commentsBlogCount + $requestsCount;
+    	$total = $reviewsCount + $commentsCount + $commentsBlogCount + $requestsCount + $cityCount + $regionCount + $phoneCount;
 
 		$request->attributes->Add(['requestsCount' => $requestsCount]);
 		$request->attributes->Add(['reviewsCount' => $reviewsCount]);
@@ -38,6 +45,9 @@ class Notifications
 		$request->attributes->Add(['commentsBlogCount' => $commentsBlogCount]);
 		$request->attributes->Add(['feedbackCount' => $feedbackCount]);
 		$request->attributes->Add(['presentCount' => $presentCount]);
+		$request->attributes->Add(['noVerifyCityCount' => $cityCount]);
+		$request->attributes->Add(['noVerifyRegionCount' => $regionCount]);
+		$request->attributes->Add(['notVerifyPhoneCount' => $phoneCount]);
 		$request->attributes->Add(['totalNotifications' => $total]);
 		return $next($request);
     }

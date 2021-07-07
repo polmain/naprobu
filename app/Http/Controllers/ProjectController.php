@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App;
 use App\Entity\ProjectAudienceEnum;
 use App\Library\Users\UserRating;
+use App\Model\Project\ProjectLink;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Cookie;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -110,6 +112,13 @@ class ProjectController extends Controller
 	}
 
 	public function category(Request $request,$url){
+        $international = $request->get('international');
+
+        $audience = ProjectAudienceEnum::UKRAINE;
+        if($international){
+            $audience = ProjectAudienceEnum::WORD;
+        }
+
 		$locale = App::getLocale();
 
 		$category = ProjectCategory::where([
@@ -145,6 +154,7 @@ class ProjectController extends Controller
 							['status_id','<>',10],
 							['isHide',0],
 							['type','<>','only-blogger'],
+                            ['audience',$audience]
 						])->orderBy('start_registration_time','desc')
 			->paginate(15);
 
@@ -174,6 +184,15 @@ class ProjectController extends Controller
 	}
 
 	public function index(Request $request,$url){
+        if($url === 'libero-touch'){
+            return redirect('https://liberoam.naprobu.ua/');
+        }
+        $international = $request->get('international');
+
+        $audience = ProjectAudienceEnum::getInstance(ProjectAudienceEnum::UKRAINE);
+        if($international){
+            $audience = ProjectAudienceEnum::getInstance(ProjectAudienceEnum::WORD);
+        }
 
 		$locale = App::getLocale();
 
@@ -200,6 +219,14 @@ class ProjectController extends Controller
         }
 
         $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
+
+        if(
+            strpos(url()->previous(), 'international/projects/') === false
+            && $audience->isWord()
+            && $locale !== 'ru'
+        ){
+            return redirect($alternativeUrls['ru'], 302);
+        }
 
 		if($project->isHide || $project->type == 'only-blogger'){
 			SEO::setTitle(trans('project.hide_title'));
@@ -473,5 +500,18 @@ class ProjectController extends Controller
 			UserRating::addAction('share_project', Auth::user());
 		}
 	}
+
+	public function conversionLink(int $id): JsonResponse
+    {
+        $projectLink = ProjectLink::find($id);
+        if($projectLink){
+            $projectLink->conversion++;
+            $projectLink->save();
+        }
+
+        return response()->json([
+            'result' => 'ok'
+        ]);
+    }
 
 }

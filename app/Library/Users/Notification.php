@@ -32,11 +32,11 @@ class Notification
 		if($type->name == 'custom'){
 			$notification->text = $text;
 		}else{
-			$text = $type->template;
+			$notificationText = $type->template;
 			foreach ($params as $key => $param){
-				$text = str_replace(':'.$key.':',$param,$text);
+                $notificationText = str_replace(':'.$key.':',$param,$notificationText);
 			}
-			$notification->text = $text;
+			$notification->text = $notificationText;
 		}
 
 		$notification->link = $link;

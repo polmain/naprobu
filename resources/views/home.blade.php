@@ -113,7 +113,7 @@
             <h2>{{trans('home.last_project_mainpage')}}</h2>
             <div class="row project-list">
                 @foreach($projects  as  $project)
-                    <a class="col-md-6 col-lg-4 project-item" href="{{route('project.level2',[$project->url])}}">
+                    <a class="col-md-6 col-lg-4 project-item" href="{{ $project->url === 'libero-touch'? 'https://liberoam.naprobu.ua/' : route('project.level2',[$project->url])}}">
                         <div class="project-item-image" style="background-image: url({{$project->preview_image}})">
                             @if($project->country && $project->audience->isWord())
                                 <div class="project-country">
@@ -244,7 +244,7 @@
         </div>
     </section>
     @endif
-    @if($posts->count() > 0)
+    @if($posts->count() > 0 && !$international)
     <section class="main-blog">
         <div class="container">
             <h2>{{trans('home.blog_mainpage')}}</h2>

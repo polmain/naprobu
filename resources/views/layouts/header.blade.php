@@ -26,6 +26,11 @@
                     </div>
                     <div class="col-md-2 col-3 lang">
                         <div class="current-lang"><img src="{{asset('public/svg/icons/'.App::getLocale().'.svg')}}" class="lang-flag" alt="{{App::getLocale()}}"/><span>{{strtoupper(App::getLocale())}}</span></div>
+                        @if(!isset($alternativeUrls))
+                            @php
+                                $alternativeUrls = [];
+                            @endphp
+                        @endif
                         <div class="other-lang" style="display: none; height: {{100 * count($alternativeUrls)}}%">
                             @foreach(\Config::get('app.locales') as $lang)
                                 @if(App::getLocale() !== $lang && isset($alternativeUrls[$lang]))

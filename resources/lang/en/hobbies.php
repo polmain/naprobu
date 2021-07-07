@@ -1,0 +1,25 @@
+<?php
+
+return [
+	'children'          =>	'Raising children',
+	'business'			=>	'Business and Entrepreneurship',
+	'gadgets'			=>	'Gadgets',
+	'it'				=>	'IT',
+	'media'				=>	'Media/Entertainment',
+	'sport'				=>	'Sport',
+	'technic'			=>	'Technique',
+	'cooking'			=>	'Cooking',
+	'education'			=>	'Education',
+	'science'			=>	'Science',
+	'art'				=>	'Art',
+	'leisure'			=>	'Leisure activities',
+	'travels'			=>	'Travels',
+	'garden'			=>	'Garden and vegetable garden',
+	'animals'			=>	'Animals',
+	'cars'				=>	'Cars',
+	'medicine'			=>	'Medicine',
+	'marketing'			=>	'Marketing',
+	'fishing'			=>	'Fishing',
+	'music_and_dancing' =>	'Music and dancing',
+	'other'				=>	'Your answer',
+];

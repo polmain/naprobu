@@ -61,18 +61,47 @@
                                 <input name="birsday" type="text" class="form-control" id="birsday" placeholder="Год рождения" value="{{$user->birsday}}">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="birsday" class="col-sm-3 control-label ">Город</label>
-                            <div class="col-sm-9">
-                                <input name="city" type="text" class="form-control" id="city" placeholder="Город" value="{{$user->city}}">
+                        @if($user->new_form_status)
+                            <div class="form-group">
+                                <label for="country_id" class="col-sm-3 control-label ">Страна</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control select2" name="country_id" id="country_id">
+                                        <option value="{{$user->country_model->id}}" selected="selected">{{$user->country_model->name}}</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="birsday" class="col-sm-3 control-label ">Область</label>
-                            <div class="col-sm-9">
-                                <input name="region" type="text" class="form-control" id="region" placeholder="Область" value="{{$user->region}}">
+                            <div class="form-group">
+                                <label for="region_id" class="col-sm-3 control-label ">Область</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control select2" name="region_id" id="region_id">
+                                        @if($user->region_model)
+                                        <option value="{{$user->region_model->id}}" selected="selected">{{$user->region_model->name}}</option>
+                                        @endif
+                                    </select>
+                                </div>
                             </div>
-                        </div>
+                            <div class="form-group">
+                                <label for="city_id" class="col-sm-3 control-label ">Город</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control select2" name="city_id" id="city_id">
+                                        <option value="{{$user->city_model->id}}" selected="selected">{{$user->city_model->name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        @else
+                            <div class="form-group">
+                                <label for="birsday" class="col-sm-3 control-label ">Город</label>
+                                <div class="col-sm-9">
+                                    <input name="city" type="text" class="form-control" id="city" placeholder="Город" value="{{$user->city}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="birsday" class="col-sm-3 control-label ">Область</label>
+                                <div class="col-sm-9">
+                                    <input name="region" type="text" class="form-control" id="region" placeholder="Область" value="{{$user->region}}">
+                                </div>
+                            </div>
+                        @endif
                         <div class="form-group">
                             <label for="email" class="col-sm-3 control-label ">Email</label>
                             <div class="col-sm-9">
@@ -121,6 +150,63 @@
             </div><!-- /.box -->
         </div><!-- /.col -->
         <div class='col-md-6'>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Дополнительная иформация</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <p><strong>Город НП:</strong> {{$user->nova_poshta_city}}</p>
+                    <p><strong>Отделение НП:</strong> {{$user->nova_poshta_warehouse}}</p>
+                    @if($user->education)
+                    <p><strong>Образование:</strong> @lang("education.".$user->education)</p>
+                    @endif
+                    @if($user->employment)
+                    <p><strong>Занятость:</strong> @lang("employment.".$user->employment)</p>
+                    @endif
+                    @if($user->work)
+                    <p><strong>Кем работаете:</strong> @lang("work.".$user->work)</p>
+                    @endif
+                    @if($user->family_status)
+                    <p><strong>Семейное положение:</strong> @lang("family_status.".$user->family_status)</p>
+                    @endif
+                    @if($user->material_condition)
+                    <p><strong>Как бы Вы описали материальное состояние вашей семьи?:</strong> @lang("material_condition.".$user->material_condition)</p>
+                    @endif
+                    @if(is_array($user->hobbies))
+                        <p><strong>Увлечения/интересы:</strong>
+                        @foreach($user->hobbies as $hobby)
+                            @lang("hobbies.".$hobby);
+                        @endforeach
+                        @if($user->hobbies_other)
+                            {{$user->hobbies_other}}
+                        @endif
+                    </p>
+                    @endif
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Расчётные поля</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <p><strong>Приоритет:</strong> {{$user->getPriority()}}</p>
+                    <p><strong>Возраст:</strong> {{\Carbon\Carbon::now()->year - $user->birsday}}</p>
+                    <p><strong>Уровень пользователя:</strong> {{$ratingStatus->name}}</p>
+                    <p><strong>Количество балов:</strong> {{$user->history->sum('score')}}</p>
+                    <p><strong>Был на сайте:</strong> {{$user->last_active}}</p>
+                    <p><strong>Дата регистрации:</strong> {{$user->created_at}}</p>
+                    <p><strong>Дата учавстия в проекте:</strong> {{$user->lastApproveRequest()?$user->lastApproveRequest()->updated_at : '-' }}</p>
+                    <p><strong>Количество участий в проектах:</strong> {{$user->approveRequestCount() }}</p>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
             <!-- Box -->
             <form action="{{route('adm_change_status',['user_id' => $user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
                 {{ csrf_field() }}
@@ -357,5 +443,70 @@
 		});
 
 		tableUsers.on( 'draw', afterDrawTabel() );
+
+        @if($user->new_form_status)
+        $('#country_id').select2({
+            placeholder: "Выберите страну...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.country.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#region_id').select2({
+            placeholder: "Выберите область...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.region.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        country_id: $('#country_id').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#city_id').select2({
+            placeholder: "Выберите город...",
+            tegs: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '{!! route('admin.city.find') !!}',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        country_id: $('#country_id').val()
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+        @endif
     </script>
 @endsection

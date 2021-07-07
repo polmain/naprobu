@@ -7,15 +7,18 @@
     <meta content="{{csrf_token()}}" name="csrf-token">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <link rel="shortcut icon" href="{{{ asset('public/favicon.ico') }}}">
-    <link href="{{ asset("/public/css/app.min.css")}}?v=1.2.0" rel="stylesheet" type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/css/intlTelInput.css" rel="stylesheet" />
+    <link href="{{ asset("/public/css/app.min.css")}}?v=1.2.2" rel="stylesheet" type="text/css" />
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
+    @if(isset($alternativeUrls))
     @foreach($alternativeUrls as $lang => $alternet_url)
         <link rel="alternate" href="{{$alternet_url}}" hreflang="{{ $lang }}" />
     @endforeach
+    @endif
 
     @yield('head')
 
@@ -76,6 +79,29 @@
 </ul>
 
 <div class="to-up"></div>
+
+<!-- Messenger Плагин чата Code -->
+<div id="fb-root"></div>
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            xfbml            : true,
+            version          : 'v10.0'
+        });
+    };
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/ru_RU/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+<!-- Your Плагин чата code -->
+<div class="fb-customerchat"
+     attribution="page_inbox"
+     page_id="255194487920301">
+</div>
 @auth
     @if(!env('APP_DEBUG', false))
     <div class="push-container">
@@ -279,6 +305,7 @@
 			email: '{!!  trans('registration.email') !!}',
 			isName: '{!!  trans('registration.isName') !!}',
 			isEmail: '{!!  trans('registration.isEmail') !!}',
+            isPhone: '{!!  trans('registration.isPhone') !!}',
 			equalTo: '{!!  trans('registration.equalTo') !!}',
 		}
     </script>
@@ -352,6 +379,33 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="social_subscribe" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@lang('modal.social_subscribe_header')</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <img src="{{asset('public/svg/icons/cross.svg')}}" alt="Cross">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="social-modal">
+                        <li class="facebook-modal">
+                            <a href="https://www.facebook.com/naprobu.ua/" target="_blank"><img src="{{asset('public/svg/icons/facebook.svg')}}" alt="Facebook"> <span>Facebook</span></a>
+                        </li>
+                        <li class="telegram-modal">
+                            <a href="https://t.me/naprobu_ua" target="_blank"><img src="{{asset('public/svg/icons/telegram.svg')}}" alt="Telegram"> <span>Telegram</span></a>
+                        </li>
+                        <li class="instagram-modal">
+                            <a href="https://www.instagram.com/naprobu.ua/" target="_blank"><img src="{{asset('public/svg/icons/instagram.svg')}}" alt="Instagram"> <span>Instagram</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
 		var feedbackValidate = {
 			required:  "@lang('validation.required')",
@@ -373,7 +427,7 @@
         };
 
     </script>
-    <script src="{{ asset ("/public/js/app.min.js") }}?v=1.2.0" type="text/javascript"></script>
+    <script src="{{ asset ("/public/js/app.min.js") }}?v=1.2.5" type="text/javascript"></script>
 @yield('scripts')
 </body>
 </html>

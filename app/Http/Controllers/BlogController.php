@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entity\ProjectAudienceEnum;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -27,9 +28,15 @@ class BlogController extends Controller
 {
 	protected $sidebar;
 
-	public function __construct()
+	public function __construct(Request $request)
 	{
 		$locale = App::getLocale();
+        $international = $request->get('international');
+
+        $audience = ProjectAudienceEnum::UKRAINE;
+        if($international){
+            $audience = ProjectAudienceEnum::WORD;
+        }
 
 		$projects = Project::where([
 				['lang',$locale],
@@ -37,6 +44,7 @@ class BlogController extends Controller
 				['status_id','<>',3],
 				['status_id','<>',10],
 				['type','<>','only-blogger'],
+                ['audience',$audience]
 			])->orderBy('start_registration_time','desc')
 			->limit(2)
 			->get();

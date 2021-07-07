@@ -2,12 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Entity\EducationEnum;
+use App\Entity\EmploymentEnum;
+use App\Entity\FamilyStatusEnum;
+use App\Entity\HobbiesEnum;
+use App\Entity\MaterialConditionEnum;
+use App\Entity\WorkEnum;
 use App\Exports\UserExport;
+use App\Library\Queries\UserFilterServices;
 use App\Library\Users\UserRating;
+use App\Model\Geo\City;
+use App\Model\Geo\Country;
+use App\Model\Geo\Region;
 use App\Model\Post;
+use App\Model\Project;
 use App\Model\Project\ProjectMessage;
 use App\Model\Project\ProjectRequest;
 use App\Model\Questionnaire\Answer;
+use App\Model\Questionnaire\Question;
+use App\Model\Queue;
 use App\Model\Review;
 use App\Model\User\UserNotification;
 use App\Model\User\UserPresents;
@@ -36,15 +49,190 @@ class UsersController extends Controller
 {
     private const TRANSLATE_LANG = ['ua', 'en'];
 
-	public function all(){
+    public function __construct()
+    {
+        app()->setLocale('ru');
+    }
+
+	public function all(Request $request){
+        if($request->submit == "excel"){
+            return $this->exportGenerate($request);
+        }elseif ($request->submit == "notification"){
+            return $this->sendCustomNotification($request);
+        }
+
 		SEO::setTitle('Все пользователи');
 		AdminPageData::setPageName('Все пользователи');
 		AdminPageData::addBreadcrumbLevel('Пользователи');
 
-		return view('admin.users.all');
+        $country = null;
+        $region = null;
+        $cities = [];
+        $projects = [];
+        $projectsExpert = [];
+        $questions = [];
+
+        if($request->has('filter.country')){
+            $country = Country::where('id', $request->input('filter.country'))->first();
+        }
+
+        if($request->has('filter.region')){
+            $region = Region::where('id', $request->input('filter.region'))->first();
+        }
+
+        if($request->has('filter.city')){
+            $citiesArray = [];
+            foreach ( $request->filter['city'] as $key => $item){
+                $citiesArray[] = $request->input('filter.city')[$key];
+            }
+            $cities = City::whereIn('id', $citiesArray)->get();
+        }
+
+        if($request->has('filter.project')){
+            $projectsArray = [];
+            foreach ( $request->filter['project'] as $key => $item){
+                $projectsArray[] = (int) $request->input('filter.project')[$key];
+            }
+            $projects = Project::whereIn('id', $projectsArray)->get();
+        }
+
+        if($request->has('filter.projectExpert')){
+            $projectsArray = [];
+            foreach ( $request->filter['projectExpert'] as $key => $item){
+                $projectsArray[] = (int) $request->input('filter.projectExpert')[$key];
+            }
+            $projectsExpert = Project::whereIn('id', $projectsArray)->get();
+        }
+
+        if($request->has('filter.questions')){
+            $questionsArray = [];
+            foreach ( $request->filter['questions'] as $key => $item){
+                $questionsArray[] = (int) $request->input('filter.questions')[$key];
+            }
+            $questions = Question::whereIn('id', $questionsArray)->get();
+        }
+
+        $statuses = UserStatus::where('lang', 'ru')->get();
+        $ratingStatuses = UserRatingStatus::where('lang', 'ru')->get();
+        $educationArray = EducationEnum::values();
+        $employmentArray = EmploymentEnum::values();
+        $workArray = WorkEnum::values();
+        $familyStatusArray = FamilyStatusEnum::values();
+        $materialConditionArray = MaterialConditionEnum::values();
+        $hobbiesArray = HobbiesEnum::values();
+
+		return view('admin.users.all',[
+            'statuses'	=>	$statuses,
+            'ratingStatuses'	=>	$ratingStatuses,
+            'educationArray'	=> $educationArray,
+            'employmentArray'	=> $employmentArray,
+            'workArray'	=> $workArray,
+            'familyStatusArray'	=> $familyStatusArray,
+            'materialConditionArray'	=> $materialConditionArray,
+            'hobbiesArray'	=> $hobbiesArray,
+            'country' => $country,
+            'region' => $region,
+            'cities' => $cities,
+            'projects' => $projects,
+            'projectsExpert' => $projectsExpert,
+            'questions' => $questions
+        ]);
 	}
+
+	public function all_archive(Request $request)
+    {
+        if($request->submit == "excel"){
+            return $this->exportGenerate($request);
+        }elseif ($request->submit == "notification"){
+            return $this->sendCustomNotification($request);
+        }
+
+        SEO::setTitle('Архив');
+        AdminPageData::setPageName('Архив');
+        AdminPageData::addBreadcrumbLevel('Пользователи','users');
+        AdminPageData::addBreadcrumbLevel('Архив');
+
+        $country = null;
+        $region = null;
+        $cities = [];
+        $projects = [];
+        $projectsExpert = [];
+        $questions = [];
+
+        if($request->has('filter.country')){
+            $country = Country::where('id', $request->input('filter.country'))->first();
+        }
+
+        if($request->has('filter.region')){
+            $region = Region::where('id', $request->input('filter.region'))->first();
+        }
+
+        if($request->has('filter.city')){
+            $citiesArray = [];
+            foreach ( $request->filter['city'] as $key => $item){
+                $citiesArray[] = $request->input('filter.city')[$key];
+            }
+            $cities = City::whereIn('id', $citiesArray)->get();
+        }
+
+        if($request->has('filter.project')){
+            $projectsArray = [];
+            foreach ( $request->filter['project'] as $key => $item){
+                $projectsArray[] = (int) $request->input('filter.project')[$key];
+            }
+            $projects = Project::whereIn('id', $projectsArray)->get();
+        }
+
+        if($request->has('filter.projectExpert')){
+            $projectsArray = [];
+            foreach ( $request->filter['projectExpert'] as $key => $item){
+                $projectsArray[] = (int) $request->input('filter.projectExpert')[$key];
+            }
+            $projectsExpert = Project::whereIn('id', $projectsArray)->get();
+        }
+
+        if($request->has('filter.questions')){
+            $questionsArray = [];
+            foreach ( $request->filter['questions'] as $key => $item){
+                $questionsArray[] = (int) $request->input('filter.questions')[$key];
+            }
+            $questions = Question::whereIn('id', $questionsArray)->get();
+        }
+
+        $statuses = UserStatus::where('lang', 'ru')->get();
+        $ratingStatuses = UserRatingStatus::where('lang', 'ru')->get();
+        $educationArray = EducationEnum::values();
+        $employmentArray = EmploymentEnum::values();
+        $workArray = WorkEnum::values();
+        $familyStatusArray = FamilyStatusEnum::values();
+        $materialConditionArray = MaterialConditionEnum::values();
+        $hobbiesArray = HobbiesEnum::values();
+
+        return view('admin.users.all',[
+            'isArchive' => true,
+            'statuses'	=>	$statuses,
+            'ratingStatuses'	=>	$ratingStatuses,
+            'educationArray'	=> $educationArray,
+            'employmentArray'	=> $employmentArray,
+            'workArray'	=> $workArray,
+            'familyStatusArray'	=> $familyStatusArray,
+            'materialConditionArray'	=> $materialConditionArray,
+            'hobbiesArray'	=> $hobbiesArray,
+            'country' => $country,
+            'region' => $region,
+            'cities' => $cities,
+            'projects' => $projects,
+            'projectsExpert' => $projectsExpert,
+            'questions' => $questions
+        ]);
+    }
+
 	public function all_ajax(Request $request){
-		$users = User::with(['roles','status']);
+        if($request->input('isArchive') == 1){
+            $users = User::with(['roles','status'])->onlyTrashed();
+        }else{
+            $users = UserFilterServices::getFilteredUsersQuery($request);
+        }
 
 		if($request->has('role')){
 			$users = $users->whereHas('roles', function($q) use	($request)
@@ -66,21 +254,100 @@ class UsersController extends Controller
 			->addColumn('lastOnline', function (User $user) {
 				return $user->lastOnline();
 			})
+			->addColumn('priority', function (User $user) {
+				return $user->getPriority();
+			})
 			->filterColumn('first_name', function($query, $keyword) {
 				$query->whereRaw("CONCAT(`first_name`, ' ', `last_name`) like ?", ["%{$keyword}%"]);
 			})
 			->toJson();
 	}
 
-	public function expert(){
+	public function expert(Request $request){
+        if($request->submit == "excel"){
+            return $this->exportGenerate($request);
+        }elseif ($request->submit == "notification"){
+            return $this->sendCustomNotification($request);
+        }
 
+        SEO::setTitle('Все Эксерты');
+        AdminPageData::setPageName('Все Эксерты');
+        AdminPageData::addBreadcrumbLevel('Пользователи','users');
+        AdminPageData::addBreadcrumbLevel('Эксерты');
 
-		SEO::setTitle('Все Эксерты');
-		AdminPageData::setPageName('Все Эксерты');
-		AdminPageData::addBreadcrumbLevel('Пользователи','users');
-		AdminPageData::addBreadcrumbLevel('Эксерты');
+        $country = null;
+        $region = null;
+        $cities = [];
+        $projects = [];
+        $projectsExpert = [];
+        $questions = [];
 
-		return view('admin.users.all',['role'=>'expert']);
+        if($request->has('filter.country')){
+            $country = Country::where('id', $request->input('filter.country'))->first();
+        }
+
+        if($request->has('filter.region')){
+            $region = Region::where('id', $request->input('filter.region'))->first();
+        }
+
+        if($request->has('filter.city')){
+            $citiesArray = [];
+            foreach ( $request->filter['city'] as $key => $item){
+                $citiesArray[] = $request->input('filter.city')[$key];
+            }
+            $cities = City::whereIn('id', $citiesArray)->get();
+        }
+
+        if($request->has('filter.project')){
+            $projectsArray = [];
+            foreach ( $request->filter['project'] as $key => $item){
+                $projectsArray[] = (int) $request->input('filter.project')[$key];
+            }
+            $projects = Project::whereIn('id', $projectsArray)->get();
+        }
+
+        if($request->has('filter.projectExpert')){
+            $projectsArray = [];
+            foreach ( $request->filter['projectExpert'] as $key => $item){
+                $projectsArray[] = (int) $request->input('filter.projectExpert')[$key];
+            }
+            $projectsExpert = Project::whereIn('id', $projectsArray)->get();
+        }
+
+        if($request->has('filter.questions')){
+            $questionsArray = [];
+            foreach ( $request->filter['questions'] as $key => $item){
+                $questionsArray[] = (int) $request->input('filter.questions')[$key];
+            }
+            $questions = Question::whereIn('id', $questionsArray)->get();
+        }
+
+        $statuses = UserStatus::where('lang', 'ru')->get();
+        $ratingStatuses = UserRatingStatus::where('lang', 'ru')->get();
+        $educationArray = EducationEnum::values();
+        $employmentArray = EmploymentEnum::values();
+        $workArray = WorkEnum::values();
+        $familyStatusArray = FamilyStatusEnum::values();
+        $materialConditionArray = MaterialConditionEnum::values();
+        $hobbiesArray = HobbiesEnum::values();
+
+        return view('admin.users.all',[
+            'role'=>'expert',
+            'statuses'	=>	$statuses,
+            'ratingStatuses'	=>	$ratingStatuses,
+            'educationArray'	=> $educationArray,
+            'employmentArray'	=> $employmentArray,
+            'workArray'	=> $workArray,
+            'familyStatusArray'	=> $familyStatusArray,
+            'materialConditionArray'	=> $materialConditionArray,
+            'hobbiesArray'	=> $hobbiesArray,
+            'country' => $country,
+            'region' => $region,
+            'cities' => $cities,
+            'projects' => $projects,
+            'projectsExpert' => $projectsExpert,
+            'questions' => $questions
+        ]);
 	}
 
 	public function find(Request $request)
@@ -128,7 +395,7 @@ class UsersController extends Controller
 	}
 
 	protected function getUserEditData($user_id){
-		$user = User::with(['roles','reviews','requests'])->withCount('requests')->find($user_id);
+		$user = User::withTrashed()->with(['roles','reviews','requests'])->withCount('requests')->find($user_id);
 
 		/*$user->current_rating = $user->history->sum('score');
 		$user->save();*/
@@ -210,8 +477,9 @@ class UsersController extends Controller
 		$user->phone = $request->phone;
 		$user->sex = $request->sex;
 		$user->birsday = $request->birsday;
-		$user->city = $request->city;
-		$user->region = $request->region;
+		$user->city_id = $request->city_id;
+		$user->region_id = $request->region_id;
+		$user->county_id = $request->county_id;
 		$pass	= $request->password;
 		$pass = Hash::make($pass);
 		$user->password = $pass;
@@ -235,7 +503,7 @@ class UsersController extends Controller
 	}
 
 	public function saveUser(Request $request,$user_id){
-		$user = User::with(['roles'])->find($user_id);
+		$user = User::withTrashed()->with(['roles'])->find($user_id);
 		$user->name = $request->login;
 		$user->first_name = $request->first_name;
 		$user->last_name = $request->last_name;
@@ -244,8 +512,15 @@ class UsersController extends Controller
 		$user->sex = $request->sex;
 
 		$user->birsday = $request->birsday;
-		$user->city = $request->city;
-		$user->region = $request->region;
+		if($request->has('city') && $request->has('region')){
+            $user->city = $request->city;
+            $user->region = $request->region;
+        }else{
+            $user->city_id = $request->city_id;
+            $user->region_id = $request->region_id;
+            $user->county_id = $request->county_id;
+        }
+
 		$user->status_id = 1;
 		$user->isNewsletter = $request->has('isNewsletter');
 
@@ -270,8 +545,9 @@ class UsersController extends Controller
 	}
 
 	public function delete($user_id){
-		User::destroy($user_id);
-
+		$user = User::find($user_id);
+        $user->delete();
+		/*
 		$reviews = Review::where('user_id',$user_id)->get();
 		foreach ($reviews as $review){
 			Review\Comment::where('review_id',$review->id)->delete();
@@ -302,7 +578,7 @@ class UsersController extends Controller
 		UserLog::where('user_id',$user_id)->delete();
 		UserNotification::where('user_id',$user_id)->delete();
 		UserPresents::where('user_id',$user_id)->delete();
-		UserRatingHistory::where('user_id',$user_id)->delete();
+		UserRatingHistory::where('user_id',$user_id)->delete();*/
 
 		return "ok";
 	}
@@ -321,7 +597,7 @@ class UsersController extends Controller
 	}
 
 	public function change_status(Request $request,$user_id){
-		$user = User::find($user_id);
+		$user = User::withTrashed()->find($user_id);
 
 		$userOldStatuse = UserChangeStatuses::all();
 		foreach ($userOldStatuse as $userOldStatus){
@@ -393,10 +669,24 @@ class UsersController extends Controller
 		AdminPageData::addBreadcrumbLevel('Пользователи','users');
 		AdminPageData::addBreadcrumbLevel('Экспорт пользователей');
 
-		$statuses = UserStatus::all();
+		$statuses = UserStatus::where('lang', 'ru')->get();
+		$ratingStatuses = UserRatingStatus::where('lang', 'ru')->get();
+        $educationArray = EducationEnum::values();
+        $employmentArray = EmploymentEnum::values();
+        $workArray = WorkEnum::values();
+        $familyStatusArray = FamilyStatusEnum::values();
+        $materialConditionArray = MaterialConditionEnum::values();
+        $hobbiesArray = HobbiesEnum::values();
 
 		return view('admin.users.export',[
-			'statuses'	=>	$statuses
+			'statuses'	=>	$statuses,
+			'ratingStatuses'	=>	$ratingStatuses,
+            'educationArray'	=> $educationArray,
+            'employmentArray'	=> $employmentArray,
+            'workArray'	=> $workArray,
+            'familyStatusArray'	=> $familyStatusArray,
+            'materialConditionArray'	=> $materialConditionArray,
+            'hobbiesArray'	=> $hobbiesArray
 		]);
 	}
 
@@ -429,16 +719,45 @@ class UsersController extends Controller
 	}*/
 
 	public function delete_ratting(Request $request,$user_id){
-		$user = User::find($user_id);
+		$user = User::withTrashed()->find($user_id);
 		UserRating::addAction($request->fine,$user);
 
 		return redirect()->route('adm_users_edit',[$user_id]);
 	}
 
 	public function add_ratting(Request $request,$user_id){
-		$user = User::find($user_id);
+		$user = User::withTrashed()->find($user_id);
 		UserRating::newAction($request,$user);
 
 		return redirect()->route('adm_users_edit',[$user_id]);
 	}
+
+	private function sendCustomNotification(Request $request){
+	    $users = UserFilterServices::getFilteredUsersQuery($request);
+	    $users = $users->orderBy('id');
+
+	    $text = $request->hello_text.' :user_name: '.$request->notification_text;
+	    $data = [
+	        'text' => $text,
+            'request' => $request->toArray()
+        ];
+
+	    $queue = new Queue();
+        $queue->name = 'user_custom_notification';
+        $queue->start = $users->first()->id;
+        $queue->data = serialize($data);
+        $queue->save();
+
+        return redirect()->route('adm_users_notification_send');
+    }
+
+    public function notificationSend()
+    {
+        SEO::setTitle('Сообщение отправленно');
+        AdminPageData::setPageName('Сообщение отправленно');
+        AdminPageData::addBreadcrumbLevel('Пользователи','users');
+        AdminPageData::addBreadcrumbLevel('Сообщение отправленно');
+
+        return view('admin.users.notification');
+    }
 }

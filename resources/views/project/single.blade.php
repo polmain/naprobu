@@ -8,6 +8,7 @@
     </div>
 </section>
 <div class="project-page">
+    @if(!request()->get('international'))
     <div class="container">
         <nav class="category-list categories-project ">
             <ul class="row ">
@@ -19,6 +20,7 @@
             </ul>
         </nav>
     </div>
+    @endif
     <div class="container">
         <div class="row">
             <div class="d-lg-none sidebar sidebar-project project-mobile-registration col-lg-4 order-lg-2">
@@ -56,8 +58,8 @@
                             <path id="Эллипс_1" data-name="Эллипс 1" class="cls-6" d="M434.5,1558.66a23.655,23.655,0,1,1-23.656,23.65A23.654,23.654,0,0,1,434.5,1558.66Z" transform="translate(-409.344 -1551.03)"/>
                         </svg>
                     </div>
-                    <div class="status-name">{{$project->status->name}}</div>
-                    <div class="status-date">
+                    <div class="status-name">{{($lang == 'ru')?$project->status->name:$base->status->translate->firstWhere('lang',$lang)->name}}</div>
+                    <div class="status-date" translate="no">
                         @switch($base->status_id)
                             @case(4)
                             {{ Carbon::parse($base->start_registration_time)->format('d.m.Y')}}
@@ -146,8 +148,8 @@
                             <path id="Эллипс_1" data-name="Эллипс 1" class="cls-6" d="M434.5,1558.66a23.655,23.655,0,1,1-23.656,23.65A23.654,23.654,0,0,1,434.5,1558.66Z" transform="translate(-409.344 -1551.03)"/>
                         </svg>
                     </div>
-                    <div class="status-name">{{$project->status->name}}</div>
-                    <div class="status-date">
+                    <div class="status-name">{{($lang == 'ru')?$project->status->name:$base->status->translate->firstWhere('lang',$lang)->name}}</div>
+                    <div class="status-date" translate="no">
                         @switch($base->status_id)
                             @case(4)
                                 {{ Carbon::parse($base->start_registration_time)->format('d.m.Y')}}
@@ -199,7 +201,7 @@
                 @endauth
 
                 @foreach($base->links->where('lang',$lang) as $links)
-                    <a href="{{$links->link}}" class="project-sidebar-link project-sidebar-link_blue" target="_blank">{{$links->text}}</a>
+                    <a href="{{$links->link}}" class="project-sidebar-link project-sidebar-link_blue" target="_blank" data-id_link="{{route('project.conversion_link',['id'=>$lang==='ru'?$links->id:$links->rus_lang_id]) }}">{{$links->text}}</a>
                 @endforeach
 
 

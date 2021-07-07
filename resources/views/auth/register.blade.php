@@ -44,38 +44,53 @@
                                     </select>
                                 </div>
                                 <div class="form-group ">
-                                    <input id="birsday" type="text" class="form-control" name="birsday" placeholder="@lang("registration.birsday")">
+                                    <label for="country">@lang("registration.birsday")</label>
+                                    <select id="birsday" class="form-control" name="birsday">
+                                        @for($year = \Carbon\Carbon::now()->year; $year >= 1900; $year--)
+                                        <option value="{{$year}}">{{$year}}</option>
+                                        @endfor
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-block">
                                 <div class="form-group ">
-
                                     <label for="country">@lang("registration.country")</label>
-                                    <select name="country" id="country" class="form-control select2">
-                                        @if(App::getLocale() === 'en')
-                                                @foreach($countryCollection as $country)
-                                                    <option value="{{$country->getName()}}">{{$country->getName()}}</option>
-                                                @endforeach
-                                            @else
-                                                @foreach($countries as $country)
-                                                    <option value="{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}" data-iso="{{$country->iso}}" @if($country->iso == 'UA') selected="selected" @endif>{{(App::getLocale()=='ru')?$country->name_ru:$country->name_ua}}</option>
-                                                @endforeach
-                                        @endif
+                                    <select name="country_id" id="country_id" class="form-control select2">
                                     </select>
                                 </div>
                                 <div class="form-group ">
-                                    <label for="region">@lang("registration.region")</label>
-                                    <select name="region" id="region_select" class="form-control select2" disabled="disabled">
-
+                                    <label for="region_id">@lang("registration.region")</label>
+                                    <select name="region_id" id="region_id" class="form-control select2">
+                                        <option value="other">@lang('registration.other_select')</option>
                                     </select>
-                                    <input id="region" type="text" class="form-control d-none" name="region" placeholder="@lang("registration.region")" disabled="disabled">
+                                </div>
+                                <div class="form-group new_region-group">
+                                    <label for="new_region">@lang("registration.new_region")</label>
+                                    <input id="new_region" type="text" class="form-control" name="new_region" placeholder="@lang("registration.new_region_placeholder")">
                                 </div>
                                 <div class="form-group ">
-                                    <label for="region">@lang("registration.city")</label>
-                                    <select name="city" id="city_select" class="form-control select2" disabled="disabled">
-
+                                    <label for="city_id">@lang("registration.city")</label>
+                                    <select name="city_id" id="city_id" class="form-control select2">
+                                        <option value="other">@lang('registration.other_select')</option>
                                     </select>
-                                    <input id="city" type="text" class="form-control d-none" name="city" placeholder="@lang("registration.city")" disabled="disabled">
+                                </div>
+                                <div class="form-group new_city-group">
+                                    <label for="new_city">@lang("registration.new_city")</label>
+                                    <input id="new_city" type="text" class="form-control" name="new_city" placeholder="@lang("registration.new_city_placeholder")">
+                                </div>
+                            </div>
+                            <div class="form-block" id="nova_poshta_block">
+                                <h3>@lang("registration.nova_poshta")</h3>
+                                <div class="form-group ">
+                                    <label for="nova_poshta_city">@lang("registration.nova_poshta_city")</label>
+                                    <select name="nova_poshta_city" id="nova_poshta_city" class="form-control">
+                                    </select>
+                                </div>
+                                <input type="hidden" name="nova_poshta_city_name">
+                                <div class="form-group ">
+                                    <label for="nova_poshta_warehouse">@lang("registration.nova_poshta_warehouse")</label>
+                                    <select name="nova_poshta_warehouse" id="nova_poshta_warehouse" class="form-control">
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-block">
@@ -86,7 +101,11 @@
                                     <input id="expert-email" type="email" class="form-control" name="email" placeholder="Email">
                                 </div>
                                 <div class="form-group ">
-                                    <input id="phone" type="tel" class="form-control" name="phone" placeholder="Телефон">
+                                    <label for="phone">@lang("registration.phone")</label>
+                                    <input id="phone" type="tel" class="input-custom input-text form-control" name="phone_mask" required autofocus>
+                                    <input id="phone-db" type="hidden" class="input-custom input-text form-control" name="phone" required>
+                                    <input type="text" class="hide-phone" style="display: none">
+                                    <a href="#" id="myPhone" class="btn-orange" style="display: none">@lang("registration.myPhone")</a>
                                 </div>
                             </div>
                             <div class="form-block">
@@ -95,6 +114,60 @@
                                 </div>
                                 <div class="form-group mb-30">
                                     <input id="expert-password_confirmation" type="password" class="form-control" name="password_confirmation" placeholder="@lang("registration.password_confirmation")">
+                                </div>
+                            </div>
+                            <div class="form-block">
+                                <div class="form-group">
+                                    <label for="education">@lang("registration.education")</label>
+                                    <select name="education" id="education" class="form-control">
+                                        @foreach($educationArray as $education)
+                                            <option value="{{$education}}">@lang("education.".$education)</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="employment">@lang("registration.employment")</label>
+                                    <select name="employment" id="employment" class="form-control">
+                                        @foreach($employmentArray as $employment)
+                                            <option value="{{$employment}}">@lang("employment.".$employment)</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group" id="work-group">
+                                    <label for="work">@lang("registration.work")</label>
+                                    <select name="work" id="work" class="form-control">
+                                        @foreach($workArray as $work)
+                                            <option value="{{$work}}">@lang("work.".$work)</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="family_status">@lang("registration.family_status")</label>
+                                    <select name="family_status" id="family_status" class="form-control">
+                                        @foreach($familyStatusArray as $familyStatus)
+                                            <option value="{{$familyStatus}}">@lang("family_status.".$familyStatus)</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="material_condition">@lang("registration.material_condition")</label>
+                                    <select name="material_condition" id="material_condition" class="form-control">
+                                        @foreach($materialConditionArray as $materialCondition)
+                                            <option value="{{$materialCondition}}">@lang("material_condition.".$materialCondition)</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="hobbies">@lang("registration.hobbies")</label>
+                                    @foreach($hobbiesArray as $hobby)
+                                    <label class="form-check">@lang("hobbies.".$hobby)
+                                        <input class="form-check-input" type="checkbox" name="hobbies[]" @if($hobby->isOther())id="hobbies_other_checkbox"@endif value="{{$hobby}}">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                                <div class="form-group" id="hobbies_other-group">
+                                    <input id="hobbies_other" type="text" class="form-control" name="hobbies_other" placeholder="@lang("hobbies.other")">
                                 </div>
                             </div>
                             <div class="form-group mb-30">
@@ -115,96 +188,285 @@
         </div>
     </div>
 
+    <div class="modal fade" id="validate_phone_sends" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@lang('registration.validate_phone_sends_title')</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <img src="{{asset('public/svg/icons/cross.svg')}}" alt="Cross">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @lang('registration.validate_phone_sends_text')
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('global.close')</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/utils.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/intlTelInput.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.js"></script>
     <script>
         $(document).ready(function () {
-        	var lang = "{{(App::getLocale() == 'ua'?'uk':App::getLocale())}}";
-
-            $("#country").change(function(){
-            	var country = $('option:selected', this).data('iso');
-				$("#region, #region_select").attr('disabled','disabled');
-				$("#region_select").html('');
-
-				$.ajax({
-					method: "get",
-					url: "{{route('registration.region')}}",
-                    data: {
-						country: country,
-						lang: lang,
+            var lang = "{{App::getLocale()}}";
+            $('#country_id').select2({
+                placeholder: "{{trans('registration.country_select')}}",
+                tegs: true,
+                minimumInputLength: 0,
+                ajax: {
+                    url: '{!! route('country.find') !!}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            name: params.term,
+                            lang: lang
+                        };
                     },
-					success: function(resp)
-					{
-						if(resp.result==="ok"){
-							if(resp.data.length > 0){
-								$("#region").addClass('d-none');
-								$("#region_select").removeClass('d-none');
-								$("#region_select").removeAttr('disabled');
-								resp.data.forEach(function (e) {
-									$("#region_select").append('<option value="'+e.name+'" data-iso="'+e.id+'">'+e.name+'</option>')
-								})
-								$("#region_select").change();
-                            }
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
+            });
+            $('#country_id').change(function (e){
+                if($(this).val() == 637){
+                    $('#nova_poshta_block').show();
+                }else{
+                    $('#nova_poshta_block').hide();
+                }
+            });
 
-						}else{
-                            $("#region").removeAttr('disabled');
-                            $("#region_select").addClass('d-none');
-                            $("#region").removeClass('d-none');
+            $('#region_id').select2({
+                placeholder: "{{trans('registration.region_select')}}.",
+                tegs: true,
+                minimumInputLength: 0,
+                ajax: {
+                    url: '{!! route('region.find') !!}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            name: params.term,
+                            lang: lang,
+                            country_id: $('#country_id').val()
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
+            });
 
-                            $("#city").removeAttr('disabled');
-                            $("#city_select").addClass('d-none');
-                            $("#city").removeClass('d-none');
-                            $("#city_select").attr('disabled','disabled');
-                            $("#city_select").html('');
+            $('#region_id').change(function(e){
+                if($(this).val() == 'other'){
+                    $('.new_region-group').show();
+                }else{
+                    $('.new_region-group').hide();
+                }
+            });
+            $('#region_id').change();
+
+            $('#city_id').select2({
+                placeholder: "{{trans('registration.city_select')}}",
+                tegs: true,
+                minimumInputLength: 0,
+                ajax: {
+                    url: '{!! route('city.find') !!}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            name: params.term,
+                            lang: lang,
+                            region_id: $('#region_id').val() ?? 0,
+                            country_id: $('#country_id').val()
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
+            });
+
+            $('#city_id').change(function(e){
+                if($(this).val() == 'other'){
+                    $('.new_city-group').show();
+                }else{
+                    $('.new_city-group').hide();
+                }
+            });
+            $('#city_id').change();
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            delete $.ajaxSettings.headers["X-CSRF-TOKEN"];
+
+            $('#nova_poshta_city').select2({
+                placeholder: "{{trans('registration.new_city_placeholder')}}",
+                minimumInputLength: 3,
+                ajax: {
+                    url: 'https://api.novaposhta.ua/v2.0/json/',
+                    dataType: 'json',
+                    type: 'POST',
+                    data: function (params) {
+                        var query = {
+                            "modelName": "Address",
+                            "calledMethod": "searchSettlements",
+                            "methodProperties": {
+                                "CityName":params.term,
+                                "Limit": 10
+                            },
+                            "apiKey": "561c40b8c8c50432066bc12cc25edefd"
+                        };
+                        return JSON.stringify(query);
+                    },
+
+                    processResults: function (data) {
+                        var items = [];
+                        if(data.success){
+                            var cities = data.data[0].Addresses;
+                            cities.forEach(function (e) {
+                                items.push({'id':e.DeliveryCity,'text':e.Present});
+                            })
                         }
-					},
-					error:  function(xhr, str){
-						console.log(xhr);
-					}
-				});
-            });
-			$("#country").change();
-            $("#region_select").change(function(){
-            	var region = $('option:selected', this).data('iso');
-				$("#city_select").attr('disabled','disabled');
-				$("#city_select").html('');
-
-				$.ajax({
-					method: "get",
-					url: "{{route('registration.city')}}",
-                    data: {
-						region: region,
-						lang: lang,
+                        return {
+                            results: items,
+                        };
                     },
-					success: function(resp)
-					{
-						if(resp.result==="ok"){
-
-							if(resp.data.length > 0) {
-								$("#city").addClass('d-none');
-								$("#city_select").removeClass('d-none');
-								$("#city_select").removeAttr('disabled');
-								var prevCity = "";
-								resp.data.forEach(function (e) {
-									if (prevCity != e.name) {
-										prevCity = e.name;
-										$("#city_select").append('<option value="' + e.name + '">' + e.name + '</option>');
-									}
-
-								})
-							}else{
-								$("#city").removeAttr('disabled');
-								$("#city_select").addClass('d-none');
-								$("#city").removeClass('d-none');
-							}
-						}
-					},
-					error:  function(xhr, str){
-						console.log(xhr);
-					}
-				});
+                    cache: false
+                },
             });
-		});
+
+            $('#nova_poshta_city').change(function(e){
+                var curOption = $("#nova_poshta_city option:selected");
+                $('input[name="nova_poshta_city_name"]').val(curOption.text());
+
+                var query = {
+                    "modelName": "AddressGeneral",
+                    "calledMethod": "getWarehouses",
+                    "methodProperties": {
+                        "CityRef": $(this).val(),
+                        "Language": "uk"
+                    },
+                    "apiKey": "561c40b8c8c50432066bc12cc25edefd"
+                };
+                var data =  JSON.stringify(query);
+
+                $.ajax({
+                    method: "POST",
+                    url: "https://api.novaposhta.ua/v2.0/json/",
+                    data: data,
+                    dataType: 'json',
+                    success: function(resp)
+                    {
+                        $('#nova_poshta_warehouse').html('');
+
+                        if(resp.success){
+                            resp.data.forEach(function(e){
+                                $('#nova_poshta_warehouse').append('<option val="'+e.Description+'">'+e.Description+'</option>');
+                            });
+                        }
+                    },
+                    error:  function(xhr, str){
+                        console.log(xhr);
+                    }
+                });
+            });
+
+            $('#nova_poshta_warehouse').select2();
+
+            $('#nova_poshta_block').hide();
+
+            $('#employment').change(function (){
+                if($(this).val() == "{{\App\Entity\EmploymentEnum::WORK}}"){
+                    $('#work-group').show();
+                }else{
+                    $('#work-group').hide();
+                }
+            });
+
+            $('#employment').change();
+
+            $('#hobbies_other_checkbox').change(function (e){
+                if($(this).is(':checked')){
+                    $('#hobbies_other-group').show();
+                }else{
+                    $('#hobbies_other-group').hide();
+                }
+            });
+
+            $('#hobbies_other_checkbox').change();
+        });
+
+        /* INITIALIZE BOTH INPUTS WITH THE intlTelInput FEATURE*/
+
+        var telInput = $("#phone,.hide-phone").intlTelInput({
+            initialCountry: "ua",
+            preferredCountries: ["ua"],
+            separateDialCode: true,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/utils.js",
+        });
+
+        /* ADD A MASK IN PHONE1 INPUT (when document ready and when changing flag) FOR A BETTER USER EXPERIENCE */
+
+
+
+        $(document).ready(function () {
+            var mask1 = $("#phone").attr('placeholder').replace(/[0-9]/g, 0);
+            $('input[type="tel"]').mask(mask1)
+        });
+
+        $("#phone").on("countrychange", function (e, countryData) {
+            $(".hide-phone").intlTelInput('setCountry',countryData.iso2);
+            $(this).val('');
+            var placeholder = $(".hide-phone").attr('placeholder');
+            var mask1 = placeholder.replace(/[0-9]/g, 0);
+            $(this).unmask();
+            $(this).mask(mask1);
+            $(this).attr('placeholder',placeholder);
+        });
+
+        $("#phone").change(function () {
+            var phone = $("#phone").intlTelInput('getNumber');
+            $("#phone-db").val(phone);
+        });
+
+        $(".hide-phone").parent().hide();
+
+        $('#myPhone').click(function (e){
+            e.preventDefault();
+
+            $.ajax({
+                method: "POST",
+                url: "/validate-phone/",
+                data: {
+                    'phone': $("#phone-db").val()
+                },
+                success: function(resp)
+                {
+                    if(resp == 'ok'){
+                        $('#validate_phone_sends').modal('show');
+                    }
+                },
+                error:  function(xhr, str){
+                    console.log(xhr);
+                }
+            });
+        })
     </script>
 @endsection

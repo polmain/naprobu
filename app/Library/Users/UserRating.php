@@ -86,7 +86,13 @@ class UserRating
 
 			if ($ratingStatus->id != $user->rang_id)
 			{
-				$statusName = $user->lang == 'ru' ? $ratingStatus->name : $ratingStatus->translate->name;
+                $statusName = $ratingStatus->name;
+                if($user->lang !== 'ru'){
+                    $translateStatus = $ratingStatus->translate->firstWhere('lang', $user->lang);
+                    if($translateStatus){
+                        $statusName = $translateStatus->name;
+                    }
+                }
 				Notification::send('new_rang', $user, 0, null, ['rang' => $statusName]);
 			}
 

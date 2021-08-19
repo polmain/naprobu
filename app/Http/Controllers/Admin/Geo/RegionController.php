@@ -183,6 +183,7 @@ class RegionController extends Controller
 
         $translate->name = $request->input('name'.$upperLang);
         $translate->country_id = $request->input('country_id');
+        $translate->is_verify = true;
         $translate->save();
 
     }
@@ -195,6 +196,10 @@ class RegionController extends Controller
         City::where('region_id', $region->id)
             ->update(['region_id' => $request->new_region_id]);
 
+        $regions = Region::where('rus_lang_id', $region->id)->get();
+        foreach ($regions as $region_item){
+            $region_item->delete();
+        }
         $region->delete();
     }
 }

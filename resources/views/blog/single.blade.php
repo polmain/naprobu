@@ -52,8 +52,10 @@
 
                                 <div class="blog-date-author">
                                 <div class="blog-date">{{Carbon::parse($post->created_at)->format('d.m.Y')}}</div>
+                                    @if($post->author)
                                 <div class="blog-author">@lang('blog.author'): <a href="{{route('blog.level2',[$post->author->name])}}">{{$post->author->name}}</a></div>
-                            </div>
+                            @endif
+                                </div>
                         </div>
                         @if(($locale == "ru")? $post->image : $post->base->image)
                         <img src="{{($locale == "ru")? $post->image : $post->base->image}}" alt="{{$post->name}}" class="post-image">

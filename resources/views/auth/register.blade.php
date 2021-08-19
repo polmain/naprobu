@@ -55,12 +55,12 @@
                             <div class="form-block">
                                 <div class="form-group ">
                                     <label for="country">@lang("registration.country")</label>
-                                    <select name="country_id" id="country_id" class="form-control select2">
+                                    <select name="country_id" id="select2_country_id" class="form-control select2" required="required">
                                     </select>
                                 </div>
                                 <div class="form-group ">
                                     <label for="region_id">@lang("registration.region")</label>
-                                    <select name="region_id" id="region_id" class="form-control select2">
+                                    <select name="region_id" id="select2_region_id" class="form-control select2">
                                         <option value="other">@lang('registration.other_select')</option>
                                     </select>
                                 </div>
@@ -70,7 +70,7 @@
                                 </div>
                                 <div class="form-group ">
                                     <label for="city_id">@lang("registration.city")</label>
-                                    <select name="city_id" id="city_id" class="form-control select2">
+                                    <select name="city_id" id="select2_city_id" class="form-control select2">
                                         <option value="other">@lang('registration.other_select')</option>
                                     </select>
                                 </div>
@@ -102,7 +102,7 @@
                                 </div>
                                 <div class="form-group ">
                                     <label for="phone">@lang("registration.phone")</label>
-                                    <input id="phone" type="tel" class="input-custom input-text form-control" name="phone_mask" required autofocus>
+                                    <input id="phone" type="tel" class="input-custom input-text form-control" name="phone_mask" required>
                                     <input id="phone-db" type="hidden" class="input-custom input-text form-control" name="phone" required>
                                     <input type="text" class="hide-phone" style="display: none">
                                     <a href="#" id="myPhone" class="btn-orange" style="display: none">@lang("registration.myPhone")</a>
@@ -209,23 +209,82 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/utils.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/intlTelInput.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.js"></script>
+    <script src="{{ asset ("/public/js/jquery.mask.js") }}" type="text/javascript"></script>
+    <script src="{{ asset ("/public/js/intlTelInput.js") }}" type="text/javascript"></script>
+    <script type="text/javascript">
+        var currentLang = "{{App::getLocale()}}";
+        var country_select = "{{trans('registration.country_select')}}";
+        var region_select = "{{trans('registration.region_select')}}.";
+        var city_select = "{{trans('registration.city_select')}}";
+        var new_city_placeholder = "{{trans('registration.new_city_placeholder')}}";
+        var employment_work = "{{\App\Entity\EmploymentEnum::WORK}}";
+    </script>
     <script>
+        var telInput = $("#phone,.hide-phone").intlTelInput({
+            initialCountry: "ua",
+            preferredCountries: ["ua"],
+            separateDialCode: true,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/utils.js",
+        });
+
         $(document).ready(function () {
-            var lang = "{{App::getLocale()}}";
-            $('#country_id').select2({
+            var placeholder = $("#phone").attr('placeholder');
+            if(placeholder){
+                var mask1 = placeholder.replace(/[0-9]/g, 0);
+                $('input[type="tel"]').mask(mask1);
+            }
+
+        });
+
+        $("#phone").on("countrychange", function (e, countryData) {
+            $(".hide-phone").intlTelInput('setCountry', countryData.iso2);
+            $(this).val('');
+            var placeholder = $(".hide-phone").attr('placeholder');
+            var mask1 = placeholder.replace(/[0-9]/g, 0);
+            $(this).unmask();
+            $(this).mask(mask1);
+            $(this).attr('placeholder', placeholder);
+        });
+
+        $("#phone").keyup(function () {
+            var phone = $("#phone").intlTelInput('getNumber');
+            $("#phone-db").val(phone);
+        });
+
+        $(".hide-phone").parent().hide();
+
+        $('#myPhone').click(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                method: "POST",
+                url: "/validate-phone/",
+                data: {
+                    'phone': $("#phone-db").val()
+                },
+                success: function (resp) {
+                    if (resp == 'ok') {
+                        $('#validate_phone_sends').modal('show');
+                    }
+                },
+                error: function (xhr, str) {
+                    console.log(xhr);
+                }
+            });
+        });
+
+        $( document ).ready( function() {
+
+            $('#select2_country_id').select2({
                 placeholder: "{{trans('registration.country_select')}}",
-                tegs: true,
                 minimumInputLength: 0,
                 ajax: {
                     url: '{!! route('country.find') !!}',
                     dataType: 'json',
                     data: function (params) {
                         return {
-                            name: params.term,
-                            lang: lang
+                            "name": params.term,
+                            "lang": currentLang,
                         };
                     },
                     processResults: function (data) {
@@ -233,29 +292,20 @@
                             results: data
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
-            $('#country_id').change(function (e){
-                if($(this).val() == 637){
-                    $('#nova_poshta_block').show();
-                }else{
-                    $('#nova_poshta_block').hide();
-                }
-            });
-
-            $('#region_id').select2({
-                placeholder: "{{trans('registration.region_select')}}.",
-                tegs: true,
+            $('#select2_region_id').select2({
+                placeholder: region_select,
                 minimumInputLength: 0,
                 ajax: {
-                    url: '{!! route('region.find') !!}',
+                    url: '/regions/find/',
                     dataType: 'json',
                     data: function (params) {
                         return {
-                            name: params.term,
-                            lang: lang,
-                            country_id: $('#country_id').val()
+                            'name': params.term,
+                            'lang': currentLang,
+                            'country_id': $('#select2_country_id').val()
                         };
                     },
                     processResults: function (data) {
@@ -263,32 +313,23 @@
                             results: data
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
-            $('#region_id').change(function(e){
-                if($(this).val() == 'other'){
-                    $('.new_region-group').show();
-                }else{
-                    $('.new_region-group').hide();
-                }
-            });
-            $('#region_id').change();
 
-            $('#city_id').select2({
-                placeholder: "{{trans('registration.city_select')}}",
-                tegs: true,
+            $('#select2_city_id').select2({
+                placeholder: city_select,
                 minimumInputLength: 0,
                 ajax: {
-                    url: '{!! route('city.find') !!}',
+                    url: '/cities/find/',
                     dataType: 'json',
                     data: function (params) {
                         return {
-                            name: params.term,
-                            lang: lang,
-                            region_id: $('#region_id').val() ?? 0,
-                            country_id: $('#country_id').val()
+                            'name': params.term,
+                            'lang': currentLang,
+                            'region_id': $('#select2_region_id').val() ? $('#select2_region_id').val() :  0,
+                            'country_id': $('#select2_country_id').val()
                         };
                     },
                     processResults: function (data) {
@@ -296,19 +337,41 @@
                             results: data
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
-            $('#city_id').change(function(e){
-                if($(this).val() == 'other'){
-                    $('.new_city-group').show();
-                }else{
-                    $('.new_city-group').hide();
-                }
-            });
-            $('#city_id').change();
 
+        });
+
+        $('#select2_country_id').change(function (e) {
+            if ($(this).val() == 637) {
+                $('#nova_poshta_block').css('display', 'block');
+            } else {
+                $('#nova_poshta_block').css('display', 'none');
+            }
+        });
+
+        $('#select2_region_id').change(function (e) {
+            if ($(this).val() == 'other') {
+                $('.new_region-group').css('display', 'block');
+            } else {
+                $('.new_region-group').css('display', 'none');
+            }
+        });
+        $('#select2_region_id').change();
+
+        $('#select2_city_id').change(function (e) {
+            if ($(this).val() === 'other') {
+                $('.new_city-group').css('display', 'block');
+                $('#new_city').attr('required', 'required');
+            } else {
+                $('.new_city-group').css('display', 'none');
+                $('#new_city').removeAttr('required');
+            }
+        });
+        $('#select2_city_id').change();
+        
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -317,18 +380,20 @@
             delete $.ajaxSettings.headers["X-CSRF-TOKEN"];
 
             $('#nova_poshta_city').select2({
-                placeholder: "{{trans('registration.new_city_placeholder')}}",
+                placeholder: new_city_placeholder,
                 minimumInputLength: 3,
                 ajax: {
                     url: 'https://api.novaposhta.ua/v2.0/json/',
                     dataType: 'json',
                     type: 'POST',
                     data: function (params) {
+
+                        delete $.ajaxSettings.headers["X-CSRF-TOKEN"];
                         var query = {
                             "modelName": "Address",
                             "calledMethod": "searchSettlements",
                             "methodProperties": {
-                                "CityName":params.term,
+                                "CityName": params.term,
                                 "Limit": 10
                             },
                             "apiKey": "561c40b8c8c50432066bc12cc25edefd"
@@ -338,10 +403,10 @@
 
                     processResults: function (data) {
                         var items = [];
-                        if(data.success){
+                        if (data.success) {
                             var cities = data.data[0].Addresses;
                             cities.forEach(function (e) {
-                                items.push({'id':e.DeliveryCity,'text':e.Present});
+                                items.push({'id': e.DeliveryCity, 'text': e.Present});
                             })
                         }
                         return {
@@ -352,7 +417,7 @@
                 },
             });
 
-            $('#nova_poshta_city').change(function(e){
+            $('#nova_poshta_city').change(function (e) {
                 var curOption = $("#nova_poshta_city option:selected");
                 $('input[name="nova_poshta_city_name"]').val(curOption.text());
 
@@ -365,24 +430,23 @@
                     },
                     "apiKey": "561c40b8c8c50432066bc12cc25edefd"
                 };
-                var data =  JSON.stringify(query);
+                var data = JSON.stringify(query);
 
                 $.ajax({
                     method: "POST",
                     url: "https://api.novaposhta.ua/v2.0/json/",
                     data: data,
                     dataType: 'json',
-                    success: function(resp)
-                    {
+                    success: function (resp) {
                         $('#nova_poshta_warehouse').html('');
 
-                        if(resp.success){
-                            resp.data.forEach(function(e){
-                                $('#nova_poshta_warehouse').append('<option val="'+e.Description+'">'+e.Description+'</option>');
+                        if (resp.success) {
+                            resp.data.forEach(function (e) {
+                                $('#nova_poshta_warehouse').append('<option val="' + e.Description + '">' + e.Description + '</option>');
                             });
                         }
                     },
-                    error:  function(xhr, str){
+                    error: function (xhr, str) {
                         console.log(xhr);
                     }
                 });
@@ -392,81 +456,24 @@
 
             $('#nova_poshta_block').hide();
 
-            $('#employment').change(function (){
-                if($(this).val() == "{{\App\Entity\EmploymentEnum::WORK}}"){
+            $('#employment').change(function () {
+                if ($(this).val() == employment_work) {
                     $('#work-group').show();
-                }else{
+                } else {
                     $('#work-group').hide();
                 }
             });
 
             $('#employment').change();
 
-            $('#hobbies_other_checkbox').change(function (e){
-                if($(this).is(':checked')){
+            $('#hobbies_other_checkbox').change(function (e) {
+                if ($(this).is(':checked')) {
                     $('#hobbies_other-group').show();
-                }else{
+                } else {
                     $('#hobbies_other-group').hide();
                 }
             });
 
             $('#hobbies_other_checkbox').change();
-        });
-
-        /* INITIALIZE BOTH INPUTS WITH THE intlTelInput FEATURE*/
-
-        var telInput = $("#phone,.hide-phone").intlTelInput({
-            initialCountry: "ua",
-            preferredCountries: ["ua"],
-            separateDialCode: true,
-            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/utils.js",
-        });
-
-        /* ADD A MASK IN PHONE1 INPUT (when document ready and when changing flag) FOR A BETTER USER EXPERIENCE */
-
-
-
-        $(document).ready(function () {
-            var mask1 = $("#phone").attr('placeholder').replace(/[0-9]/g, 0);
-            $('input[type="tel"]').mask(mask1)
-        });
-
-        $("#phone").on("countrychange", function (e, countryData) {
-            $(".hide-phone").intlTelInput('setCountry',countryData.iso2);
-            $(this).val('');
-            var placeholder = $(".hide-phone").attr('placeholder');
-            var mask1 = placeholder.replace(/[0-9]/g, 0);
-            $(this).unmask();
-            $(this).mask(mask1);
-            $(this).attr('placeholder',placeholder);
-        });
-
-        $("#phone").change(function () {
-            var phone = $("#phone").intlTelInput('getNumber');
-            $("#phone-db").val(phone);
-        });
-
-        $(".hide-phone").parent().hide();
-
-        $('#myPhone').click(function (e){
-            e.preventDefault();
-
-            $.ajax({
-                method: "POST",
-                url: "/validate-phone/",
-                data: {
-                    'phone': $("#phone-db").val()
-                },
-                success: function(resp)
-                {
-                    if(resp == 'ok'){
-                        $('#validate_phone_sends').modal('show');
-                    }
-                },
-                error:  function(xhr, str){
-                    console.log(xhr);
-                }
-            });
-        })
     </script>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Geo;
 use App\Library\Queries\QueryBuilder;
 use App\Model\Geo\City;
 use App\Model\Geo\Country;
+use App\Model\Geo\Region;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -163,6 +164,10 @@ class CityController extends Controller
 	public function delete($id){
         City::destroy($id);
         City::where('rus_lang_id',$id)->delete();
+
+        User::where('city_id', $id)
+            ->update(['city_id' => null]);
+
 		return "ok";
 	}
 
@@ -196,6 +201,7 @@ class CityController extends Controller
         $translate->name = $request->input('name'.$upperLang);
         $translate->country_id = $request->input('country_id');
         $translate->region_id = $request->input('region_id');
+        $translate->is_verify = true;
         $translate->save();
 
     }
@@ -205,6 +211,11 @@ class CityController extends Controller
         User::where('city_id', $city->id)
             ->update(['city_id' => $request->new_city_id]);
 
+
+        $cities = City::where('rus_lang_id', $city->id)->get();
+        foreach ($cities as $city_item){
+            $city_item->delete();
+        }
         $city->delete();
     }
 }

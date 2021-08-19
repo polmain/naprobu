@@ -73,7 +73,7 @@
 						return '<a href="/admin/users/phones/edit/'+row.id+'">'+data+'</a>';
 					}
 				},
-				{ "data": "duplicates" },
+				{ "data": "duplicates_name" },
 				{
 					"data": "status_name",
 					"orderable":      false,

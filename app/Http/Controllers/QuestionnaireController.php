@@ -35,7 +35,7 @@ class QuestionnaireController extends Controller
 		}
 
 
-		if(!$user->hasRole("expert")){
+		if(!$user->hasRole("expert") || !$user->new_form_status){
 			return redirect()->route('user.cabinet');
 		}
 		$project = Project::with(['base','category'])->find($base->project_id);

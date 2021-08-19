@@ -84,7 +84,9 @@
                                 <label for="city_id" class="col-sm-3 control-label ">Город</label>
                                 <div class="col-sm-9">
                                     <select class="form-control select2" name="city_id" id="city_id">
+                                        @if($user->city_model)
                                         <option value="{{$user->city_model->id}}" selected="selected">{{$user->city_model->name}}</option>
+                                        @endif
                                     </select>
                                 </div>
                             </div>

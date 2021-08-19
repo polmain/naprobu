@@ -27,12 +27,20 @@ class PhoneController extends Controller
 	}
 
     public function all_ajax(Request $request){
-        $filter = QueryBuilder::getFilter($request);
-        $phones = PhoneVerify::where($filter);
+        $isVerify = $request->has('is_verify');
+        if($isVerify){
+            $phones = PhoneVerify::where('status_name', PhoneStatusEnum::NOT_VERIFIED);
+        }else{
+            $phones = PhoneVerify::where([]);
+        }
+
 
         return datatables()->eloquent($phones)
             ->addColumn('status_name', function (PhoneVerify $phone) {
                 return PhoneStatusEnum::getInstance($phone->status)->isVerified()? 'Верифицированно' : 'Не верифицированно';
+            })
+            ->addColumn('duplicates_name', function (PhoneVerify $phone) {
+                return $phone->users->count();
             })
             ->addColumn('is_new_user_string', function (PhoneVerify $phone) {
                 return $phone->is_new_user? 'Новый' : 'Старый';

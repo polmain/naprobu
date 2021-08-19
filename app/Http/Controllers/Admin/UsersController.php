@@ -512,7 +512,7 @@ class UsersController extends Controller
 		$user->sex = $request->sex;
 
 		$user->birsday = $request->birsday;
-		if($request->has('city') && $request->has('region')){
+		if(!$request->has('county_id')){
             $user->city = $request->city;
             $user->region = $request->region;
         }else{

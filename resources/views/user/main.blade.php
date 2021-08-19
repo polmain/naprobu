@@ -74,13 +74,20 @@
                                 <div class="form-block">
                                     <div class="form-group ">
                                         <label for="country">@lang("registration.country")</label>
-                                        <select name="country_id" id="country_id" class="form-control select2">
+                                        <select name="country_id" id="country_id" class="form-control select2" required="required">
                                             @if(Auth::user()->country_model)
                                                 @if(App::getLocale() === 'ru')
                                                     <option value="{{Auth::user()->country_model->id}}" selected="selected">{{Auth::user()->country_model->name}}</option>
                                                 @else
                                                     <option value="{{Auth::user()->country_model->id}}" selected="selected">{{Auth::user()->country_model->translate->firstWhere('lang', App::getLocale())->name}}</option>
                                                 @endif
+                                            @endif
+                                            @if(!Auth::user()->country_model || $defaultCountry->id !== Auth::user()->country_model->id)
+                                                    @if(App::getLocale() === 'ru')
+                                                        <option value="{{$defaultCountry->id}}">{{$defaultCountry->name}}</option>
+                                                    @else
+                                                        <option value="{{$defaultCountry->id}}">{{$defaultCountry->translate->firstWhere('lang', App::getLocale())->name}}</option>
+                                                    @endif
                                             @endif
                                         </select>
                                     </div>
@@ -148,7 +155,7 @@
                                     </div>
                                     <div class="form-group ">
                                         <label for="phone">@lang("registration.phone")</label>
-                                        <input id="phone" type="tel" class="input-custom input-text form-control" name="phone_mask" required autofocus>
+                                        <input id="phone" type="tel" class="input-custom input-text form-control" name="phone_mask" required>
                                         <input id="phone-db" type="hidden" class="input-custom input-text form-control" name="phone" required value="{{Auth::user()->phone}}">
                                         <input type="text" class="hide-phone" style="display: none">
                                         <a href="#" id="myPhone" class="btn-orange" style="display: none">@lang("registration.myPhone")</a>
@@ -261,11 +268,11 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/utils.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/intlTelInput.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.js"></script>
-    <script>
-		$(document).ready(function () {
+    <script src="{{ asset ("/public/js/jquery.mask.js") }}" type="text/javascript"></script>
+    <script src="{{ asset ("/public/js/utils.js") }}" type="text/javascript"></script>
+    <script src="{{ asset ("/public/js/intlTelInput.js") }}" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
             var lang = "{{App::getLocale()}}";
             $('#country_id').select2({
                 placeholder: "{{trans('registration.country_select')}}",
@@ -291,7 +298,7 @@
 
             $('#region_id').select2({
                 placeholder: "{{trans('registration.region_select')}}",
-                tegs: true,
+                tegs: false,
                 minimumInputLength: 0,
                 ajax: {
                     url: '{!! route('region.find') !!}',
@@ -308,23 +315,23 @@
                             results: data
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
-            $('#region_id').change(function(e){
-                if($(this).val() == 'other'){
+            $('#region_id').change(function (e) {
+                if ($(this).val() == 'other') {
                     $('.new_region-group').show();
-                }else{
+                } else {
                     $('.new_region-group').hide();
                 }
             });
             $('#region_id').change();
 
-            $('#country_id').change(function (e){
-                if($(this).val() == 637){
+            $('#country_id').change(function (e) {
+                if ($(this).val() == 637) {
                     $('#nova_poshta_block').show();
-                }else{
+                } else {
                     $('#nova_poshta_block').hide();
                 }
             });
@@ -340,7 +347,7 @@
                         return {
                             name: params.term,
                             lang: lang,
-                            region_id: $('#region_id').val() ?? 0,
+                            region_id: $('#region_id').val() ? ('#region_id').val() : 0,
                             country_id: $('#country_id').val()
                         };
                     },
@@ -349,24 +356,26 @@
                             results: data
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
-            $('#city_id').change(function(e){
-                if($(this).val() == 'other'){
+            $('#city_id').change(function (e) {
+                if ($(this).val() == 'other') {
                     $('.new_city-group').show();
-                }else{
+                    $('#new_city').attr('required', 'required');
+                } else {
                     $('.new_city-group').hide();
+                    $('#new_city').removeAttr('required');
                 }
             });
             $('#city_id').change();
 
-            $.ajaxSetup({
+            /*$.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
-            });
+            });*/
             delete $.ajaxSettings.headers["X-CSRF-TOKEN"];
 
             $('#nova_poshta_city').select2({
@@ -377,11 +386,12 @@
                     dataType: 'json',
                     type: 'POST',
                     data: function (params) {
+                        delete $.ajaxSettings.headers["X-CSRF-TOKEN"];
                         var query = {
                             "modelName": "Address",
                             "calledMethod": "searchSettlements",
                             "methodProperties": {
-                                "CityName":params.term,
+                                "CityName": params.term,
                                 "Limit": 10
                             },
                             "apiKey": "561c40b8c8c50432066bc12cc25edefd"
@@ -391,10 +401,10 @@
 
                     processResults: function (data) {
                         var items = [];
-                        if(data.success){
+                        if (data.success) {
                             var cities = data.data[0].Addresses;
                             cities.forEach(function (e) {
-                                items.push({'id':e.DeliveryCity,'text':e.Present});
+                                items.push({'id': e.DeliveryCity, 'text': e.Present});
                             })
                         }
                         return {
@@ -405,7 +415,7 @@
                 },
             });
 
-            $('#nova_poshta_city').change(function(e){
+            $('#nova_poshta_city').change(function (e) {
                 var curOption = $("#nova_poshta_city option:selected");
                 $('input[name="nova_poshta_city_name"]').val(curOption.text());
 
@@ -418,24 +428,23 @@
                     },
                     "apiKey": "561c40b8c8c50432066bc12cc25edefd"
                 };
-                var data =  JSON.stringify(query);
+                var data = JSON.stringify(query);
 
                 $.ajax({
                     method: "POST",
                     url: "https://api.novaposhta.ua/v2.0/json/",
                     data: data,
                     dataType: 'json',
-                    success: function(resp)
-                    {
+                    success: function (resp) {
                         $('#nova_poshta_warehouse').html('');
 
-                        if(resp.success){
-                            resp.data.forEach(function(e){
-                                $('#nova_poshta_warehouse').append('<option val="'+e.Description+'">'+e.Description+'</option>');
+                        if (resp.success) {
+                            resp.data.forEach(function (e) {
+                                $('#nova_poshta_warehouse').append('<option val="' + e.Description + '">' + e.Description + '</option>');
                             });
                         }
                     },
-                    error:  function(xhr, str){
+                    error: function (xhr, str) {
                         console.log(xhr);
                     }
                 });
@@ -443,87 +452,89 @@
 
             $('#nova_poshta_warehouse').select2();
 
-            if($('#country_id').val() != 637){
+            if ($('#country_id').val() != 637) {
                 $('#nova_poshta_block').hide();
             }
 
-            $('#employment').change(function (){
-                if($(this).val() == "{{\App\Entity\EmploymentEnum::WORK}}"){
+            $('#employment').change(function () {
+                if ($(this).val() == "{{\App\Entity\EmploymentEnum::WORK}}") {
                     $('#work-group').show();
-                }else{
+                } else {
                     $('#work-group').hide();
                 }
             });
 
             $('#employment').change();
 
-            $('#hobbies_other_checkbox').change(function (e){
-                if($(this).is(':checked')){
+            $('#hobbies_other_checkbox').change(function (e) {
+                if ($(this).is(':checked')) {
                     $('#hobbies_other-group').show();
-                }else{
+                } else {
                     $('#hobbies_other-group').hide();
                 }
             });
 
             $('#hobbies_other_checkbox').change();
-		});
 
-		/* INITIALIZE BOTH INPUTS WITH THE intlTelInput FEATURE*/
+            /* INITIALIZE BOTH INPUTS WITH THE intlTelInput FEATURE*/
 
-        var telInput = $("#phone,.hide-phone").intlTelInput({
-            initialCountry: "ua",
-            preferredCountries: ["ua"],
-            separateDialCode: true,
-            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/utils.js",
-        });
-
-        $("#phone").intlTelInput('setNumber',"{{Auth::user()->phone}}");
-        /* ADD A MASK IN PHONE1 INPUT (when document ready and when changing flag) FOR A BETTER USER EXPERIENCE */
-
-
-
-        $(document).ready(function () {
-            var mask1 = $("#phone").attr('placeholder').replace(/[0-9]/g, 0);
-            $('input[type="tel"]').mask(mask1)
-        });
-
-        $("#phone").on("countrychange", function (e, countryData) {
-            $(".hide-phone").intlTelInput('setCountry',countryData.iso2);
-            $(this).val('');
-            var placeholder = $(".hide-phone").attr('placeholder');
-            var mask1 = placeholder.replace(/[0-9]/g, 0);
-            $(this).unmask();
-            $(this).mask(mask1);
-            $(this).attr('placeholder',placeholder);
-        });
-
-        $("#phone").change(function () {
-            var phone = $("#phone").intlTelInput('getNumber');
-            $("#phone-db").val(phone);
-        });
-
-        $(".hide-phone").parent().hide();
-
-        $('#myPhone').click(function (e){
-            e.preventDefault();
-
-            $.ajax({
-                method: "POST",
-                url: "/validate-phone/",
-                data: {
-                    'phone': $("#phone-db").val()
-                },
-                success: function(resp)
-                {
-                    if(resp == 'ok'){
-                        $('#validate_phone_sends').modal('show');
-                    }
-                },
-                error:  function(xhr, str){
-                    console.log(xhr);
-                }
+            var telInput = $("#phone,.hide-phone").intlTelInput({
+                initialCountry: "ua",
+                preferredCountries: ["ua"],
+                separateDialCode: true,
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/js/utils.js",
             });
-        })
+
+            $("#phone").intlTelInput('setNumber', "{{Auth::user()->phone}}");
+            /* ADD A MASK IN PHONE1 INPUT (when document ready and when changing flag) FOR A BETTER USER EXPERIENCE */
+
+            $("#phone").on("countrychange", function (e, countryData) {
+                $(".hide-phone").intlTelInput('setCountry', countryData.iso2);
+                $(this).val('');
+                var placeholder = $(".hide-phone").attr('placeholder');
+                if(placeholder){
+                    var mask1 = placeholder.replace(/[0-9]/g, 0);
+                    $(this).mask(mask1);
+                }
+
+                $(this).unmask();
+                $(this).attr('placeholder', placeholder);
+            });
+
+            $("#phone").keyup(function () {
+                var phone = $("#phone").intlTelInput('getNumber');
+                $("#phone-db").val(phone);
+            });
+
+            $(".hide-phone").parent().hide();
+
+            $('#myPhone').click(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    method: "POST",
+                    url: "/validate-phone/",
+                    data: {
+                        'phone': $("#phone-db").val()
+                    },
+                    success: function (resp) {
+                        if (resp == 'ok') {
+                            $('#validate_phone_sends').modal('show');
+                        }
+                    },
+                    error: function (xhr, str) {
+                        console.log(xhr);
+                    }
+                });
+            })
+
+            var placeholder = $("#phone").attr('placeholder');
+            if(placeholder){
+                var mask1 = placeholder.replace(/[0-9]/g, 0);
+                $('input[type="tel"]').mask(mask1)
+            }
+
+        });
     </script>
 @endsection
 

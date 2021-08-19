@@ -17,7 +17,8 @@ class GeoController extends Controller
 
         $countries = Country::where('lang',$locale)
             ->where('name','like',"%".$name."%")
-            ->limit(5)
+            ->orderBy('name')
+            ->limit(50)
             ->get();
 
         $formatted_countries = [];
@@ -43,7 +44,8 @@ class GeoController extends Controller
 
         $regions = $regions->where('name','like',"%".$name."%")
             ->where('is_verify',true)
-            ->limit(20)
+            ->orderBy('name')
+            ->limit(50)
             ->get();
 
         $formatted_regions = [];
@@ -72,7 +74,8 @@ class GeoController extends Controller
 
         $cities = $cities->where('name','like',"%".$name."%")
             ->where('is_verify',true)
-            ->limit(20)
+            ->orderBy('name')
+            ->limit(50)
             ->get();
 
         $formatted_cities = [];

@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     {!! SEO::generate() !!}
-
     <meta content="{{csrf_token()}}" name="csrf-token">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <link rel="shortcut icon" href="{{{ asset('public/favicon.ico') }}}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/css/intlTelInput.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.14/css/intlTelInput.css" rel="stylesheet"  type="text/css" />
     <link href="{{ asset("/public/css/app.min.css")}}?v=1.2.2" rel="stylesheet" type="text/css" />
 
     <!--[if lt IE 9]>
@@ -185,6 +184,7 @@
             </div>
         </div>
     </div>
+    {{--
     <div class="modal fade modal-auth" id="registration" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -251,13 +251,13 @@
                                 <a class="auth-social auth-instagram" href="/login/instagram/"><img src="{{asset('public/svg/icons/instagram_white.svg')}}" alt="Instagram Logo"></a>
                             </div>
                             --}}
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    {{--</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+--}}
     <div id="adriver_banner_361480379"></div>
     <script type="text/javascript">
 		new adriver("adriver_banner_361480379", {sid:222433, bt:52, bn:9});
@@ -425,9 +425,8 @@
             link: '@lang('global.purecookieLink')',
             button: "@lang('global.purecookieButton')",
         };
-
     </script>
-    <script src="{{ asset ("/public/js/app.min.js") }}?v=1.2.5" type="text/javascript"></script>
+    <script src="{{ asset ("/public/js/app.min.js") }}?v=1.2.6" type="text/javascript"></script>
 @yield('scripts')
 </body>
 </html>

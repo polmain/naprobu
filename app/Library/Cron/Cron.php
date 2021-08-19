@@ -16,6 +16,7 @@ use App\Model\User\UserRatingHistory;
 use App\Model\User\UserRatingStatus;
 use App\Model\User\Viber;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\User\NewPassword;
@@ -183,52 +184,50 @@ class Cron
 
 		$users = User::where([
 			['id','>',$queue->start],
-			['id','<=',$queue->start + 50],
+			['id','<=',$queue->start + 1000],
 			['status_id','<>',5],
-			['isNewsletter',1],
 		])->get();
 
 		$lastUser = User::where([
             ['status_id','<>',5],
-            ['isNewsletter',1],
         ])->orderBy('id','DESC')->first();
-		if($lastUser && $queue->start + 50 > $lastUser->id){
+		if($lastUser && $queue->start + 1000 > $lastUser->id){
 			$queue->delete();
 		}else{
-			$queue->start += 50;
+			$queue->start += 1000;
 			$queue->save();
 		}
+        $end_registration_time = Carbon::parse($project->end_registration_time)->format('H:i d.m.Y');
 		foreach ($users as $user)
 		{
-			$data['email'] = $user->email;
-			$validator = Validator::make($data, [
-				'email' => 'required|email',
-			]);
-			if($validator && (strripos($user->email,'@') !== false) )
-			{
-				$link = "ru/projects/" . $project->url . '/';
-				$projectName = $project->name;
-				if ($user->lang !== "ru")
-				{
-                    $projectTranslate = $project->translate->firstWhere('lang', $user->lang);
-                    if($projectTranslate){
-                        $link = ($user->lang === "ua"?'':'/'.$user->lang)."projects/" . $projectTranslate->url . '/';
-                        $projectName = $projectTranslate->name;
-                    }
-				}
-				Notification::send('project_start_register', $user, 1, $link, ['project' => $projectName]);
+            $link = "ru/projects/" . $project->url . '/';
+            $projectName = $project->name;
+            if ($user->lang !== "ru")
+            {
+                $projectTranslate = $project->translate->firstWhere('lang', $user->lang);
+                if($projectTranslate){
+                    $link = ($user->lang === "ua"?'':'/'.$user->lang)."projects/" . $projectTranslate->url . '/';
+                    $projectName = $projectTranslate->name;
+                }
+            }
+            Notification::send('project_start_register', $user, 1, $link, ['project' => $projectName]);
 
-				if (isset($user->email) && $user->isNewsletter)
-				{
-                    try {
-                        Mail::to($user)->send(new UserNotificationMail($user, 'project_start_register', url('/') . $link, ['project' => $projectName, 'end_registration_time' => Carbon::parse($project->end_registration_time)->format('H:i d.m.Y')]));
-                    }catch (Throwable $exception)
-                    {
+            $data['email'] = $user->email;
+            $validator = Validator::make($data, [
+                'email' => 'required|email',
+            ]);
 
-                    }
-				}
-			}
+            if ($user->isNewsletter && $validator && (strripos($user->email,'@') !== false))
+            {
+                try {
+                    Mail::to($user)->send(new UserNotificationMail($user, 'project_start_register', url('/') . $link, ['project' => $projectName, 'end_registration_time' => $end_registration_time]));
+                }catch (Throwable $exception)
+                {
+                    Log::warning($exception->getMessage());
+                }
+            }
 		}
+        Log::warning('end action');
 	}
 
 	public static function queueProjectMembership($queue){
@@ -488,6 +487,7 @@ class Cron
 		foreach ($users as $user){
 		    if($user->phone){
                 Viber::create([
+                    'user_id' => $user->id,
                     'phone' => $user->phone,
                     'first_name'  => $user->first_name,
                     'last_name' => $user->last_name,

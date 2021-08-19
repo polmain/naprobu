@@ -87,7 +87,7 @@ class MainController extends Controller
 							$review->where('type_id',1);
 						})->count();
 
-		$expert_count = User::with(['roles'])->whereHas('roles', function($q) {
+		$expert_count = User::withTrashed()->with(['roles'])->whereHas('roles', function($q) {
 								$q->where('name', 'expert');
 							})->count();
 

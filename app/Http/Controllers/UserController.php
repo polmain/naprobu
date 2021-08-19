@@ -43,11 +43,13 @@ class UserController extends Controller
 
 	public function index(Request $request){
 		$user = Auth::user();
+
 		$userLikes = ReviewLike::with(['review'])->whereHas('review',function ($review) use ($user){
 			$review->where('user_id',$user->id);
 		})->count();
 		$ratingStatuses = UserRatingStatus::with(['translate'])->where('lang','ru')->get();
 
+		$defaultCountry = App\Model\Geo\Country::find(637);
         $educationArray = EducationEnum::values();
         $employmentArray = EmploymentEnum::values();
         $workArray = WorkEnum::values();
@@ -83,7 +85,8 @@ class UserController extends Controller
             'workArray'	=> $workArray,
             'familyStatusArray'	=> $familyStatusArray,
             'materialConditionArray'	=> $materialConditionArray,
-            'hobbiesArray'	=> $hobbiesArray
+            'hobbiesArray'	=> $hobbiesArray,
+            'defaultCountry'	=> $defaultCountry
 		]);
 	}
 
@@ -455,7 +458,7 @@ class UserController extends Controller
 		$country_id = $request->country_id;
         $user->country_id = $country_id;
 
-        $region_id = $request->region_id;
+        $region_id = $request->region_id !== 'other' ? $request->region_id : null;
 		if($request->new_region != ""){
             $region = new Region();
             $region->name = $request->new_region;
@@ -482,7 +485,7 @@ class UserController extends Controller
 
             $city_id = $city->id;
         }
-		$user->city_id = $city_id;
+        $user->city_id = $city_id;
 
 		$user->name = $request->name;
 		$user->phone = $request->phone;

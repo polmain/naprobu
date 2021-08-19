@@ -97,7 +97,7 @@ class ExpertRegisterController extends Controller
         $country_id = $request->country_id;
         $user->country_id = $country_id;
 
-        $region_id = $request->region_id;
+        $region_id = $request->region_id !== 'other' ? $request->region_id : null;
         if($request->new_region != ""){
             $region = new Region();
             $region->name = $request->new_region;

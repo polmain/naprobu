@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Viber extends Model
 {
 	protected $fillable = [
-        'first_name', 'last_name', 'nickname', 'email', 'lang', 'phone'
+        'user_id', 'first_name', 'last_name', 'nickname', 'email', 'lang', 'phone'
 	];
 
 	/**

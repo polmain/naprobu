@@ -41,7 +41,7 @@
             const googleTranslateConfig = {
                 lang: "ru",
             };
-            TranslateSetCookie("{{strtolower(Request::hasCookie('project_lang'))}}")
+            TranslateSetCookie("{{strtolower(Cookie::get('project_lang'))}}")
 
             function TranslateInit() {
                 // Инициализируем виджет с языком по умолчанию

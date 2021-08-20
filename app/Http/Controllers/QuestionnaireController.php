@@ -151,7 +151,7 @@ class QuestionnaireController extends Controller
 	    $user = Auth::user();
 
 	    if(!$user){
-	        $user = new User([
+	        $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,

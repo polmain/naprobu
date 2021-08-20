@@ -15,6 +15,7 @@ use App\Model\Questionnaire\Answer;
 use App\User;
 use App\Library\Users\UserRating;
 use App\Mail\BrifNotificationMail;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use SEO;
 use SEOMeta;
@@ -35,12 +36,12 @@ class QuestionnaireController extends Controller
 		}
 
 
-		if(!$user->hasRole("expert") || !$user->new_form_status){
+		if($user && (!$user->hasRole("expert") || !$user->new_form_status)){
 			return redirect()->route('user.cabinet');
 		}
 		$project = Project::with(['base','category'])->find($base->project_id);
 		$projectRequest = ProjectRequest::where([
-				['user_id',$user->id],
+				['user_id',$user ? $user->id : 0],
 				['project_id',$base->project_id],
 			])->first();
 
@@ -147,9 +148,37 @@ class QuestionnaireController extends Controller
 	}
 
 	public function questionnaireSend(Request $request, $questionnaire_id){
-		$user_id = Auth::user()->id;
+	    $user = Auth::user();
 
-		if(!Auth::user()->hasRole("expert")){
+	    if(!$user){
+	        $user = new User([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'lang' => $request->lang,
+                'password' => Hash::make($request->password),
+                'status_id' => 1,
+                'current_rating' => 0,
+                'rang_id' => 1,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'patronymic' => $request->patronymic,
+                'sex' => $request->sex,
+                'new_form_status' => 1,
+            ]);
+
+            UserRating::addAction('register',$user);
+            UserRating::addAction('email',$user);
+
+            $user->makeExployee('expert');
+
+            Auth::login($user, true);
+        }
+
+
+		$user_id = $user->id;
+
+		if(!$user->hasRole("expert")){
 			$responce = [
 				'status' => 'error',
 				'text' => trans('questionnaire.not_allow'),
@@ -210,14 +239,14 @@ class QuestionnaireController extends Controller
 			$projectRequest->status_id = 9;
 			$projectRequest->save();
 
-			UserRating::addAction('send_report',Auth::user());
+			UserRating::addAction('send_report',$user);
 
 		}elseif ($projectRequestStatus == 9){
 
 			$projectRequest->status_id = 11;
 			$projectRequest->save();
 
-			UserRating::addAction('send_report',Auth::user());
+			UserRating::addAction('send_report',$user);
 		}
 
 		foreach ($questions as $question){

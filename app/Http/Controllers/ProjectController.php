@@ -184,9 +184,13 @@ class ProjectController extends Controller
 	}
 
 	public function index(Request $request,$url){
+
         if($url === 'libero-touch'){
             return redirect('https://liberoam.naprobu.ua/');
+        }elseif($url === 'optimeal-vse-dlya-zdorovogo-rostu-vashih-ulyublenciv'){
+            return redirect('http://erotex.tilda.ws/page20965902.html');
         }
+
         $international = $request->get('international');
 
         $audience = ProjectAudienceEnum::getInstance(ProjectAudienceEnum::UKRAINE);

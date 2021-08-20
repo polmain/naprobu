@@ -28,4 +28,7 @@ return [
 	'thank_you_regiter_message' 	=> 'Our moderators will check your profile, if no errors are found, you will be admitted to the selection for the project',
 	'thank_you_report_header' 		=> 'Thank you for filling out the report',
 	'thank_you_report_message'	 	=> 'Thank you for participating in the project!',
+
+
+    'not_registration_text'	 	=> 'You are not registered, fill out the form below.',
 ];

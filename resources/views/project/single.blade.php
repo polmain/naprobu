@@ -84,29 +84,24 @@
                     </div>
 
                 </div>
+                @if($base->status_id == 2 && empty($projectRequest) && $base->questionnaires->where('type_id',2)->first())
+                    <a href="{{route('project.questionnaire',['id'=>$base->questionnaires->where('type_id',2)->first()->id??1])}}" class=" d-none d-lg-block questionnaite-link project-sidebar-link">@lang('project.register_project')</a>
+                @endif
                 @auth()
-                    @if($base->status_id == 2 && empty($projectRequest) && $base->questionnaires->where('type_id',2)->first())
-                        <a href="{{route('project.questionnaire',['id'=>$base->questionnaires->where('type_id',2)->first()->id??1])}}" class="questionnaite-link project-sidebar-link">@lang('project.register_project')</a>
-                    @endif
-
                     @if($base->status_id == 5 && isset($projectRequest) && $base->questionnaires->where('type_id',3)->first())
                         @if($projectRequest->status_id == 7)
-                            <a href="{{route('project.questionnaire',['id'=>$base->questionnaires->where('type_id',3)->first()->id??1])}}" class="questionnaite-link project-sidebar-link">@lang('project.write_report')</a>
+                            <a href="{{route('project.questionnaire',['id'=>$base->questionnaires->where('type_id',3)->first()->id??1])}}" class=" d-none d-lg-block questionnaite-link project-sidebar-link">@lang('project.write_report')</a>
                         @endif
                     @endif
                     @if(isset($projectRequest) && $base->questionnaires->where('type_id',4)->first())
 
                         @if($projectRequest->status_id == 9)
-                            <a href="{{route('project.questionnaire',['id'=>$base->questionnaires->where('type_id',4)->first()->id??1])}}" class="questionnaite-link project-sidebar-link">@lang('project.write_post_report')</a>
+                            <a href="{{route('project.questionnaire',['id'=>$base->questionnaires->where('type_id',4)->first()->id??1])}}" class="d-none d-lg-block questionnaite-link project-sidebar-link">@lang('project.write_post_report')</a>
                         @endif
                     @endif
                 @else
-                    @if($base->status_id == 2 && $base->questionnaires->where('type_id',2)->first())
-                        <a href="#" class="questionnaite-link project-sidebar-link"  data-toggle="modal" data-target="#login">@lang('project.register_project')</a>
-                    @endif
-
                     @if($base->status_id == 5 && $base->questionnaires->where('type_id',3)->first())
-                        <a href="#" class="questionnaite-link project-sidebar-link"  data-toggle="modal" data-target="#login">@lang('project.write_report')</a>
+                        <a href="#" class=" d-none d-lg-block questionnaite-link project-sidebar-link"  data-toggle="modal" data-target="#login">@lang('project.write_report')</a>
                     @endif
                 @endauth
             </div>
@@ -174,11 +169,11 @@
                     </div>
 
                 </div>
-                @auth()
+
                     @if($base->status_id == 2 && empty($projectRequest) && $base->questionnaires->where('type_id',2)->first())
                         <a href="{{route('project.questionnaire',['id'=>$base->questionnaires->where('type_id',2)->first()->id??1])}}" class=" d-none d-lg-block questionnaite-link project-sidebar-link">@lang('project.register_project')</a>
                     @endif
-
+                @auth()
                     @if($base->status_id == 5 && isset($projectRequest) && $base->questionnaires->where('type_id',3)->first())
                         @if($projectRequest->status_id == 7)
                         <a href="{{route('project.questionnaire',['id'=>$base->questionnaires->where('type_id',3)->first()->id??1])}}" class=" d-none d-lg-block questionnaite-link project-sidebar-link">@lang('project.write_report')</a>
@@ -191,10 +186,6 @@
                         @endif
                     @endif
                 @else
-                    @if($base->status_id == 2 && $base->questionnaires->where('type_id',2)->first())
-                        <a href="#" class=" d-none d-lg-block questionnaite-link project-sidebar-link"  data-toggle="modal" data-target="#login">@lang('project.register_project')</a>
-                    @endif
-
                     @if($base->status_id == 5 && $base->questionnaires->where('type_id',3)->first())
                         <a href="#" class=" d-none d-lg-block questionnaite-link project-sidebar-link"  data-toggle="modal" data-target="#login">@lang('project.write_report')</a>
                     @endif

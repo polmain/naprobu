@@ -519,6 +519,10 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
             Route::get('/projects/{url}/','ProjectController@lavel2')->name('project.level2');
             Route::get('/projects/{project_url}/{subpage}/','ProjectController@subpage')->where(['project_url' => '^((?!questionnaire).)*'])->name('project.subpage');
 
+            Route::get('/projects/questionnaire/{id}/','QuestionnaireController@questionnaire')->name('project.questionnaire');
+            Route::post('/project/questionnaire/{id}/','QuestionnaireController@questionnaireSend')->name('project.questionnaire.send');
+
+
             Route::get('/reviews/','ReviewController@all')->name('review');
             Route::get('/reviews/{url}/','ReviewController@lavel2')->name('review.level2');
 
@@ -539,13 +543,14 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
             Route::get('/cities/find/', 'GeoController@cityFind')->name('city.find');
 
             Route::group(['middleware'=>'auth'],function(){
-                Route::get('/projects/questionnaire/{id}/','QuestionnaireController@questionnaire')->name('project.questionnaire');
+
+
+                Route::get('/thank-you-registration/','QuestionnaireController@thank_regiter')->name('project.questionnaire.thank.regiter');
+                Route::get('/thank-you-write-report/','QuestionnaireController@thank_report')->name('project.questionnaire.thank.report');
 
                 Route::group(['middleware'=>'role:expert'],function(){
 
-                    Route::post('/project/questionnaire/{id}/','QuestionnaireController@questionnaireSend')->name('project.questionnaire.send');
-                    Route::get('/thank-you-registration/','QuestionnaireController@thank_regiter')->name('project.questionnaire.thank.regiter');
-                    Route::get('/thank-you-write-report/','QuestionnaireController@thank_report')->name('project.questionnaire.thank.report');
+
                 });
                 Route::group(['middleware'=>'role:bloger'],function(){
 

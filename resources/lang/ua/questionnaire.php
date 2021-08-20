@@ -28,4 +28,6 @@ return [
 	'thank_you_report_header' 		=> 'Дякуємо за заповнення звіту',
 	'thank_you_report_message'	 	=> 'Дякуємо за участь у проекті!',
 
+
+    'not_registration_text'	 	=> 'Ви не зареєстровані, заповніть форму нижче.',
 ];

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Mail;
 use SEO;
 use SEOMeta;
 use OpenGraph;
+use Cookie;
 
 class QuestionnaireController extends Controller
 {
@@ -199,6 +200,13 @@ class QuestionnaireController extends Controller
 			['user_id',$user_id],
 			['project_id',$questionnaire->project_id],
 		])->first();
+
+		$project = $questionnaire->project;
+
+		if($project->audience->isWord()){
+            Cookie::queue('project_lang',$project->country->getCode(), 10080);
+        }
+
 		if($questionnaire->type_id == 2){
 			if(isset($projectRequest)){
 				$responce = [

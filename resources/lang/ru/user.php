@@ -45,4 +45,11 @@ return [
 	'add_social_network_to_user'	=> 'Привяжи социальную сеть и входи в один клик',
 	'get_notification_to_email'		=> 'Получать рассылку на электронный адрес',
 	'setting_submit'				=> 'Сохранить изменения',
+
+    // оплата
+    'payment_type'          => 'Выберите способ оплаты',
+    'payment_type_mobile'   => 'Пополнение мобильного',
+    'payment_type_card'     => 'Перевод на карту',
+
+    'payment_card_number'   => 'Номер вашей карты'
 ];

@@ -217,7 +217,7 @@ class Cron
                 'email' => 'required|email',
             ]);
 
-            if ($user->isNewsletter && $validator && (strripos($user->email,'@') !== false))
+            if ($user->isNewsletter && (strripos($user->email,'@') !== false))
             {
                 try {
                     Mail::to($user)->send(new UserNotificationMail($user, 'project_start_register', url('/') . $link, ['project' => $projectName, 'end_registration_time' => $end_registration_time]));

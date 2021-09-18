@@ -36,11 +36,15 @@ class QuestionnaireController extends Controller
 			abort(404);
 		}
 
+        $project = Project::with(['base','category'])->find($base->project_id);
+		if(!$project->audience->isWord() && !$user){
+		    return redirect()->route('registration');
+        }
 
 		if($user && (!$user->hasRole("expert") || !$user->new_form_status)){
 			return redirect()->route('user.cabinet');
 		}
-		$project = Project::with(['base','category'])->find($base->project_id);
+
 		$projectRequest = ProjectRequest::where([
 				['user_id',$user ? $user->id : 0],
 				['project_id',$base->project_id],

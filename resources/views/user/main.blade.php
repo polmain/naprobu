@@ -499,6 +499,7 @@
 
             $('#payment_type').change();
 
+            $('#card_number').mask('0000 0000 0000 0000');
             /* INITIALIZE BOTH INPUTS WITH THE intlTelInput FEATURE*/
 
             var telInput = $("#phone,.hide-phone").intlTelInput({

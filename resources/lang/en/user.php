@@ -45,4 +45,11 @@ return [
 	'add_social_network_to_user'	=> 'Link a social network and enter in one click',
 	'get_notification_to_email'		=> 'Receive newsletters by email',
 	'setting_submit'				=> 'Save changes',
+
+    // оплата
+    'payment_type'          => 'Select a Payment Method',
+    'payment_type_mobile'   => 'Mobile top-up',
+    'payment_type_card'     => 'Transfer to card',
+
+    'payment_card_number'   => 'Your card number'
 ];

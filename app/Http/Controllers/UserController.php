@@ -511,6 +511,11 @@ class UserController extends Controller
         $user->hobbies = $request->hobbies;
         $user->hobbies_other = $request->hobbies_other;
 
+        if($request->payment_type === 'card'){
+            $user->card_number = $request->card_number;
+        }
+        $user->payment_type = $request->payment_type;
+
         if(EmploymentEnum::getInstance($request->employment)->isWork()){
             $user->work = $request->work;
         }else{

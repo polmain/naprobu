@@ -163,6 +163,10 @@
                 <div class="box-body">
                     <p><strong>Город НП:</strong> {{$user->nova_poshta_city}}</p>
                     <p><strong>Отделение НП:</strong> {{$user->nova_poshta_warehouse}}</p>
+                    <p><strong>Метод оплаты:</strong> @lang("user.payment_type_".$user->payment_type)</p>
+                    @if($user->payment_type === 'card')
+                        <p><strong>Номер карты:</strong> {{$user->card_number}}</p>
+                    @endif
                     @if($user->education)
                     <p><strong>Образование:</strong> @lang("education.".$user->education)</p>
                     @endif

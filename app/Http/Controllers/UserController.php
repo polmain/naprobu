@@ -9,6 +9,7 @@ use App\Entity\EmploymentEnum;
 use App\Entity\FamilyStatusEnum;
 use App\Entity\HobbiesEnum;
 use App\Entity\MaterialConditionEnum;
+use App\Entity\PaymentEnum;
 use App\Entity\WorkEnum;
 use App\Model\Geo\City;
 use App\Model\Geo\Region;
@@ -56,6 +57,7 @@ class UserController extends Controller
         $familyStatusArray = FamilyStatusEnum::values();
         $materialConditionArray = MaterialConditionEnum::values();
         $hobbiesArray = HobbiesEnum::values();
+        $paymentsArray = PaymentEnum::values();
 
 		$locale = App::getLocale();
 		$title = str_replace(':user_name:',$user->name, \App\Model\Setting::where([['name','user_main_title'],['lang',$locale]])->first()->value);
@@ -86,6 +88,7 @@ class UserController extends Controller
             'familyStatusArray'	=> $familyStatusArray,
             'materialConditionArray'	=> $materialConditionArray,
             'hobbiesArray'	=> $hobbiesArray,
+            'paymentsArray'	=> $paymentsArray,
             'defaultCountry'	=> $defaultCountry
 		]);
 	}

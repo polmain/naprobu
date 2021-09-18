@@ -216,6 +216,19 @@
                                     <input id="hobbies_other" type="text" class="form-control" name="hobbies_other" placeholder="@lang("hobbies.other")" value="{{Auth::user()->hobbies_other}}">
                                 </div>
                             </div>
+                            <div class="form-block">
+                                <div class="form-group">
+                                    <label for="payment_type">@lang("user.payment_type")</label>
+                                    <select name="payment_type" id="payment_type" class="form-control">
+                                        @foreach($paymentsArray as $paymentType)
+                                            <option value="{{$paymentType}}" @if($paymentType->getValue() === Auth::user()->payment_type)selected="selected" @endif>@lang("user.payment_type_".$paymentType)</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group" id="card_number-group">
+                                    <input id="card_number" type="text" class="form-control" name="card_number" placeholder="@lang("user.payment_card_number")" value="{{Auth::user()->card_number}}">
+                                </div>
+                            </div>
                                 <div class="form-group ">
                                     <input id="expert-password" type="password" class="form-control" name="password" autocomplete="off" placeholder="@lang("registration.password")">
                                 </div>
@@ -475,6 +488,16 @@
             });
 
             $('#hobbies_other_checkbox').change();
+
+            $('#payment_type').change(function () {
+                if ($(this).val() == "{{\App\Entity\PaymentEnum::CARD}}") {
+                    $('#card_number-group').show();
+                } else {
+                    $('#card_number-group').hide();
+                }
+            });
+
+            $('#payment_type').change();
 
             /* INITIALIZE BOTH INPUTS WITH THE intlTelInput FEATURE*/
 

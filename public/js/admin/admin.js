@@ -836,6 +836,24 @@ function deleteUsers() {
 
 /* End Users page */
 
+/* Users restore */
+
+function restoreUser(id) {
+	$('#modal-warning').find(".modal-title").text("Подтвердите востановление");
+	$('#modal-warning').find(".modal-body").html("<p>Вы уверены что хотите востановить пользователя?</p>");
+	$('#modal-warning').find("#success").attr('onclick','deleteAjax("/admin/users/restore/'+id+'/")');
+	$('#modal-warning').modal('show');
+}
+
+function restoreUsers() {
+	$('#modal-warning').find(".modal-title").text("Подтвердите востановление");
+	$('#modal-warning').find(".modal-body").html("<p>Вы уверены что хотите востановить пользователей?</p>");
+	$('#modal-warning').find("#success").attr('onclick','groupAjax("/admin/users/restore/--id--/")');
+	$('#modal-warning').modal('show');
+}
+
+/* End Users restore */
+
 /* Users page */
 
 function deleteBlogger(id) {

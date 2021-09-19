@@ -290,6 +290,7 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
 		Route::get('/users/history/{user_id}/', 'Admin\Settings\UserRatingController@ajax_history')->name('adm_users_history');
 		Route::get('/users/edit/{user_id}/', 'Admin\UsersController@edit')->name('adm_users_edit');
         Route::get('/users/delete/{user_id}/', 'Admin\UsersController@delete');
+        Route::get('/users/restore/{user_id}/', 'Admin\UsersController@restore');
         Route::get('/users/notification-send', 'Admin\UsersController@notificationSend')->name('adm_users_notification_send');
 
 		Route::get('/users/statuses-log/', 'Admin\UsersController@statusesLog')->name('adm_users_statuses_log');

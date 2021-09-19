@@ -583,6 +583,13 @@ class UsersController extends Controller
 		return "ok";
 	}
 
+	public function restore($user_id){
+        $user = User::withTrashed()->find($user_id);
+        $user->restore();
+
+        return "ok";
+    }
+
 	public function hide($user_id){
 		$user = User::find($user_id);
 		$user->isHide = true;

@@ -14,7 +14,11 @@
 				<div class="box-footer">
 					<button type="button" class="btn btn-primary check_all">Отметить все</button>
 					<div class="inline">С выбранными:
-						<button class="btn btn-danger" onclick="deleteUsers()">Удалить</button>
+                        @if(!isset($isArchive))
+                            <button class="btn btn-danger" onclick="deleteUsers()">Удалить</button>
+                        @else
+                            <button class="btn btn-success" onclick="restoreUsers()">Востановить</button>
+                        @endif
 					</div>
 					<a href="{{route('adm_users_new')}}" class="btn btn-primary pull-right">Добавить пользователя</a>
 				</div>
@@ -55,7 +59,11 @@
                 <div class="box-footer">
 					<button type="button" class="btn btn-primary check_all">Отметить все</button>
 					<div class="inline">С выбранными:
+                        @if(!isset($isArchive))
 						<button class="btn btn-danger" onclick="deleteUsers()">Удалить</button>
+                        @else
+                        <button class="btn btn-success" onclick="restoreUsers()">Востановить</button>
+                        @endif
 					</div>
                     <a href="{{route('adm_users_new')}}" class="btn btn-primary pull-right">Добавить пользователя</a>
                 </div><!-- /.box-footer-->
@@ -478,6 +486,7 @@
 				{
 					"data": "current_rating",
 				},
+                @if(!isset($isArchive))
 				{
 					"className":      'text-center',
 					data: null,
@@ -487,6 +496,17 @@
 					searchable: false,
 					"orderable":      false,
 				}
+				@else
+				{
+					"className":      'text-center',
+					data: null,
+					render: function ( data, type, row ) {
+						    return '<button class="btn btn-success restore-ajax" id="restore-'+row.id+'" onclick="restoreUser('+row.id+')">Востановить</button>';
+					},
+					searchable: false,
+					"orderable":      false,
+				}
+				@endif
 			],
 			"fnDrawCallback": afterDrawTabel
 		});

@@ -41,6 +41,7 @@
                             <th>Пользователь</th>
                             <th>Проект</th>
                             <th>Отзыв</th>
+                            <th></th>
                             <th>Статус</th>
 							<th width="20"></th>
                         </tr>
@@ -122,6 +123,19 @@
 					},
 					"orderable":      false,
 				},
+                {
+                    "className":      'text-center',
+                    "orderable":      false,
+                    "data":           'id',
+                    render: function ( data, type, row ) {
+                        /*return '<label>\n' +
+                            '     <input type="checkbox" class="minimal-red checkbox-item" id="isMainReview-'+row.id+'"  value="true" '+((data == 1)?'checked':'')+' disabled="disabled">\n' +
+                            '</label>';*/
+
+                        return '<a href="{{route('review')}}'+row.review_id+'" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>';
+                    },
+                    searchable: false
+                },
 				{
 					"data": "status",
 					"orderable":      false,
@@ -149,7 +163,7 @@
 			],
 			"fnDrawCallback": afterDrawTabel,
 			initComplete: function () {
-				this.api().columns([6]).every(function () {
+				this.api().columns([7]).every(function () {
 					var column = this;
 					var select = $('<select><option value=""></option></select>')
 						.appendTo($(column.header()))

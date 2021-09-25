@@ -234,7 +234,7 @@
             initComplete: function () {
                 this.api().columns([6]).every(function () {
                     var column = this;
-                    var select = $('<select id="project_filter"><option value=""></option></select>')
+                    var select = $('<select id="project_filter" width="200"><option value=""></option></select>')
                         .appendTo($(column.header()))
                         .bind('keyup change', function () {
                             column.search($(this).val()).draw();

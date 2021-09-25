@@ -232,7 +232,7 @@
 			],
 			"fnDrawCallback": afterDrawTabel,
             initComplete: function () {
-                this.api().columns([7]).every(function () {
+                this.api().columns([6]).every(function () {
                     var column = this;
                     var select = $('<select><option value=""></option></select>')
                         .appendTo($(column.header()))

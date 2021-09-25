@@ -42,7 +42,7 @@
                             <th>Заголовок</th>
                             <th>Тескт</th>
                             <th>Пользователь</th>
-                            <th width="200" style="max-width: 100%">Проект</th>
+                            <th width="200">Проект</th>
                             <th>Страница</th>
                             <th>Статус</th>
                             <th></th>
@@ -131,6 +131,7 @@
 					"orderable":      false,
 				},
 				{
+                    "className": 'max-width-column-200',
 					data: 'project',
 					name: 'project',
 					"orderable":      false,

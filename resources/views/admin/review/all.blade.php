@@ -241,7 +241,7 @@
                         } );
                     @foreach($projects as $project)
                     select.append('<option value="{{$project->name}}">{{$project->name}}</option>');
-                    @@endforeach
+                    @endforeach
                 });
             }
 		});

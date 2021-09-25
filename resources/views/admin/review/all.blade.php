@@ -231,6 +231,19 @@
 				}
 			],
 			"fnDrawCallback": afterDrawTabel,
+            initComplete: function () {
+                this.api().columns([7]).every(function () {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.header()))
+                        .bind('keyup change', function () {
+                            column.search($(this).val()).draw();
+                        } );
+                    @foreach($projects as $project)
+                    select.append('<option value="{{$project->name}}">{{$project->name}}</option>');
+                    @@endforeach
+                });
+            }
 		});
 
 		tableUsers.on( 'draw', afterDrawTabel() );

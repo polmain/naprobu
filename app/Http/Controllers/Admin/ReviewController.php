@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Model\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\Review;
@@ -22,7 +23,11 @@ class ReviewController extends Controller
 		AdminPageData::setPageName('Все отзывы');
 		AdminPageData::addBreadcrumbLevel('Отзывы');
 
-		return view('admin.review.all');
+		$projects = Project::where('lang','ru')->get();
+
+		return view('admin.review.all',[
+		    'projects' => $projects
+        ]);
 	}
 
 	public function all_ajax(Request $request){

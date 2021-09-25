@@ -23,7 +23,10 @@ class ReviewController extends Controller
 		AdminPageData::setPageName('Все отзывы');
 		AdminPageData::addBreadcrumbLevel('Отзывы');
 
-		$projects = Project::where('lang','ru')->get();
+		$projects = Project::where([
+		    ['lang','ru'],
+		    ['isHide',0],
+        ])->orderBy('id','DESC')->get();
 
 		return view('admin.review.all',[
 		    'projects' => $projects

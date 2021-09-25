@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Model\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Library\Queries\QueryBuilder;
@@ -25,7 +26,14 @@ class CommentController extends Controller
 		AdminPageData::setPageName('Все комментарии');
 		AdminPageData::addBreadcrumbLevel('Комментарии');
 
-		return view('admin.review.comment.all');
+        $projects = Project::where([
+            ['lang','ru'],
+            ['isHide',0],
+        ])->orderBy('id','DESC')->get();
+
+		return view('admin.review.comment.all',[
+		    'projects' => $projects
+        ]);
 	}
 
 	public function all_ajax(Request $request){

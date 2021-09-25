@@ -42,7 +42,7 @@
                             <th>Заголовок</th>
                             <th>Тескт</th>
                             <th>Пользователь</th>
-                            <th>Проект</th>
+                            <th width="200">Проект</th>
                             <th>Страница</th>
                             <th>Статус</th>
                             <th></th>
@@ -131,6 +131,7 @@
 					"orderable":      false,
 				},
 				{
+                    "className": 'max-width-column-200',
 					data: 'project',
 					name: 'project',
 					"orderable":      false,
@@ -231,6 +232,21 @@
 				}
 			],
 			"fnDrawCallback": afterDrawTabel,
+            initComplete: function () {
+                this.api().columns([6]).every(function () {
+                    var column = this;
+                    var select = $('<select id="project_filter" width="200"><option value=""></option></select>')
+                        .appendTo($(column.header()))
+                        .bind('keyup change', function () {
+                            column.search($(this).val()).draw();
+                        } );
+                    @foreach($projects as $project)
+                    select.append('<option value="{{$project->name}}">{{$project->name}}</option>');
+                    @endforeach
+
+                    $('#project_filter').select2();
+                });
+            }
 		});
 
 		tableUsers.on( 'draw', afterDrawTabel() );

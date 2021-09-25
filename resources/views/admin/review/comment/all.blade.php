@@ -164,7 +164,7 @@
 			],
 			"fnDrawCallback": afterDrawTabel,
 			initComplete: function () {
-                this.api().columns([5]).every(function () {
+                this.api().columns([4]).every(function () {
                     var column = this;
                     var select = $('<select id="project_filter" width="200"><option value=""></option></select>')
                         .appendTo($(column.header()))

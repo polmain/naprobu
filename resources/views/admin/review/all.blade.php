@@ -42,7 +42,7 @@
                             <th>Заголовок</th>
                             <th>Тескт</th>
                             <th>Пользователь</th>
-                            <th>Проект</th>
+                            <th width="200">Проект</th>
                             <th>Страница</th>
                             <th>Статус</th>
                             <th></th>
@@ -234,7 +234,7 @@
             initComplete: function () {
                 this.api().columns([6]).every(function () {
                     var column = this;
-                    var select = $('<select><option value=""></option></select>')
+                    var select = $('<select id="project_filter"><option value=""></option></select>')
                         .appendTo($(column.header()))
                         .bind('keyup change', function () {
                             column.search($(this).val()).draw();
@@ -242,6 +242,8 @@
                     @foreach($projects as $project)
                     select.append('<option value="{{$project->name}}">{{$project->name}}</option>');
                     @endforeach
+
+                    $('#project_filter').select2();
                 });
             }
 		});

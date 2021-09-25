@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>
-                                        <input type="checkbox" class="minimal-red" name="question_required" value="true">
+                                        <input type="checkbox" class="minimal-red" name="question_required" value="true" checked="checked">
                                         Обязательно к заполнению?
                                     </label>
                                 </div>

@@ -271,6 +271,10 @@ class Cron
 
             Notification::send('project_members', $projectRequest->user, 1, $link, ['project' => $projectName]);
 
+			if($projectRequest->status_id >= 7){
+                Notification::send('in_members_list', $projectRequest->user, 1, $link, ['project' => $projectName]);
+            }
+
             if(isset($projectRequest->user->email) && $projectRequest->user->isNewsletter)
             {
                 try {

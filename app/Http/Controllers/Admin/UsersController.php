@@ -727,14 +727,14 @@ class UsersController extends Controller
 
 	public function delete_ratting(Request $request,$user_id){
 		$user = User::withTrashed()->find($user_id);
-		UserRating::addAction($request->fine,$user);
+        UserRating::newAction($request,$user, -1);
 
 		return redirect()->route('adm_users_edit',[$user_id]);
 	}
 
 	public function add_ratting(Request $request,$user_id){
 		$user = User::withTrashed()->find($user_id);
-		UserRating::newAction($request,$user);
+		UserRating::newAction($request,$user, 1);
 
 		return redirect()->route('adm_users_edit',[$user_id]);
 	}

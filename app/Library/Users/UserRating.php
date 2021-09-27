@@ -124,19 +124,19 @@ class UserRating
 		$instance->addActionToUser($action,$user);
 	}
 
-	public static function newAction($request,$user){
+	public static function newAction($request, $user, $coefficient){
 		$instance = static::getInstance();
 
 		$action = UserRatingAction::where([
 			['name',$request->name_ru],
-			['points',$request->score],
+			['points',$request->score * $coefficient],
 			['lang','ru']
 		])->first();
 
 		if(empty($action)){
 			$action = UserRatingAction::create([
 				'name' => $request->name_ru,
-				'points' => $request->score,
+				'points' => $request->score * $coefficient,
 				'lang' => 'ru',
 				'rus_lang_id' => 0
 			]);
@@ -144,7 +144,7 @@ class UserRating
 			foreach (self::TRANSLATE_LANG as $lang){
                 UserRatingAction::create([
                     'name' => $request->input('name_'.$lang),
-                    'points' => $request->score,
+                    'points' => $request->score * $coefficient,
                     'lang' => $lang,
                     'rus_lang_id' => $action->id
                 ]);

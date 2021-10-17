@@ -16347,11 +16347,12 @@ form .btn-blue:hover {
     cursor: pointer;
 }
 
-.main-reviews .review-item .review-bottom span.like-count {
+.main-reviews .review-item .review-bottom span.like-count,
+.main-reviews .review-item .review-bottom span.bookmark-count {
     width: auto;
 }
 
-.main-reviews .review-item .review-bottom .review-like {
+.main-reviews .review-item .review-bottom .review-actions {
     display: inline-block;
     width: 50%;
     float: left;
@@ -16361,20 +16362,41 @@ form .btn-blue:hover {
     font-weight: 700;
 }
 
+.main-reviews .review-item .review-bottom .review-bookmark,
+.main-reviews .review-item .review-bottom .review-like {
+    display: inline-block;
+}
+
 .main-reviews .review-item .review-bottom .review-like a {
     color: #f61a10;
 }
 
-.main-reviews .review-item .review-bottom .review-like .like {
+.main-reviews .review-item .review-bottom .review-bookmark a {
+    color: #052b5f;
+}
+
+.main-reviews .review-item .review-bottom .review-actions .like {
     background-image: url("../svg/icons/like_empty.svg");
 }
 
-.main-reviews .review-item .review-bottom .review-like .like:hover {
+.main-reviews .review-item .review-bottom .review-actions .like:hover {
     background-image: url("../svg/icons/like_full.svg");
 }
 
 .main-reviews .review-item .review-bottom .review-like.active .like {
     background-image: url("../svg/icons/like_full.svg");
+}
+
+.main-reviews .review-item .review-bottom .review-actions .bookmark {
+    background-image: url("../svg/icons/star.svg");
+}
+
+.main-reviews .review-item .review-bottom .review-actions .bookmark:hover {
+    background-image: url("../svg/icons/star_fill.svg");
+}
+
+.main-reviews .review-item .review-bottom .review-bookmark.active .bookmark {
+    background-image: url("../svg/icons/star_fill.svg");
 }
 
 .main-reviews .review-item .review-bottom .review-share {
@@ -17948,11 +17970,12 @@ form .btn-blue:hover {
     cursor: pointer;
 }
 
+.review-page.review-list .review-item .review-bottom span.bookmark-count,
 .review-page.review-list .review-item .review-bottom span.like-count {
     width: auto;
 }
 
-.review-page.review-list .review-item .review-bottom .review-like {
+.review-page.review-list .review-item .review-bottom .review-actions {
     display: inline-block;
     float: left;
     line-height: 16px;
@@ -17961,8 +17984,16 @@ form .btn-blue:hover {
     margin-right: 30px;
 }
 
+.review-page.review-list .review-item .review-bottom .review-actions div:hover:not(.disabled) {
+    opacity: .7;
+}
+
 .review-page.review-list .review-item .review-bottom .review-like a {
     color: #f61a10;
+}
+
+.review-page.review-list .review-item .review-bottom .review-bookmark a {
+    color: #052b5f;
 }
 
 .review-page.review-list .review-item .review-bottom .review-like.active .like {
@@ -17973,12 +18004,20 @@ form .btn-blue:hover {
     background-image: url("../svg/icons/like_empty.svg");
 }
 
-.review-page.review-list .review-item .review-bottom .review-like:hover:not(.disabled) {
-    opacity: .7;
-}
-
 .review-page.review-list .review-item .review-bottom .review-like:hover:not(.disabled) .like {
     background-image: url("../svg/icons/like_full.svg");
+}
+
+.review-page.review-list .review-item .review-bottom .review-bookmark.active .bookmark {
+    background-image: url("../svg/icons/star_fill.svg");
+}
+
+.review-page.review-list .review-item .review-bottom .review-bookmark .bookmark {
+    background-image: url("../svg/icons/star.svg");
+}
+
+.review-page.review-list .review-item .review-bottom .review-bookmark:hover:not(.disabled) .bookmark {
+    background-image: url("../svg/icons/star_fill.svg");
 }
 
 .review-page.review-list .review-item .review-bottom .review-comment-button {

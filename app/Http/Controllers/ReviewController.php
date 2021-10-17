@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Review\ReviewBookmark;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -305,6 +306,31 @@ class ReviewController extends Controller
 			'like_count' => $like_count,
 		];
 
+		return \Response::json($responce);
+	}
+
+	public function bookmark(Request $request, $review_id){
+		$user_id = Auth::user()->id;
+		$bookmark = ReviewBookmark::where([
+			['user_id',$user_id],
+			['review_id',$review_id],
+		])->first();
+		if(isset($bookmark)){
+            $bookmark->delete();
+		}else{
+			$like = new ReviewBookmark();
+			$like->user_id = $user_id;
+			$like->review_id = $review_id;
+			$like->save();
+		}
+        $bookmark_count = ReviewBookmark::where([
+			['review_id',$review_id],
+		])->count();
+
+		$responce = [
+			'status' => 'ok',
+			'bookmark_count' => $bookmark_count,
+		];
 
 		return \Response::json($responce);
 	}

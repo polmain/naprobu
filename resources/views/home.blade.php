@@ -218,12 +218,21 @@
                                 @endif
                             </div>
                             <div class="review-bottom">
-                                <div class="review-like @auth{{($review->likes->where('user_id',Auth::user()->id)->first())?' active':''}}@else disabled @endauth">
-                                    @auth
-                                        <span class="like-count">{{$review->likes->count()}}</span> <span class="like"></span>
+                                <div class="review-actions">
+                                    <div class="review-like @auth{{($review->likes->where('user_id',Auth::user()->id)->first())?' active':''}}@else disabled @endauth">
+                                        @auth
+                                            <span class="like-count">{{$review->likes->count()}}</span> <span class="like"></span>
                                         @else
                                             <a href="#" data-toggle="modal" data-target="#login"><span class="like-count">{{$review->likes->count()}}</span> <span class="like"></span></a>
-                                            @endauth
+                                        @endauth
+                                    </div>
+                                    <div class="review-bookmark @auth{{($review->bookmarks->where('user_id',Auth::user()->id)->first())?' active':''}}@else disabled @endauth">
+                                        @auth
+                                            <span class="bookmark-count">{{$review->bookmarks->count()}}</span> <span class="bookmark"></span>
+                                        @else
+                                            <a href="#" data-toggle="modal" data-target="#login"><span class="bookmark-count">{{$review->bookmarks->count()}}</span> <span class="bookmark"></span></a>
+                                        @endauth
+                                    </div>
                                 </div>
                                 <div class="review-share">
                                     <a href="https://www.facebook.com/sharer/sharer.php?u={!!   urlencode(route('review.level2',['url'=>$review->id])) !!}"
@@ -231,7 +240,6 @@
                                        target="_blank" title="Share on Facebook">
                                         <span class="facebook-share"></span>
                                     </a>
-
                                 </div>
                             </div>
                         </div>

@@ -475,6 +475,7 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
 		Route::group(['middleware'=>'role:user'],function(){
 			Route::post('/review/comment/create/{review_id}/','ReviewController@createComment')->name('review.comment.create');
 			Route::post('/review/like/{review_id}/','ReviewController@like')->name('review.like');
+			Route::post('/review/bookmark/{review_id}/','ReviewController@bookmark')->name('review.bookmark');
 			Route::post('/review/create/{subpage}/','ReviewController@create')->name('review.create');
 			Route::post('/review/edit/','ReviewController@save')->name('review.edit');
 			Route::post('/review/addimage/','ReviewController@addImage')->name('review.addimage');

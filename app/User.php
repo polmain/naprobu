@@ -66,6 +66,10 @@ class User extends Authenticatable
 		return $this->hasMany('App\Model\Review', 'user_id');
 	}
 
+	public function bookmarks(){
+		return $this->hasMany('App\Model\Review\ReviewBookmark', 'user_id');
+	}
+
 	public function rang(){
 		return $this->hasOne('App\Model\User\UserRatingStatus', 'id', 'rang_id');
 	}

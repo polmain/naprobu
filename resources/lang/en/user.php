@@ -26,6 +26,9 @@ return [
 	'menu_notification' 	=> 'Notifications',
 	'menu_setting' 			=> 'Settings',
 
+    'menu_my_review' 			=> 'My Reviews',
+    'menu_bookmark_review' 		=> 'Favorite Reviews',
+
 	// страница рейтинга пользователя
 	'rating_history'		=> 'Last scoring history:',
     'congratulation'        => 'Congratulation!',

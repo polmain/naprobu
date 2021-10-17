@@ -31,10 +31,10 @@
                 <nav class="user-page-menu">
                     <ul class="row">
                         <li class="col-md col-sm-4">
-                            <a href="{{route('user.cabinet')}}"{!! (\Request::route()->getName() == 'user.review') ?' class="active"':"" !!}>@lang('user.menu_my_review')</a>
+                            <a href="{{route('user.review')}}"{!! (\Request::route()->getName() == 'user.review') ?' class="active"':"" !!}>@lang('user.menu_my_review')</a>
                         </li>
                         <li class="col-md col-sm-4">
-                            <a href="{{route('user.project')}}"{!! (\Request::route()->getName() == 'user.review.bookmark') ?' class="active"':"" !!}>@lang('user.menu_bookmark_review')</a>
+                            <a href="{{route('user.review.bookmark')}}"{!! (\Request::route()->getName() == 'user.review.bookmark') ?' class="active"':"" !!}>@lang('user.menu_bookmark_review')</a>
                         </li>
                     </ul>
                 </nav>

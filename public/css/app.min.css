@@ -16371,6 +16371,7 @@ form .btn-blue:hover {
     color: #f61a10;
 }
 
+.main-reviews .review-item .review-bottom .review-bookmark,
 .main-reviews .review-item .review-bottom .review-bookmark a {
     color: #052b5f;
 }
@@ -17992,6 +17993,7 @@ form .btn-blue:hover {
     color: #f61a10;
 }
 
+.review-page.review-list .review-item .review-bottom .review-bookmark
 .review-page.review-list .review-item .review-bottom .review-bookmark a {
     color: #052b5f;
 }

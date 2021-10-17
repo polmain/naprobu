@@ -314,7 +314,7 @@
                 {{ csrf_field() }}
                 <div class="box box-warning collapsed-box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Штраф за накрутку</h3>
+                        <h3 class="box-title">Снятие баллов</h3>
 
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
@@ -324,16 +324,25 @@
                     </div>
                     <div class="box-body">
                         <div class="col-md-12">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> За что баллы<span class="input-request">*</span></label>
+                                    <input type="text" class="form-control" name="name_ru" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> За что баллы<span class="input-request">*</span></label>
+                                    <input type="text" class="form-control" name="name_ua" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> За что баллы<span class="input-request">*</span></label>
+                                    <input type="text" class="form-control" name="name_en" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <label>Размер штрафа<span class="input-request">*</span></label>
-                                <select name="fine" class="form-control select2" style="width: 100%;">
-                                    <option value="delete_5">5</option>
-                                    <option value="delete_10">10</option>
-                                    <option value="delete_20">20</option>
-                                    <option value="delete_50">50</option>
-                                    <option value="delete_100">100</option>
-                                    <option value="delete_500">500</option>
-                                </select>
+                                <label>Колличество баллов<span class="input-request">*</span></label>
+                                <input type="number" class="form-control" min="1" required name="score">
                             </div>
                         </div>
                     </div><!-- /.box-body -->
@@ -358,18 +367,18 @@
                     </div>
                     <div class="box-body">
                         <div class="form-group row">
-                        <div class="col-md-4">
-                            <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> За что баллы<span class="input-request">*</span></label>
-                            <input type="text" class="form-control" name="name_ru" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> За что баллы<span class="input-request">*</span></label>
-                            <input type="text" class="form-control" name="name_ua" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> За что баллы<span class="input-request">*</span></label>
-                            <input type="text" class="form-control" name="name_en" required>
-                        </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> За что баллы<span class="input-request">*</span></label>
+                                <input type="text" class="form-control" name="name_ru" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> За что баллы<span class="input-request">*</span></label>
+                                <input type="text" class="form-control" name="name_ua" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> За что баллы<span class="input-request">*</span></label>
+                                <input type="text" class="form-control" name="name_en" required>
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">

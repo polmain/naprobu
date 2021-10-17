@@ -117,7 +117,7 @@
                         <div class="project-item-image" style="background-image: url({{$project->preview_image}})">
                             @if($project->country && $project->audience->isWord())
                                 <div class="project-country">
-                                    <img src="{{$project->country->getFlag()}}" alt="{{$project->country->getName()}}">
+                                    <img src="/public/images/country/{{strtolower($project->country->getCode())}}.png" alt="{{$project->country->getName()}}">
                                 </div>
                             @endif
                         </div>

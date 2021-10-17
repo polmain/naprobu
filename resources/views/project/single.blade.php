@@ -262,7 +262,7 @@
                         <img src="{{$project->main_image}}" alt="{{$project->name}}">
                         @if($project->country && $project->audience->isWord())
                             <div class="project-country">
-                                <img src="{{$project->country->getFlag()}}" alt="{{$project->country->getName()}}">
+                                <img src="/public/images/country/{{strtolower($project->country->getCode())}}.png" alt="{{$project->country->getName()}}">
                             </div>
                         @endif
                     </div>

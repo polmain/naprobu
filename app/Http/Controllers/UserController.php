@@ -237,6 +237,59 @@ class UserController extends Controller
 		]);
 	}
 
+	public function bookmark(Request $request){
+		$user = Auth::user();
+		$userLikes = ReviewLike::with(['review'])->whereHas('review',function ($review) use ($user){
+			$review->where('user_id',$user->id);
+		})->count();
+
+		$reviews = Review::with(['user.roles','visibleComments.user.roles','likes'])
+            ->whereHas('bookmarks', function ($bookmarks) use ($user){
+                $bookmarks->where('user_id', $user->id);
+            })
+            ->where([
+                ['status_id', 2],
+                ['isHide',0],
+		    ])
+            ->orderBy('id','desc')
+            ->paginate(5);
+
+
+		if ($request->ajax()) {
+			$view = view('review.include.review_item_user',compact(['reviews']))->render();
+			return response()->json([
+				'html' => $view,
+				'isNext' => $reviews->nextPageUrl() == false
+			]);
+		}
+
+		$locale = App::getLocale();
+
+		$title = str_replace(':user_name:',$user->name, \App\Model\Setting::where([['name','user_review_title'],['lang',$locale]])->first()->value);
+		$description = str_replace(':user_name:',$user->name, \App\Model\Setting::where([['name','user_review_description'],['lang',$locale]])->first()->value);
+		$og_image = \App\Model\Setting::where('name','og_image_default')->first()->value;
+
+		SEO::setTitle($title);
+		SEO::setDescription($description);
+		OpenGraph::addImage([
+				'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
+				'width' => 350,
+				'height' => 220
+			]
+		);
+
+        $url = 'cabinet/bookmark/'.($reviews->previousPageUrl()?'?page='.$reviews->currentPage():'');
+        $routes = AlternativeUrlService::generateReplyRoutes($url);
+
+        $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
+
+		return view('user.review',[
+			'userLikes' => $userLikes,
+			'reviews' => $reviews,
+			'alternativeUrls' => $alternativeUrls
+		]);
+	}
+
 	public function notification(Request $request){
 		$user = Auth::user();
 		$userLikes = ReviewLike::with(['review'])->whereHas('review',function ($review) use ($user){

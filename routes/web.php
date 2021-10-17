@@ -475,6 +475,7 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
 		Route::group(['middleware'=>'role:user'],function(){
 			Route::post('/review/comment/create/{review_id}/','ReviewController@createComment')->name('review.comment.create');
 			Route::post('/review/like/{review_id}/','ReviewController@like')->name('review.like');
+			Route::post('/review/bookmark/{review_id}/','ReviewController@bookmark')->name('review.bookmark');
 			Route::post('/review/create/{subpage}/','ReviewController@create')->name('review.create');
 			Route::post('/review/edit/','ReviewController@save')->name('review.edit');
 			Route::post('/review/addimage/','ReviewController@addImage')->name('review.addimage');
@@ -560,6 +561,7 @@ Route::post('/projects/share/','ProjectController@share')->name('project.share')
                     Route::get('/cabinet/','UserController@index')->name('user.cabinet');
                     Route::get('/cabinet/project/','UserController@project')->name('user.project');
                     Route::get('/cabinet/review/','UserController@review')->name('user.review');
+                    Route::get('/cabinet/bookmark/','UserController@bookmark')->name('user.review.bookmark');
                     Route::get('/cabinet/rating/','UserController@rating')->name('user.rating');
                     Route::get('/cabinet/notification/','UserController@notification')->name('user.notification');
                     Route::get('/cabinet/setting/','UserController@setting')->name('user.setting');

@@ -28,6 +28,17 @@
 
                 @include('user.include.cabinet_menu')
 
+                <nav class="user-page-menu">
+                    <ul class="row">
+                        <li class="col-md col-sm-4">
+                            <a href="{{route('user.review')}}"{!! (\Request::route()->getName() == 'user.review') ?' class="active"':"" !!}>@lang('user.menu_my_review')</a>
+                        </li>
+                        <li class="col-md col-sm-4">
+                            <a href="{{route('user.review.bookmark')}}"{!! (\Request::route()->getName() == 'user.review.bookmark') ?' class="active"':"" !!}>@lang('user.menu_bookmark_review')</a>
+                        </li>
+                    </ul>
+                </nav>
+
                 <section class="review-list review-page">
                     <div class="container">
                         <div class="row" id="ajax-list">

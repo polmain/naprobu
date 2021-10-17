@@ -8,7 +8,7 @@
             <a href="{{route('user.project')}}"{!! (\Request::route()->getName() == 'user.project') ?' class="active"':"" !!}>@lang('user.menu_project')</a>
         </li>
         <li class="col">
-            <a href="{{route('user.review')}}"{!! (\Request::route()->getName() == 'user.review') ?' class="active"':"" !!}>@lang('user.menu_review')</a>
+            <a href="{{route('user.review')}}"{!! (\Request::route()->getName() === 'user.review' || \Request::route()->getName() === 'user.review.bookmark' ) ?' class="active"':"" !!}>@lang('user.menu_review')</a>
         </li>
         <li class="col-md col-sm-4">
             <a href="{{route('user.rating')}}"{!! (\Request::route()->getName() == 'user.rating') ?' class="active"':"" !!}>@lang('user.menu_rating')</a>

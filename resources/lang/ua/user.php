@@ -26,6 +26,9 @@ return [
 	'menu_notification' 	=> 'Сповіщення',
 	'menu_setting' 			=> 'Налаштування',
 
+    'menu_my_review' 			=> 'Мої Відгуки',
+    'menu_bookmark_review' 		=> 'Обрані Відгуки',
+
 	// страница рейтинга пользователя
 	'rating_history'		=> 'Остання історія нарахування балів:',
     'congratulation'        => 'Вітаємо!',

@@ -48,12 +48,22 @@
             </div>
         </div>
         <div class="review-bottom">
-            <div class="review-like @auth{{($review->likes->where('user_id',Auth::user()->id)->first())?' active':''}}@else disabled @endauth">
-                @auth
-                    <span class="like-count">{{$review->likes->count()}}</span> <span class="like"></span>
+
+            <div class="review-actions">
+                <div class="review-like @auth{{($review->likes->where('user_id',Auth::user()->id)->first())?' active':''}}@else disabled @endauth">
+                    @auth
+                        <span class="like-count">{{$review->likes->count()}}</span> <span class="like"></span>
                     @else
                         <a href="#" data-toggle="modal" data-target="#login"><span class="like-count">{{$review->likes->count()}}</span> <span class="like"></span></a>
-                        @endauth
+                    @endauth
+                </div>
+                <div class="review-bookmark @auth{{($review->bookmarks->where('user_id',Auth::user()->id)->first())?' active':''}}@else disabled @endauth">
+                    @auth
+                        <span class="bookmark-count">{{$review->bookmarks->count()}}</span> <span class="bookmark"></span>
+                    @else
+                        <a href="#" data-toggle="modal" data-target="#login"><span class="bookmark-count">{{$review->bookmarks->count()}}</span> <span class="bookmark"></span></a>
+                    @endauth
+                </div>
             </div>
             <div class="review-comment-button">
                 <span class="comments"></span> {{ Lang::choice('review.comment_count', $review->visibleComments->count(), ['count'=>$review->visibleComments->count()])}}

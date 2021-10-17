@@ -17983,6 +17983,12 @@ form .btn-blue:hover {
     color: #f61a10;
     font-weight: 700;
     margin-right: 30px;
+    width: 100px;
+}
+
+.review-page.review-list .review-item .review-bottom .review-like,
+.review-page.review-list .review-item .review-bottom .review-bookmark {
+    display: inline;
 }
 
 .review-page.review-list .review-item .review-bottom .review-actions div:hover:not(.disabled) {
@@ -17993,7 +17999,7 @@ form .btn-blue:hover {
     color: #f61a10;
 }
 
-.review-page.review-list .review-item .review-bottom .review-bookmark
+.review-page.review-list .review-item .review-bottom .review-bookmark,
 .review-page.review-list .review-item .review-bottom .review-bookmark a {
     color: #052b5f;
 }

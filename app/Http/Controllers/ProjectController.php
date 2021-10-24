@@ -345,153 +345,171 @@ class ProjectController extends Controller
 				['isHide',0],
 			])->first();
 
+		if(!$subpage){
+            return abort(404);
+        }
 
 
-		if(isset($subpage)){
-			$subpage_base = ($locale == 'ru')?$subpage:$subpage->base;
+        $subpage_base = ($locale == 'ru')?$subpage:$subpage->base;
 
-			$title = $subpage->seo_title ?? str_replace(':page_name:',$subpage->name, \App\Model\Setting::where([['name','title_default'],['lang',$locale]])->first()->value);
-			$description = $subpage->seo_description ?? str_replace(':page_name:',$subpage->name, \App\Model\Setting::where([['name','description_default'],['lang',$locale]])->first()->value);
-			$og_image = (($locale == 'ru')?$project:$project->base)->preview_image ?? \App\Model\Setting::where('name','og_image_default')->first()->value;
+        $title = $subpage->seo_title ?? str_replace(':page_name:',$subpage->name, \App\Model\Setting::where([['name','title_default'],['lang',$locale]])->first()->value);
+        $description = $subpage->seo_description ?? str_replace(':page_name:',$subpage->name, \App\Model\Setting::where([['name','description_default'],['lang',$locale]])->first()->value);
+        $og_image = (($locale == 'ru')?$project:$project->base)->preview_image ?? \App\Model\Setting::where('name','og_image_default')->first()->value;
 
-			SEO::setTitle($title);
-			SEO::setDescription($description);
-			SEOMeta::setKeywords($subpage->seo_keywords);
-			OpenGraph::addImage([
-					'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
-					'width' => 350,
-					'height' => 220
-				]
-			);
+        SEO::setTitle($title);
+        SEO::setDescription($description);
+        SEOMeta::setKeywords($subpage->seo_keywords);
+        OpenGraph::addImage([
+                'url' => (($request->secure())?"https://":"http://").$request->getHost().$og_image,
+                'width' => 350,
+                'height' => 220
+            ]
+        );
 
-			if($subpage->type_id == 5){
-				$requests = ProjectRequest::with(['user'])->where([
-						['project_id', $project_id],
-						['status_id','>=',7],
-					])
-					->get()
-					->sortBy((function($item,$key) {
-						return mb_substr(mb_strtolower($item->user->name),0,1);
-					}));
+        if($subpage->type_id == 5){
+            $requests = ProjectRequest::with(['user'])->where([
+                    ['project_id', $project_id],
+                    ['status_id','>=',7],
+                ])
+                ->get()
+                ->sortBy((function($item,$key) {
+                    return mb_substr(mb_strtolower($item->user->name),0,1);
+                }));
 
-                $routes = ['ru' => 'projects/'.$subpage_base->project->url.'/'.$subpage_base->url.'/'];
+            $routes = ['ru' => 'projects/'.$subpage_base->project->url.'/'.$subpage_base->url.'/'];
 
-                foreach ($subpage_base->translate as $translate){
-                    $projectTranslate = $subpage_base->project->translate->firstWhere('lang', $translate->lang);
-                    if($projectTranslate){
-                        $routes[$translate->lang] = 'projects/'.$projectTranslate->url.'/'.$translate->url.'/';
-                    }
+            foreach ($subpage_base->translate as $translate){
+                $projectTranslate = $subpage_base->project->translate->firstWhere('lang', $translate->lang);
+                if($projectTranslate){
+                    $routes[$translate->lang] = 'projects/'.$projectTranslate->url.'/'.$translate->url.'/';
                 }
+            }
 
-                $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
+            $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
-				return view('project.subpage.member',[
-					'project' => $project,
-					'subpage' => $subpage,
-					'requests' => $requests,
-					'alternativeUrls' => $alternativeUrls
-				]);
+            return view('project.subpage.member',[
+                'project' => $project,
+                'subpage' => $subpage,
+                'requests' => $requests,
+                'alternativeUrls' => $alternativeUrls
+            ]);
 
-			}elseif($subpage->type_id == 15){
-				$posts = ProjectBloggerPost::where([
-					['project_id', $project_id],
-					['isHide',0],
-				])->orderBy('created_at','desc')
-					->paginate(15);
+        }
+        elseif($subpage->type_id == 15) {
+            $posts = ProjectBloggerPost::where([
+                ['project_id', $project_id],
+                ['isHide',0],
+            ])->orderBy('created_at','desc')
+                ->paginate(15);
 
-				if ($request->ajax()) {
-					$view = view('project.include.post_item',compact(['posts','subpage']))->render();
-					return response()->json([
-						'html' => $view,
-						'isNext' => $posts->nextPageUrl() == false
-					]);
-				}
+            if ($request->ajax()) {
+                $view = view('project.include.post_item',compact(['posts','subpage']))->render();
+                return response()->json([
+                    'html' => $view,
+                    'isNext' => $posts->nextPageUrl() == false
+                ]);
+            }
 
-				$routes = ['ru' => 'projects/'.$subpage_base->project->url.'/'.$subpage_base->url.'/'.($posts->previousPageUrl() ?'?page='.$posts->currentPage() : '')];
+            $routes = ['ru' => 'projects/'.$subpage_base->project->url.'/'.$subpage_base->url.'/'.($posts->previousPageUrl() ?'?page='.$posts->currentPage() : '')];
 
-                foreach ($subpage_base->translate as $translate){
-                    $projectTranslate = $subpage_base->project->translate->firstWhere('lang', $translate->lang);
-                    if($projectTranslate){
-                        $routes[$translate->lang] = 'projects/'.$projectTranslate->url.'/'.$translate->url.'/'.($posts->previousPageUrl() ?'?page='.$posts->currentPage() : '');
-                    }
+            foreach ($subpage_base->translate as $translate){
+                $projectTranslate = $subpage_base->project->translate->firstWhere('lang', $translate->lang);
+                if($projectTranslate){
+                    $routes[$translate->lang] = 'projects/'.$projectTranslate->url.'/'.$translate->url.'/'.($posts->previousPageUrl() ?'?page='.$posts->currentPage() : '');
                 }
+            }
 
-                $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
+            $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
 
-				return view('project.subpage.blogger_post',[
-					'project' => $project,
-					'subpage' => $subpage,
-					'posts' => $posts,
-					'alternativeUrls' => $alternativeUrls
-				]);
-			}
-			else{
-				$reviews	=	Review::with(['user.roles','visibleComments.user.roles','likes'])->where([
-					['subpage_id',$subpage_base->id],
-					['status_id',2],
-					['isHide',0],
-				]);
-				if($request->has('orderBy')){
-					switch ($request->orderBy){
-						case 'user_asc':
-							$reviews = $reviews->orderBy('user_id')->paginate(5);
-							break;
-						case 'date_asc':
-							$reviews = $reviews->paginate(5);
-							break;
-						case 'popular':
-							$reviews = $reviews->withCount('likes')->orderBy('likes_count','desc')->paginate(5);
-							break;
-					}
-					$reviews->appends(['orderBy'=>$request->orderBy]);
+            return view('project.subpage.blogger_post',[
+                'project' => $project,
+                'subpage' => $subpage,
+                'posts' => $posts,
+                'alternativeUrls' => $alternativeUrls
+            ]);
+        }
+        else{
+            $reviews	=	Review::with(['user.roles','visibleComments.user.roles','likes'])->where([
+                ['subpage_id',$subpage_base->id],
+                ['status_id',2],
+                ['isHide',0],
+            ]);
 
-				}else{
-					$reviews = $reviews->orderBy('id','desc')->paginate(5);
-				}
+            $topReviews = Review::with(['user.roles','visibleComments.user.roles','likes','subpage.translate'])
+                ->whereHas('subpage',function ($subpage) use ($project_id){
+                    $subpage->where([
+                        ['project_id',$project_id],
+                        ['type_id',1],
+                        ['lang','ru'],
+                        ['hasReviews',1],
+                    ]);
+                })
+                ->where([
+                    ['status_id',2],
+                    ['isProjectGallery',1],
+                ])
+                ->orderBy('id','desc')
+                ->get();
 
-
-				if ($request->ajax()) {
-					$view = view('review.include.review_item_subpage',compact(['reviews','subpage']))->render();
-					return response()->json([
-						'html' => $view,
-						'isNext' => $reviews->nextPageUrl() == false
-					]);
-				}
-
-				$projectRequest = null;
-				if(Auth::check()){
-					$projectRequest = ProjectRequest::where([
-						['project_id',$project_id],
-						['user_id',Auth::user()->id],
-						['status_id','>=',7],
-					])->first();
-				}
-
-				$routes = ['ru' => 'projects/'.$subpage_base->project->url.'/'.$subpage_base->url.'/'.($reviews->previousPageUrl() ?'?page='.$reviews->currentPage() : '')];
-
-                foreach ($subpage_base->translate as $translate){
-                    $projectTranslate = $subpage_base->project->translate->firstWhere('lang', $translate->lang);
-                    if($projectTranslate){
-                        $routes[$translate->lang] = 'projects/'.$projectTranslate->url.'/'.$translate->url.'/'.($reviews->previousPageUrl() ?'?page='.$reviews->currentPage() : '');
-                    }
+            if($request->has('orderBy')){
+                switch ($request->orderBy){
+                    case 'user_asc':
+                        $reviews = $reviews->orderBy('user_id')->paginate(5);
+                        break;
+                    case 'date_asc':
+                        $reviews = $reviews->paginate(5);
+                        break;
+                    case 'popular':
+                        $reviews = $reviews->withCount('likes')->orderBy('likes_count','desc')->paginate(5);
+                        break;
                 }
+                $reviews->appends(['orderBy'=>$request->orderBy]);
 
-                $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
-
-				return view('project.subpage.review',[
-					'project'		=>	$project,
-					'subpage'		=>	$subpage,
-					'reviews'		=>	$reviews,
-					'subpage_base'	=>	$subpage_base,
-					'projectRequest'	=>	$projectRequest,
-					'alternativeUrls' => $alternativeUrls
-				]);
-			}
-		}
+            }else{
+                $reviews = $reviews->orderBy('id','desc')->paginate(5);
+            }
 
 
-		return abort(404);
+            if ($request->ajax()) {
+                $view = view('review.include.review_item_subpage',compact(['reviews','subpage']))->render();
+                return response()->json([
+                    'html' => $view,
+                    'isNext' => $reviews->nextPageUrl() == false
+                ]);
+            }
+
+            $projectRequest = null;
+            if(Auth::check()){
+                $projectRequest = ProjectRequest::where([
+                    ['project_id',$project_id],
+                    ['user_id',Auth::user()->id],
+                    ['status_id','>=',7],
+                ])->first();
+            }
+
+            $routes = ['ru' => 'projects/'.$subpage_base->project->url.'/'.$subpage_base->url.'/'.($reviews->previousPageUrl() ?'?page='.$reviews->currentPage() : '')];
+
+            foreach ($subpage_base->translate as $translate){
+                $projectTranslate = $subpage_base->project->translate->firstWhere('lang', $translate->lang);
+                if($projectTranslate){
+                    $routes[$translate->lang] = 'projects/'.$projectTranslate->url.'/'.$translate->url.'/'.($reviews->previousPageUrl() ?'?page='.$reviews->currentPage() : '');
+                }
+            }
+
+            $alternativeUrls = AlternativeUrlService::getAlternativeUrls($locale, $routes);
+
+            return view('project.subpage.review',[
+                'project'		=>	$project,
+                'subpage'		=>	$subpage,
+                'reviews'		=>	$reviews,
+                'subpage_base'	=>	$subpage_base,
+                'projectRequest'	=>	$projectRequest,
+                'alternativeUrls' => $alternativeUrls,
+                'topReviews' => $topReviews
+            ]);
+        }
 	}
+
 	public function password(Request $request){
 		Cookie::queue('project_'.$request->project_id.'_password',$request->password, 10080);
 

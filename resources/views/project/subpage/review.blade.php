@@ -39,6 +39,16 @@
     </section>
     @endif
     @if($subpage->hasReviews)
+        <div class="container mb-4">
+            @if($subpage->type_id == 1)
+                <div class="review-list">
+                    @foreach($topReviews as $review)
+                        @include('review.include.review_item_slide')
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
     <div class="container mb-4">
         <div class="row">
 

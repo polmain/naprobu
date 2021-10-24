@@ -39,8 +39,9 @@
     </section>
     @endif
     @if($subpage->hasReviews)
-        <div class="main-reviews">
-            <div class="container mb-4">
+        <div class="main-reviews mb-4">
+            <div class="container">
+                <h2>@lang('review.top_reviews')</h2>
                 @if($subpage->type_id == 1)
                     <div class="review-list">
                         @foreach($topReviews as $review)

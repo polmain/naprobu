@@ -16274,6 +16274,11 @@ form .btn-blue:hover {
     left: 30px;
 }
 
+.review-gallery .review-images{
+    position: relative;
+    height: 400px;
+}
+
 .review-gallery .review-images:after,
 .main-reviews .review-item .review-images:after {
     display: table;

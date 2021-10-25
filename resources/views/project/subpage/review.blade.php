@@ -39,21 +39,29 @@
     </section>
     @endif
     @if($subpage->hasReviews)
-        <div class="review-images">
-            @php
-                $i = 0;
-                $max_image = 3;
-            @endphp
-            @foreach($subpage_base->project->review_images as $image)
-                @if(++$i <= $max_image || count($subpage_base->project->review_images) <= $max_image)
-                    <a class="review-image" data-fancybox="review_gallery" href="/public/uploads/images/projects/{{$image[1]}}" style="background-image: url('/public/uploads/images/projects/{{$image[0]}}')"></a>
-                @elseif(++$i == 4)
-                    <a class="review-image" data-fancybox="review_gallery" href="/public/uploads/images/projects/{{$image[1]}}" style="background-image: url('/public/uploads/images/projects/{{$image[0]}}')"><div class="more-image">{{count($subpage_base->project->review_images) - 2}}</div></a>
-                @else
-                    <a class="review-image review-image-hidden" data-fancybox="review_gallery" href="/public/uploads/images/projects/{{$image[1]}}"></a>
-                @endif
-            @endforeach
+        @if(isset($review->images))
+        <div class="review-gallery mb-4">
+            <div class="container">
+                <h2>@lang('review.gallery')</h2>
+                <div class="review-images">
+                    @php
+                        $i = 0;
+                        $max_image = 3;
+                    @endphp
+                    @foreach($subpage_base->project->review_images as $image)
+                        @if(++$i <= $max_image || count($subpage_base->project->review_images) <= $max_image)
+                            <a class="review-image" data-fancybox="review_gallery" href="/public/uploads/images/projects/{{$image[1]}}" style="background-image: url('/public/uploads/images/projects/{{$image[0]}}')"></a>
+                        @elseif(++$i == 4)
+                            <a class="review-image" data-fancybox="review_gallery" href="/public/uploads/images/projects/{{$image[1]}}" style="background-image: url('/public/uploads/images/projects/{{$image[0]}}')"><div class="more-image">{{count($subpage_base->project->review_images) - 2}}</div></a>
+                        @else
+                            <a class="review-image review-image-hidden" data-fancybox="review_gallery" href="/public/uploads/images/projects/{{$image[1]}}"></a>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
         </div>
+        @endif
+
         @if($subpage->type_id == 1 && count($topReviews) > 0)
         <div class="main-reviews mb-4">
             <div class="container">

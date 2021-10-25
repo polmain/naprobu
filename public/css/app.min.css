@@ -16262,6 +16262,7 @@ form .btn-blue:hover {
     color: #052b5f;
 }
 
+.review-gallery .review-images,
 .main-reviews .review-item .review-images {
     display: inline-block;
     width: -webkit-calc(100% - 60px);
@@ -16273,12 +16274,14 @@ form .btn-blue:hover {
     left: 30px;
 }
 
+.review-gallery .review-images:after,
 .main-reviews .review-item .review-images:after {
     display: table;
     clear: both;
     content: '';
 }
 
+.review-gallery .review-images .review-image,
 .main-reviews .review-item .review-images .review-image {
     display: inline-block;
     height: 100%;
@@ -16294,10 +16297,12 @@ form .btn-blue:hover {
     background-repeat: no-repeat;
 }
 
+.review-gallery .review-images .review-image:nth-child(3),
 .main-reviews .review-item .review-images .review-image:nth-child(3) {
     margin-right: 0;
 }
 
+.review-gallery .review-images .review-image .more-image,
 .main-reviews .review-item .review-images .review-image .more-image {
     display: inline-block;
     width: 100%;
@@ -16309,6 +16314,7 @@ form .btn-blue:hover {
     font-size: 16px;
 }
 
+.review-gallery .review-images .review-image.review-image-hidden,
 .main-reviews .review-item .review-images .review-image.review-image-hidden {
     display: none;
 }

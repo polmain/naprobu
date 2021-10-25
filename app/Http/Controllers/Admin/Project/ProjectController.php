@@ -402,7 +402,7 @@ class ProjectController extends Controller implements iAdminController
             $oldImages = $request->images !== "null" ? json_decode($request->images) : [];
             $project->review_images = array_merge($oldImages, $newImages);
         }else{
-            $project->review_images = $request->images === "null" ? json_decode($request->images) : [];
+            $project->review_images = $request->images !== "null" ? json_decode($request->images) : [];
         }
 
 		//SEO

@@ -300,28 +300,30 @@
                             <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="item-form col-md-12">
-                            <label for="screens">Сохраненные фото:</label>
-                            <input type="hidden" name="images" id="images_list" value="{{json_encode($project->review_images)}}">
-                            <div class="load-imgs row">
-                                @if(!empty($project->review_images))
-                                    @foreach($project->review_images as $image)
-                                        <div class="col-md-4 load-image-container">
-                                            <div class="load-img active" style="background-image: url('/public/uploads/images/reviews/{{$image[1]}}')">
-                                                <i class="fa fa-times delete-image" aria-hidden="true"></i>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <div class="item-form col-md-12">
+                                <label for="screens">Сохраненные фото:</label>
+                                <input type="hidden" name="images" id="images_list" value="{{json_encode($project->review_images)}}">
+                                <div class="load-imgs row">
+                                    @if(!empty($project->review_images))
+                                        @foreach($project->review_images as $image)
+                                            <div class="col-md-4 load-image-container">
+                                                <div class="load-img active" style="background-image: url('/public/uploads/images/reviews/{{$image[1]}}')">
+                                                    <i class="fa fa-times delete-image" aria-hidden="true"></i>
+                                                </div>
                                             </div>
-                                        </div>
-                                    @endforeach
-                                @endif
+                                        @endforeach
+                                    @endif
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="item-form col-md-12">
-                            <div class="load-imgs row"></div>
-                            <label for="screens">Добавить фото:</label>
-                            <input type="file" name="new_images[]" multiple />
+                        <div class="form-group">
+                            <div class="item-form col-md-12">
+                                <div class="load-imgs row"></div>
+                                <label for="screens">Добавить фото:</label>
+                                <input type="file" name="new_images[]" multiple />
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -399,7 +399,7 @@ class ProjectController extends Controller implements iAdminController
 
         if($request->hasFile('new_images')){
             $newImages = $this->saveImageGallery($request->new_images);
-            $oldImages = $request->images === "null" ? json_decode($request->images) : [];
+            $oldImages = $request->images !== "null" ? json_decode($request->images) : [];
             $project->images = array_merge($oldImages, $newImages);
         }else{
             $project->images = $request->images === "null" ? json_decode($request->images) : [];

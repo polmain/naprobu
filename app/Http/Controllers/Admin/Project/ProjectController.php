@@ -447,11 +447,11 @@ class ProjectController extends Controller implements iAdminController
     protected function saveImageWithPreview($image,$modificator){
         $images = [];
         $filename = time() .$modificator. '.' . $image->getClientOriginalExtension();
-        Image::make($image)->save( public_path('/uploads/images/reviews/' . $filename ) );
+        Image::make($image)->save( public_path('/uploads/images/projects/' . $filename ) );
         $images[] = $filename;
 
         $filename = time() .($modificator+1). '.' . $image->getClientOriginalExtension();
-        Image::make($image)->fit (300, 300)->save( public_path('/uploads/images/reviews/' . $filename ) );
+        Image::make($image)->fit (300, 300)->save( public_path('/uploads/images/projects/' . $filename ) );
         $images[] = $filename;
 
         return $images;

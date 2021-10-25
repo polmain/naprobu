@@ -309,7 +309,7 @@
                                     @if(!empty($project->review_images))
                                         @foreach($project->review_images as $image)
                                             <div class="col-md-4 load-image-container">
-                                                <div class="load-img active" style="background-image: url('/public/uploads/images/reviews/{{$image[1]}}')">
+                                                <div class="load-img active" style="background-image: url('/public/uploads/images/projects/{{$image[1]}}')">
                                                     <i class="fa fa-times delete-image" aria-hidden="true"></i>
                                                 </div>
                                             </div>

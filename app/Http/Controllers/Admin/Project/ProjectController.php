@@ -396,6 +396,15 @@ class ProjectController extends Controller implements iAdminController
 			$project->status_id = $request->status;
 		}
 
+        if($request->hasFile('new_images')){
+            $newImages = $this->saveImageGallery($request->new_images);
+            $oldImages = json_decode($request->images);
+            $oldImages = is_array($oldImages)?$oldImages:[];
+            $project->images = array_merge($oldImages, $newImages);
+        }else{
+            $project->images = json_decode($request->images);
+        }
+
 		//SEO
 		$project->seo_title = $request->title;
 		$project->seo_description = $request->seo_description;
@@ -423,6 +432,29 @@ class ProjectController extends Controller implements iAdminController
 
 		$this->deleteQuestions($project->id);
 	}
+
+    protected function saveImageGallery($images){
+        $out_images = [];
+        $i = 0;
+        foreach ($images as $image){
+            $out_images[] = $this->saveImageWithPreview($image, $i);
+            $i += 2;
+        }
+        return $out_images;
+    }
+
+    protected function saveImageWithPreview($image,$modificator){
+        $images = [];
+        $filename = time() .$modificator. '.' . $image->getClientOriginalExtension();
+        Image::make($image)->save( public_path('/uploads/images/reviews/' . $filename ) );
+        $images[] = $filename;
+
+        $filename = time() .($modificator+1). '.' . $image->getClientOriginalExtension();
+        Image::make($image)->fit (300, 300)->save( public_path('/uploads/images/reviews/' . $filename ) );
+        $images[] = $filename;
+
+        return $images;
+    }
 
     private function checkRequiredForLang(Request $request, string $lang): bool
     {

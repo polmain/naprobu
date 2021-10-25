@@ -320,8 +320,8 @@
                         </div>
                         <div class="form-group">
                             <div class="item-form col-md-12">
-                                <div class="load-imgs row"></div>
                                 <label for="screens">Добавить фото:</label>
+                                <div class="load-imgs row"></div>
                                 <input type="file" name="new_images[]" multiple />
                             </div>
                         </div>

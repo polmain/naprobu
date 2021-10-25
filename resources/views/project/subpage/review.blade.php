@@ -39,7 +39,7 @@
     </section>
     @endif
     @if($subpage->hasReviews)
-        @if(isset($review->images))
+        @if(isset($subpage_base->project->review_images))
         <div class="review-gallery mb-4">
             <div class="container">
                 <h2>@lang('review.gallery')</h2>

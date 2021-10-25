@@ -300,7 +300,7 @@
                             <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group">
                         <div class="item-form col-md-12">
                             <label for="screens">Сохраненные фото:</label>
                             <input type="hidden" name="images" id="images_list" value="{{json_encode($project->review_images)}}">
@@ -317,7 +317,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group">
                         <div class="item-form col-md-12">
                             <div class="load-imgs row"></div>
                             <label for="screens">Добавить фото:</label>

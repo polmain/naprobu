@@ -27,6 +27,7 @@ use PDF;
 use SEO;
 use AdminPageData;
 use Storage;
+use Image;
 
 class ProjectController extends Controller implements iAdminController
 {

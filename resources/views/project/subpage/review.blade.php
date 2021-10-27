@@ -45,9 +45,11 @@
                 <h2>@lang('review.gallery')</h2>
                 <div class="gallery-list">
                     @foreach($subpage_base->project->review_images as $image)
-                        <a class="gallery-item" data-fancybox="review_gallery" href="/public/uploads/images/projects/{{$image[0]}}">
-                            <img src="/public/uploads/images/projects/{{$image[1]}}">
-                        </a>
+                        <div class="col-md-4">
+                            <a class="gallery-item" data-fancybox="review_gallery" href="/public/uploads/images/projects/{{$image[0]}}">
+                                <img src="/public/uploads/images/projects/{{$image[1]}}">
+                            </a>
+                        </div>
                     @endforeach
                 </div>
             </div>

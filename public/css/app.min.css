@@ -16273,7 +16273,10 @@ form .btn-blue:hover {
     bottom: 50px;
     left: 30px;
 }
-
+.review-gallery .col-md-4{
+    max-width: 100%;
+    padding: 0;
+}
 .review-gallery .review-images{
     position: relative;
     height: 400px;

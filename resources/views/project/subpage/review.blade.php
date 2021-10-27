@@ -40,7 +40,7 @@
     @endif
     @if($subpage->hasReviews)
         @if(isset($subpage_base->project->review_images))
-        <div class="review-gallery mb-4">
+        <div class="review-gallery mb-5">
             <div class="container">
                 <h2>@lang('review.gallery')</h2>
                 <div class="gallery-list">
@@ -57,7 +57,7 @@
         @endif
 
         @if($subpage->type_id == 1 && count($topReviews) > 0)
-        <div class="main-reviews mb-4">
+        <div class="main-reviews mb-5">
             <div class="container">
                 <h2>@lang('review.top_reviews')</h2>
 

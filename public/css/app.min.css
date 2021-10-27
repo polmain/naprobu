@@ -16174,6 +16174,9 @@ form .btn-blue:hover {
     max-width: 100%;
     padding: 0;
 }
+.review-gallery h2{
+    margin-bottom: 30px;
+}
 
 .review-gallery .col-md-4{
     max-width: 100%;

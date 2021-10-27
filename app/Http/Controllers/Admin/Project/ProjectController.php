@@ -443,14 +443,14 @@ class ProjectController extends Controller implements iAdminController
         return $out_images;
     }
 
-    protected function saveImageWithPreview($image,$modificator){
+    protected function saveImageWithPreview($image, $modificator){
         $images = [];
         $filename = time() .$modificator. '.' . $image->getClientOriginalExtension();
         Image::make($image)->save( public_path('/uploads/images/projects/' . $filename ) );
         $images[] = $filename;
 
         $filename = time() .($modificator+1). '.' . $image->getClientOriginalExtension();
-        Image::make($image)->fit (300, 300)->save( public_path('/uploads/images/projects/' . $filename ) );
+        Image::make($image)->fit (500, 500)->save( public_path('/uploads/images/projects/' . $filename ) );
         $images[] = $filename;
 
         return $images;

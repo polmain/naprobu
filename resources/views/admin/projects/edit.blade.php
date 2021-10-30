@@ -295,6 +295,41 @@
 
                 <div class="box box-primary">
                     <div class="box-header with-border">
+                        <h3 class="box-title">Галерея фото с отзывов</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <div class="item-form col-md-12">
+                                <label for="screens">Сохраненные фото:</label>
+                                <input type="hidden" name="images" id="images_list" value="{{json_encode($project->review_images)}}">
+                                <div class="load-imgs row">
+                                    @if(!empty($project->review_images))
+                                        @foreach($project->review_images as $image)
+                                            <div class="col-md-4 load-image-container">
+                                                <div class="load-img active" style="background-image: url('/public/uploads/images/projects/{{$image[1]}}')">
+                                                    <i class="fa fa-times delete-image" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="item-form col-md-12">
+                                <label for="screens">Добавить фото:</label>
+                                <div class="load-imgs row"></div>
+                                <input type="file" name="new_images[]" multiple />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box box-primary">
+                    <div class="box-header with-border">
                         <h3 class="box-title">Результаты проекта</h3>
                         <div class="box-tools pull-right">
                             <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>

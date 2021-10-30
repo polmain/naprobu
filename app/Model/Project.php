@@ -9,10 +9,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
+    protected $casts = [
+        'review_images' => 'array',
+    ];
+
 	public function category()
 	{
 		return $this->hasOne('App\Model\Project\ProjectCategory','id','category_id');
 	}
+
 	public function status()
 	{
 		return $this->hasOne('App\Model\Project\ProjectStatus','id','status_id');

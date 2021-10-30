@@ -1,6 +1,10 @@
 <?php
 
 return [
+
+    'top_reviews'   => 'Top reviews',
+    'gallery'       => 'Gallery',
+
 	/* Карточка отзыва */
 	'comment_count'				=> '{0} Review has :count comments|{1} Review has :count comment|[2,3] Review has :count comments|[4,*] Review has :count comments',
 	'comment_more_count'		=> '{0} Show more :count comments|{1} Show more :count comment|[2,3] Show more :count comments|[4,*] Show more :count comments',

@@ -39,6 +39,37 @@
     </section>
     @endif
     @if($subpage->hasReviews)
+        @if(isset($subpage_base->project->review_images))
+        <div class="review-gallery mb-5">
+            <div class="container">
+                <h2>@lang('review.gallery')</h2>
+                <div class="gallery-list">
+                    @foreach($subpage_base->project->review_images as $image)
+                        <div class="col-md-4">
+                            <a class="gallery-item" data-fancybox="review_gallery" href="/public/uploads/images/projects/{{$image[0]}}">
+                                <img src="/public/uploads/images/projects/{{$image[1]}}">
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        @endif
+
+        @if($subpage->type_id == 1 && count($topReviews) > 0)
+        <div class="main-reviews mb-5">
+            <div class="container">
+                <h2>@lang('review.top_reviews')</h2>
+
+                    <div class="review-list">
+                        @foreach($topReviews as $review)
+                            @include('review.include.review_item_slide')
+                        @endforeach
+                    </div>
+            </div>
+        </div>
+        @endif
+
     <div class="container mb-4">
         <div class="row">
 

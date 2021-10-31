@@ -42,7 +42,7 @@ class MainPageSettingController extends Controller
 		}
 
 		ModeratorLogs::addLog("Отредактировал настройки главной страницы");
-		return redirect()->route('adm_seo_settings');
+		return redirect()->route('adm_mainpage_settings');
 	}
 
 	private function editSetting($request,$key){

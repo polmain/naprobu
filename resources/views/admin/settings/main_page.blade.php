@@ -6,11 +6,11 @@
             {{ csrf_field() }}
         <div class='col-md-9'>
             <!-- Box -->
-            <div class="box box-primary collapsed-box">
+            <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">Настройик Главной страницы</h3>
                         <div class="box-tools pull-right">
-                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-plus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                             <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
                         </div>
                     </div>

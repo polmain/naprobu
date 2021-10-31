@@ -50,7 +50,7 @@ class MainPageSettingController extends Controller
 		$setting->value = $request->setting_content[$key];
 		$setting->save();
 
-		if ($setting->type_id !== 4){
+		if ($setting->type_id != 4){
             foreach (self::TRANSLATE_LANG as $lang){
                 $translate = $setting->translate->firstWhere('lang', $lang);
                 if($translate){

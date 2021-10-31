@@ -35,8 +35,8 @@
                                             <div class="col-md-12">
                                                 <label>Текст<span class="input-request">*</span></label>
                                                 <select class="form-control select2 blog-select2" name="setting_content[]">
-                                                    <option value="0" @if($setting->value === 0) selected="selected" @endif>Последняя новость</option>
-                                                    @if($setting->value !== 0)
+                                                    <option value="0" @if($setting->value == 0) selected="selected" @endif>Последняя новость</option>
+                                                    @if($setting->value != 0)
                                                         @php
                                                             $post = $posts->firstWhere('id', $setting->value);
                                                         @endphp

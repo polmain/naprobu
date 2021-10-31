@@ -252,6 +252,10 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
 
 			Route::get('/settings/language_settings/', 'Admin\Settings\LanguageController@settings')->name('adm_language_settings');
 			Route::post('/settings/language_settings/', 'Admin\Settings\LanguageController@settings_save')->name('adm_language_settings_save');
+
+
+			Route::get('/settings/main-page-settings/', 'Admin\Settings\MainPageSettingController@settings')->name('adm_mainpage_settings');
+			Route::post('/settings/main-page-settings/', 'Admin\Settings\MainPageSettingController@save')->name('adm_mainpage_settings_save');
 			/* End Settings */
 
 			/* ----------------- IMPORT DB ----------------------- */
@@ -366,6 +370,7 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
 
 		/* Blog pages */
 
+        Route::get('/blog/find/', 'Admin\Blog\BlogController@find')->name('adm_post_find');
 		Route::get('/blog/comments/', 'Admin\Blog\CommentController@all')->name('adm_post_comment');
 		Route::get('/blog/comments/ajax/', 'Admin\Blog\CommentController@all_ajax')->name('adm_post_comment_ajax');
 		Route::get('/blog/comments/edit/{comment_id}/', 'Admin\Blog\CommentController@edit')->name('adm_post_comment_edit');

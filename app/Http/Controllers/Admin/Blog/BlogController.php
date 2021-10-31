@@ -103,6 +103,21 @@ class BlogController extends Controller
 		return "ok";
 	}
 
+    public function find(Request $request)
+    {
+        $name = $request->name;
+
+        $posts = Post::where('lang','ru')->where('name','like',"%".$name."%")->limit(10)->get();
+
+        $formattedPosts = [];
+
+        foreach ($posts as $post) {
+            $formattedPosts[] = ['id' => $post->id, 'text' => $post->name];
+        }
+
+        return \Response::json($formattedPosts);
+    }
+
 	public function hide($post_id){
 		$post = Post::find($post_id);
 		$post->isHide = true;

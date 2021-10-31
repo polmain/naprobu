@@ -89,6 +89,7 @@ class ProjectController extends Controller implements iAdminController
 
 		return \Response::json($formatted_projects);
 	}
+
 	public function validURL(Request $request,$project_id)
 	{
 		$url = $request->url;

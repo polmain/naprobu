@@ -33,14 +33,14 @@
                                         @switch($setting->type_id)
                                             @case(4)
                                             <div class="col-md-12">
-                                                <label>Текст<span class="input-request">*</span></label>
+                                                <label>Выберите статью<span class="input-request">*</span></label>
                                                 <select class="form-control select2 blog-select2" name="setting_content[]">
                                                     <option value="0" @if($setting->value == 0) selected="selected" @endif>Последняя новость</option>
                                                     @if($setting->value != 0)
                                                         @php
                                                             $post = $posts->firstWhere('id', $setting->value);
                                                         @endphp
-                                                        <option value="{{ $post->id }}" selected="selected">{{ $post->id }}</option>
+                                                        <option value="{{ $post->id }}" selected="selected">{{ $post->name }}</option>
                                                     @endif
                                                 </select>
                                             </div>

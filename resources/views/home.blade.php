@@ -177,36 +177,10 @@
             <h2>{{trans('home.blog_mainpage')}}</h2>
             <div class="row post-list">
                 <div class="col-lg-6 mb-lg-0 mb-5">
-                    <a class="post-big" href="{{route('blog.level2',[(App::getLocale() == 'ru')?$posts->first()->url:$posts->first()->translate->firstWhere('lang', App::getLocale())->url])}}">
-                        <div class="post-big-image" style="background-image: url({{$posts->first()->image}})">
-
-                        </div>
-                        <div class="post-big-info">
-                            @if(App::getLocale() == 'ru')
-                            <div class="post-big-name">
-                                {{$posts->first()->name}}
-                            </div>
-                            <div class="post-big-description">
-                                {{$posts->first()->preview_text}}
-                            </div>
-                            @else
-                                <div class="post-big-name">
-                                    {{$posts->first()->translate->firstWhere('lang', App::getLocale())->name}}
-                                </div>
-                                <div class="post-big-description">
-                                    {{$posts->first()->translate->firstWhere('lang', App::getLocale())->preview_text}}
-                                </div>
-                            @endif
-                            <div class="row align-items-center post-big-bottom">
-                                <div class="col">
-                                    <div class="post-big-date">{{Carbon::parse($posts->first()->created_at)->format('d.m.Y')}}</div>
-                                </div>
-                                <div class="col text-right">
-                                    <div class="post-big-link">@lang('global.detail')</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+                    @php
+                        $bigPost = $mainPageBlogSettings->firstWhere('name', 'post_1');
+                    @endphp
+                    @include('blog.include.big_post',['post' => $bigPost->value != 0 ? $bigPost: $posts->first() ])
                 </div>
                 <div class="col-lg-6 ">
                     <div class="d-flex align-content-between flex-wrap post-small-list" >

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App;
 use App\Entity\ProjectAudienceEnum;
+use App\Model\Setting;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Illuminate\Http\Request;
 use App\Mail\PartnerNotificationMail;
@@ -27,6 +28,7 @@ class MainController extends Controller
     private const FAKE_PROJECT_COUNT_INCREMENTER = 37;
     private const OPEN_GRAPH_IMAGE_WIDTH = 350;
     private const OPEN_GRAPH_IMAGE_HEIGHT = 220;
+    private const DEFAULT_LANG = 'ru';
 
     public function home(Request $request){
         $international = $request->get('international');
@@ -91,6 +93,19 @@ class MainController extends Controller
 								$q->where('name', 'expert');
 							})->count();
 
+        $mainPageBlogSettings = Setting::where([
+            ['page','main_page_blog'],
+            ['lang', self::DEFAULT_LANG],
+        ])->get();
+
+        $mainPagePosts = Post::with(['project.category.translate'])
+            ->whereIn('id', $mainPageBlogSettings->pluck('value'))
+            ->withCount(['visible_comments'])->where([
+                ['lang','ru'],
+                ['isHide',0],
+            ])
+            ->get();
+
 		if($locale === 'ru'){
             $posts = Post::with(['project.category.translate'])->where([
                     ['lang',$locale],
@@ -139,6 +154,8 @@ class MainController extends Controller
     		'expert_count'	=>	$expert_count,
 			'alternativeUrls'	=> $alternativeUrls,
 			'international'	=> $international,
+			'mainPagePosts'	=> $mainPagePosts,
+			'mainPageBlogSettings'	=> $mainPageBlogSettings,
 		]);
 	}
 

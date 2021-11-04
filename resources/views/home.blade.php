@@ -178,9 +178,13 @@
             <div class="row post-list">
                 <div class="col-lg-6 mb-lg-0 mb-5">
                     @php
-                        $bigPost = $mainPageBlogSettings->firstWhere('name', 'post_1');
+                        $bigPostSetting1 = $mainPageBlogSettings->firstWhere('name', 'post_1');
+                        if($bigPostSetting1->value != 0){
+                           $post = $mainPagePosts->firstWhere('id', $bigPostSetting1->value);
+                        } else {
+                            $post = null;
                     @endphp
-                    @include('blog.include.big_post',['post' => $bigPost->value != 0 ? $bigPost: $posts->first() ])
+                    @include('blog.include.big_post',['post' =>  $post?: $posts->first() ])
                 </div>
                 <div class="col-lg-6 ">
                     <div class="d-flex align-content-between flex-wrap post-small-list" >

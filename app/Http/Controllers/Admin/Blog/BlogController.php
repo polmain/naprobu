@@ -107,7 +107,7 @@ class BlogController extends Controller
     {
         $name = $request->name;
 
-        $posts = Post::where('lang','ru')->where('name','like',"%".$name."%")->limit(10)->get();
+        $posts = Post::where('lang','ru')->where('name','like',"%".$name."%")->orderBy('id', 'DESC')->limit(10)->get();
 
         $formattedPosts = [];
 

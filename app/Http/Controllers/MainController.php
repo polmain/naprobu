@@ -100,10 +100,7 @@ class MainController extends Controller
 
         $mainPagePosts = Post::with(['project.category.translate'])
             ->whereIn('id', $mainPageBlogSettings->pluck('value'))
-            ->withCount(['visible_comments'])->where([
-                ['lang','ru'],
-                ['isHide',0],
-            ])
+            ->withCount(['visible_comments'])
             ->get();
 
 		if($locale === 'ru'){

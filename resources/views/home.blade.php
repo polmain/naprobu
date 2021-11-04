@@ -183,6 +183,7 @@
                            $post = $mainPagePosts->firstWhere('id', $bigPostSetting1->value);
                         } else {
                             $post = null;
+                        }
                     @endphp
                     @include('blog.include.big_post',['post' =>  $post?: $posts->first() ])
                 </div>

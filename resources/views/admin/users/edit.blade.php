@@ -6,13 +6,13 @@
         <div class='col-md-6'>
             <!-- Box -->
             <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Редактировать пользователя</h3>
-                        <div class="box-tools pull-right">
-                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-                        </div>
+                <div class="box-header with-border">
+                    <h3 class="box-title">Редактировать пользователя</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
                     </div>
+                </div>
                 <form action="{{route('adm_users_save',['user_id'=>$user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="box-body">
@@ -85,7 +85,7 @@
                                 <div class="col-sm-9">
                                     <select class="form-control select2" name="city_id" id="city_id">
                                         @if($user->city_model)
-                                        <option value="{{$user->city_model->id}}" selected="selected">{{$user->city_model->name}}</option>
+                                            <option value="{{$user->city_model->id}}" selected="selected">{{$user->city_model->name}}</option>
                                         @endif
                                     </select>
                                 </div>
@@ -136,6 +136,30 @@
                         </div>
                         @endif
                         <div class="form-group">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <label>
+                                    <input type="checkbox" class="minimal-red" name="is_good_photo" value="true"{{($user->is_good_photo)?" checked=checked":""}}>
+                                    Хорошие фотографии
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <label>
+                                    <input type="checkbox" class="minimal-red" name="is_good_video" value="true"{{($user->is_good_video)?" checked=checked":""}}>
+                                    Хорошие видео
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <label>
+                                    <input type="checkbox" class="minimal-red" name="is_good_review" value="true"{{($user->is_good_review)?" checked=checked":""}}>
+                                    Хорошие отзывы
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="userRole" class="col-sm-3 control-label ">Аватар</label>
                             <div class="col-sm-9">
                                 <div class="load-image-container avatar">
@@ -163,34 +187,33 @@
                 <div class="box-body">
                     <p><strong>Город НП:</strong> {{$user->nova_poshta_city}}</p>
                     <p><strong>Отделение НП:</strong> {{$user->nova_poshta_warehouse}}</p>
-                    <p><strong>Метод оплаты:</strong> @lang("user.payment_type_".$user->payment_type)</p>
-                    @if($user->payment_type === 'card')
-                        <p><strong>Номер карты:</strong> {{$user->card_number}}</p>
-                    @endif
                     @if($user->education)
-                    <p><strong>Образование:</strong> @lang("education.".$user->education)</p>
+                        <p><strong>Образование:</strong> @lang("education.".$user->education)</p>
                     @endif
                     @if($user->employment)
-                    <p><strong>Занятость:</strong> @lang("employment.".$user->employment)</p>
+                        <p><strong>Занятость:</strong> @lang("employment.".$user->employment)</p>
                     @endif
                     @if($user->work)
-                    <p><strong>Кем работаете:</strong> @lang("work.".$user->work)</p>
+                        <p><strong>Кем работаете:</strong> @lang("work.".$user->work)</p>
                     @endif
                     @if($user->family_status)
-                    <p><strong>Семейное положение:</strong> @lang("family_status.".$user->family_status)</p>
+                        <p><strong>Семейное положение:</strong> @lang("family_status.".$user->family_status)</p>
+                    @endif
+                    @if($user->has_child)
+                        <p><strong>Есть ли у Вас дети?:</strong> {{$user->has_child?"Да":"Нет"}}</p>
                     @endif
                     @if($user->material_condition)
-                    <p><strong>Как бы Вы описали материальное состояние вашей семьи?:</strong> @lang("material_condition.".$user->material_condition)</p>
+                        <p><strong>Как бы Вы описали материальное состояние вашей семьи?:</strong> @lang("material_condition.".$user->material_condition)</p>
                     @endif
                     @if(is_array($user->hobbies))
                         <p><strong>Увлечения/интересы:</strong>
-                        @foreach($user->hobbies as $hobby)
-                            @lang("hobbies.".$hobby);
-                        @endforeach
-                        @if($user->hobbies_other)
-                            {{$user->hobbies_other}}
-                        @endif
-                    </p>
+                            @foreach($user->hobbies as $hobby)
+                                @lang("hobbies.".$hobby);
+                            @endforeach
+                            @if($user->hobbies_other)
+                                {{$user->hobbies_other}}
+                            @endif
+                        </p>
                     @endif
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
@@ -204,7 +227,7 @@
                 </div>
                 <div class="box-body">
                     <p><strong>Приоритет:</strong> {{$user->getPriority()}}</p>
-                    <p><strong>Возраст:</strong> {{\Carbon\Carbon::now()->year - $user->birsday}}</p>
+                    <p><strong>Возраст:</strong> {{is_numeric($user->birsday)? \Carbon\Carbon::now()->year - $user->birsday : 0}}</p>
                     <p><strong>Уровень пользователя:</strong> {{$ratingStatus->name}}</p>
                     <p><strong>Количество балов:</strong> {{$user->history->sum('score')}}</p>
                     <p><strong>Был на сайте:</strong> {{$user->last_active}}</p>
@@ -216,16 +239,16 @@
             <!-- Box -->
             <form action="{{route('adm_change_status',['user_id' => $user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
                 {{ csrf_field() }}
-            <div class="box box-warning collapsed-box">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Сменить статус</h3>
+                <div class="box box-warning collapsed-box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Сменить статус</h3>
 
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
-                        </button>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                        <!-- /.box-tools -->
                     </div>
-                    <!-- /.box-tools -->
-                </div>
                     <div class="box-body">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -256,7 +279,7 @@
                         <button type="submit" class="btn btn-primary">Подтвердить</button>
                     </div>
 
-            </div>
+                </div>
             </form>
             <div class="box box-default collapsed-box">
                 <div class="box-header with-border">
@@ -271,16 +294,16 @@
 
                 <div class="box-body">
                     <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
-                        <thead>
+                        <table class="table table-bordered table-hover">
+                            <thead>
                             <tr>
                                 <th>id</th>
                                 <th>Статус</th>
                                 <th>Примечание</th>
                                 <th>Время смены</th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             @foreach($statusHistory as $status)
                                 <tr>
                                     <td>{{$status->id}}</td>
@@ -289,8 +312,8 @@
                                     <td>{{$status->created_at}}</td>
                                 </tr>
                             @endforeach
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
                     </div>
                 </div><!-- /.box-body -->
 
@@ -404,18 +427,18 @@
                 <div class="box-body">
                     <h4>{{$ratingStatus->name}}({{$user->current_rating}}) <strong>{{$user->history->sum('score')}}</strong></h4>
                     <div class="table-responsive">
-                    <table id="user-history" class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th>Действие</th>
-                            <th width="60">Балы</th>
-                            <th width="60">Балы</th>
-                            <th>Время</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                        <table id="user-history" class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>Действие</th>
+                                <th width="60">Балы</th>
+                                <th width="60">Балы</th>
+                                <th>Время</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
@@ -426,38 +449,38 @@
 
 @section("scripts")
     <script>
-		var tableUsers = $('#user-history').DataTable({
-			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Все"]],
-			"pageLength": 10,
-			"language": {
-				"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json"
-			},
-			"processing": true,
-			"serverSide": true,
-			"ajax": "{!! route('adm_users_history',['user_id'=>$user->id]) !!}",
-			"columns": [
+        var tableUsers = $('#user-history').DataTable({
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Все"]],
+            "pageLength": 10,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json"
+            },
+            "processing": true,
+            "serverSide": true,
+            "ajax": "{!! route('adm_users_history',['user_id'=>$user->id]) !!}",
+            "columns": [
 
-				{
-					data: 'action',
+                {
+                    data: 'action',
                     orderable:      false,
-				},
-				{
-					data: 'points',
-					orderable:      false,
                 },
-				{
-					data: 'score',
-					orderable:      false,
+                {
+                    data: 'points',
+                    orderable:      false,
                 },
-				{
-					data: "created_at",
-				},
+                {
+                    data: 'score',
+                    orderable:      false,
+                },
+                {
+                    data: "created_at",
+                },
 
-			],
-			"fnDrawCallback": afterDrawTabel
-		});
+            ],
+            "fnDrawCallback": afterDrawTabel
+        });
 
-		tableUsers.on( 'draw', afterDrawTabel() );
+        tableUsers.on( 'draw', afterDrawTabel() );
 
         @if($user->new_form_status)
         $('#country_id').select2({

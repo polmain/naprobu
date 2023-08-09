@@ -42,6 +42,7 @@
                             <th width="40">id</th>
                             <th>Логин</th>
                             <th>Имя</th>
+                            <th>Телефон</th>
                             <th>e-mail</th>
                             <th width="60">Роль</th>
                             <th>В сети</th>
@@ -455,6 +456,10 @@
 				},
 				{
 					data: 'first_name',
+					visible: false,
+				},
+				{
+					data: 'phone',
 					visible: false,
 				},
 				{ "data": "email" },

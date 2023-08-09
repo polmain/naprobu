@@ -118,6 +118,10 @@ class User extends Authenticatable
         return $this->hasOne('App\Model\Geo\City','id', 'city_id');
     }
 
+    public function children(){
+        return $this->hasMany('App\Model\User\UserChild', 'user_id');
+    }
+
 	public function isOnline(){
 		return ActiveUser::isOnline($this->last_active);
 	}

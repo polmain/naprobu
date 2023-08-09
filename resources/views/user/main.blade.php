@@ -1,12 +1,12 @@
 @extends('layouts.main')
 @section('content')
-<section class="breadcrumb-box mb-4">
-    <div class="container">
-        <div class="row">
-            {{ Breadcrumbs::render('user') }}
+    <section class="breadcrumb-box mb-4">
+        <div class="container">
+            <div class="row">
+                {{ Breadcrumbs::render('user') }}
+            </div>
         </div>
-    </div>
-</section>
+    </section>
     <div class="container">
         <div class="row">
             <div class="col-lg-3 col-md-6  col-sm-8 offset-sm-2 offset-md-3 offset-lg-0">
@@ -35,18 +35,18 @@
                         </div>
                     </div>
                     @auth
-                    @if(!Auth::user()->hasRole('expert'))
-                    <div class="user-page-block text-center">
-                        <div class="user-page-title user-page-title-ref">
-                            @lang('user.user_not_expert')
-                        </div>
-                    </div>
-                    @endif
+                        @if(!Auth::user()->hasRole('expert'))
+                            <div class="user-page-block text-center">
+                                <div class="user-page-title user-page-title-ref">
+                                    @lang('user.user_not_expert')
+                                </div>
+                            </div>
+                        @endif
                     @endauth
                     <div class="col-12">
                         <div class="row">
-                        <form method="POST" id="user_data_form" action="{{ route('user.data_save') }}" class="form-user-edit-data">
-                            @csrf
+                            <form method="POST" id="user_data_form" action="{{ route('user.data_save') }}" class="form-user-edit-data">
+                                @csrf
                                 <div class="form-block">
                                     <div class="form-group ">
                                         <input id="last_name" type="text" class="form-control" name="last_name" value="{{Auth::user()->last_name}}" placeholder="@lang("registration.last_name")">
@@ -83,11 +83,11 @@
                                                 @endif
                                             @endif
                                             @if(!Auth::user()->country_model || $defaultCountry->id !== Auth::user()->country_model->id)
-                                                    @if(App::getLocale() === 'ru')
-                                                        <option value="{{$defaultCountry->id}}">{{$defaultCountry->name}}</option>
-                                                    @else
-                                                        <option value="{{$defaultCountry->id}}">{{$defaultCountry->translate->firstWhere('lang', App::getLocale())->name}}</option>
-                                                    @endif
+                                                @if(App::getLocale() === 'ru')
+                                                    <option value="{{$defaultCountry->id}}">{{$defaultCountry->name}}</option>
+                                                @else
+                                                    <option value="{{$defaultCountry->id}}">{{$defaultCountry->translate->firstWhere('lang', App::getLocale())->name}}</option>
+                                                @endif
                                             @endif
                                         </select>
                                     </div>
@@ -101,7 +101,7 @@
                                                     <option value="{{Auth::user()->region_model->id}}" selected="selected">{{(Auth::user()->region_model->translate->firstWhere('lang', App::getLocale()) ?? Auth::user()->region_model)->name}}</option>
                                                 @endif
                                             @endif
-                                                <option value="other">@lang('registration.other_select')</option>
+                                            <option value="other">@lang('registration.other_select')</option>
                                         </select>
                                     </div>
                                     <div class="form-group new_region-group">
@@ -118,7 +118,7 @@
                                                     <option value="{{Auth::user()->city_model->id}}" selected="selected">{{(Auth::user()->city_model->translate->firstWhere('lang', App::getLocale()) ?? Auth::user()->city_model)->name}}</option>
                                                 @endif
                                             @endif
-                                                <option value="other">@lang('registration.other_select')</option>
+                                            <option value="other">@lang('registration.other_select')</option>
                                         </select>
                                     </div>
                                     <div class="form-group new_city-group">
@@ -162,85 +162,85 @@
                                     </div>
                                 </div>
 
-                            <div class="form-block">
-                                <div class="form-group">
-                                    <label for="education">@lang("registration.education")</label>
-                                    <select name="education" id="education" class="form-control">
-                                        @foreach($educationArray as $education)
-                                            <option value="{{$education}}" @if($education->getValue() === Auth::user()->education)selected="selected" @endif>@lang("education.".$education)</option>
+                                <div class="form-block">
+                                    <div class="form-group">
+                                        <label for="education">@lang("registration.education")</label>
+                                        <select name="education" id="education" class="form-control">
+                                            @foreach($educationArray as $education)
+                                                <option value="{{$education}}" @if($education->getValue() === Auth::user()->education)selected="selected" @endif>@lang("education.".$education)</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="employment">@lang("registration.employment")</label>
+                                        <select name="employment" id="employment" class="form-control">
+                                            @foreach($employmentArray as $employment)
+                                                <option value="{{$employment}}" @if($employment->getValue() === Auth::user()->employment)selected="selected" @endif>@lang("employment.".$employment)</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="work-group">
+                                        <label for="work">@lang("registration.work")</label>
+                                        <select name="work" id="work" class="form-control">
+                                            @foreach($workArray as $work)
+                                                <option value="{{$work}}" @if($work->getValue() === Auth::user()->work)selected="selected" @endif>@lang("work.".$work)</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="family_status">@lang("registration.family_status")</label>
+                                        <select name="family_status" id="family_status" class="form-control">
+                                            @foreach($familyStatusArray as $familyStatus)
+                                                <option value="{{$familyStatus}}" @if($familyStatus->getValue() === Auth::user()->family_status)selected="selected" @endif>@lang("family_status.".$familyStatus)</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="has_child">@lang("registration.has_child")</label>
+                                        <select name="has_child" id="has_child" class="form-control">
+                                            <option value="1" @if(Auth::user()->has_child === 1)selected="selected" @endif>@lang("global.yes")</option>
+                                            <option value="0" @if(Auth::user()->has_child === 0)selected="selected" @endif>@lang("global.no")</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="child_count_block">
+                                        <input id="child_count" type="number" class="form-control" name="child_count" value="{{--  {{Auth::user()->birsday}} --}}" placeholder="@lang("registration.child_count")" min="1" max="20">
+                                    </div>
+                                    <div class="form-group" id="child_list">
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="material_condition">@lang("registration.material_condition")</label>
+                                        <select name="material_condition" id="material_condition" class="form-control">
+                                            @foreach($materialConditionArray as $materialCondition)
+                                                <option value="{{$materialCondition}}" @if($materialCondition->getValue() === Auth::user()->material_condition)selected="selected" @endif>@lang("material_condition.".$materialCondition)</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="hobbies">@lang("registration.hobbies")</label>
+                                        @foreach($hobbiesArray as $hobby)
+                                            <label class="form-check">@lang("hobbies.".$hobby)
+                                                <input class="form-check-input" type="checkbox" name="hobbies[]" @if($hobby->isOther())id="hobbies_other_checkbox"@endif  @if(is_array(Auth::user()->hobbies) && in_array($hobby->getValue(), Auth::user()->hobbies))checked="checked" @endif value="{{$hobby}}">
+                                                <span class="checkmark"></span>
+                                            </label>
                                         @endforeach
-                                    </select>
+                                    </div>
+                                    <div class="form-group" id="hobbies_other-group">
+                                        <input id="hobbies_other" type="text" class="form-control" name="hobbies_other" placeholder="@lang("hobbies.other")" value="{{Auth::user()->hobbies_other}}">
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="employment">@lang("registration.employment")</label>
-                                    <select name="employment" id="employment" class="form-control">
-                                        @foreach($employmentArray as $employment)
-                                            <option value="{{$employment}}" @if($employment->getValue() === Auth::user()->employment)selected="selected" @endif>@lang("employment.".$employment)</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group" id="work-group">
-                                    <label for="work">@lang("registration.work")</label>
-                                    <select name="work" id="work" class="form-control">
-                                        @foreach($workArray as $work)
-                                            <option value="{{$work}}" @if($work->getValue() === Auth::user()->work)selected="selected" @endif>@lang("work.".$work)</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="family_status">@lang("registration.family_status")</label>
-                                    <select name="family_status" id="family_status" class="form-control">
-                                        @foreach($familyStatusArray as $familyStatus)
-                                            <option value="{{$familyStatus}}" @if($familyStatus->getValue() === Auth::user()->family_status)selected="selected" @endif>@lang("family_status.".$familyStatus)</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="material_condition">@lang("registration.material_condition")</label>
-                                    <select name="material_condition" id="material_condition" class="form-control">
-                                        @foreach($materialConditionArray as $materialCondition)
-                                            <option value="{{$materialCondition}}" @if($materialCondition->getValue() === Auth::user()->material_condition)selected="selected" @endif>@lang("material_condition.".$materialCondition)</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="hobbies">@lang("registration.hobbies")</label>
-                                    @foreach($hobbiesArray as $hobby)
-                                        <label class="form-check">@lang("hobbies.".$hobby)
-                                            <input class="form-check-input" type="checkbox" name="hobbies[]" @if($hobby->isOther())id="hobbies_other_checkbox"@endif  @if(is_array(Auth::user()->hobbies) && in_array($hobby->getValue(), Auth::user()->hobbies))checked="checked" @endif value="{{$hobby}}">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                                <div class="form-group" id="hobbies_other-group">
-                                    <input id="hobbies_other" type="text" class="form-control" name="hobbies_other" placeholder="@lang("hobbies.other")" value="{{Auth::user()->hobbies_other}}">
-                                </div>
-                            </div>
-                            <div class="form-block">
-                                <div class="form-group">
-                                    <label for="payment_type">@lang("user.payment_type")</label>
-                                    <select name="payment_type" id="payment_type" class="form-control">
-                                        @foreach($paymentsArray as $paymentType)
-                                            <option value="{{$paymentType}}" @if($paymentType->getValue() === Auth::user()->payment_type)selected="selected" @endif>@lang("user.payment_type_".$paymentType)</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group" id="card_number-group">
-                                    <input id="card_number" type="text" class="form-control" name="card_number" placeholder="@lang("user.payment_card_number")" value="{{Auth::user()->card_number}}">
-                                </div>
-                            </div>
                                 <div class="form-group ">
                                     <input id="expert-password" type="password" class="form-control" name="password" autocomplete="off" placeholder="@lang("registration.password")">
                                 </div>
                                 <div class="form-group mb-30">
                                     <input id="expert-password_confirmation" type="password" class="form-control" name="password_confirmation" placeholder="@lang("registration.password_confirmation")">
                                 </div>
-                            <div class="col-sm-6 offset-sm-3">
-                                <button type="submit" class="btn-orange btn-block mb-0">
-                                    @lang("user.setting_submit")
-                                </button>
-                            </div>
-                        </form>
+                                <div class="col-sm-6 offset-sm-3">
+                                    <button type="submit" class="btn-orange btn-block mb-0">
+                                        @lang("user.setting_submit")
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
@@ -259,24 +259,24 @@
         </div>
     </div>
 
-<div class="modal fade" id="validate_phone_sends" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">@lang('registration.validate_phone_sends_title')</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <img src="{{asset('public/svg/icons/cross.svg')}}" alt="Cross">
-                </button>
-            </div>
-            <div class="modal-body">
-                @lang('registration.validate_phone_user_sends_text')
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('global.close')</button>
+    <div class="modal fade" id="validate_phone_sends" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@lang('registration.validate_phone_sends_title')</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <img src="{{asset('public/svg/icons/cross.svg')}}" alt="Cross">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @lang('registration.validate_phone_user_sends_text')
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('global.close')</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 @endsection
 
@@ -360,7 +360,7 @@
                         return {
                             name: params.term,
                             lang: lang,
-                            region_id: $('#region_id').val() ? ('#region_id').val() : 0,
+                            region_id: $('#region_id').val() ? $('#region_id').val() : 0,
                             country_id: $('#country_id').val()
                         };
                     },
@@ -407,7 +407,7 @@
                                 "CityName": params.term,
                                 "Limit": 10
                             },
-                            "apiKey": "561c40b8c8c50432066bc12cc25edefd"
+                            "apiKey": "71190074c2d66199cbd1886cba6f186f"
                         };
                         return JSON.stringify(query);
                     },
@@ -439,7 +439,7 @@
                         "CityRef": $(this).val(),
                         "Language": "uk"
                     },
-                    "apiKey": "561c40b8c8c50432066bc12cc25edefd"
+                    "apiKey": "71190074c2d66199cbd1886cba6f186f"
                 };
                 var data = JSON.stringify(query);
 
@@ -488,17 +488,6 @@
             });
 
             $('#hobbies_other_checkbox').change();
-
-            $('#payment_type').change(function () {
-                if ($(this).val() == "{{\App\Entity\PaymentEnum::CARD}}") {
-                    $('#card_number-group').show();
-                } else {
-                    $('#card_number-group').hide();
-                }
-            });
-
-            $('#payment_type').change();
-
 
             /* INITIALIZE BOTH INPUTS WITH THE intlTelInput FEATURE*/
 
@@ -557,7 +546,34 @@
                 var mask1 = placeholder.replace(/[0-9]/g, 0);
                 $('input[type="tel"]').mask(mask1)
             }
-            $('#card_number').mask('0000 0000 0000 0000');
+
+            $('#has_child').change(function (e) {
+                if ($(this).val() == 1) {
+                    $('#child_count_block').show();
+                } else {
+                    $('#child_count_block').hide();
+                }
+            });
+
+            $('#has_child').change();
+
+            $("#child_count").bind('keyup mouseup', function () {
+                let childBirthdayCount = $('child_birthday').count();
+                let childCount = $(this).val();
+
+                if (childCount > childBirthdayCount) {
+                    for (let i = childBirthdayCount; i < childCount; i++) {
+                        $('#child_list').append('<input type="date" class="form-control child_birthday" name="child_birthday[]" placeholder="@lang("registration.child_birthday")" max="{{date("Y-m-d")}}">');
+                    }
+                }
+
+                if (childCount < childBirthdayCount) {
+                    for (let i = childCount; i < childBirthdayCount; i++) {
+                        $('#child_list').children().last().remove()
+                    }
+                }
+
+            });
         });
     </script>
 @endsection

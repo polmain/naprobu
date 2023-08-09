@@ -19,6 +19,7 @@ class UserFilterServices
         $employmentArray = [];
         $workArray = [];
         $familyStatusArray = [];
+        $hasChildArray = [];
         $materialConditionArray = [];
         $hobbiesArray = [];
 
@@ -50,6 +51,12 @@ class UserFilterServices
         if($filters->has('filter.family_status')){
             foreach ( $filters->filter['family_status'] as $key => $item){
                 $familyStatusArray[] = $filters->input('filter.family_status')[$key];
+            }
+        }
+
+        if($filters->has('filter.has_child')){
+            foreach ( $filters->filter['has_child'] as $key => $item){
+                $hasChildArray[] = $filters->input('filter.has_child')[$key];
             }
         }
 
@@ -96,6 +103,15 @@ class UserFilterServices
             ->when( !empty($filters->filter['sex']), function ($query) use ($filters){
                 $query->where('sex',$filters->filter['sex']);
             })
+            ->when( !empty($filters->filter['is_good_photo']), function ($query) use ($filters){
+                $query->where('is_good_photo',$filters->filter['is_good_photo']);
+            })
+            ->when( !empty($filters->filter['is_good_video']), function ($query) use ($filters){
+                $query->where('is_good_video',$filters->filter['is_good_video']);
+            })
+            ->when( !empty($filters->filter['is_good_review']), function ($query) use ($filters){
+                $query->where('is_good_review',$filters->filter['is_good_review']);
+            })
             ->when( !empty($filters->filter['status']), function ($query) use ($filters){
                 $query->where('status_id',$filters->filter['status']);
             })->when( !empty($filters->filter['old_min']), function ($query) use ($filters){
@@ -120,6 +136,8 @@ class UserFilterServices
                 $query->whereIn('work', $workArray);
             })->when( $filters->has('filter.family_status'), function ($query) use ($familyStatusArray){
                 $query->whereIn('family_status', $familyStatusArray);
+            })->when( $filters->has('filter.has_child'), function ($query) use ($hasChildArray){
+                $query->whereIn('has_child', $hasChildArray);
             })->when( $filters->has('filter.material_condition'), function ($query) use ($materialConditionArray){
                 $query->whereIn('material_condition', $materialConditionArray);
             })->when( $filters->has('filter.hobbies'), function ($query) use ($hobbiesArray){

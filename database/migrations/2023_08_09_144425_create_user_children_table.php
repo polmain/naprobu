@@ -16,7 +16,7 @@ class CreateUserChildrenTable extends Migration
         Schema::create('user_children', function (Blueprint $table) {
             $table->increments('id');
             $table->date('birthday');
-            $table->integer('user_id')->unsigned();
+            $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

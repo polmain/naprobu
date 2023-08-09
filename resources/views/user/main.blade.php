@@ -204,10 +204,12 @@
                                     </div>
                                     <div class="form-group" id="child_count_block">
                                         <label for="child_count">@lang("registration.child_count")</label>
-                                        <input id="child_count" type="number" class="form-control" name="child_count" value="{{--  {{Auth::user()->birsday}} --}}" placeholder="@lang("registration.child_count")" min="1" max="20">
+                                        <input id="child_count" type="number" class="form-control" name="child_count" value="{{Auth::user()->children->count()}}" placeholder="@lang("registration.child_count")" min="1" max="20">
                                     </div>
                                     <div class="form-group" id="child_list">
-
+                                        @foreach(Auth::user()->children as $key => $child)
+                                            <label>@lang("registration.child_birthday") {{$key}}</label><input type="date" class="form-control child_birthday" name="child_birthday[]" max="{{date("Y-m-d")}}" value="{{$child->birthday}}">
+                                        @endforeach
                                     </div>
                                     <div class="form-group">
                                         <label for="material_condition">@lang("registration.material_condition")</label>
@@ -570,7 +572,8 @@
 
                 if (childCount < childBirthdayCount) {
                     for (let i = childCount; i < childBirthdayCount; i++) {
-                        $('#child_list').children().last().remove()
+                        $('#child_list').children().last().remove();
+                        $('#child_list').children().last().remove();
                     }
                 }
 

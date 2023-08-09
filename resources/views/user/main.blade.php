@@ -203,6 +203,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group" id="child_count_block">
+                                        <label for="child_count">@lang("registration.child_count")</label>
                                         <input id="child_count" type="number" class="form-control" name="child_count" value="{{--  {{Auth::user()->birsday}} --}}" placeholder="@lang("registration.child_count")" min="1" max="20">
                                     </div>
                                     <div class="form-group" id="child_list">
@@ -563,7 +564,7 @@
 
                 if (childCount > childBirthdayCount) {
                     for (let i = childBirthdayCount; i < childCount; i++) {
-                        $('#child_list').append('<input type="date" class="form-control child_birthday" name="child_birthday[]" placeholder="@lang("registration.child_birthday")" max="{{date("Y-m-d")}}">');
+                        $('#child_list').append('<label>@lang("registration.child_birthday") '+(i+1)+'</label><input type="date" class="form-control child_birthday" name="child_birthday[]" max="{{date("Y-m-d")}}">');
                     }
                 }
 

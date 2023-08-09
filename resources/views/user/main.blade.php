@@ -558,7 +558,7 @@
             $('#has_child').change();
 
             $("#child_count").bind('keyup mouseup', function () {
-                let childBirthdayCount = $('child_birthday').count();
+                let childBirthdayCount = $('child_birthday').length;
                 let childCount = $(this).val();
 
                 if (childCount > childBirthdayCount) {

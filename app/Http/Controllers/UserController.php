@@ -560,6 +560,7 @@ class UserController extends Controller
         $user->education = $request->education;
         $user->employment = $request->employment;
         $user->family_status = $request->family_status;
+        $user->has_child = $request->has_child;
         $user->material_condition = $request->material_condition;
         $user->hobbies = $request->hobbies;
         $user->hobbies_other = $request->hobbies_other;

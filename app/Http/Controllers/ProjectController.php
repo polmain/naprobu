@@ -53,7 +53,7 @@ class ProjectController extends Controller
     	$categories = ProjectCategory::where([
 			['lang',$locale],
 			['isHide',0],
-		])->get();
+		])->orderBy('sort')->get();
 
     	$audience = ProjectAudienceEnum::UKRAINE;
     	if($international){
@@ -146,7 +146,7 @@ class ProjectController extends Controller
 		$categories = ProjectCategory::where([
 			['lang',$locale],
 			['isHide',0],
-		])->get();
+		])->orderBy('sort')->get();
 		$projects	=	Project::where([
 							['category_id',$base->id],
 							['lang',$locale],
@@ -203,7 +203,7 @@ class ProjectController extends Controller
 		$categories = ProjectCategory::where([
 			['lang',$locale],
 			['isHide',0],
-		])->get();
+		])->orderBy('sort')->get();
 
 		$project	=	Project::with(['subpages.reviews.user','category','status','questionnaires','messages','base'])
 			->where([

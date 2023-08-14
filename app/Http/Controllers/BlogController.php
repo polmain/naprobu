@@ -155,7 +155,7 @@ class BlogController extends Controller
 		$categories = ProjectCategory::with(['base'])->where([
 			['lang',$locale],
 			['isHide',0],
-		])->get();
+		])->orderBy('sort')->get();
 
 		if($locale == "ru"){
 			$base = $post = Post::with(['project.category.translate','comments.user.roles','tags','author'])
@@ -516,7 +516,7 @@ class BlogController extends Controller
 	public function list($posts, $lastPost, $page, $request, array $alternativeUrls){
 		$locale = App::getLocale();
 
-		$categories = ProjectCategory::with(['base'])->where([['lang',$locale],['isHide',0]])->get();
+		$categories = ProjectCategory::with(['base'])->where([['lang',$locale],['isHide',0]])->orderBy('sort')->get();
 
 		if(isset($lastPost)){
 			$posts = $posts->where([

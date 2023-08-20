@@ -208,7 +208,7 @@
                                     </div>
                                     <div class="form-group" id="child_list">
                                         @foreach(Auth::user()->children as $key => $child)
-                                            <label>@lang("registration.child_birthday") {{$key}}</label><input type="date" class="form-control child_birthday" name="child_birthday[]" max="{{date("Y-m-d")}}" value="{{$child->birthday}}">
+                                            <label>@lang("registration.child_birthday") {{$key+1}}</label><input type="date" class="form-control child_birthday" name="child_birthday[]" max="{{date("Y-m-d")}}" value="{{$child->birthday}}">
                                         @endforeach
                                     </div>
                                     <div class="form-group">

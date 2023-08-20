@@ -13,6 +13,7 @@ use App\Entity\PaymentEnum;
 use App\Entity\WorkEnum;
 use App\Model\Geo\City;
 use App\Model\Geo\Region;
+use App\Model\User\UserChild;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Auth;
 use Cookie;
@@ -560,10 +561,31 @@ class UserController extends Controller
         $user->education = $request->education;
         $user->employment = $request->employment;
         $user->family_status = $request->family_status;
-        $user->has_child = $request->has_child;
         $user->material_condition = $request->material_condition;
         $user->hobbies = $request->hobbies;
         $user->hobbies_other = $request->hobbies_other;
+
+        $user->has_child = $request->has_child;
+
+        $removedChildren = $user->children->pluck('birthday');
+        if ($request->has_child) {
+            foreach ($request->child_birthday as $childBirth) {
+                $date = new Carbon\Carbon($childBirth);
+                $child = $user->children->where('birthday', $date->format('Y-m-d'))->first();
+                if (!$child) {
+                    $child = new UserChild();
+                    $child->birthday = $date;
+                    $child->user_id = $user->id;
+                    $child->save();
+                }
+
+                $key = array_search($date, $removedChildren);
+                if (false !== $key) {
+                    unset($removedChildren[$key]);
+                }
+            }
+        }
+        $user->has_child = $request->has_child;
 
         if($request->payment_type === 'card'){
             $user->card_number = $request->card_number;

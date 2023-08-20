@@ -579,7 +579,7 @@ class UserController extends Controller
                     $child->save();
                 }
 
-                $key = array_search($date, $removedChildren);
+                $key = array_search( $date->format('Y-m-d'), $removedChildren);
                 if (false !== $key) {
                     unset($removedChildren[$key]);
                 }

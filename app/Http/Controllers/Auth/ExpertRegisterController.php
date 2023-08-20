@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App;
 use App\Entity\EmploymentEnum;
 use App\Entity\WorkEnum;
+use App\Http\Controllers\Auth\EmailVerification;
 use App\Model\Geo\City;
 use App\Model\Geo\Region;
+use App\Model\User\UserChild;
 use Cookie;
 use App\Library\Users\UserRating;
 use App\User;
@@ -14,86 +16,86 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use App\Http\Controllers\Auth\EmailVerification;
 use Illuminate\Http\Request;
 
 class ExpertRegisterController extends Controller
 {
-	use RegistersUsers;
+    use RegistersUsers;
 
-	/**
-	 * Where to redirect users after registration.
-	 *
-	 * @var string
-	 */
-	protected $redirectTo = '/cabinet/';
+    /**
+     * Where to redirect users after registration.
+     *
+     * @var string
+     */
+    protected $redirectTo = '/cabinet/';
 
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		$this->middleware('guest');
-	}
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
 
-	/**
-	 * Get a validator for an incoming registration request.
-	 *
-	 * @param  array  $data
-	 * @return \Illuminate\Contracts\Validation\Validator
-	 */
-	protected function validator(array $data)
-	{
-		return Validator::make($data, [
-			'name' => ['required', 'string', 'max:255'],
-			'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-			'password' => ['required', 'string', 'min:6', 'confirmed'],
-		]);
-	}
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ]);
+    }
 
-	/**
-	 * Create a new user instance after a valid registration.
-	 *
-	 * @param  array  $data
-	 * @return \App\User
-	 */
-	protected function create(array $data)
-	{
-		$user = User::create([
-			'name' => $data['name'],
-			'email' => $data['email'],
-			'phone' => $data['phone'],
-			'sex' => $data['sex'],
-			'password' => Hash::make($data['password']),
-			'status_id' => 5,
-			'current_rating' => 0,
-			'rang_id' => 1,
-			'first_name' => $data['first_name'],
-			'last_name' => $data['last_name'],
-			'patronymic' => $data['patronymic'],
-			'birsday' => $data['birsday'],
-			'nova_poshta_city' => isset($data['nova_poshta_city_name']) ? $data['nova_poshta_city_name'] : null,
-			'nova_poshta_warehouse' => isset($data['nova_poshta_warehouse']) ? $data['nova_poshta_warehouse'] : null,
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return \App\User
+     */
+    protected function create(array $data)
+    {
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'sex' => $data['sex'],
+            'password' => Hash::make($data['password']),
+            'status_id' => 5,
+            'current_rating' => 0,
+            'rang_id' => 1,
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'patronymic' => $data['patronymic'],
+            'birsday' => $data['birsday'],
+            'nova_poshta_city' => isset($data['nova_poshta_city_name']) ? $data['nova_poshta_city_name'] : null,
+            'nova_poshta_warehouse' => isset($data['nova_poshta_warehouse']) ? $data['nova_poshta_warehouse'] : null,
             'education' => $data['education'],
             'employment' => $data['employment'],
             'family_status' => $data['family_status'],
+            'has_child' => $data['has_child'],
             'material_condition' => $data['material_condition'],
-            'hobbies' => $data['hobbies'],
+            'hobbies' => $data['hobbies'] ?? [],
             'hobbies_other' => $data['hobbies_other'],
-		]);
-		return $user;
-	}
-	/**
-	 * The user has been registered.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  mixed  $user
-	 * @return mixed
-	 */
-	protected function registered(Request $request, $user)
-	{
+        ]);
+        return $user;
+    }
+    /**
+     * The user has been registered.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function registered(Request $request, $user)
+    {
         $country_id = $request->country_id;
         $user->country_id = $country_id;
 
@@ -133,25 +135,38 @@ class ExpertRegisterController extends Controller
 
         $user->save();
 
-		$this->user_rating($user);
-		$user->makeExployee('expert');
-		EmailVerification::sendVerifyCode($user);
+        if ($request->has_child) {
+            foreach ($request->child_birthday as $childBirth) {
+                $date = new \Carbon\Carbon($childBirth);
+                $child = $user->children->where('birthday', $date->format('Y-m-d'))->first();
+                if (!$child) {
+                    $child = new UserChild();
+                    $child->birthday = $date;
+                    $child->user_id = $user->id;
+                    $child->save();
+                }
+            }
+        }
 
-		if($request->hasCookie('ref_id')){
-			$ref_owner = User::find(Cookie::get('ref_id'));
-			UserRating::addAction('friend',$ref_owner);
-		}
+        $this->user_rating($user);
+        $user->makeExployee('expert');
+        EmailVerification::sendVerifyCode($user);
 
-		$this->guard()->logout();
-		return view('message',[
+        if($request->hasCookie('ref_id')){
+            $ref_owner = User::find(Cookie::get('ref_id'));
+            UserRating::addAction('friend',$ref_owner);
+        }
 
-			'header'	=>	'Благодарим за регистрацию.',
-			'message'	=>	'На ваш email: '.$user->email.' было высланно письмо с активационной ссылкой. Пожалуйста перейдите на неё для завершения процедуры регистрации.'
-		]);
-	}
+        $this->guard()->logout();
+        return view('message',[
 
-	protected function user_rating($user){
-		UserRating::addAction('register',$user);
-		UserRating::addAction('email',$user);
-	}
+            'header'	=>	'Благодарим за регистрацию.',
+            'message'	=>	'На ваш email: '.$user->email.' было высланно письмо с активационной ссылкой. Пожалуйста перейдите на неё для завершения процедуры регистрации.'
+        ]);
+    }
+
+    protected function user_rating($user){
+        UserRating::addAction('register',$user);
+        UserRating::addAction('email',$user);
+    }
 }

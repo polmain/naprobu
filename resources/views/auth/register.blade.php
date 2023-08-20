@@ -152,13 +152,13 @@
                                 <div class="form-group">
                                     <label for="has_child">@lang("registration.has_child")</label>
                                     <select name="has_child" id="has_child" class="form-control">
-                                        <option value="1">@lang("global.yes")</option>
                                         <option value="0">@lang("global.no")</option>
+                                        <option value="1">@lang("global.yes")</option>
                                     </select>
                                 </div>
                                 <div class="form-group" id="child_count_block">
                                     <label for="child_count">@lang("registration.child_count")</label>
-                                    <input id="child_count" type="number" class="form-control" name="child_count" placeholder="@lang("registration.child_count")" min="1" max="20">
+                                    <input id="child_count" type="number" class="form-control" name="child_count" placeholder="@lang("registration.child_count")" min="1" max="20" value="1">
                                 </div>
                                 <div class="form-group" id="child_list">
                                         <label>@lang("registration.child_birthday") 1</label><input type="date" class="form-control child_birthday" name="child_birthday[]" max="{{date("Y-m-d")}}">

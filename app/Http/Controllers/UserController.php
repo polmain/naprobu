@@ -586,7 +586,10 @@ class UserController extends Controller
             }
         }
         foreach ($removedChildren as $removedChild) {
-            $user->children->where('birthday', $removedChild)->delete();
+            UserChild::where([
+                ['birthday', $removedChild],
+                ['user_id', $user->id],
+            ])->delete();
         }
 
         if($request->payment_type === 'card'){

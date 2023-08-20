@@ -570,7 +570,7 @@ class UserController extends Controller
         $removedChildren = $user->children->pluck('birthday');
         if ($request->has_child) {
             foreach ($request->child_birthday as $childBirth) {
-                $date = new Carbon\Carbon($childBirth);
+                $date = new \Carbon\Carbon($childBirth);
                 $child = $user->children->where('birthday', $date->format('Y-m-d'))->first();
                 if (!$child) {
                     $child = new UserChild();

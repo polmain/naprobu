@@ -585,7 +585,9 @@ class UserController extends Controller
                 }
             }
         }
-        $user->has_child = $request->has_child;
+        foreach ($removedChildren as $removedChild) {
+            $user->children->where('birthday', $removedChild)->delete();
+        }
 
         if($request->payment_type === 'card'){
             $user->card_number = $request->card_number;

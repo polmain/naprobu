@@ -110,10 +110,10 @@
                             </div>
                             <div class="form-block">
                                 <div class="form-group ">
-                                    <input id="expert-password" type="password" class="form-control" name="password" placeholder="@lang("registration.password")">
+                                    <input id="expert-password" type="password" class="form-control" name="password" placeholder="@lang("registration.password")" autocomplete="new-password">
                                 </div>
                                 <div class="form-group mb-30">
-                                    <input id="expert-password_confirmation" type="password" class="form-control" name="password_confirmation" placeholder="@lang("registration.password_confirmation")">
+                                    <input id="expert-password_confirmation" type="password" class="form-control" name="password_confirmation" placeholder="@lang("registration.password_confirmation")" autocomplete="new-password">
                                 </div>
                             </div>
                             <div class="form-block">
@@ -148,6 +148,21 @@
                                             <option value="{{$familyStatus}}">@lang("family_status.".$familyStatus)</option>
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="has_child">@lang("registration.has_child")</label>
+                                    <select name="has_child" id="has_child" class="form-control">
+                                        <option value="1">@lang("global.yes")</option>
+                                        <option value="0">@lang("global.no")</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="child_count_block">
+                                    <label for="child_count">@lang("registration.child_count")</label>
+                                    <input id="child_count" type="number" class="form-control" name="child_count" placeholder="@lang("registration.child_count")" min="1" max="20">
+                                </div>
+                                <div class="form-group" id="child_list">
+                                        <label>@lang("registration.child_birthday") 1</label><input type="date" class="form-control child_birthday" name="child_birthday[]" max="{{date("Y-m-d")}}">
+
                                 </div>
                                 <div class="form-group">
                                     <label for="material_condition">@lang("registration.material_condition")</label>
@@ -233,7 +248,6 @@
                 var mask1 = placeholder.replace(/[0-9]/g, 0);
                 $('input[type="tel"]').mask(mask1);
             }
-
         });
 
         $("#phone").on("countrychange", function (e, countryData) {
@@ -371,109 +385,138 @@
             }
         });
         $('#select2_city_id').change();
-        
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            delete $.ajaxSettings.headers["X-CSRF-TOKEN"];
 
-            $('#nova_poshta_city').select2({
-                placeholder: new_city_placeholder,
-                minimumInputLength: 3,
-                ajax: {
-                    url: 'https://api.novaposhta.ua/v2.0/json/',
-                    dataType: 'json',
-                    type: 'POST',
-                    data: function (params) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        delete $.ajaxSettings.headers["X-CSRF-TOKEN"];
 
-                        delete $.ajaxSettings.headers["X-CSRF-TOKEN"];
-                        var query = {
-                            "modelName": "Address",
-                            "calledMethod": "searchSettlements",
-                            "methodProperties": {
-                                "CityName": params.term,
-                                "Limit": 10
-                            },
-                            "apiKey": "561c40b8c8c50432066bc12cc25edefd"
-                        };
-                        return JSON.stringify(query);
-                    },
+        $('#nova_poshta_city').select2({
+            placeholder: new_city_placeholder,
+            minimumInputLength: 3,
+            ajax: {
+                url: 'https://api.novaposhta.ua/v2.0/json/',
+                dataType: 'json',
+                type: 'POST',
+                data: function (params) {
 
-                    processResults: function (data) {
-                        var items = [];
-                        if (data.success) {
-                            var cities = data.data[0].Addresses;
-                            cities.forEach(function (e) {
-                                items.push({'id': e.DeliveryCity, 'text': e.Present});
-                            })
-                        }
-                        return {
-                            results: items,
-                        };
-                    },
-                    cache: false
+                    delete $.ajaxSettings.headers["X-CSRF-TOKEN"];
+                    var query = {
+                        "modelName": "Address",
+                        "calledMethod": "searchSettlements",
+                        "methodProperties": {
+                            "CityName": params.term,
+                            "Limit": 10
+                        },
+                        "apiKey": "71190074c2d66199cbd1886cba6f186f"
+                    };
+                    return JSON.stringify(query);
                 },
-            });
 
-            $('#nova_poshta_city').change(function (e) {
-                var curOption = $("#nova_poshta_city option:selected");
-                $('input[name="nova_poshta_city_name"]').val(curOption.text());
-
-                var query = {
-                    "modelName": "AddressGeneral",
-                    "calledMethod": "getWarehouses",
-                    "methodProperties": {
-                        "CityRef": $(this).val(),
-                        "Language": "uk"
-                    },
-                    "apiKey": "561c40b8c8c50432066bc12cc25edefd"
-                };
-                var data = JSON.stringify(query);
-
-                $.ajax({
-                    method: "POST",
-                    url: "https://api.novaposhta.ua/v2.0/json/",
-                    data: data,
-                    dataType: 'json',
-                    success: function (resp) {
-                        $('#nova_poshta_warehouse').html('');
-
-                        if (resp.success) {
-                            resp.data.forEach(function (e) {
-                                $('#nova_poshta_warehouse').append('<option val="' + e.Description + '">' + e.Description + '</option>');
-                            });
-                        }
-                    },
-                    error: function (xhr, str) {
-                        console.log(xhr);
+                processResults: function (data) {
+                    var items = [];
+                    if (data.success) {
+                        var cities = data.data[0].Addresses;
+                        cities.forEach(function (e) {
+                            items.push({'id': e.DeliveryCity, 'text': e.Present});
+                        })
                     }
-                });
-            });
+                    return {
+                        results: items,
+                    };
+                },
+                cache: false
+            },
+        });
 
-            $('#nova_poshta_warehouse').select2();
+        $('#nova_poshta_city').change(function (e) {
+            var curOption = $("#nova_poshta_city option:selected");
+            $('input[name="nova_poshta_city_name"]').val(curOption.text());
 
-            $('#nova_poshta_block').hide();
+            var query = {
+                "modelName": "AddressGeneral",
+                "calledMethod": "getWarehouses",
+                "methodProperties": {
+                    "CityRef": $(this).val(),
+                    "Language": "uk"
+                },
+                "apiKey": "71190074c2d66199cbd1886cba6f186f"
+            };
+            var data = JSON.stringify(query);
 
-            $('#employment').change(function () {
-                if ($(this).val() == employment_work) {
-                    $('#work-group').show();
-                } else {
-                    $('#work-group').hide();
+            $.ajax({
+                method: "POST",
+                url: "https://api.novaposhta.ua/v2.0/json/",
+                data: data,
+                dataType: 'json',
+                success: function (resp) {
+                    $('#nova_poshta_warehouse').html('');
+
+                    if (resp.success) {
+                        resp.data.forEach(function (e) {
+                            $('#nova_poshta_warehouse').append('<option val="' + e.Description + '">' + e.Description + '</option>');
+                        });
+                    }
+                },
+                error: function (xhr, str) {
+                    console.log(xhr);
                 }
             });
+        });
 
-            $('#employment').change();
+        $('#nova_poshta_warehouse').select2();
 
-            $('#hobbies_other_checkbox').change(function (e) {
-                if ($(this).is(':checked')) {
-                    $('#hobbies_other-group').show();
-                } else {
-                    $('#hobbies_other-group').hide();
+        $('#nova_poshta_block').hide();
+
+        $('#employment').change(function () {
+            if ($(this).val() == employment_work) {
+                $('#work-group').show();
+            } else {
+                $('#work-group').hide();
+            }
+        });
+
+        $('#employment').change();
+
+        $('#hobbies_other_checkbox').change(function (e) {
+            if ($(this).is(':checked')) {
+                $('#hobbies_other-group').show();
+            } else {
+                $('#hobbies_other-group').hide();
+            }
+        });
+
+        $('#hobbies_other_checkbox').change();
+
+        $('#has_child').change(function (e) {
+            if ($(this).val() == 1) {
+                $('#child_count_block').show();
+            } else {
+                $('#child_count_block').hide();
+            }
+        });
+
+        $('#has_child').change();
+
+        $("#child_count").bind('keyup mouseup', function () {
+            let childBirthdayCount = $('.child_birthday').length;
+            let childCount = $(this).val();
+
+            if (childCount > childBirthdayCount) {
+                for (let i = childBirthdayCount; i < childCount; i++) {
+                    $('#child_list').append('<label>@lang("registration.child_birthday") '+(i+1)+'</label><input type="date" class="form-control child_birthday" name="child_birthday[]" max="{{date("Y-m-d")}}">');
                 }
-            });
+            }
 
-            $('#hobbies_other_checkbox').change();
+            if (childCount < childBirthdayCount) {
+                for (let i = childCount; i < childBirthdayCount; i++) {
+                    $('#child_list').children().last().remove();
+                    $('#child_list').children().last().remove();
+                }
+            }
+
+        });
     </script>
 @endsection

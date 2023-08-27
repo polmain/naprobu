@@ -121,6 +121,8 @@ class UsersController extends Controller
         $materialConditionArray = MaterialConditionEnum::values();
         $hobbiesArray = HobbiesEnum::values();
 
+        $newFormUsersCount = User::where('new_form_status',1)->count();
+
 		return view('admin.users.all',[
             'statuses'	=>	$statuses,
             'ratingStatuses'	=>	$ratingStatuses,
@@ -135,7 +137,8 @@ class UsersController extends Controller
             'cities' => $cities,
             'projects' => $projects,
             'projectsExpert' => $projectsExpert,
-            'questions' => $questions
+            'questions' => $questions,
+            'newFormUsersCount' => $newFormUsersCount
         ]);
 	}
 
@@ -395,7 +398,7 @@ class UsersController extends Controller
 	}
 
 	protected function getUserEditData($user_id){
-		$user = User::withTrashed()->with(['roles','reviews','requests'])->withCount('requests')->find($user_id);
+		$user = User::withTrashed()->with(['roles','reviews','requests','children'])->withCount('requests')->find($user_id);
 
 		/*$user->current_rating = $user->history->sum('score');
 		$user->save();*/
@@ -512,17 +515,20 @@ class UsersController extends Controller
 		$user->sex = $request->sex;
 
 		$user->birsday = $request->birsday;
-		if(!$request->has('county_id')){
+		if(!$request->has('country_id')){
             $user->city = $request->city;
             $user->region = $request->region;
         }else{
             $user->city_id = $request->city_id;
             $user->region_id = $request->region_id;
-            $user->county_id = $request->county_id;
+            $user->country_id = $request->country_id;
         }
 
 		$user->status_id = 1;
 		$user->isNewsletter = $request->has('isNewsletter');
+        $user->is_good_photo = $request->has('is_good_photo');
+        $user->is_good_video = $request->has('is_good_video');
+        $user->is_good_review = $request->has('is_good_review');
 
 		$pass	= $request->password;
 		if(isset($pass)){

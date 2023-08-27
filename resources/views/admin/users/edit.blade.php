@@ -85,7 +85,7 @@
                                 <div class="col-sm-9">
                                     <select class="form-control select2" name="city_id" id="city_id">
                                         @if($user->city_model)
-                                            <option value="{{$user->city_model->id}}" selected="selected">{{$user->city_model->name}}</option>
+                                        <option value="{{$user->city_model->id}}" selected="selected">{{$user->city_model->name}}</option>
                                         @endif
                                     </select>
                                 </div>
@@ -188,32 +188,35 @@
                     <p><strong>Город НП:</strong> {{$user->nova_poshta_city}}</p>
                     <p><strong>Отделение НП:</strong> {{$user->nova_poshta_warehouse}}</p>
                     @if($user->education)
-                        <p><strong>Образование:</strong> @lang("education.".$user->education)</p>
+                    <p><strong>Образование:</strong> @lang("education.".$user->education)</p>
                     @endif
                     @if($user->employment)
-                        <p><strong>Занятость:</strong> @lang("employment.".$user->employment)</p>
+                    <p><strong>Занятость:</strong> @lang("employment.".$user->employment)</p>
                     @endif
                     @if($user->work)
-                        <p><strong>Кем работаете:</strong> @lang("work.".$user->work)</p>
+                    <p><strong>Кем работаете:</strong> @lang("work.".$user->work)</p>
                     @endif
                     @if($user->family_status)
-                        <p><strong>Семейное положение:</strong> @lang("family_status.".$user->family_status)</p>
+                    <p><strong>Семейное положение:</strong> @lang("family_status.".$user->family_status)</p>
                     @endif
                     @if($user->has_child)
-                        <p><strong>Есть ли у Вас дети?:</strong> {{$user->has_child?"Да":"Нет"}}</p>
+                    <p><strong>Есть ли у Вас дети?:</strong> {{$user->has_child?"Да":"Нет"}}</p>
+                        @foreach($user->children as $key => $child)
+                            <p><strong>Возраст ребенка {{$key}}:</strong> {{\Carbon\Carbon::createFromDate($child)->format('d.m.Y')}}</p>
+                        @endforeach
                     @endif
                     @if($user->material_condition)
-                        <p><strong>Как бы Вы описали материальное состояние вашей семьи?:</strong> @lang("material_condition.".$user->material_condition)</p>
+                    <p><strong>Как бы Вы описали материальное состояние вашей семьи?:</strong> @lang("material_condition.".$user->material_condition)</p>
                     @endif
                     @if(is_array($user->hobbies))
                         <p><strong>Увлечения/интересы:</strong>
-                            @foreach($user->hobbies as $hobby)
-                                @lang("hobbies.".$hobby);
-                            @endforeach
-                            @if($user->hobbies_other)
-                                {{$user->hobbies_other}}
-                            @endif
-                        </p>
+                        @foreach($user->hobbies as $hobby)
+                            @lang("hobbies.".$hobby);
+                        @endforeach
+                        @if($user->hobbies_other)
+                            {{$user->hobbies_other}}
+                        @endif
+                    </p>
                     @endif
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
@@ -239,16 +242,16 @@
             <!-- Box -->
             <form action="{{route('adm_change_status',['user_id' => $user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
                 {{ csrf_field() }}
-                <div class="box box-warning collapsed-box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Сменить статус</h3>
+            <div class="box box-warning collapsed-box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Сменить статус</h3>
 
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        <!-- /.box-tools -->
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                        </button>
                     </div>
+                    <!-- /.box-tools -->
+                </div>
                     <div class="box-body">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -279,7 +282,7 @@
                         <button type="submit" class="btn btn-primary">Подтвердить</button>
                     </div>
 
-                </div>
+            </div>
             </form>
             <div class="box box-default collapsed-box">
                 <div class="box-header with-border">
@@ -294,16 +297,16 @@
 
                 <div class="box-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead>
+                    <table class="table table-bordered table-hover">
+                        <thead>
                             <tr>
                                 <th>id</th>
                                 <th>Статус</th>
                                 <th>Примечание</th>
                                 <th>Время смены</th>
                             </tr>
-                            </thead>
-                            <tbody>
+                        </thead>
+                        <tbody>
                             @foreach($statusHistory as $status)
                                 <tr>
                                     <td>{{$status->id}}</td>
@@ -312,8 +315,8 @@
                                     <td>{{$status->created_at}}</td>
                                 </tr>
                             @endforeach
-                            </tbody>
-                        </table>
+                        </tbody>
+                    </table>
                     </div>
                 </div><!-- /.box-body -->
 
@@ -390,18 +393,18 @@
                     </div>
                     <div class="box-body">
                         <div class="form-group row">
-                            <div class="col-md-4">
-                                <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> За что баллы<span class="input-request">*</span></label>
-                                <input type="text" class="form-control" name="name_ru" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> За что баллы<span class="input-request">*</span></label>
-                                <input type="text" class="form-control" name="name_ua" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> За что баллы<span class="input-request">*</span></label>
-                                <input type="text" class="form-control" name="name_en" required>
-                            </div>
+                        <div class="col-md-4">
+                            <label><img src="{{asset('/public/images/russia.png')}}" alt="Флаг России"> За что баллы<span class="input-request">*</span></label>
+                            <input type="text" class="form-control" name="name_ru" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label><img src="{{asset('/public/images/ukraine.png')}}" alt="Флаг Украины"> За что баллы<span class="input-request">*</span></label>
+                            <input type="text" class="form-control" name="name_ua" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label><img src="{{asset('/public/images/united-kingdom.png')}}" alt="Флаг Великой бриатнии"> За что баллы<span class="input-request">*</span></label>
+                            <input type="text" class="form-control" name="name_en" required>
+                        </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
@@ -427,18 +430,18 @@
                 <div class="box-body">
                     <h4>{{$ratingStatus->name}}({{$user->current_rating}}) <strong>{{$user->history->sum('score')}}</strong></h4>
                     <div class="table-responsive">
-                        <table id="user-history" class="table table-bordered table-hover">
-                            <thead>
-                            <tr>
-                                <th>Действие</th>
-                                <th width="60">Балы</th>
-                                <th width="60">Балы</th>
-                                <th>Время</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                    <table id="user-history" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Действие</th>
+                            <th width="60">Балы</th>
+                            <th width="60">Балы</th>
+                            <th>Время</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                     </div>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
@@ -449,38 +452,38 @@
 
 @section("scripts")
     <script>
-        var tableUsers = $('#user-history').DataTable({
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Все"]],
-            "pageLength": 10,
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json"
-            },
-            "processing": true,
-            "serverSide": true,
-            "ajax": "{!! route('adm_users_history',['user_id'=>$user->id]) !!}",
-            "columns": [
+		var tableUsers = $('#user-history').DataTable({
+			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Все"]],
+			"pageLength": 10,
+			"language": {
+				"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json"
+			},
+			"processing": true,
+			"serverSide": true,
+			"ajax": "{!! route('adm_users_history',['user_id'=>$user->id]) !!}",
+			"columns": [
 
-                {
-                    data: 'action',
+				{
+					data: 'action',
                     orderable:      false,
+				},
+				{
+					data: 'points',
+					orderable:      false,
                 },
-                {
-                    data: 'points',
-                    orderable:      false,
+				{
+					data: 'score',
+					orderable:      false,
                 },
-                {
-                    data: 'score',
-                    orderable:      false,
-                },
-                {
-                    data: "created_at",
-                },
+				{
+					data: "created_at",
+				},
 
-            ],
-            "fnDrawCallback": afterDrawTabel
-        });
+			],
+			"fnDrawCallback": afterDrawTabel
+		});
 
-        tableUsers.on( 'draw', afterDrawTabel() );
+		tableUsers.on( 'draw', afterDrawTabel() );
 
         @if($user->new_form_status)
         $('#country_id').select2({

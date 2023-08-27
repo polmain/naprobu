@@ -202,7 +202,7 @@
                     @if($user->has_child)
                     <p><strong>Есть ли у Вас дети?:</strong> {{$user->has_child?"Да":"Нет"}}</p>
                         @foreach($user->children as $key => $child)
-                            <p><strong>Возраст ребенка {{$key}}:</strong> {{\Carbon\Carbon::createFromDate($child)->format('d.m.Y')}}</p>
+                            <p><strong>Возраст ребенка {{$key}}:</strong> {{\Carbon\Carbon::createFromDate($child->birthday)->format('d.m.Y')}}</p>
                         @endforeach
                     @endif
                     @if($user->material_condition)

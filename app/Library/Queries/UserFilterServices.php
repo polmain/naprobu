@@ -138,6 +138,14 @@ class UserFilterServices
                 $query->whereIn('family_status', $familyStatusArray);
             })->when( $filters->has('filter.has_child'), function ($query) use ($hasChildArray){
                 $query->whereIn('has_child', $hasChildArray);
+            })->when( !empty($filters->filter['child_old_min']), function ($query) use ($filters){
+                $query->whereHas('children', function($q) use ($filters){
+                    $q->where('birthday', '>=',  Carbon::parse($filters->filter['child_old_min']));
+                });
+            })->when( !empty($filters->filter['child_old_max']), function ($query) use ($filters){
+                $query->whereHas('children', function($q) use ($filters){
+                    $q->where('birthday', '<=',  Carbon::parse($filters->filter['child_old_max']));
+                });
             })->when( $filters->has('filter.material_condition'), function ($query) use ($materialConditionArray){
                 $query->whereIn('material_condition', $materialConditionArray);
             })->when( $filters->has('filter.hobbies'), function ($query) use ($hobbiesArray){

@@ -234,6 +234,21 @@
                             </div>
                         </div>
                         <div class="filter-item">
+                            <div class="filter-name{{(Request::input('filter.child_old_min') || Request::input('filter.child_old_max'))?' active':''}}">Возраст ребёнка/детей:</div>
+                            <div class="filter-options" {{(Request::input('filter.child_old_min') || Request::input('filter.child_old_max'))?'style=display:block':''}}>
+                                <div class="filter-option-item row">
+                                    <div class="col-md-6">
+                                        <lable>От</lable>
+                                        <input type="text" class="form-control" name="filter[child_old_min]" value="{{Request::input('filter.child_old_min')}}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <lable>До</lable>
+                                        <input type="text" class="form-control" name="filter[child_old_max]" value="{{Request::input('filter.child_old_max')}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter-item">
                             <div class="filter-name{{(Request::has('filter.material_condition'))?' active':''}}">Материальное положение</div>
                             <div class="filter-options" {{( Request::has('filter.material_condition'))?'style=display:block':''}}>
                                 <div class="filter-option-item">

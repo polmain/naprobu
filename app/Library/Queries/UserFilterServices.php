@@ -138,11 +138,11 @@ class UserFilterServices
                 $query->whereIn('family_status', $familyStatusArray);
             })->when( $filters->has('filter.has_child'), function ($query) use ($hasChildArray){
                 $query->whereIn('has_child', $hasChildArray);
-            })->when( !empty($filters->filter['child_old_min']), function ($query) use ($filters){
+            })->when( isset($filters->filter['child_old_min']), function ($query) use ($filters){
                 $query->whereHas('children', function($q) use ($filters){
                     $q->where('birthday', '<=',  Carbon::now()->subYear($filters->filter['child_old_min'])->format('Y-m-d'));
                 });
-            })->when( !empty($filters->filter['child_old_max']), function ($query) use ($filters){
+            })->when( isset($filters->filter['child_old_max']), function ($query) use ($filters){
                 $query->whereHas('children', function($q) use ($filters){
                     $q->where('birthday', '>=',  Carbon::now()->subYear($filters->filter['child_old_max'])->format('Y-m-d'));
                 });

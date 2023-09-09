@@ -69,6 +69,20 @@
                     <a href="{{route('adm_users_new')}}" class="btn btn-primary pull-right">Добавить пользователя</a>
                 </div><!-- /.box-footer-->
             </div><!-- /.box -->
+            @if(isset($newFormUsersCount))
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Информация из БД</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <p><strong>Обновлённых анкет:</strong> {{$newFormUsersCount}}</p>
+                </div>
+            </div>
+            @endif
         </div><!-- /.col -->
         <div class="col-md-4">
             <!-- Box -->
@@ -204,6 +218,17 @@
                                         @foreach($familyStatusArray as $familyStatus)
                                             <option value="{{$familyStatus}}" @if(is_array(Request::input('filter.family_status')) && in_array($familyStatus->getValue(), Request::input('filter.family_status')))selected="selected" @endif>@lang("family_status.".$familyStatus)</option>
                                         @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <div class="filter-name{{(Request::has('filter.has_child'))?' active':''}}">Есть ли у Вас дети?</div>
+                            <div class="filter-options" {{( Request::has('filter.has_child'))?'style=display:block':''}}>
+                                <div class="filter-option-item">
+                                    <select class="form-control select2-multiple" name="filter[has_child][]" multiple="multiple" id="has_child">
+                                        <option value="1" @if(is_array(Request::input('filter.has_child')) && in_array(1, Request::input('filter.has_child')))selected="selected" @endif>Да</option>
+                                        <option value="0" @if(is_array(Request::input('filter.has_child')) && in_array(0, Request::input('filter.has_child')))selected="selected" @endif>Нет</option>
                                     </select>
                                 </div>
                             </div>
@@ -388,6 +413,39 @@
                                         @foreach($questions as $question)
                                             <option value="{{$question->id}}" selected="selected">{{$question->name}}</option>
                                         @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <div class="filter-name{{(Request::has('filter.is_good_photo'))?' active':''}}">Хорошие фотографии?</div>
+                            <div class="filter-options" {{( Request::has('filter.is_good_photo'))?'style=display:block':''}}>
+                                <div class="filter-option-item">
+                                    <select class="form-control select2-multiple" name="filter[is_good_photo][]" multiple="multiple" id="is_good_photo">
+                                        <option value="1" @if(is_array(Request::input('filter.is_good_photo')) && in_array(1, Request::input('filter.is_good_photo')))selected="selected" @endif>Да</option>
+                                        <option value="0" @if(is_array(Request::input('filter.is_good_photo')) && in_array(0, Request::input('filter.is_good_photo')))selected="selected" @endif>Нет</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <div class="filter-name{{(Request::has('filter.is_good_video'))?' active':''}}">Хорошие видео?</div>
+                            <div class="filter-options" {{( Request::has('filter.is_good_video'))?'style=display:block':''}}>
+                                <div class="filter-option-item">
+                                    <select class="form-control select2-multiple" name="filter[is_good_video][]" multiple="multiple" id="is_good_video">
+                                        <option value="1" @if(is_array(Request::input('filter.is_good_video')) && in_array(1, Request::input('filter.is_good_video')))selected="selected" @endif>Да</option>
+                                        <option value="0" @if(is_array(Request::input('filter.is_good_video')) && in_array(0, Request::input('filter.is_good_video')))selected="selected" @endif>Нет</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <div class="filter-name{{(Request::has('filter.is_good_review'))?' active':''}}">Хорошие отзывы?</div>
+                            <div class="filter-options" {{( Request::has('filter.is_good_review'))?'style=display:block':''}}>
+                                <div class="filter-option-item">
+                                    <select class="form-control select2-multiple" name="filter[is_good_review][]" multiple="multiple" id="is_good_review">
+                                        <option value="1" @if(is_array(Request::input('filter.is_good_review')) && in_array(1, Request::input('filter.is_good_review')))selected="selected" @endif>Да</option>
+                                        <option value="0" @if(is_array(Request::input('filter.is_good_review')) && in_array(0, Request::input('filter.is_good_review')))selected="selected" @endif>Нет</option>
                                     </select>
                                 </div>
                             </div>

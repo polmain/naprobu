@@ -140,7 +140,7 @@ class UserFilterServices
                 $query->whereIn('has_child', $hasChildArray);
             })->when( isset($filters->filter['child_old_min']), function ($query) use ($filters){
                 $query->whereHas('children', function($q) use ($filters){
-                    $q->where('birthday', '<=',  Carbon::now()->subYear($filters->filter['child_old_min'] + 1)->format('Y-m-d'));
+                    $q->where('birthday', '<=',  Carbon::now()->subYear($filters->filter['child_old_min'])->format('Y-m-d'));
                 })->whereIn('has_child',[1]);
             })->when( isset($filters->filter['child_old_max']), function ($query) use ($filters){
                 $query->whereHas('children', function($q) use ($filters){

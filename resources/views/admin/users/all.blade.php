@@ -234,8 +234,8 @@
                             </div>
                         </div>
                         <div class="filter-item">
-                            <div class="filter-name{{(Request::has('filter.child_old_min') || Request::has('filter.child_old_max'))?' active':''}}">Возраст ребёнка/детей:</div>
-                            <div class="filter-options" {{(Request::has('filter.child_old_min') || Request::has('filter.child_old_max'))?'style=display:block':''}}>
+                            <div class="filter-name{{((Request::has('filter.child_old_min') && Request::input('filter.child_old_min') >= 0) || (Request::has('filter.child_old_max') && Request::input('filter.child_old_max') >= 0)))?' active':''}}">Возраст ребёнка/детей:</div>
+                            <div class="filter-options" {{((Request::has('filter.child_old_min') && Request::input('filter.child_old_min') >= 0) || (Request::has('filter.child_old_max') && Request::input('filter.child_old_max') >= 0)))?'style=display:block':''}}>
                                 <div class="filter-option-item row">
                                     <div class="col-md-6">
                                         <lable>От</lable>

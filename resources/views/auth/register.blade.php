@@ -161,8 +161,6 @@
                                     <input id="child_count" type="number" class="form-control" name="child_count" placeholder="@lang("registration.child_count")" min="1" max="20" value="1">
                                 </div>
                                 <div class="form-group" id="child_list">
-                                        <label>@lang("registration.child_birthday") 1</label><input type="date" class="form-control child_birthday" name="child_birthday[]" max="{{date("Y-m-d")}}">
-
                                 </div>
                                 <div class="form-group">
                                     <label for="material_condition">@lang("registration.material_condition")</label>

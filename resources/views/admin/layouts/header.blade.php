@@ -34,6 +34,13 @@
                         <span class="label label-primary">{{ Request::Get('presentCount') }}</span>
                     </a>
                 </li><!-- /.messages-menu -->
+                <li class="dropdown messages-menu">
+                    <!-- Menu toggle button -->
+                    <a href='{{ route('adm_present')}}?filter=["isGet",1],["isSent",0]'>
+                        <i class="fa fa-users"></i>
+                        <span class="label label-default">{{ Request::Get('totalBloggerNotifications') }}</span>
+                    </a>
+                </li><!-- /.messages-menu -->
 
                 <li class="dropdown messages-menu">
                     <!-- Menu toggle button -->

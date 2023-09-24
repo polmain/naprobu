@@ -3,9 +3,11 @@
 namespace App\Http\Middleware\Admin;
 
 use App\Entity\PhoneStatusEnum;
+use App\Entity\UserBloggerStatusEnum;
 use App\Model\Geo\City;
 use App\Model\Geo\Region;
 use App\Model\User\PhoneVerify;
+use App\Model\User\UserBlogger;
 use Closure;
 use App\Model\User\UserPresents;
 use App\Model\Project\ProjectRequest;
@@ -32,6 +34,7 @@ class Notifications
         $cityCount = City::where('is_verify',0)->count();
         $regionCount = Region::where('is_verify',0)->count();
         $phoneCount = PhoneVerify::where('status',PhoneStatusEnum::NOT_VERIFIED)->count();
+        $bloggerCount = UserBlogger::where('status', UserBloggerStatusEnum::IN_MODERATE)->count();
 
     	$feedbackCount = Feedback::where('isNew',1)->count();
 
@@ -51,6 +54,7 @@ class Notifications
 		$request->attributes->Add(['notVerifyPhoneCount' => $phoneCount]);
 		$request->attributes->Add(['totalNotifications' => $total]);
 		$request->attributes->Add(['totalGeoNotifications' => $totalGeo]);
+		$request->attributes->Add(['totalBloggerNotifications' => $bloggerCount]);
 		return $next($request);
     }
 }

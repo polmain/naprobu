@@ -38,7 +38,7 @@
                 <li class="dropdown messages-menu">
                     <!-- Menu toggle button -->
                     <a href='{{ route('admin.phone.all') }}?filter=["is_verify",0]'>
-                        <i class="fa fa-phone  text-red" aria-hidden="true"></i>
+                        <i class="fa fa-phone" aria-hidden="true"></i>
                         <span class="label label-danger">{{ Request::Get('notVerifyPhoneCount') }}</span>
                     </a>
                 </li><!-- /.messages-menu -->
@@ -87,7 +87,7 @@
                         <span class="label label-info">{{ Request::Get('totalGeoNotifications') }}</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">{{ Request::Get('totalGeoNotifications') }} новых событий</li>
+                        <li class="header">{{ Request::Get('totalGeoNotifications') }} новых локаций</li>
                         <li>
                             <ul class="menu">
                                 <li><!-- start notification -->

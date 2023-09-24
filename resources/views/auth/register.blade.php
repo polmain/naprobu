@@ -185,6 +185,24 @@
                                     <input id="hobbies_other" type="text" class="form-control" name="hobbies_other" placeholder="@lang("hobbies.other")">
                                 </div>
                             </div>
+                            <div class="form-block">
+                                <label class="form-check">@lang("blogger.i_am_blogger")
+                                    <input class="form-check-input" type="checkbox" name="i_am_blogger" id="i_am_blogger_checkbox" value="i_am_blogger">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <div class="form-group i_am_blogger-group">
+                                    <input id="blogger_subscriber_count" type="text" class="form-control" name="blogger_subscriber_count" placeholder="@lang("blogger.subscriber_count")">
+                                </div>
+                                <div class="form-group i_am_blogger-group">
+                                    <input id="blog_subject" type="text" class="form-control" name="blog_subject" placeholder="@lang("blogger.blog_subject")">
+                                </div>
+                                <div class="form-group i_am_blogger-group">
+                                    <input id="blog_platform" type="text" class="form-control" name="blog_platform" placeholder="@lang("blogger.blog_platform")">
+                                </div>
+                                <div class="form-group i_am_blogger-group">
+                                    <input id="blog_url" type="text" class="form-control" name="blog_url" placeholder="@lang("blogger.blog_url")">
+                                </div>
+                            </div>
                             <div class="form-group mb-30">
                                 <p class="text-center small-text">
                                     {!!  trans('modal.user_agreement',['url' => route('simple',['legal'])]) !!}
@@ -517,6 +535,14 @@
                 }
             }
 
+        });
+
+        $('#i_am_blogger_checkbox').change(function (e) {
+            if ($(this).prop('checked')) {
+                $('.i_am_blogger-group').show();
+            } else {
+                $('.i_am_blogger-group').hide();
+            }
         });
     </script>
 @endsection

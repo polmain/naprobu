@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App;
 use App\Entity\EmploymentEnum;
+use App\Entity\UserBloggerStatusEnum;
 use App\Entity\WorkEnum;
 use App\Http\Controllers\Auth\EmailVerification;
 use App\Model\Geo\City;
 use App\Model\Geo\Region;
+use App\Model\User\UserBlogger;
 use App\Model\User\UserChild;
 use Cookie;
 use App\Library\Users\UserRating;
@@ -146,6 +148,19 @@ class ExpertRegisterController extends Controller
                     $child->save();
                 }
             }
+        }
+
+        if ($request->has('i_am_blogger')) {
+            $blogger = new UserBlogger();
+
+            $blogger->user_id = $user->id;
+            $blogger->subscriber_count = $request->blogger_subscriber_count;
+            $blogger->blog_subject = $request->blog_subject;
+            $blogger->blog_platform = $request->blog_platform;
+            $blogger->blog_url = $request->blog_url;
+            $blogger->status = UserBloggerStatusEnum::IN_MODERATE;
+
+            $blogger->save();
         }
 
         $this->user_rating($user);

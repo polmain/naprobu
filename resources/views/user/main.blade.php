@@ -258,16 +258,16 @@
                                     </label>
                                     @if($blogger && !$blogger_status->isConfirmed())
                                     <div class="form-group i_am_blogger-group">
-                                        <input id="blogger_subscriber_count" type="text" class="form-control" name="blogger_subscriber_count" placeholder="@lang("blogger.subscriber_count")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->subscriber_count}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif">
+                                        <input id="blogger_subscriber_count" type="text" class="form-control" name="blogger_subscriber_count" placeholder="@lang("blogger.subscriber_count")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->subscriber_count}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif>
                                     </div>
                                     <div class="form-group i_am_blogger-group">
-                                        <input id="blog_subject" type="text" class="form-control" name="blog_subject" placeholder="@lang("blogger.blog_subject")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->blog_subject}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif">
+                                        <input id="blog_subject" type="text" class="form-control" name="blog_subject" placeholder="@lang("blogger.blog_subject")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->blog_subject}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif>
                                     </div>
                                     <div class="form-group i_am_blogger-group">
-                                        <input id="blog_platform" type="text" class="form-control" name="blog_platform" placeholder="@lang("blogger.blog_platform")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->blog_platform}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif">
+                                        <input id="blog_platform" type="text" class="form-control" name="blog_platform" placeholder="@lang("blogger.blog_platform")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->blog_platform}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif>
                                     </div>
                                     <div class="form-group i_am_blogger-group">
-                                        <input id="blog_url" type="text" class="form-control" name="blog_url" placeholder="@lang("blogger.blog_url")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->blog_url}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif">
+                                        <input id="blog_url" type="text" class="form-control" name="blog_url" placeholder="@lang("blogger.blog_url")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->blog_url}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif>
                                     </div>
                                     @endif
                                 </div>
@@ -626,8 +626,6 @@
             });
 
             $('#i_am_blogger_checkbox').change();
-
-            $().change();
         });
     </script>
 @endsection

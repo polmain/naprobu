@@ -428,7 +428,7 @@ class UsersController extends Controller
 
 		$statusHistory = UserChangeStatuses::with(['status'])->where('user_id',$user_id)->get();
 
-		$blogger = UserBlogger::where('user_id',$user_id)->get();
+		$blogger = UserBlogger::where('user_id',$user_id)->first();
 
 		return [
 			"user" => $user,

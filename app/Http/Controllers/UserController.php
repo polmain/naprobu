@@ -10,9 +10,11 @@ use App\Entity\FamilyStatusEnum;
 use App\Entity\HobbiesEnum;
 use App\Entity\MaterialConditionEnum;
 use App\Entity\PaymentEnum;
+use App\Entity\UserBloggerStatusEnum;
 use App\Entity\WorkEnum;
 use App\Model\Geo\City;
 use App\Model\Geo\Region;
+use App\Model\User\UserBlogger;
 use App\Model\User\UserChild;
 use App\Services\LanguageServices\AlternativeUrlService;
 use Auth;
@@ -601,6 +603,28 @@ class UserController extends Controller
             $user->work = $request->work;
         }else{
             $user->work = null;
+        }
+
+        $blogger = $user->bloggers->first();
+
+        if ($request->has('i_am_blogger')) {
+            if (!$blogger) {
+                $blogger = new UserBlogger();
+
+                $blogger->user_id = $user->id;
+                $blogger->status = UserBloggerStatusEnum::REFUSED;
+            }
+
+            $blogger_status = UserBloggerStatusEnum::getInstance($blogger->status);
+            if ($blogger_status->isRefused()) {
+                $blogger->subscriber_count = $request->blogger_subscriber_count;
+                $blogger->blog_subject = $request->blog_subject;
+                $blogger->blog_platform = $request->blog_platform;
+                $blogger->blog_url = $request->blog_url;
+                $blogger->status = UserBloggerStatusEnum::IN_MODERATE;
+            }
+
+            $blogger->save();
         }
 
 		$user->new_form_status = true;

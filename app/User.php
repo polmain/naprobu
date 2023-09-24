@@ -122,6 +122,10 @@ class User extends Authenticatable
         return $this->hasMany('App\Model\User\UserChild', 'user_id');
     }
 
+    public function bloggers(){
+        return $this->hasMany('App\Model\User\UserBlogger', 'user_id');
+    }
+
 	public function isOnline(){
 		return ActiveUser::isOnline($this->last_active);
 	}

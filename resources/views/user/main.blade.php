@@ -232,6 +232,28 @@
                                         <input id="hobbies_other" type="text" class="form-control" name="hobbies_other" placeholder="@lang("hobbies.other")" value="{{Auth::user()->hobbies_other}}">
                                     </div>
                                 </div>
+                                <div class="form-block">
+                                    <label class="form-check">@lang("blogger.i_am_blogger")
+                                        @php
+                                            $blogger = Auth::user()->bloggers->first();
+                                            $blogger_status = \App\Entity\UserBloggerStatusEnum::getInstance($blogger->status);
+                                        @endphp
+                                        <input class="form-check-input" type="checkbox" name="i_am_blogger" id="i_am_blogger_checkbox"  @if($blogger) @if(!$blogger_status->isRefused())checked="checked" @endif @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif value="i_am_blogger">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div class="form-group i_am_blogger-group">
+                                        <input id="blogger_subscriber_count" type="text" class="form-control" name="blogger_subscriber_count" placeholder="@lang("blogger.subscriber_count")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->subscriber_count}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif">
+                                    </div>
+                                    <div class="form-group i_am_blogger-group">
+                                        <input id="blog_subject" type="text" class="form-control" name="blog_subject" placeholder="@lang("blogger.blog_subject")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->blog_subject}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif">
+                                    </div>
+                                    <div class="form-group i_am_blogger-group">
+                                        <input id="blog_platform" type="text" class="form-control" name="blog_platform" placeholder="@lang("blogger.blog_platform")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->blog_platform}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif">
+                                    </div>
+                                    <div class="form-group i_am_blogger-group">
+                                        <input id="blog_url" type="text" class="form-control" name="blog_url" placeholder="@lang("blogger.blog_url")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->blog_url}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif">
+                                    </div>
+                                </div>
                                 <div class="form-group ">
                                     <input id="expert-password" type="password" class="form-control" name="password" autocomplete="off" placeholder="@lang("registration.password")">
                                 </div>
@@ -576,8 +598,19 @@
                         $('#child_list').children().last().remove();
                     }
                 }
-
             });
+
+            $('#i_am_blogger_checkbox').change(function (e) {
+                if ($(this).prop('checked')) {
+                    $('.i_am_blogger-group').show();
+                } else {
+                    $('.i_am_blogger-group').hide();
+                }
+            });
+
+            $('#i_am_blogger_checkbox').change();
+
+            $().change();
         });
     </script>
 @endsection

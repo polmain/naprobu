@@ -17,7 +17,7 @@ class CreateUserBloggersTable extends Migration
             $table->increments('id');
             $table->string('status', 255)->default('IN_MODERATE');
             $table->integer('subscriber_count')->nullable();
-            $table->integer('blog_subject')->nullable();
+            $table->string('blog_subject')->nullable();
             $table->string('blog_platform')->nullable();
             $table->string('blog_url',255)->nullable();
             $table->unsignedInteger('user_id');

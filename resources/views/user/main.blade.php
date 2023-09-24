@@ -233,17 +233,30 @@
                                     </div>
                                 </div>
                                 <div class="form-block">
-                                    <label class="form-check">@lang("blogger.i_am_blogger")
-                                        @php
-                                            $blogger = Auth::user()->bloggers->first();
-                                            if ($blogger) {
-                                               $blogger_status = \App\Entity\UserBloggerStatusEnum::getInstance($blogger->status);
-                                            }
 
-                                        @endphp
+                                    @php
+                                        $blogger = Auth::user()->bloggers->first();
+                                        if ($blogger) {
+                                           $blogger_status = \App\Entity\UserBloggerStatusEnum::getInstance($blogger->status);
+                                        }
+                                    @endphp
+
+                                    <label class="form-check">@lang("blogger.i_am_blogger")
+                                        @switch(true)
+                                            @case($blogger_status->isConfirmed())
+                                                <strong style="color: #66FF00">@lang("blogger.confirmed")</strong>
+                                            @break
+                                            @case($blogger_status->isRefused())
+                                                <strong style="color: #CC3333">@lang("blogger.refused")</strong>
+                                            @break
+                                            @case($blogger_status->isInModerate())
+                                                <strong style="color: #FFCC00">@lang("blogger.om_moderation")</strong>
+                                            @break
+                                        @endswitch
                                         <input class="form-check-input" type="checkbox" name="i_am_blogger" id="i_am_blogger_checkbox"  @if($blogger) @if(!$blogger_status->isRefused())checked="checked" @endif @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif value="i_am_blogger">
                                         <span class="checkmark"></span>
                                     </label>
+                                    @if($blogger && !$blogger_status->isConfirmed())
                                     <div class="form-group i_am_blogger-group">
                                         <input id="blogger_subscriber_count" type="text" class="form-control" name="blogger_subscriber_count" placeholder="@lang("blogger.subscriber_count")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->subscriber_count}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif">
                                     </div>
@@ -256,6 +269,7 @@
                                     <div class="form-group i_am_blogger-group">
                                         <input id="blog_url" type="text" class="form-control" name="blog_url" placeholder="@lang("blogger.blog_url")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->blog_url}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif">
                                     </div>
+                                    @endif
                                 </div>
                                 <div class="form-group ">
                                     <input id="expert-password" type="password" class="form-control" name="password" autocomplete="off" placeholder="@lang("registration.password")">

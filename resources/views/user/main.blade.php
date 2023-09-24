@@ -605,7 +605,7 @@
 
                 if (childCount > childBirthdayCount) {
                     for (let i = childBirthdayCount; i < childCount; i++) {
-                        $('#child_list').append('<label>@lang("registration.child_birthday") '+(i+1)+'</label><input type="date" class="form-control child_birthday" name="child_birthday[]" max="{{date("Y-m-d")}}">');
+                        $('#child_list').append("<label>@lang("registration.child_birthday") "+(i+1)+'</label><input type="date" class="form-control child_birthday" name="child_birthday[]" max="{{date("Y-m-d")}}">');
                     }
                 }
 

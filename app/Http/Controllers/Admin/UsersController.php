@@ -7,9 +7,11 @@ use App\Entity\EmploymentEnum;
 use App\Entity\FamilyStatusEnum;
 use App\Entity\HobbiesEnum;
 use App\Entity\MaterialConditionEnum;
+use App\Entity\UserBloggerStatusEnum;
 use App\Entity\WorkEnum;
 use App\Exports\UserExport;
 use App\Library\Queries\UserFilterServices;
+use App\Library\Users\Notification;
 use App\Library\Users\UserRating;
 use App\Model\Geo\City;
 use App\Model\Geo\Country;
@@ -641,6 +643,35 @@ class UsersController extends Controller
 		ModeratorLogs::addLog("Сменил статус пользователя: ".$user->login);
 
 		return redirect()->route('adm_users_edit',['user_id'	=>	$user_id]);
+	}
+
+	public function blogger_verification(Request $request, $user_id){
+		$user = User::withTrashed()->find($user_id);
+
+        $blogger = UserBlogger::where('user_id', $user_id)->first();
+
+        $blogger->subscriber_count = $request->subscriber_count;
+        $blogger->blog_subject = $request->blog_subject;
+        $blogger->blog_platform = $request->blog_platform;
+        $blogger->blog_url = $request->blog_url;
+
+        $oldStatus = UserBloggerStatusEnum::getInstance($blogger->status);
+        $newStatus = UserBloggerStatusEnum::getInstance($request->status);
+        $blogger->status = $newStatus->getValue();
+
+        $blogger->save();
+
+        if (!$oldStatus->equals($newStatus)) {
+            if ($newStatus->isConfirmed()) {
+                Notification::send('blogger_confirmed', $user, 1);
+            } else {
+                Notification::send('blogger_refused', $user, 1);
+            }
+        }
+
+		ModeratorLogs::addLog("Сменил заявку на блогерство пользователя: ".$user->login);
+
+		return redirect()->route('adm_users_edit', ['user_id' => $user_id]);
 	}
 
 	public function end_status($status_id){

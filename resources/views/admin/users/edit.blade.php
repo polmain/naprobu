@@ -245,7 +245,7 @@
             @if($blogger)
             <form action="{{route('adm_blogger_verification',['user_id' => $user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
                 {{ csrf_field() }}
-                <div class="box box-warning collapsed-box">
+                <div class="box box-warning">
                     <div class="box-header with-border">
                         <h3 class="box-title">Анкета блогера</h3>
 

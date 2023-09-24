@@ -244,10 +244,10 @@
                                     <label class="form-check">@lang("blogger.i_am_blogger")
                                         @switch(true)
                                             @case($blogger_status->isConfirmed())
-                                                <strong style="color: #66FF00">@lang("blogger.confirmed")</strong>
+                                                <strong style="color: #009933">@lang("blogger.confirmed")</strong>
                                             @break
                                             @case($blogger_status->isRefused())
-                                                <strong style="color: #CC3333">@lang("blogger.refused")</strong>
+                                                <strong style="color: #f9423a">@lang("blogger.refused")</strong>
                                             @break
                                             @case($blogger_status->isInModerate())
                                                 <strong style="color: #FFCC00">@lang("blogger.om_moderation")</strong>

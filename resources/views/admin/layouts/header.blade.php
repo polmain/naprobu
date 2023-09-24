@@ -35,6 +35,14 @@
                     </a>
                 </li><!-- /.messages-menu -->
 
+                <li class="dropdown messages-menu">
+                    <!-- Menu toggle button -->
+                    <a href='{{ route('admin.phone.all') }}?filter=["is_verify",0]'>
+                        <i class="fa fa-phone  text-red" aria-hidden="true"></i>
+                        <span class="label label-danger">{{ Request::Get('notVerifyPhoneCount') }}</span>
+                    </a>
+                </li><!-- /.messages-menu -->
+
                 <!-- Notifications Menu -->
                 <li class="dropdown notifications-menu">
                     <!-- Menu toggle button -->
@@ -66,6 +74,22 @@
                                         <i class="fa fa-comments text-green"></i> {{ Request::Get('commentsBlogCount') }} новых комментариев к статьям
                                     </a>
                                 </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Notifications Menu -->
+                <li class="dropdown notifications-menu">
+                    <!-- Menu toggle button -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-globe"></i>
+                        <span class="label label-info">{{ Request::Get('totalGeoNotifications') }}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="header">{{ Request::Get('totalGeoNotifications') }} новых событий</li>
+                        <li>
+                            <ul class="menu">
                                 <li><!-- start notification -->
                                     <a href='{{ route('admin.region.all') }}?filter=["is_verify",0]'>
                                         <i class="fa fa-globe text-navy" aria-hidden="true"></i> {{ Request::Get('noVerifyRegionCount') }} неверефицированных областей
@@ -74,11 +98,6 @@
                                 <li><!-- start notification -->
                                     <a href='{{ route('admin.city.all') }}?filter=["is_verify",0]'>
                                         <i class="fa fa-map-marker text-light-blue" aria-hidden="true"></i> {{ Request::Get('noVerifyCityCount') }} неверефицированных городов
-                                    </a>
-                                </li>
-                                <li><!-- start notification -->
-                                    <a href='{{ route('admin.phone.all') }}?filter=["is_verify",0]'>
-                                        <i class="fa fa-phone  text-red" aria-hidden="true"></i> {{ Request::Get('notVerifyPhoneCount') }} неверефицированных телефонов
                                     </a>
                                 </li>
                             </ul>

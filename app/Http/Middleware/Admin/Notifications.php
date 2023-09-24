@@ -37,7 +37,8 @@ class Notifications
 
     	$presentCount = UserPresents::where([['isGet','1'],['isSent','0']])->count();
 
-    	$total = $reviewsCount + $commentsCount + $commentsBlogCount + $requestsCount + $cityCount + $regionCount + $phoneCount;
+    	$total = $reviewsCount + $commentsCount + $commentsBlogCount + $requestsCount;
+        $totalGeo = $cityCount + $regionCount;
 
 		$request->attributes->Add(['requestsCount' => $requestsCount]);
 		$request->attributes->Add(['reviewsCount' => $reviewsCount]);
@@ -49,6 +50,7 @@ class Notifications
 		$request->attributes->Add(['noVerifyRegionCount' => $regionCount]);
 		$request->attributes->Add(['notVerifyPhoneCount' => $phoneCount]);
 		$request->attributes->Add(['totalNotifications' => $total]);
+		$request->attributes->Add(['totalGeoNotifications' => $totalGeo]);
 		return $next($request);
     }
 }

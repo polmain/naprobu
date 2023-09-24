@@ -306,6 +306,8 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
 
 		Route::post('/users/delete-ratting/{user_id}/', 'Admin\UsersController@delete_ratting')->name('adm_delete_ratting');
 		Route::post('/users/add-ratting/{user_id}/', 'Admin\UsersController@add_ratting')->name('adm_add_ratting');
+
+        Route::post('/users/blogger_verification/{user_id}/', 'Admin\UsersController@blogger_verification')->name('adm_blogger_verification');
 		/* End User Pages */
 
         /* Cities pages */

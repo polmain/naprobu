@@ -240,6 +240,57 @@
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
             <!-- Box -->
+
+            <!-- Blogger verification block -->
+            @if($blogger)
+            <form action="{{route('adm_blogger_verification',['user_id' => $user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <div class="box box-warning collapsed-box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Анкета блогера</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                        <!-- /.box-tools -->
+                    </div>
+                    <div class="box-body">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Количество подписчиков</label>
+                                <input class="form-control" type="text" name="subscriber_count" value="{{$blogger->subscriber_count}}">
+                            </div>
+                            <div class="form-group">
+                                <label>Тематика блога</label>
+                                <input class="form-control" type="text" name="blog_subject" value="{{$blogger->blog_subject}}">
+                            </div>
+                            <div class="form-group">
+                                <label>Платформа</label>
+                                <input class="form-control" type="text" name="blog_platform" value="{{$blogger->blog_platform}}">
+                            </div>
+                            <div class="form-group">
+                                <label>Ссылка на блог</label>
+                                <input class="form-control" type="text" name="blog_url" value="{{$blogger->blog_url}}">
+                            </div>
+                            <div class="form-group">
+                                <label>Статус<span class="input-request">*</span></label>
+                                <select name="status" class="form-control select2" style="width: 100%;">
+                                    <option value="{{\App\Entity\UserBloggerStatusEnum::REFUSED}}" @if(\App\Entity\UserBloggerStatusEnum::getInstance($blogger->status)->isRefused()) selected="selected" @endif>Отклонено</option>
+                                    <option value="{{\App\Entity\UserBloggerStatusEnum::IN_MODERATE}}" @if(\App\Entity\UserBloggerStatusEnum::getInstance($blogger->status)->isInModerate()) selected="selected" @endif>На модерации</option>
+                                    <option value="{{\App\Entity\UserBloggerStatusEnum::CONFIRMED}}" @if(\App\Entity\UserBloggerStatusEnum::getInstance($blogger->status)->isConfirmed()) selected="selected" @endif>Подтверждено</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </div>
+            </form>
+            <!-- End Blogger verification block -->
+            @endif
+
             <form action="{{route('adm_change_status',['user_id' => $user->id])}}" method="post" class="form-horizontal" enctype="multipart/form-data">
                 {{ csrf_field() }}
             <div class="box box-warning collapsed-box">
@@ -294,7 +345,6 @@
                     </div>
                     <!-- /.box-tools -->
                 </div>
-
                 <div class="box-body">
                     <div class="table-responsive">
                     <table class="table table-bordered table-hover">
@@ -319,7 +369,6 @@
                     </table>
                     </div>
                 </div><!-- /.box-body -->
-
             </div>
             <!-- Box -->
             <div class="box box-primary">

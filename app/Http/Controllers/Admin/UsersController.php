@@ -22,6 +22,7 @@ use App\Model\Questionnaire\Answer;
 use App\Model\Questionnaire\Question;
 use App\Model\Queue;
 use App\Model\Review;
+use App\Model\User\UserBlogger;
 use App\Model\User\UserNotification;
 use App\Model\User\UserPresents;
 use App\Model\User\UserRatingHistory;
@@ -427,8 +428,10 @@ class UsersController extends Controller
 
 		$statusHistory = UserChangeStatuses::with(['status'])->where('user_id',$user_id)->get();
 
+		$blogger = UserBlogger::where('user_id',$user_id)->get();
+
 		return [
-			"user"=>$user,
+			"user" => $user,
 			"countReviews"=>$countReviews,
 			"reviewFilter"=>$reviewFilter,
 			'countComments' => $countComments,
@@ -436,6 +439,7 @@ class UsersController extends Controller
 			'ratingStatus' => $ratingStatus,
 			'statuses' => $statuses,
 			'statusHistory' => $statusHistory,
+			'blogger' => $blogger,
 		];
 	}
 

@@ -544,5 +544,7 @@
                 $('.i_am_blogger-group').hide();
             }
         });
+
+        $('#i_am_blogger_checkbox').change();
     </script>
 @endsection

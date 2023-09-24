@@ -236,7 +236,10 @@
                                     <label class="form-check">@lang("blogger.i_am_blogger")
                                         @php
                                             $blogger = Auth::user()->bloggers->first();
-                                            $blogger_status = \App\Entity\UserBloggerStatusEnum::getInstance($blogger->status);
+                                            if ($blogger) {
+                                               $blogger_status = \App\Entity\UserBloggerStatusEnum::getInstance($blogger->status);
+                                            }
+
                                         @endphp
                                         <input class="form-check-input" type="checkbox" name="i_am_blogger" id="i_am_blogger_checkbox"  @if($blogger) @if(!$blogger_status->isRefused())checked="checked" @endif @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif value="i_am_blogger">
                                         <span class="checkmark"></span>

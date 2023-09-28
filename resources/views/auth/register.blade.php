@@ -427,7 +427,7 @@
                             "CityName": params.term,
                             "Limit": 10
                         },
-                        "apiKey": "71190074c2d66199cbd1886cba6f186f"
+                        "apiKey": "72ad00ce8bb01e03fc84ec9493bfa155"
                     };
                     return JSON.stringify(query);
                 },
@@ -459,7 +459,7 @@
                     "CityRef": $(this).val(),
                     "Language": "uk"
                 },
-                "apiKey": "71190074c2d66199cbd1886cba6f186f"
+                "apiKey": "72ad00ce8bb01e03fc84ec9493bfa155"
             };
             var data = JSON.stringify(query);
 

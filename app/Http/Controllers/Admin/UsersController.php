@@ -13,6 +13,7 @@ use App\Exports\UserExport;
 use App\Library\Queries\UserFilterServices;
 use App\Library\Users\Notification;
 use App\Library\Users\UserRating;
+use App\Model\Blogger\BloggerUser;
 use App\Model\Geo\City;
 use App\Model\Geo\Country;
 use App\Model\Geo\Region;
@@ -645,7 +646,46 @@ class UsersController extends Controller
 		return redirect()->route('adm_users_edit',['user_id'	=>	$user_id]);
 	}
 
-	public function blogger_verification(Request $request, $user_id){
+    public function bloggerRequests () {
+        SEO::setTitle('Все заявки от блогеров');
+        AdminPageData::setPageName('Заявки от Блогеров');
+        AdminPageData::addBreadcrumbLevel('Пользователи','users');
+        AdminPageData::addBreadcrumbLevel('Заявки Блогеров');
+
+        return view('admin.users.blogger_requests');
+    }
+
+    public function bloggerRequestsAjax(Request $request){
+
+        $bloggerUsers = BloggerUser::when($request->has('status'), function ($query) use ($request) {
+            $query->where('status', $request->status);
+        });
+
+        return datatables()->eloquent($bloggerUsers)
+            ->addColumn('status_name', function (BloggerUser $bloggerUser) {
+                $status = UserBloggerStatusEnum::getInstance($bloggerUser->status);
+
+                switch (true) {
+                    case $status->isConfirmed():
+                        return "Подтвержден";
+                    case $status->isInModerate():
+                        return "На модерации";
+                    case $status->isRefused():
+                        return "Отказанно";
+                    default:
+                        return "UNKNOWN";
+                }
+            })
+            ->addColumn('name', function (BloggerUser $bloggerUser) {
+                return $bloggerUser->user->name;
+            })
+            ->addColumn('email', function (BloggerUser $bloggerUser) {
+                return $bloggerUser->user->email;
+            })
+            ->toJson();
+    }
+
+	public function bloggerVerification(Request $request, $user_id){
 		$user = User::withTrashed()->find($user_id);
 
         $blogger = UserBlogger::where('user_id', $user_id)->first();

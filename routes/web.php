@@ -307,7 +307,9 @@ Route::group(['prefix'=>'admin','middleware'=>['admin.auth','admin.notifications
 		Route::post('/users/delete-ratting/{user_id}/', 'Admin\UsersController@delete_ratting')->name('adm_delete_ratting');
 		Route::post('/users/add-ratting/{user_id}/', 'Admin\UsersController@add_ratting')->name('adm_add_ratting');
 
-        Route::post('/users/blogger_verification/{user_id}/', 'Admin\UsersController@blogger_verification')->name('adm_blogger_verification');
+        Route::get('/users/blogger_requests/', 'Admin\UsersController@bloggerRequests')->name('adm_blogger_requests');
+        Route::get('/users/blogger_requests/ajax/', 'Admin\UsersController@bloggerRequestsAjax')->name('adm_blogger_requests_ajax');
+        Route::post('/users/blogger_verification/{user_id}/', 'Admin\UsersController@bloggerVerification')->name('adm_blogger_verification');
 		/* End User Pages */
 
         /* Cities pages */

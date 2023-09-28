@@ -36,7 +36,7 @@
                 </li><!-- /.messages-menu -->
                 <li class="dropdown messages-menu">
                     <!-- Menu toggle button -->
-                    <a href='{{ route('adm_present')}}?filter=["isGet",1],["isSent",0]'>
+                    <a href='{{ route('adm_blogger_requests')}}?filter=["status",{{\App\Entity\UserBloggerStatusEnum::IN_MODERATE}}]'>
                         <i class="fa fa-users"></i>
                         <span class="label label-default">{{ Request::Get('totalBloggerNotifications') }}</span>
                     </a>

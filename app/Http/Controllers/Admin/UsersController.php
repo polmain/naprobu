@@ -657,12 +657,13 @@ class UsersController extends Controller
 
     public function bloggerRequestsAjax(Request $request){
 
-        $bloggerUsers = BloggerUser::when($request->has('status'), function ($query) use ($request) {
+        $bloggerUsers = UserBlogger::when($request->has('status'), function ($query) use ($request) {
             $query->where('status', $request->status);
         });
 
         return datatables()->eloquent($bloggerUsers)
-            ->addColumn('status_name', function (BloggerUser $bloggerUser) {
+            ->addColumn('status_name', function (UserBlogger $bloggerUser) {
+
                 $status = UserBloggerStatusEnum::getInstance($bloggerUser->status);
 
                 switch (true) {
@@ -676,10 +677,10 @@ class UsersController extends Controller
                         return "UNKNOWN";
                 }
             })
-            ->addColumn('name', function (BloggerUser $bloggerUser) {
+            ->addColumn('name', function (UserBlogger $bloggerUser) {
                 return $bloggerUser->user->name;
             })
-            ->addColumn('email', function (BloggerUser $bloggerUser) {
+            ->addColumn('email', function (UserBlogger $bloggerUser) {
                 return $bloggerUser->user->email;
             })
             ->toJson();

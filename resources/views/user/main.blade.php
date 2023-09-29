@@ -242,6 +242,7 @@
                                     @endphp
 
                                     <label class="form-check">@lang("blogger.i_am_blogger")
+                                        @if ($blogger)
                                         @switch(true)
                                             @case($blogger_status->isConfirmed())
                                                 <strong style="color: #009933">@lang("blogger.confirmed")</strong>
@@ -253,10 +254,11 @@
                                                 <strong style="color: #FFCC00">@lang("blogger.om_moderation")</strong>
                                             @break
                                         @endswitch
+                                        @endif
                                         <input class="form-check-input" type="checkbox" name="i_am_blogger" id="i_am_blogger_checkbox"  @if($blogger) @if(!$blogger_status->isRefused())checked="checked" @endif @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif value="i_am_blogger">
                                         <span class="checkmark"></span>
                                     </label>
-                                    @if($blogger && !$blogger_status->isConfirmed())
+                                    @if(!$blogger || !$blogger_status->isConfirmed())
                                     <div class="form-group i_am_blogger-group">
                                         <input id="blogger_subscriber_count" type="text" class="form-control" name="blogger_subscriber_count" placeholder="@lang("blogger.subscriber_count")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->subscriber_count}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif>
                                     </div>

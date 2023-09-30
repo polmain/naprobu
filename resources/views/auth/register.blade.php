@@ -190,7 +190,12 @@
                                     <span class="checkmark"></span>
                                 </label>
                                 <div class="form-group i_am_blogger-group">
-                                    <input id="blogger_subscriber_count" type="text" class="form-control" name="blogger_subscriber_count" placeholder="@lang("blogger.subscriber_count")">
+                                    <label for="blogger_subscriber_count">@lang("blogger.subscriber_count")</label>
+                                    <select name="blogger_subscriber_count" id="blogger_subscriber_count" class="form-control">
+                                        @foreach($subscriberCountArray as $subscriberCount)
+                                            <option value="{{$subscriberCount}}" >@lang("blogger.subscriber_count_".$subscriberCount)</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group i_am_blogger-group">
                                     <input id="blog_subject" type="text" class="form-control" name="blog_subject" placeholder="@lang("blogger.blog_subject")">

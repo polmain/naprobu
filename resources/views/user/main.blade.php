@@ -268,9 +268,6 @@
                                         </select>
                                     </div>
                                     <div class="form-group i_am_blogger-group">
-                                        <input id="blogger_subscriber_count" type="text" class="form-control" name="blogger_subscriber_count" placeholder="@lang("blogger.subscriber_count")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->subscriber_count}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif>
-                                    </div>
-                                    <div class="form-group i_am_blogger-group">
                                         <input id="blog_subject" type="text" class="form-control" name="blog_subject" placeholder="@lang("blogger.blog_subject")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->blog_subject}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif>
                                     </div>
                                     <div class="form-group i_am_blogger-group">

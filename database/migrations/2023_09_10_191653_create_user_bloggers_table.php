@@ -16,7 +16,7 @@ class CreateUserBloggersTable extends Migration
         Schema::create('user_bloggers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('status', 255)->default('IN_MODERATE');
-            $table->integer('subscriber_count')->nullable();
+            $table->string('subscriber_count', 255)->nullable();
             $table->string('blog_subject')->nullable();
             $table->string('blog_platform')->nullable();
             $table->string('blog_url',255)->nullable();

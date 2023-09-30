@@ -260,6 +260,14 @@
                                     </label>
                                     @if(!$blogger || !$blogger_status->isConfirmed())
                                     <div class="form-group i_am_blogger-group">
+                                        <label for="blogger_subscriber_count">@lang("blogger.subscriber_count")</label>
+                                        <select name="blogger_subscriber_count" id="blogger_subscriber_count" class="form-control"  @if($blogger && $blogger_status->isInModerate()) disabled="disabled" @endif>
+                                            @foreach($subscriberCountArray as $subscriberCount)
+                                                <option value="{{$subscriberCount}}" @if($blogger && !$blogger_status->isRefused() && $subscriberCount->getValue() === $blogger->subscriber_count)selected="selected" @endif>@lang("blogger.subscriber_count_".$subscriberCount)</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group i_am_blogger-group">
                                         <input id="blogger_subscriber_count" type="text" class="form-control" name="blogger_subscriber_count" placeholder="@lang("blogger.subscriber_count")" @if($blogger && !$blogger_status->isRefused())value="{{$blogger->subscriber_count}}" @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif>
                                     </div>
                                     <div class="form-group i_am_blogger-group">

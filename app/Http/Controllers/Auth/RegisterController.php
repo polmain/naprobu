@@ -8,6 +8,7 @@ use App\Entity\EmploymentEnum;
 use App\Entity\FamilyStatusEnum;
 use App\Entity\HobbiesEnum;
 use App\Entity\MaterialConditionEnum;
+use App\Entity\SubscriberCountEnum;
 use App\Entity\WorkEnum;
 use App\Model\User\UserCountry;
 use App\Services\LanguageServices\AlternativeUrlService;
@@ -92,6 +93,7 @@ class RegisterController extends Controller
         $familyStatusArray = FamilyStatusEnum::values();
         $materialConditionArray = MaterialConditionEnum::values();
         $hobbiesArray = HobbiesEnum::values();
+        $subscriberCountArray = SubscriberCountEnum::values();
 
 		return view('auth.register',[
 			'page' => $page,
@@ -101,7 +103,8 @@ class RegisterController extends Controller
 			'workArray'	=> $workArray,
 			'familyStatusArray'	=> $familyStatusArray,
 			'materialConditionArray'	=> $materialConditionArray,
-			'hobbiesArray'	=> $hobbiesArray
+			'hobbiesArray'	=> $hobbiesArray,
+            'subscriberCountArray'	=> $subscriberCountArray,
 		]);
 	}
 

@@ -127,7 +127,7 @@ class User extends Authenticatable
         return $this->hasMany('App\Model\User\UserBlogger', 'user_id');
     }
 
-    public function isBlogger() {
+    public function isBlogger(): bool {
 	    return !is_null($this->bloggers()->where('status', UserBloggerStatusEnum::CONFIRMED)->first());
     }
 

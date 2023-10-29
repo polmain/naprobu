@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Entity\UserBloggerStatusEnum;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -124,6 +125,10 @@ class User extends Authenticatable
 
     public function bloggers(){
         return $this->hasMany('App\Model\User\UserBlogger', 'user_id');
+    }
+
+    public function isBlogger() {
+	    return $this->bloggers()->where('status', UserBloggerStatusEnum::CONFIRMED)->first();
     }
 
 	public function isOnline(){

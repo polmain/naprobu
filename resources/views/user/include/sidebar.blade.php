@@ -8,6 +8,9 @@
             @else
                 {{Auth::user()->rang->translate->firstWhere('lang', App::getLocale())->name}}
             @endif
+            @if(Auth::user()->isBlogger())
+                - @lang('user.blogger');
+            @endif
         </div>
     </div>
     <div class="user-page-block">

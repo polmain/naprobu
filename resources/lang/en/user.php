@@ -17,6 +17,7 @@ return [
 	'user_not_expert'		=> 'To participate in projects fill out the form below',
 	'user_ref'				=> 'Invite a friend to participate in projects and get extra points!',
 	'rating_point'			=> 'point|points|points',
+    'blogger'               => 'Blogger',
 
 	// Меню на странице пользователя
 	'menu_questionnaire' 	=> 'Profile',

@@ -8,9 +8,9 @@
                 <div class="user-info">
                     <div class="user-name">{{$review->user->name}}</div>
                     @if(App::getLocale() == 'ru')
-                        <div class="user-role">{{$review->user->rang->name}} @if(Auth::user()->isBlogger()) - @lang('user.blogger') @endif </div>
+                        <div class="user-role">{{$review->user->rang->name}} @if($review->user->isBlogger()) - @lang('user.blogger') @endif </div>
                     @else
-                        <div class="user-role">{{$review->user->rang->translate->firstWhere('lang', App::getLocale())->name}} @if(Auth::user()->isBlogger()) - @lang('user.blogger') @endif </div>
+                        <div class="user-role">{{$review->user->rang->translate->firstWhere('lang', App::getLocale())->name}} @if($review->user->isBlogger()) - @lang('user.blogger') @endif </div>
                     @endif
                 </div>
             </a>
@@ -91,9 +91,9 @@
                             <div class="user-info">
                                 <div class="user-name">{{$comment->user->name}}</div>
                                 @if(App::getLocale() == 'ru')
-                                    <div class="user-role">{{$comment->user->rang->name}} @if(Auth::user()->isBlogger()) - @lang('user.blogger') @endif </div>
+                                    <div class="user-role">{{$comment->user->rang->name}} @if($comment->user->isBlogger()) - @lang('user.blogger') @endif </div>
                                 @else
-                                    <div class="user-role">{{$comment->user->rang->translate->firstWhere('lang', App::getLocale())->name}} @if(Auth::user()->isBlogger()) - @lang('user.blogger') @endif </div>
+                                    <div class="user-role">{{$comment->user->rang->translate->firstWhere('lang', App::getLocale())->name}} @if($comment->user->isBlogger()) - @lang('user.blogger') @endif </div>
                                 @endif
                             </div>
                         </a>

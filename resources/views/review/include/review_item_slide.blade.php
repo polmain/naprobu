@@ -11,7 +11,7 @@
                         @else
                             {{$review->user->rang->translate->firstWhere('lang', App::getLocale())->name}}
                         @endif
-                        @if(Auth::user()->isBlogger())
+                        @if($review->user->isBlogger())
                             - @lang('user.blogger')
                         @endif</span>, {{$review->created_at}}</div>
             </div>

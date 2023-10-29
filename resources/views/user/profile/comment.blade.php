@@ -31,6 +31,9 @@
                     @else
                         {{$user->rang->translate->firstWhere('lang', App::getLocale())->name}}
                     @endif
+                    @if(Auth::user()->isBlogger())
+                        - @lang('user.blogger')
+                    @endif
                 </div>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 mb-3">

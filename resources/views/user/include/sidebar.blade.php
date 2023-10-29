@@ -9,7 +9,7 @@
                 {{Auth::user()->rang->translate->firstWhere('lang', App::getLocale())->name}}
             @endif
             @if(Auth::user()->isBlogger())
-                - @lang('user.blogger');
+                - @lang('user.blogger')
             @endif
         </div>
     </div>

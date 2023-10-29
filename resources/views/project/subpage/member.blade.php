@@ -63,9 +63,9 @@
                                 <div class="user-info">
                                     <div class="user-name">{{$request->user->name}}</div>
                                     @if(App::getLocale() == 'ru')
-                                        <div class="user-role">{{$request->user->rang->name}}</div>
+                                        <div class="user-role">{{$request->user->rang->name}} @if(Auth::user()->isBlogger()) - @lang('user.blogger') @endif </div>
                                     @else
-                                        <div class="user-role">{{$request->user->rang->translate->firstWhere('lang', App::getLocale())->name}}</div>
+                                        <div class="user-role">{{$request->user->rang->translate->firstWhere('lang', App::getLocale())->name}}  @if(Auth::user()->isBlogger()) - @lang('user.blogger') @endif </div>
                                     @endif
                                 </div>
                             </a>

@@ -128,7 +128,7 @@ class User extends Authenticatable
     }
 
     public function isBlogger() {
-	    return $this->bloggers()->where('status', UserBloggerStatusEnum::CONFIRMED)->first();
+	    return !is_null($this->bloggers()->where('status', UserBloggerStatusEnum::CONFIRMED)->first());
     }
 
 	public function isOnline(){

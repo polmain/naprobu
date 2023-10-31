@@ -247,6 +247,9 @@
                                         }
                                     @endphp
 
+                                    @if (!$blogger)
+                                        <p>{!! trans('user.user_page_text_blogger') !!}</p>
+                                    @endif
                                     <label class="form-check">@lang("blogger.i_am_blogger")
                                         @if ($blogger)
                                         @switch(true)
@@ -264,9 +267,6 @@
                                         <input class="form-check-input" type="checkbox" name="i_am_blogger" id="i_am_blogger_checkbox"  @if($blogger) @if(!$blogger_status->isRefused())checked="checked" @endif @if($blogger_status->isInModerate()) disabled="disabled" @endif @endif value="i_am_blogger">
                                         <span class="checkmark"></span>
                                     </label>
-                                    @if (!$blogger)
-                                        <p>{!! trans('user.user_page_text_blogger') !!}</p>
-                                    @endif
                                     @if(!$blogger || !$blogger_status->isConfirmed())
                                     <div class="form-group i_am_blogger-group">
                                         <label for="blogger_subscriber_count">@lang("blogger.subscriber_count")</label>

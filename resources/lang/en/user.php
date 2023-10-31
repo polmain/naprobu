@@ -55,5 +55,12 @@ return [
     'payment_type_mobile'   => 'Mobile top-up',
     'payment_type_card'     => 'Transfer to card',
 
-    'payment_card_number'   => 'Your card number'
+    'payment_card_number'   => 'Your card number',
+
+    'user_page_text_1'    => 'We understand that now many of our experts have changed their place of residence due to the events taking place in the country. Therefore, please give us a few minutes of your time and update your profile data.',
+    'user_page_text_2'    => 'Your naprobu.ua team',
+    'user_page_text_blogger'    => 'NEW!<br>
+If you are developing as a blogger, have at least one active account in social networks with 1000+ followers, then check the status "I am a blogger".<br>
+Read more information about the status and privileges at the link: (we will add a link to the FQ)<br>
+Happy testing!'
 ];

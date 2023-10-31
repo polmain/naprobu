@@ -706,7 +706,14 @@ class UsersController extends Controller
             if ($newStatus->isConfirmed()) {
                 Notification::send('blogger_confirmed', $user, 1);
             } else {
-                Notification::send('blogger_refused', $user, 1);
+                $userLang = $user->lang;
+                if($userLang === 'ua'){
+                    $link = "faq/";
+                }else{
+                    $link = $userLang."/faq/";
+                }
+
+                Notification::send('blogger_refused', $user, 1, $link);
             }
         }
 
